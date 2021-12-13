@@ -1,0 +1,111 @@
+@import 'meyer-reset.css';
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Display:ital@0;1&display=swap');
+
+* {
+	box-sizing: border-box;
+}
+
+body {
+	--white: #fffafa;
+	background-color: var(--white);
+	font-family: 'Noto Sans Display', sans-serif;
+}
+
+body * {
+	/*border: 1px solid red;*/
+}
+
+.inner-column {
+	max-width: 800px;
+	margin-left: auto;
+	margin-right: auto;
+	padding: 10px;
+}
+
+p {
+	padding-bottom: 10px;
+	line-height: 1.2;
+	color: #008B8B;
+}
+
+header {
+	background-color: #FFFAFA;
+	position: sticky;
+	top: 0;
+	box-shadow: 0 0 10px 0 black;
+}
+
+header div {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: space-between;
+}
+
+h1 {
+	font-size: 25px;
+}
+.about {
+	background-color: #FAEBD7;
+}
+
+.about .inner-column {
+	display: flex;
+	flex-direction: column;
+	gap: 20px;
+}
+
+.about h2 {
+	text-align: center;
+}
+
+@media (min-width: 600px) {
+	.about .inner-column {
+	    flex-direction: row;
+	    align-items: center;
+	}
+	.about h2 {
+		width: 50%;
+	}
+	.about .about-text {
+		width: 50%;
+	}
+}
+
+img {
+	width: 150px;
+}
+
+/*projects*/
+
+.projects {
+	background-color: #FFE4C4;
+	background-color: var(--white);
+}
+
+project-grid {
+	display: block;
+	
+}
+
+@media (min-width: 600px) {
+	.projects {
+		background-color: #FFE4C4;
+	}
+	project-grid {
+		background-color: var(--white);
+		border-radius: 10px;
+		padding: 20px;
+	}
+	project-list {
+		display: flex;
+	    flex-direction: row;
+	    align-items: center;
+	}
+}
+
+footer {
+ background-color: #DEB887;
+}
+
+
