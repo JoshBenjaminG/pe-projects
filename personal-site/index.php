@@ -4,7 +4,7 @@
 
 <section class="about">
 	<div class="inner-column">
-		<h2>A bit about me</h2>
+		<h2>Hi! I'm Joshua Gage</h2>
 		<div class="about-text">
 			<p>Hello! My name is Joshua Gage. I am a front-end developer and soon-to-be college graduate.</p>
 

@@ -3,7 +3,9 @@
 </main>
 
 		<footer>
-			<div class="inner-column">Contact me</div>
+			<div class="inner-column">
+				<p>Contact me at the links below</p>
+			</div>
 		</footer>
 
 	</body>

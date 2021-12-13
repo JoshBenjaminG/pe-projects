@@ -42,11 +42,24 @@ header div {
 	justify-content: space-between;
 }
 
+nav a {
+	text-decoration: none;
+	color: black;
+	padding: 10px;
+}
+
+nav a:hover {
+	text-decoration: underline;
+	color: #0050d6;
+}
+
 h1 {
 	font-size: 25px;
 }
 .about {
-	background-color: #FAEBD7;
+	display: flex;
+	background-color: #0050d6;;
+	min-height: 100vh;
 }
 
 .about .inner-column {
@@ -57,6 +70,15 @@ h1 {
 
 .about h2 {
 	text-align: center;
+	font-size: 70px;
+	color: white;
+}
+
+.about-text p {
+	color: white;
+	font-size: 18px;
+	line-height: 1.7;
+	letter-spacing: 2px;
 }
 
 @media (min-width: 600px) {
@@ -79,8 +101,10 @@ img {
 /*projects*/
 
 .projects {
-	background-color: #FFE4C4;
-	background-color: var(--white);
+	display: flex;
+	align-items: center;
+	background-color: #6ba1ff;
+	min-height: 100vh;
 }
 
 project-grid {
@@ -88,9 +112,13 @@ project-grid {
 	
 }
 
+project p {
+	color: black;
+}
+
 @media (min-width: 600px) {
 	.projects {
-		background-color: #FFE4C4;
+		background-color: #6ba1ff;
 	}
 	project-grid {
 		background-color: var(--white);
@@ -105,7 +133,14 @@ project-grid {
 }
 
 footer {
- background-color: #DEB887;
+ background-color: #0050d6;
+ min-height: 100vh;
+ display: flex;
+ align-items: center;
+}
+
+footer div p {
+	color: white;
 }
 
 
