@@ -1,0 +1,28 @@
+@import 'meyer-reset.css';
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Display:ital@0;1&display=swap');
+
+* {
+	box-sizing: border-box;
+}
+
+body {
+	--white: #fffafa;
+	background-color: var(--white);
+	font-family: 'Noto Sans Display', sans-serif;
+}
+
+body * {
+	/*border: 1px solid red;*/
+}
+
+.inner-column {
+	max-width: 900px;
+	margin-left: auto;
+	margin-right: auto;
+	padding: 10px;
+}
+
+
+li {
+	font-size: 30px;
+}
