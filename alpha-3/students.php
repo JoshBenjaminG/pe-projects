@@ -5,7 +5,7 @@ $students = [
 		"name" => "Budi",
 		"description" => "I'm a barista turned Perpetual Education- minted Web Developer. Dive in!",
 		"link" => "Click here",
-		"picture" => "https://ca.slack-edge.com/T02DBMXN57Y-U02E7T6MQ49-fcdbb27af6a2-512",
+		// "picture" => "https://ca.slack-edge.com/T02DBMXN57Y-U02E7T6MQ49-fcdbb27af6a2-512",
 	],
 
 	[
