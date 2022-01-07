@@ -5,13 +5,15 @@ $students = [
 		"name" => "Budi",
 		"description" => "I'm a barista turned Perpetual Education- minted Web Developer. Dive in!",
 		"link" => "Click here",
-		// "picture" => "https://ca.slack-edge.com/T02DBMXN57Y-U02E7T6MQ49-fcdbb27af6a2-512",
+		"picture" => "https://ca.slack-edge.com/T02DBMXN57Y-U02E7T6MQ49-fcdbb27af6a2-512",
+		"url" => "https://peprojects.dev/alpha-3/budi/web-portal/",
 	],
 
 	[
 		"name" => "Josh",
 		"description" => "Josh's Stuff",
 		"link" => "Click here",
+		"picture" => "https://ca.slack-edge.com/T02DBMXN57Y-U02DNGEPJ3Y-e3186e657284-512",
 	],
 
 	[
@@ -60,12 +62,15 @@ $students = [
 		"name" => "Brian",
 		"description" => "Check out my projects and case studies",
 		"link" => "Read more",
+		"picture" => "",
+		"url" => "https://peprojects.dev/alpha-3/bdlowery/",
     ],
 
     [
 		"name" => "TaraUhhhhhh",
 		"description" => "An aspiring web developer and programming enthusiast. On this journey to a new career, I'm collecting experience and inspiration. Come join me and see what I've got so far!",
 		"link" => "Check it out!",
+		"picture" => "https://ca.slack-edge.com/T02DBMXN57Y-U02DS8HSLBX-041daa742b86-192",
 	],
 
 ];

@@ -6,7 +6,7 @@
 		</picture>
 	  	<h2><?=$student["name"]?></h2>
 	  	<p><?=$student["description"]?></p>
-	 	<a href=""><?=$student["link"]?></a>
+	 	<a href=<?=$student["url"]?>><?=$student["link"]?></a>
 	</div>
 
 
