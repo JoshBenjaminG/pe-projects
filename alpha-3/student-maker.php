@@ -1,6 +1,6 @@
 <?php foreach ($students as $student) { ?>
 		
-	<div class="student <?=$student["name"]?>">
+	<div class="student <?=$student["name"]?> <?=$student["color"]?>">
 		<picture>
 			<img src="<?=$student["picture"]?>">
 		</picture>
@@ -8,6 +8,7 @@
 	  	<p><?=$student["description"]?></p>
 	 	<a href=<?=$student["url"]?>><?=$student["link"]?></a>
 	</div>
+
 
 
 <?php } ?>
