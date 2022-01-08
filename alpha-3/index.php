@@ -12,7 +12,6 @@
 
 <?php include 'students.php'; ?>
 
-
 <header>
   <div class="inner-column">Alpha Net Student Sites</div>
 </header>
