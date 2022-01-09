@@ -13,17 +13,15 @@
 <?php include 'items.php'; ?>
 
 <header>
-  <div class="inner-column">
-    <h1>header</h1>
-    <p>header content</p>
-  </div>
+
+<?php include 'header.php'; ?>
+
 </header>
 
 <section class="page-section masthead">
-  <div class="inner-column">
-    <img src="https://jegxdwep1p-flywheel.netdna-ssl.com/wp-content/uploads/2016/09/tumblr_o05v3eZmyT1ugn1wu_og_1280-1080x675.png" alt="">
-    <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Reiciendis inventore excepturi, iusto soluta cum ut a modi dignissimos optio voluptas reprehenderit nulla blanditiis, odio perferendis praesentium. Sit numquam id sapiente!</p>
-  </div>
+
+	<?php include 'mast-head.php'; ?> 
+
 </section>
 
 <main>
@@ -41,10 +39,9 @@
 </main>
 
 <footer>
-  <div class="inner-column">
-    <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Illum, harum? Ut officiis accusamus iure ipsam quo!</p>
-    <p>Veritatis possimus corrupti iste non aliquid molestiae magnam dignissimos, ut deleniti quia, ea quisquam.</p>
-  </div>
+
+	<?php include 'footer.php'; ?>
+
 </footer>
 
 </body>
