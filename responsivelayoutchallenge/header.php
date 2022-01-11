@@ -1,4 +1,6 @@
   <div class="inner-column">
     <h1>header</h1>
-    <p>header content</p>
-  </div>
+    <a href="index.php">home page</a>
+    <a href="about.php">about page</a>
+
+  </div> 

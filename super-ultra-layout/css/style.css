@@ -1,0 +1,121 @@
+@import 'meyer-reset.css';
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Display:ital@0;1&display=swap');
+
+* {
+	box-sizing: border-box;
+}
+
+body * {
+/*  border: 2px solid red;*/
+/*  padding: 10px;*/
+}
+
+body {
+	font-family: 'Noto Sans Display', sans-serif;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.inner-column {
+  max-width: 700px;
+  margin-right: auto;
+  margin-left: auto;
+  padding: 10px;
+  display: block;
+}
+
+header {
+  background-color: #ccffc0;
+}
+
+header div {
+  display: flex;
+}
+
+div nav {
+  display: flex;
+
+  /*border: 2px solid black;*/
+}
+
+div a {
+  /*border: 2px solid black;*/
+  padding-right: 10px;
+}
+
+main {
+  flex-grow: 1;
+}
+
+.diptych {
+  background-color: #ffbfea;
+}
+
+picture {
+  display: block;
+}
+
+picture img {
+  text-align: center;
+  width: 100%;
+}
+
+.module-text {
+  padding-top: 30px;
+  padding-bottom: 30px;
+}
+
+.action-module {
+  background-color: #fff6c0;
+}
+
+.article-header, .article-grid {
+  background-color: #c0e8fe;
+}
+
+h1 {
+  font-size: 30px;
+  font-weight: 600;
+}
+
+footer {
+  background-color: #ccffc0;
+}
+
+.footer-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.footer-container nav {
+  display: flex;
+  flex-direction: column;
+}
+
+@media (min-width: 600px) {
+  header div {
+    flex-direction: row;
+    justify-content: space-between;
+  }
+  .footer-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+  .diptych div {
+    display: flex;
+}
+  .diptych picture {
+    padding-right: 20px;
+  }
+  .module-text {
+    flex-direction: column;
+    justify-content: center;
+  }
+  .article-grid div {
+    display: flex;
+}
+}
+
