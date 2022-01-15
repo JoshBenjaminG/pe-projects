@@ -1,0 +1,63 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100;400;700&display=swap');
+
+.loud-voice	{
+	font-family: Roboto;
+	font-size: clamp(36px, 5vw, 60px);
+	color: white;
+}
+@media (min-width: 600px) {
+	.loud-voice {
+		font-weight: 700;
+	}
+}
+
+.intro-voice	{
+	font-family: Roboto;
+	font-size: 110px;
+	font-weight: 700;
+	color: white;
+}
+
+.attention-voice	{
+	font-family: Roboto;
+	font-size: 36px;
+	color: white;
+}
+
+.something-for-site-map-headings {
+	/* */
+}
+
+.calm-voice {
+	font-family: Roboto;
+	font-size: 1.3rem;
+	line-height: 1.4;
+	color: white;
+	font-weight: 100;
+}
+
+.anchor-voice {
+	font-family: Roboto;
+	font-size: 1.2rem;
+	line-height: 1.4;
+	color: white;
+	font-weight: 100;
+}
+
+.black-text {
+	color: black;
+}
+
+/* these would be scoped to section or to an article element */
+/* this is just a loose setting for now $todo */
+p + p {
+	margin-top: 14px;
+}
+
+h1 + p {
+	margin-top: 60px;
+}
+
+h2 + p {
+	margin-top: 30px;
+}

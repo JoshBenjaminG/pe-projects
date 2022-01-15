@@ -6,9 +6,9 @@
 }
 
 body * {
-/*  border: 2px solid red;*/
-/*  padding: 10px;*/
-}
+  /*border: 2px solid red;*/
+ /* padding: 10px;
+*/}
 
 body {
 	font-family: 'Noto Sans Display', sans-serif;
@@ -22,7 +22,6 @@ body {
   margin-right: auto;
   margin-left: auto;
   padding: 10px;
-  display: block;
 }
 
 header {
@@ -35,7 +34,6 @@ header div {
 
 div nav {
   display: flex;
-
   /*border: 2px solid black;*/
 }
 
@@ -57,13 +55,21 @@ picture {
 }
 
 picture img {
-  text-align: center;
+  /*text-align: center;*/
   width: 100%;
 }
 
-.module-text {
-  padding-top: 30px;
-  padding-bottom: 30px;
+.module-text > *{
+  padding-top: 15px;
+  padding-bottom: 25px;
+}
+
+.module-text a {
+  display: inline-block;
+  background-color: black;
+  color: white;
+  text-decoration: none;
+  height: 30px;
 }
 
 .action-module {
@@ -72,6 +78,15 @@ picture img {
 
 .article-header, .article-grid {
   background-color: #c0e8fe;
+}
+
+.article-grid .inner-column {
+  display: flex;
+  flex-direction: column;
+}
+
+article {
+/*  border: 2px solid red;*/
 }
 
 h1 {
@@ -103,19 +118,27 @@ footer {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-}
-  .diptych div {
+  }
+  .diptych .inner-column {
+    flex-direction: row-reverse;
     display: flex;
-}
+    align-items: center;
+  }
   .diptych picture {
-    padding-right: 20px;
+    padding-left: 20px;
   }
   .module-text {
     flex-direction: column;
     justify-content: center;
   }
-  .article-grid div {
-    display: flex;
-}
+  .article-grid .inner-column {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+  article {
+    width: 45%;
+  }
+
 }
 

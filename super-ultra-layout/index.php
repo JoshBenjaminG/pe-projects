@@ -57,26 +57,26 @@
 
 	<section class="article-grid">
 		<div class="inner-column">
-			<div class="module-text">
+			<article class="module-text">
 				<h1>An article title</h1>
 				<p>An article description or sentence</p>
 				<a href="#">Click to read!</a>
-			</div>
-			<div class="module-text">
+			</article>
+			<article class="module-text">
 				<h1>An article title</h1>
 				<p>An article description or sentence</p>
 				<a href="#">Click to read!</a>
-			</div>
-			<div class="module-text">
+			</article>
+			<article class="module-text">
+				<h1>An article title</h1>
+				<p>An article description or sentence</p>
+				<a href="#" class="module-button">Click to read!</a>
+			</article>
+			<article class="module-text">
 				<h1>An article title</h1>
 				<p>An article description or sentence</p>
 				<a href="#">Click to read!</a>
-			</div>
-			<div class="module-text">
-				<h1>An article title</h1>
-				<p>An article description or sentence</p>
-				<a href="#">Click to read!</a>
-			</div>
+			</article>
 		</div>
 	</section>
 
