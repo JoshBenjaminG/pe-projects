@@ -6,18 +6,17 @@
 			<img src="images/logo.svg" alt="">
 		</a> -->
 
-		<a href='#' class="anchor-voice">
+		<a href='#'>
 			<span>Some page</span>
 		</a>
 
-		<a href='#' class="anchor-voice">
+		<a href='#'>
 			<span>"Masthead"</span>
 		</a>
 	</nav>
 
-
 	<nav class='user-menu'>
-		<a href='#' class="anchor-voice">
+		<a href='#'>
 			<span>Sign-in</span>
 		</a>
 	</nav>

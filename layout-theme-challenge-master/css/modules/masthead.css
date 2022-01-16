@@ -19,6 +19,10 @@ mast-head a {
   padding:  10px;
 }
 
+mast-head a:hover {
+  text-decoration: underline;
+}
+
 @media (min-width: 600px) {
   mast-head {
     display: flex;

@@ -20,10 +20,21 @@ site-map .logo * {
 }
 
 site-map a {
-  font-family: sans-serif;
+  font-family: Roboto;
   font-size: 1rem;
   padding:  10px;
+  font-weight: 300;
+}
+
+site-map a:hover {
   text-decoration: underline;
+}
+
+site-map h3 {
+  font-family: Roboto;
+  font-size: 1.5rem;
+  padding:  10px;
+  font-weight: 100;
 }
 
 @media (min-width:  700px) {

@@ -97,11 +97,12 @@ html {
 }
 
 .help-us {
-  
+  background-color: #1926c2;
 }
 
 .site-footer {
-	background-color: var(--color);
+	padding-top: 10rem;
+	background-color: black;
 	color: var(--white);
 }
 

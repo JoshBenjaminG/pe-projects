@@ -1,8 +1,8 @@
 
 call-to-action {
   display: block;
-  padding-top: 40px;
-  padding-bottom: 40px;
+  padding-top: 60px;
+  padding-bottom: 60px;
   /* */
   display: flex;
   flex-direction: column;
@@ -11,21 +11,24 @@ call-to-action {
 
 call-to-action a {
   margin-top:  20px;
-}
-
-.button-color {
-  background-color: yellow;
   color: #1923b7;
-  width: 14rem;
+  width: 16rem;
   height: 3rem;
   display: flex;
   justify-content: center;
   align-items: center;
   margin-top: 50px;
+  text-transform: uppercase;
+  transition: all 200ms ease-in-out;
+}
+
+call-to-action a:hover {
+  background-color: #ddd203;
+  color: #565fff;
 }
 
 @media (min-width: 600px) {
   call-to-action {
-    padding: 100px;
+    padding: 150px;
   }
 }

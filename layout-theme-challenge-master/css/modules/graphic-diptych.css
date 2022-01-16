@@ -3,15 +3,26 @@ graphic-diptych {
   display: block;
   padding:  20px;
   padding-top: 4vh;
-  padding-bottom: 4vh;
+  padding-bottom: 10vh;
   /* */
   display: flex;
   flex-direction: column;
   gap: 30px;
+  
 }
 
 graphic-diptych text-content {
   display: block;
+}
+
+graphic-diptych picture {
+  display: block;
+}
+
+graphic-diptych img {
+  display: block;
+  width: 100%; 
+  height: auto;
 }
 
 @media (min-width: 660px) {
@@ -21,7 +32,7 @@ graphic-diptych text-content {
   }
 
   graphic-diptych :is(picture, text-content) {
-    width: 50%;
+    
   }
 
   graphic-diptych picture {

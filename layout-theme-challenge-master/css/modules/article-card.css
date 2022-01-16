@@ -23,5 +23,16 @@ article-card h2 {
 
 article-card a {
   margin-top: 20px;
-  color: var(--color);
+  color: white;
+  background-color: black;
+  width: 9.5rem;
+  height: 2.7rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: all 200ms ease-in-out;
+}
+
+article-card a:hover {
+  background-color: #3f3f3f;
 }

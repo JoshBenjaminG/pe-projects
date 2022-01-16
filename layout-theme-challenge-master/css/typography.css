@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100;400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;700&display=swap');
 
 .loud-voice	{
 	font-family: Roboto;
@@ -13,9 +13,11 @@
 
 .intro-voice	{
 	font-family: Roboto;
-	font-size: 110px;
+	font-size: clamp(90px, 50%, 110px);
 	font-weight: 700;
 	color: white;
+	letter-spacing: .2rem;
+	line-height: 1;
 }
 
 .attention-voice	{
@@ -36,7 +38,16 @@
 	font-weight: 100;
 }
 
-.anchor-voice {
+call-to-action a {
+	font-family: Roboto;
+	font-size: 1.2rem;
+	line-height: 1.4;
+	color: #1923b7;
+	font-weight: 300;
+	background-color: yellow;
+}
+
+mast-head nav a {
 	font-family: Roboto;
 	font-size: 1.2rem;
 	line-height: 1.4;
