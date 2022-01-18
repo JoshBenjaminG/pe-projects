@@ -3,49 +3,25 @@ graphic-diptych {
   display: block;
   padding:  20px;
   padding-top: 4vh;
-  padding-bottom: 15vh;
+  padding-bottom: 4vh;
   /* */
   display: flex;
   flex-direction: column;
-  gap: 40px;
-  width: 80vw;
+  gap: 30px;
 }
-
-/*graphic-diptych {
-   border: 2px solid white;
-}
-
-graphic-diptych * {
-   border: 2px solid white;
-}*/
 
 graphic-diptych text-content {
   display: block;
 }
 
-graphic-diptych picture {
-  display: block;
-  width: 100%;
-}
-
-graphic-diptych img {
-  display: block;
-  width: 100%;
-  height: auto;
-}
-
-@media (min-width: 1000px) {
+@media (min-width: 660px) {
   graphic-diptych {
     flex-direction: row;
     align-items: center;
   }
 
-  graphic-diptych picture {
-    min-width: 500px;
-  }
-
   graphic-diptych :is(picture, text-content) {
-    
+    width: 50%;
   }
 
   graphic-diptych picture {

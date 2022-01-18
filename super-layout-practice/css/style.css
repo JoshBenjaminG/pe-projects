@@ -66,15 +66,12 @@ html {
 
 /* OK! SITE STYLES! */
 .site-header {
-  background-color: black;
+  background-color: var(--color);
   color: var(--white);
 }
 
 .welcome {
-  background-color: black;
-  padding: 80px;
-  display: flex;
-  justify-content: center;
+  
 }
 
 
@@ -82,11 +79,9 @@ html {
 
 
 .get-involved {
-	padding: 40px;
-  background-color:  #1a27c9;
-  background-image:  url("https://images.unsplash.com/photo-1553877522-43269d4ea984?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80");
-  background-blend-mode: overlay;
-} 
+  background-color:  var(--highlight);
+  background-image:  url("data:image/svg+xml,%3Csvg width='4' height='4' viewBox='0 0 6 6' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23000000' fill-opacity='0.2' fill-rule='evenodd'%3E%3Cpath d='M5 0h1L0 6V5zM6 5v1H5z'/%3E%3C/g%3E%3C/svg%3E");
+} /* interesting way to include the whole image in your CSS */
 
 .get-involved inner-column {
 	/*max-width:  700px;*/
@@ -98,19 +93,15 @@ html {
 
 
 .stuff {
-  background-color: #efefef;
+  
 }
 
 .help-us {
-	padding: 40px;
-  background-color:  #1a27c9;
-  background-image:  url("https://images.unsplash.com/photo-1522202176988-66273c2fd55f?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1471&q=80");
-  background-blend-mode: overlay;
+  
 }
 
 .site-footer {
-	padding-top: 10rem;
-	background-color: black;
+	background-color: var(--color);
 	color: var(--white);
 }
 
