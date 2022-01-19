@@ -66,12 +66,14 @@ html {
 
 /* OK! SITE STYLES! */
 .site-header {
-  background-color: var(--color);
-  color: var(--white);
+  background-color: white;
+  color: black;
 }
 
 .welcome {
-  
+	background: url('https://images.unsplash.com/photo-1536180838057-b604200e6f36?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTA0fHxmYXNoaW9ufGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=800&q=60') no-repeat center;
+	background-size: cover;
+	background-attachment: fixed;
 }
 
 
@@ -79,8 +81,9 @@ html {
 
 
 .get-involved {
-  background-color:  var(--highlight);
-  background-image:  url("data:image/svg+xml,%3Csvg width='4' height='4' viewBox='0 0 6 6' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23000000' fill-opacity='0.2' fill-rule='evenodd'%3E%3Cpath d='M5 0h1L0 6V5zM6 5v1H5z'/%3E%3C/g%3E%3C/svg%3E");
+	background: url('https://images.unsplash.com/photo-1487222477894-8943e31ef7b2?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MjB8fGZhc2hpb258ZW58MHx8MHx8&auto=format&fit=crop&w=800&q=60') no-repeat center;
+	background-size: cover;
+	background-attachment: fixed;
 } /* interesting way to include the whole image in your CSS */
 
 .get-involved inner-column {
@@ -97,7 +100,9 @@ html {
 }
 
 .help-us {
-  
+	background: url('https://images.unsplash.com/photo-1475180098004-ca77a66827be?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MjR8fGZhc2hpb258ZW58MHx8MHx8&auto=format&fit=crop&w=800&q=60') no-repeat center;
+	background-size: cover;
+	background-attachment: fixed;  
 }
 
 .site-footer {

@@ -11,6 +11,10 @@ site-map {
   justify-content: space-between;
 }
 
+site-map nav:hover {
+  color: grey;
+}
+
 site-map .logo {
   max-width:  40px;
 }
@@ -28,6 +32,7 @@ site-map a {
 
 site-map a:hover {
   text-decoration: underline;
+  color: white;
 }
 
 site-map h3 {

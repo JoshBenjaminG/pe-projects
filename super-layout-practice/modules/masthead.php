@@ -2,24 +2,33 @@
 <mast-head>
 
 	<nav class='site-menu'>
-		<a class='logo' href='#'>
-			<img src="images/logo.svg" alt="">
-			<!-- or you could actually use the SVG -->
+
+		<a href='#' class="logo">
+			<span>SEXI</span>
 		</a>
 
 		<a href='#'>
-			<span>Some page</span>
+			<span>FASHION</span>
 		</a>
 
 		<a href='#'>
-			<span>"Masthead"</span>
+			<span>WATCHES</span>
 		</a>
+
+		<a href='#'>
+			<span>EYEWEAR</span>
+		</a>
+
+		<a href='#'>
+			<span>FRAGRANCE</span>
+		</a>
+
 	</nav>
 
 
 	<nav class='user-menu'>
 		<a href='#'>
-			<span>Sign-in</span>
+			<span>SIGN IN</span>
 		</a>
 	</nav>
 

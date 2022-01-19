@@ -8,6 +8,7 @@ graphic-diptych {
   display: flex;
   flex-direction: column;
   gap: 30px;
+  height: 50vh;
 }
 
 graphic-diptych text-content {

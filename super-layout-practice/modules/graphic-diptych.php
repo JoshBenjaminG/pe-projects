@@ -1,10 +1,6 @@
 
 <graphic-diptych>
 
-	<picture>
-		<img src='https://peprojects.dev/images/square.jpg' alt='$todo'>
-	</picture>
-
 	<text-content>
 		<h1 class='intro-voice'>Hello! This is a 'diptych'</h1>
 

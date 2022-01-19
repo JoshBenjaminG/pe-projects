@@ -9,16 +9,16 @@
 
 <article-card>
 
-	<picture>
+<!-- 	<picture>
 		<img src='<?=$thumbnail?>' loading='lazy' alt='$todo'>
-	</picture>
+	</picture> -->
 
 	<h2 class='attention-voice black-text'><?=$article["heading"]?></h2>
 
 	<p class='calm-voice black-text'><?=$article["description"]?></p>
 
 	<a class='link calm-voice' href='#'>
-		<span>Read more</span>
+		<span>READ MORE</span>
 	</a>
 
 </article-card>

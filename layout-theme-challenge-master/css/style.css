@@ -72,11 +72,20 @@ html {
 
 .welcome {
   background-color: black;
-  padding: 80px;
+  padding: 20px;
   display: flex;
-  justify-content: center;
+ /* justify-content: center;
+  background-color: black;
+  background-image:  url("https://images.unsplash.com/photo-1553877522-43269d4ea984?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80");
+  background-blend-mode: overlay;*/
 }
 
+@media(min-width: 1000px) {
+	.welcome {
+		padding-bottom: 80px;
+		padding-top: 80px;
+	}
+}
 
 /* things kinda just start grouping up... and you'll know when something should be grouped into another file - most of the time */
 
@@ -84,7 +93,7 @@ html {
 .get-involved {
 	padding: 40px;
   background-color:  #1a27c9;
-  background-image:  url("https://images.unsplash.com/photo-1553877522-43269d4ea984?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80");
+  background-image: url("https://images.unsplash.com/photo-1553877522-43269d4ea984?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80");
   background-blend-mode: overlay;
 } 
 
@@ -99,6 +108,8 @@ html {
 
 .stuff {
   background-color: #efefef;
+  padding-left: 10px;
+  padding-right: 10px;
 }
 
 .help-us {
