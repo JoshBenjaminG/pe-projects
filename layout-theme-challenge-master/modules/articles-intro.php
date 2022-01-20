@@ -2,9 +2,9 @@
 <articles-intro>
 
   <header>
-    <h2 class='attention-voice black-text'>This is and "Article grid" module. This is its heading.</h2>
+    <h2 class='attention-voice black-text'>A Community of Designers, Artists, and Teachers.</h2>
 
-    <p class='calm-voice black-text'>Again, we totally just made that up. It's a box with boxes in it.</p>
+    <p class='calm-voice black-text'>Whether you need a design, a fresh brand, or know-how, Wollf has you covered.</p>
   </header>
 
   <article-grid>

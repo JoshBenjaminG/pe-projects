@@ -2,13 +2,12 @@
 graphic-diptych {
   display: block;
   padding:  20px;
-  padding-top: 4vh;
   padding-bottom: 15vh;
   /* */
   display: flex;
   flex-direction: column;
   gap: 40px;
-  width: 80vw;
+  width: 100%;
 }
 
 /*graphic-diptych {
@@ -25,13 +24,14 @@ graphic-diptych text-content {
 
 graphic-diptych picture {
   display: block;
+  height: 50%;
   width: 100%;
 }
 
 graphic-diptych img {
   display: block;
+  height: 100%;
   width: 100%;
-  height: auto;
 }
 
 @media (min-width: 1000px) {
@@ -42,15 +42,26 @@ graphic-diptych img {
 
   graphic-diptych picture {
     min-width: 500px;
+    max-width: 600px;
   }
 
   graphic-diptych :is(picture, text-content) {
     
   }
 
+  graphic-diptych text-content {
+    max-width: 100vh;
+  }
+
   graphic-diptych picture {
     order: 2;
     /* OR you could use flex-direction row-reverse */
     /* it depends on the situation */
+  }
+
+  @media (min-width: 1500px) {
+    graphic-diptych text-content {
+      max-width: 50vh;
+    }
   }
 }

@@ -24,7 +24,6 @@
 
 	<nav class='social-menu'>
 		<h3>Social Menu</h3>
-
 		<a href='#'>social thing a</a>
 		<a href='#'>social thing b</a>
 		<a href='#'>social thing c</a>

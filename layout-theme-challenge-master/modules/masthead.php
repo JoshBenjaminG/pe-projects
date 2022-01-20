@@ -7,17 +7,17 @@
 		</a> -->
 
 		<a href='#'>
-			<span>Some page</span>
+			<span>WOLFF</span>
 		</a>
 
 		<a href='#'>
-			<span>"Masthead"</span>
+			<span>SERVICES</span>
 		</a>
 	</nav>
 
 	<nav class='user-menu'>
 		<a href='#'>
-			<span>Sign-in</span>
+			<span>MORE</span>
 		</a>
 	</nav>
 

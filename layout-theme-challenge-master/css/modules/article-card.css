@@ -9,12 +9,14 @@ article-card {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  background-color: #fefefe;
-  transition: all 200ms ease-in-out;
+  background-color: #F9F9F9;
+  transition: all 150ms ease-in-out;
 }
 
 article-card:hover {
   box-shadow: 0 0 18px 6px #e2e2e2;
+  
+  background-color: #ffffff;
 }
 
 article-card h2 {
