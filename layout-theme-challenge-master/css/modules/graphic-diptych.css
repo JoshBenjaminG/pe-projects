@@ -1,13 +1,13 @@
 
 graphic-diptych {
   display: block;
-  padding:  20px;
-  padding-bottom: 15vh;
   /* */
   display: flex;
   flex-direction: column;
+  align-items: center;
   gap: 40px;
   width: 100%;
+  min-height: 80vh;
 }
 
 /*graphic-diptych {
@@ -25,7 +25,8 @@ graphic-diptych text-content {
 graphic-diptych picture {
   display: block;
   height: 50%;
-  width: 100%;
+  width: 90%;
+  max-width: 500px;
 }
 
 graphic-diptych img {
@@ -40,7 +41,7 @@ graphic-diptych img {
     align-items: center;
   }
 
-  graphic-diptych picture {
+  graphic-diptych picture, {
     min-width: 500px;
     max-width: 600px;
   }

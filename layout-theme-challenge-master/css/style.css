@@ -30,6 +30,7 @@
 @import 'modules/articles-intro.css';
 @import 'modules/article-card.css';
 @import 'modules/site-map.css';
+@import 'modules/article-carousel.css';
 /* should everything/nothing be in it's own file? */
 
 
@@ -60,19 +61,15 @@ html {
 
 
 
-
-
-
-
 /* OK! SITE STYLES! */
 .site-header {
   background-color: black;
   color: var(--white);
+  z-index: 1;
 }
 
 .welcome {
   background-color: black;
-  padding: 20px;
   display: flex;
  /* justify-content: center;
   background-color: black;
@@ -82,8 +79,7 @@ html {
 
 @media(min-width: 1000px) {
 	.welcome {
-		padding-bottom: 70px;
-		padding-top: 20px;
+
 	}
 }
 
@@ -97,6 +93,8 @@ html {
   background-blend-mode: overlay;
   background-repeat: no-repeat;
   background-size: cover;
+  background-position: center 10%;
+  background-attachment: fixed;
 } 
 
 .get-involved inner-column {
@@ -110,8 +108,11 @@ html {
 
 .stuff {
   background-color: #EDEDED;
-  padding-left: 10px;
-  padding-right: 10px;
+  display: flex;
+}
+
+.stuff inner-column {
+  min-width: 80%;
 }
 
 .help-us {
@@ -121,6 +122,8 @@ html {
   background-blend-mode: overlay;
   background-repeat: no-repeat;
   background-size: cover;
+  background-position: center center;
+  background-attachment: fixed;
 }
 
 .site-footer {

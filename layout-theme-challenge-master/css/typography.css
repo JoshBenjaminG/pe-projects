@@ -13,11 +13,11 @@
 
 .intro-voice	{
 	font-family: Roboto;
-	font-size: clamp(70px, 30%, 80px);
+	font-size: clamp(50px, 40%, 70px);
 	font-weight: 700;
 	color: white;
 	letter-spacing: .2rem;
-	line-height: 1;
+	line-height: 1.2;
 }
 
 .attention-voice	{

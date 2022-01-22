@@ -24,6 +24,11 @@ mast-head a:hover {
   text-decoration: underline;
 }
 
+/* Translate -10px moves entire nav to the left by 10 px beacuse we only want padding around other areas. */
+mast-head .site-menu {
+  transform: translate(-10px, 0);
+}
+
 @media (min-width: 600px) {
   mast-head {
     display: flex;

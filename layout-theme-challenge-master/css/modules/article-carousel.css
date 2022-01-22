@@ -1,0 +1,16 @@
+article-carousel {
+	display: block;
+	width: 95%;
+	margin-bottom: 60px;
+}
+
+article-carousel article-card {
+	margin-bottom: 50px;
+	min-height: 100%;
+	width: 100%;
+}
+
+article-carousel article-card a {
+	margin-top: auto;
+}
+	

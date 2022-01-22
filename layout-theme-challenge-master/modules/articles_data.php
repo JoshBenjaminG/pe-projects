@@ -2,18 +2,60 @@
 
 $database = [ // an associative array (Array of key:value pairs)
 	[
-		"heading" => "Article or product",
-		"description" => "Here's a little info to help you understand if this is a thing you want to know about.",
+		"heading" => "Level Up Your Brand",
+		"description" => "Your brand is great, and you love it enough to make it better. Here's how.",
 		"thumbnail" => "https://peprojects.dev/images/landscape.jpg",
+		"button" => "Next Level",
 	],
 	[
-		"heading" => "Destination or option",
-		"description" => "Here's a little info to help you understand if this is a thing you want to know about.",
+		"heading" => "Find A New Direction",
+		"description" => "Pivoting is easy with direction from experts. This is the first step.",
 		"thumbnail" => "https://peprojects.dev/images/landscape.jpg",
+		"button" => "The Map",
 	],
 	[
-		"heading" => "Story or something",
-		"description" => "Here's a little info to help you understand if this is a thing you want to know about.",
+		"heading" => "Expand Your Story",
+		"description" => "Take your success to new areas just to see what happens. You may be surprised.",
 		"thumbnail" => "https://peprojects.dev/images/landscape.jpg",
+		"button" => "Unique Story",
+	],
+];
+
+$allarticles = [ // an associative array (Array of key:value pairs)
+	[
+		"heading" => "Level Up Your Brand",
+		"description" => "Your brand is great, and you love it enough to make it better. Here's how.",
+		"thumbnail" => "https://peprojects.dev/images/landscape.jpg",
+		"button" => "Next Level",
+	],
+	[
+		"heading" => "Find A New Direction",
+		"description" => "Pivoting is easy with direction from experts. This is the first step.",
+		"thumbnail" => "https://peprojects.dev/images/landscape.jpg",
+		"button" => "The Map",
+	],
+	[
+		"heading" => "Expand Your Story",
+		"description" => "Take your success to new areas just to see what happens. You may be surprised.",
+		"thumbnail" => "https://peprojects.dev/images/landscape.jpg",
+		"button" => "Unique Story",
+	],
+		[
+		"heading" => "Level Up Your Brand",
+		"description" => "Your brand is great, and you love it enough to make it better. Here's how.",
+		"thumbnail" => "https://peprojects.dev/images/landscape.jpg",
+		"button" => "Next Level",
+	],
+	[
+		"heading" => "Find A New Direction",
+		"description" => "Pivoting is easy with direction from experts. This is the first step.",
+		"thumbnail" => "https://peprojects.dev/images/landscape.jpg",
+		"button" => "The Map",
+	],
+	[
+		"heading" => "Expand Your Story",
+		"description" => "Take your success to new areas just to see what happens. You may be surprised.",
+		"thumbnail" => "https://peprojects.dev/images/landscape.jpg",
+		"button" => "Unique Story",
 	],
 ];

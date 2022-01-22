@@ -1,12 +1,12 @@
 
 <call-to-action>
 
-	<h2 class='attention-voice'>This module is a "call to action"</h2>
+	<h2 class='attention-voice'>Stop them from scrolling away.</h2>
 
-	<p class='calm-voice'>These aren't names you should memorize. We're just making them up. Sometimes things get called something so many times, that it sticks. This is a pretty common pattern</p>
+	<p class='calm-voice'>Give your brand a facelift and capture their attention. They won't want to leave when they see this. Looking like money is the first step to a successful design.</p>
 
 	<a href='#'>
-		<span>Here's the action!</span>
+		<span>THE FIRST STEP</span>
 	</a>
 
 </call-to-action>

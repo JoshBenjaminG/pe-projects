@@ -33,6 +33,23 @@
 </section>
 
 
+<section class='stuff'>
+<inner-column>
+	
+	<?php include('modules/articles-carousel.php'); ?>
+
+</inner-column>
+</section>
+
+
+<section class='help-us'>
+<inner-column>
+
+	<?php include('modules/call-to-action.php'); ?>
+
+</inner-column>
+</section>
+
 
 <section class='help-us'>
 <inner-column>
