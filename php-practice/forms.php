@@ -4,8 +4,10 @@ $age = 0;
 $daysAlive = 0;
 
 if( isset($_POST["submit"]) ) {
-	$age = $_POST["age"];
-	$daysAlive = $age * 365;
+	if(isset($_POST["age"]) ) {
+		$age = $_POST["age"];
+		$daysAlive = $age * 365;
+	}
 }
 
 ?>
@@ -18,7 +20,7 @@ if( isset($_POST["submit"]) ) {
 
 <form method="POST">
 	<label>What is your age?</label>
-	<input type="number" name="age">
+	<input type="number" name="age" min="0">
 	
 	<button type="submit" name="submit">submit</button>
 </form>
