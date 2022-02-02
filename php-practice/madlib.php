@@ -1,59 +1,68 @@
 <?php
 
-$age = 0;
-$daysAlive = 0;
+include("style.php");
+
+$noun = "dog";
+$verb = "walk";
+$adjective = "blue";
+$adverb = "quickly";
 
 if( isset($_POST["submit"]) ) {
-	if (isset($_POST["noun"]) ) {
+	if ( empty($_POST["noun"]) ) {
+		$noun = "";
+	} else {
 		$noun = $_POST["noun"];
-		$verb = $_POST["verb"];
-		$adjective = $_POST["adjective"];
-		$adverb = $_POST["adverb"];
+	}
 
+	if ( empty($_POST["verb"]) ) {
+		$verb = "";
+	} else {
+		$verb = $_POST["verb"];
+	} 
+
+	if ( empty($_POST["adjective"]) ) {
+		$adjective = "";
+	} else {
+		$adjective = $_POST["adjective"];
+	} 
+
+	if ( empty($_POST["adverb"]) ) {
+		$adverb = "";
+	} else {
+		$adverb = $_POST["adverb"];
+	}  
+	if (isset($_POST["noun"]) && $_POST["verb"] && $_POST["adjective"] && $_POST["adverb"]) {
 		$message = "Do you " . $verb . " your " . $adjective . " " . $noun . " " . $adverb . "?" . " That's hilarious!";
+	} else {
+		$message = "Enter the dang words.";
 	}
 }
+
+
 
 ?>
 
 
 <section>
-<p>Mad libs! Enter strings into the input fields.</p>
+<h1>Mad libs! Enter strings into the input fields.</h1>
 
 <p><?=$message?></p>
 
 <form method="POST">
+
 	<label>Enter a noun.</label>
-	<input type="string" name="noun" placeholder="dog">
+	<input type="string" name="noun" value="<?=$noun?>" placeholder="Person, place, or thing.">
+
 	<label>Enter a verb.</label>
-	<input type="string" name="verb" placeholder="walk">
+	<input type="string" name="verb" value="<?=$verb?>" placeholder="An action.">
+
 	<label>Enter an adjective.</label>
-	<input type="string" name="adjective" placeholder="blue">
+	<input type="string" name="adjective" value="<?=$adjective?>" placeholder="Word that describes a noun">
+
 	<label>Enter an adverb.</label>
-	<input type="string" name="adverb" placeholder="quickly">
+	<input type="string" name="adverb" value="<?=$adverb?>" placeholder="Word that describes an action.">
+
 	<button type="submit" name="submit">submit</button>
 </form>
 </section>
 
-<style type="text/css">
-	section {
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-		justify-content: center;
-	}
-
-	form {
-		display: flex;
-		flex-direction: column;
-	}
-
-	label {
-		padding-bottom: 10px;
-		padding-top: 10px;
-	}
-
-	button {
-		margin-top: 10px;
-	}
-</style>

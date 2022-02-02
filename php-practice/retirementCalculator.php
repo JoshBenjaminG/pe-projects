@@ -16,7 +16,7 @@ if( isset($_POST["submit"]) ) {
 <h1>Retirement Calculator</h1>
 
 <p><?=$ageDifference?> years until you retire.</p>
-<p>It's<?=$year?>. So you can retire in <?=$ageYear?>.</p>
+<p>It's <?=$year?>. So you can retire in <?=$ageYear?>.</p>
 
 <form method="POST">
 	<label>What is your current age?</label>
