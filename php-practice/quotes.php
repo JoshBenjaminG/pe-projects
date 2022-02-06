@@ -1,5 +1,7 @@
 <?php
 
+include("style.php");
+
 if( isset($_POST["submit"]) ) {
 	if(isset($_POST["quote"]) && isset($_POST["author"]) ) {
 		$quote = $_POST["quote"];

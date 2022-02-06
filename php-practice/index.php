@@ -1,5 +1,7 @@
 <?php
 
+include("style.php");
+
 $array = [
 	"count",
 	"forms",
@@ -9,6 +11,7 @@ $array = [
 	"quotes",
 	"retirementCalculator",
 	"simpleMath",
+	"rectangle",
 ];
 
 foreach($array as $exercise) {

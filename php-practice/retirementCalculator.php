@@ -1,5 +1,7 @@
 <?php 
 
+include("style.php");
+
 $year = date("Y"); 
 
 if( isset($_POST["submit"]) ) {

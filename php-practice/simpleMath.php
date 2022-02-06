@@ -1,5 +1,7 @@
 <?php 
 
+include("style.php");
+
 if( isset($_POST["submit"]) ) {
 	if(isset($_POST["num1"]) && isset($_POST["num2"]) ) {
 		$num1 = $_POST["num1"];

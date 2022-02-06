@@ -1,5 +1,6 @@
 <?php
 
+include("style.php");
 
 $array = [
 	"hair" => "curly",

@@ -1,5 +1,7 @@
 <?php 
 
+include("style.php");
+
 $name = 'Josh';
 $age = 25;
 $money = 1000;

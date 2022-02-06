@@ -1,5 +1,7 @@
 <?php
 
+include("style.php");
+
 $formSubmitted = isset($_POST["submit"]);
 $height = $_POST["height"];
 $width = $_POST["width"];

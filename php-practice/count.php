@@ -1,5 +1,7 @@
 <?php 
 
+include("style.php");
+
 $formSubmitted = isset($_POST["submit"]);
 $inputSubmitted = isset($_POST["string"]);
 $message = "Input a string";
