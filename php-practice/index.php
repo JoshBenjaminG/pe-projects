@@ -12,6 +12,7 @@ $array = [
 	"retirementCalculator",
 	"simpleMath",
 	"rectangle",
+	"triangle",
 ];
 
 foreach($array as $exercise) {
