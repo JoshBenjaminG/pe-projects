@@ -1,0 +1,20 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Serif:wght@100;300;400&display=swap');
+
+.loud-voice {
+	font-family: 'Roboto Serif', sans-serif;
+	font-size: clamp(36px, 5vw, 60px);
+}
+
+.intro-voice {
+	font-family: 'Roboto Serif', sans-serif;
+	font-size: clamp(50px, 40%, 70px);
+}
+
+.calm-voice {
+	font-family: 'Roboto Serif', sans-serif;
+	font-size: clamp(25px, 5vw, 40px);
+}
+
+header a {
+	font-family: 'Roboto Serif', sans-serif;
+}

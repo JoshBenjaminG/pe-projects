@@ -1,0 +1,77 @@
+@import 'meyer-reset.css';
+
+@import 'typography.css';
+
+* {
+	box-sizing: border-box;
+
+}
+
+body * {
+	/*border: 2px solid red;*/
+}
+
+body {
+	font-family: ;
+	min-height: 100vh;
+	display: flex;
+	flex-direction: column;
+}
+
+.inner-column {
+	max-width: 700px;
+	margin-right: auto;
+	margin-left: auto;
+}
+
+
+
+header nav {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	margin-top: 3vh;
+	max-width: 1300px;
+	margin-left: auto;
+	margin-right: auto;
+	padding-left: 10px;
+	padding-right: 10px;
+}
+
+header nav div a{
+	padding-right: 9px;
+}
+
+header nav a {
+	text-decoration: none;
+	color: black;
+}
+
+header nav a:hover {
+	text-decoration: underline;
+	color: #4d4d4d;
+}
+
+main {
+	flex-grow: 1;
+}
+
+.landing {
+	min-height: 85vh;
+	display: flex;
+	justify-content: center;
+	align-content: center;
+	flex-direction: column;
+}
+
+.landing h1 {
+	display: flex;
+	justify-content: center;
+	padding-bottom: 8px;
+}
+
+footer div nav {
+	display: flex;
+	justify-content: center;
+	margin-bottom: 4vh;
+}
