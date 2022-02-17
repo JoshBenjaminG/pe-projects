@@ -1,0 +1,14 @@
+@import 'meyer-reset.css';
+@import 'setup.css';
+
+* {
+	box-sizing: border-box;
+}
+
+body {
+	background-color: salmon;
+}
+
+body * {
+	padding: 10px;
+}
