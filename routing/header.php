@@ -24,7 +24,7 @@ if(isset($_GET['page'])) {
 
 <header>
 	<nav>
-		<a href='?page=home'>home page</a>
-		<a href='?page=list'>lectures page</a>
+			<a href='?page=home'>home page</a>
+			<a href='?page=list'>lectures page</a>
 	</nav>
 </header>

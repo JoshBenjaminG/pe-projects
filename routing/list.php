@@ -1,25 +1,15 @@
+<?php include('lecture-data.php'); ?>
+
 <ul>
-	<li class='lecture'>
-		<card>
-			<h2>Lecture Title</h2>
-			<h3>Lecture Description</h3>
-			<a href='?page=details'>details</a>
-		</card>
-	</li>
+	<?php foreach ($lecture_data as $lecture) { ?>
+		<li class='lecture'>
+			<card>
+				<h2><?=$lecture["title"]?></h2>
+				<h3><?=$lecture["length"]?></h3>
+				<a href= '?page=details&lecture=<?=$lecture["id"]?>'>details</a>
+			</card>
+		</li>
+	<?php } ?>
 
-	<li class='lecture'>
-		<card>
-			<h2>Lecture Title</h2>
-			<h3>Lecture Description</h3>
-			<a href='?page=details'>details</a>
-		</card>
-	</li>
-
-	<li class='lecture'>
-		<card>
-			<h2>Lecture Title</h2>
-			<h3>Lecture Description</h3>
-			<a href='?page=details'>details</a>
-		</card>
-	</li>
 </ul>
+
