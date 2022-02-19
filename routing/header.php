@@ -5,7 +5,7 @@
 if(isset($_GET['page'])) {
 	$page = $_GET['page'];
 } else {
-	$page = 'empty';
+	$page = 'home';
 }
 
 ?>
@@ -26,5 +26,6 @@ if(isset($_GET['page'])) {
 	<nav>
 			<a href='?page=home'>home page</a>
 			<a href='?page=list'>lectures page</a>
+			<a href='?page=create'>add lecture</a>
 	</nav>
 </header>
