@@ -3,12 +3,50 @@
 
 * {
 	box-sizing: border-box;
+	/*border: 2px solid dodgerblue;*/
 }
 
 body {
-	background-color: salmon;
+	background-color: #ffebcd;
 }
 
 body * {
 	padding: 10px;
+}
+
+header {
+	background-color: dodgerblue;
+}
+
+header nav {
+	display: flex;
+	flex-direction: row;
+	justify-content: flex-end;
+}
+
+form {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+}
+
+field {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+field input {
+
+}
+
+form div {
+	display: flex;
+	flex-direction: column;
+	align-items: flex-end;
+}
+
+.error {
+	color: red;
 }
