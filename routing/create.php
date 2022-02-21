@@ -19,9 +19,9 @@
 		$lectureLength = "";
 		if(isset($_POST["length"])) {
 			$lectureLength = $_POST["length"];
-	// if there is not a length, make an error message
 			if (strlen($lectureLength) > 0 ) {
 				$hasLength = true;
+	// if there is not a length, make an error message
 			} else {
 				$lengthError = "Please add a length";
 			}
@@ -39,7 +39,7 @@
 <form method="POST">
 	<div>
 		<h1>Add a lecture or educational video below</h1>
-		<p><?=$submitMessage?></p>
+		<p class="success"><?=$submitMessage?></p>
 		<field>
 			<label>Name</label>
 			<input type="name" name="title" value="<?=$lectureTitle?>">
