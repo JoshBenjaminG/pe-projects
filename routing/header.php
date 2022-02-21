@@ -24,8 +24,8 @@ if(isset($_GET['page'])) {
 
 <header>
 	<nav>
-			<a href='?page=home'>home page</a>
-			<a href='?page=list'>lectures page</a>
-			<a href='?page=create'>add lecture</a>
+			<a href='?page=home' class="<?php if( $page == 'home') { echo 'active'; } ?>">home page</a>
+			<a href='?page=list' class="<?php if( $page == 'list') { echo 'active'; } ?>">lectures page</a>
+			<a href='?page=create' class="<?php if( $page == 'create') { echo 'active'; } ?>">add lecture</a>
 	</nav>
 </header>
