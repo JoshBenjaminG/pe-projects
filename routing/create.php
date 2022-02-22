@@ -1,10 +1,20 @@
 
 <?php
+
+	
+	$lengthError = "";
+	$lectureLength = "";
+	$hasLength = false;
+	$submitMessage = "";
+	$titleError = "";
+	$lectureTitle = "";
+	$hasTitle = false;
+
 	// if something was submitted
 	if (isset($_POST["create"])) {
 		
 	// is there a title	
-		$lectureTitle = "";
+		
 		if(isset($_POST["title"])) {
 			$lectureTitle = $_POST["title"];
 	
@@ -16,20 +26,22 @@
 			}
 		}
 	// is there a length
-		$lectureLength = "";
+		
 		if(isset($_POST["length"])) {
 			$lectureLength = $_POST["length"];
-			if (strlen($lectureLength) > 0 ) {
+			if(strlen($lectureLength) > 0 ) {
 				$hasLength = true;
 	// if there is not a length, make an error message
 			} else {
 				$lengthError = "Please add a length";
 			}
 		}
+
 	// if it has a length and title, make a confirmation message
+	
 		if ($hasLength && $hasTitle) {
 			$submitMessage = "Lecture submitted";
-		} 
+		}
 	}
 
 ?>

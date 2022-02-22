@@ -1,147 +1,77 @@
 @import 'meyer-reset.css';
-@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Display:ital@0;1&display=swap');
+
+@import 'typography.css';
 
 * {
 	box-sizing: border-box;
-}
 
-body {
-	--white: #fffafa;
-	background-color: var(--white);
-	font-family: 'Noto Sans Display', sans-serif;
 }
 
 body * {
-	/*border: 1px solid red;*/
+	/*border: 2px solid red;*/
+}
+
+body {
+	font-family: ;
+	min-height: 100vh;
+	display: flex;
+	flex-direction: column;
 }
 
 .inner-column {
-	max-width: 900px;
-	margin-left: auto;
+	max-width: 700px;
 	margin-right: auto;
-	padding: 10px;
+	margin-left: auto;
 }
 
-p {
-	padding-bottom: 10px;
-	line-height: 1.2;
-	color: #008B8B;
-}
 
-header {
-	background-color: #FFFAFA;
-	position: sticky;
-	top: 0;
-	box-shadow: 0 0 10px 0 black;
-}
 
-header div {
+header nav {
 	display: flex;
 	flex-direction: row;
-	align-items: center;
 	justify-content: space-between;
+	margin-top: 3vh;
+	max-width: 1300px;
+	margin-left: auto;
+	margin-right: auto;
+	padding-left: 10px;
+	padding-right: 10px;
 }
 
-nav a {
+header nav div a{
+	padding-right: 9px;
+}
+
+header nav a {
 	text-decoration: none;
 	color: black;
-	padding: 10px;
 }
 
-nav a:hover {
+header nav a:hover {
 	text-decoration: underline;
-	color: #0050d6;
+	color: #4d4d4d;
 }
 
-h1 {
-	font-size: 25px;
-}
-.about {
-	display: flex;
-	background-color: #0050d6;;
-	min-height: 100vh;
+main {
+	flex-grow: 1;
 }
 
-.about .inner-column {
+.landing {
+	min-height: 85vh;
 	display: flex;
+	justify-content: center;
+	align-content: center;
 	flex-direction: column;
-	gap: 20px;
 }
 
-.about h2 {
-	text-align: center;
-	font-size: 70px;
-	color: white;
-}
-
-.about-text p {
-	color: white;
-	font-size: 18px;
-	line-height: 1.7;
-	letter-spacing: 2px;
-}
-
-@media (min-width: 600px) {
-	.about .inner-column {
-	    flex-direction: row;
-	    align-items: center;
-	}
-	.about h2 {
-		width: 50%;
-	}
-	.about .about-text {
-		width: 50%;
-	}
-}
-
-img {
-	width: 150px;
-}
-
-/*projects*/
-
-.projects {
+.landing h1 {
 	display: flex;
-	align-items: center;
-	background-color: var(--white);
-	min-height: 100vh;
+	justify-content: center;
+	padding-bottom: 8px;
 }
 
-project-grid {
-	display: block;
-	
+footer div nav {
+	display: flex;
+	justify-content: center;
+	margin-bottom: 4vh;
 }
-
-project p {
-	color: black;
-}
-
-@media (min-width: 600px) {
-	.projects {
-		background-color: #6ba1ff;
-	}
-	project-grid {
-		background-color: var(--white);
-		border-radius: 10px;
-		padding: 20px;
-		box-shadow: 0 0 4px 0 black;
-	}
-	project-list {
-		display: flex;
-	    flex-direction: row;
-	    align-items: center;
-	}
-}
-
-footer {
- background-color: #0050d6;
- min-height: 100vh;
- display: flex;
- align-items: center;
-}
-
-footer div p {
-	color: white;
-}
-
-
