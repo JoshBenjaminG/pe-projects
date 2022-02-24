@@ -41,6 +41,13 @@
 	
 		if ($hasLength && $hasTitle) {
 			$submitMessage = "Lecture submitted";
+			$newLecture = [
+				"title" => $lectureTitle,
+				"length" => $lectureLength,
+			];
+
+			$lectureJSON = json_encode($newLecture);
+			file_put_contents('lectureJSON.json', $lectureJSON);
 		}
 	}
 
