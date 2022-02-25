@@ -7,12 +7,14 @@
 
 .intro-voice {
 	font-family: 'Roboto Serif', sans-serif;
-	font-size: clamp(50px, 40%, 70px);
+	font-size: clamp(40px, 4vw, 70px);
+	font-weight: 400;
 }
 
 .calm-voice {
 	font-family: 'Roboto Serif', sans-serif;
-	font-size: clamp(25px, 5vw, 40px);
+	font-size: clamp(25px, 5vw, 32px);
+	font-weight: 300;
 }
 
 header a {
