@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg width="100%" height="100%" viewBox="0 0 800 600" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
+    <rect x="253.281" y="150.215" width="278.195" height="255.843" style="fill:url(#_Linear1);"/>
+    <path d="M531.976,150.215C531.976,149.939 531.752,149.715 531.476,149.715L253.281,149.715C253.004,149.715 252.781,149.939 252.781,150.215L252.781,406.057C252.781,406.334 253.004,406.557 253.281,406.557L531.476,406.557C531.752,406.557 531.976,406.334 531.976,406.057L531.976,150.215ZM530.976,150.715L530.976,405.557C530.976,405.557 253.781,405.557 253.781,405.557C253.781,405.557 253.781,150.715 253.781,150.715C266.831,150.715 530.976,150.715 530.976,150.715L530.976,150.715Z" style="fill:rgb(187,187,187);"/>
+    <g transform="matrix(1.57082,0,0,1.57082,-199.799,-81.9996)">
+        <text x="327.396px" y="232.053px" style="font-family:'Zapfino', cursive;font-style:italic;font-size:64px;">J</text>
+    </g>
+    <g transform="matrix(1.45326,0,0,1.45326,-221.27,-92.9889)">
+        <text x="391.24px" y="291.384px" style="font-family:'Zapfino', cursive;font-style:italic;font-size:64px;">G</text>
+    </g>
+    <defs>
+        <linearGradient id="_Linear1" x1="0" y1="0" x2="1" y2="0" gradientUnits="userSpaceOnUse" gradientTransform="matrix(278.195,0,0,255.843,253.281,278.136)"><stop offset="0" style="stop-color:white;stop-opacity:1"/><stop offset="1" style="stop-color:rgb(255,254,254);stop-opacity:1"/></linearGradient>
+    </defs>
+</svg>

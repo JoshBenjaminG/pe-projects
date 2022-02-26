@@ -2,13 +2,16 @@
 
 @import 'typography.css';
 
+html {
+	scroll-behavior: smooth;
+}
+
 * {
 	box-sizing: border-box;
-
 }
 
 body * {
-	/*border: 2px solid red;*/
+/*	border: 2px solid red;*/
 }
 
 body {
@@ -23,8 +26,6 @@ body {
 	margin-left: auto;
 }
 
-
-
 header nav {
 	display: flex;
 	flex-direction: row;
@@ -35,6 +36,7 @@ header nav {
 	margin-right: auto;
 	padding-left: 10px;
 	padding-right: 10px;
+
 }
 
 header nav div a{
@@ -56,7 +58,7 @@ main {
 }
 
 .landing {
-	min-height: 92vh;
+	min-height: 95vh;
 	display: flex;
 	justify-content: center;
 	align-content: center;
@@ -70,7 +72,7 @@ main {
 }
 
 .aboutMe {
-	min-height: 98vh;
+	min-height: 95vh;
 	display: flex;
 	justify-content: center;
 	align-content: center;
@@ -87,12 +89,12 @@ li + li {
 }
 
 .projects {
-	min-height: 92vh;
+	min-height: 95vh;
 	display: flex;
 	justify-content: center;
 	align-content: center;
 	flex-direction: column;
-	background-color: white;
+	background-color: #65edd1;
 }
 
 ul li {

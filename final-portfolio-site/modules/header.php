@@ -13,11 +13,11 @@
 <header>
 
 	<nav>
-		<a href="">Joshua</a>
+		<a href=""><img src="logo.svg"></a>
 		<div>
-			<a href="">Projects</a>
-			<a href="">Resume</a>
-			<a href="">Contact</a>
+			<a href="#aboutme">About Me</a>
+			<a href="#projects">Projects</a>
+			<a href="JoshuaGageResume.pdf" download>Resume</a>
 		</div>
 	</nav>
 

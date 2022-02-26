@@ -8,7 +8,7 @@
 
 	</section>
 
-	<section class="aboutMe">
+	<section class="aboutMe" id="aboutme">
 		<div class="inner-column">
 			
 			<?php include("modules/aboutMe.php"); ?>
@@ -16,7 +16,7 @@
 		</div>
 	</section>
 
-	<section class="projects">
+	<section class="projects" id="projects">
 		<div class="inner-column">
 				
 			<?php include 'modules/project-maker.php'; ?>
@@ -27,5 +27,5 @@
 </main>
 
 
-<?php include("modules/footer.php"); ?>
+
 

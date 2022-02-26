@@ -21,3 +21,14 @@
 header a {
 	font-family: 'Roboto Serif', sans-serif;
 }
+
+.projects a {
+	font-family: 'Roboto Serif', sans-serif;
+	text-decoration: none;
+	color: black;
+}
+
+.projects a:hover {
+	text-decoration: underline;
+	color: white;
+}
