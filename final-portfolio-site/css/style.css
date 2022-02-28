@@ -10,8 +10,11 @@ html {
 	box-sizing: border-box;
 }
 
-body * {
-/*	border: 2px solid red;*/
+body* {/*	border: 2px solid red;
+*/}
+
+::-webkit-scrollbar{
+	display: none;
 }
 
 body {
@@ -26,11 +29,18 @@ body {
 	margin-left: auto;
 }
 
+header picture svg {
+	display: block;
+	min-height: 4vh;
+	max-height: 5vh;
+}
+
 header nav {
 	display: flex;
 	flex-direction: row;
 	justify-content: space-between;
-	margin-top: 1.5vh;
+	align-items: center;
+	margin-top: 1.2vh;
 	max-width: 1300px;
 	margin-left: auto;
 	margin-right: auto;
@@ -39,7 +49,7 @@ header nav {
 
 }
 
-header nav div a{
+header nav div a {
 	padding-right: 2vw;
 }
 
@@ -58,11 +68,13 @@ main {
 }
 
 .landing {
-	min-height: 95vh;
+	min-height: 92vh;
 	display: flex;
 	justify-content: center;
 	align-content: center;
 	flex-direction: column;
+	padding-bottom: 5vh;
+
 }
 
 .landing h1 {
@@ -71,25 +83,36 @@ main {
 	padding-bottom: 3vh;
 }
 
+.aboutMe .inner-column {
+	max-width: 80vw;
+}
+
 .aboutMe {
-	min-height: 95vh;
+	min-height: 97vh;
 	display: flex;
 	justify-content: center;
 	align-content: center;
 	flex-direction: column;
 	background-color: black;
+	color: white;
 }
 
-.aboutMe {
-	color: white;
+.aboutMe h1 + p {
+	padding-top: 4vh;
 }
 
 li + li {
 	padding-top: 7vh;
 }
 
+.projects .inner-column {
+	max-width: 80vw;
+	padding-top: 3vh;
+	padding-bottom: 3vh;
+}
+
 .projects {
-	min-height: 95vh;
+	min-height: 97vh;
 	display: flex;
 	justify-content: center;
 	align-content: center;
@@ -108,7 +131,7 @@ picture {
 	display: block;
 }
 
-img {
+div picture img {
 	display: block;
 	width: 10vw;
 	height: auto;
@@ -118,4 +141,13 @@ footer div nav {
 	display: flex;
 	justify-content: center;
 	margin-bottom: 4vh;
+}
+
+.pink {
+  position: absolute;
+  width: 100px;
+  height: 100px;
+  top: 60%;
+  background-color: pink;
+  right: 50px;
 }
