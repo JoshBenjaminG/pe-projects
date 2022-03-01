@@ -29,11 +29,16 @@ body {
 	margin-left: auto;
 }
 
-header picture svg {
+.logo svg {
 	display: block;
-	min-height: 4vh;
-	max-height: 5vh;
+	width: 100%
 }
+
+header .logo {
+	display: block;
+	max-width: 60px;
+}
+
 
 header nav {
 	display: flex;

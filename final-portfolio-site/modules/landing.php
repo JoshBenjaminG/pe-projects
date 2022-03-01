@@ -1,5 +1,3 @@
-<div class="blue">blue</div>
-
 <div class="inner-column">
 	<ul>
 		<div class="inner-column">
