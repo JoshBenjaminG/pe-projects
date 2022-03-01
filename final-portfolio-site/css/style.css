@@ -67,6 +67,15 @@ main {
 	flex-grow: 1;
 }
 
+.blue {
+	width: 100px;
+	height: 100px;
+	background-color: blue;
+	position: absolute;
+	top: 150px;
+	left: 150px;
+}
+
 .landing {
 	min-height: 92vh;
 	display: flex;
