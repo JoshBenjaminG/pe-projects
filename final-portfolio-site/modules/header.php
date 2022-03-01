@@ -10,8 +10,6 @@
 </head>
 <body>
 
-<?php include 'modules/projects.php'; ?>
-
 <section>
 
 	<header>

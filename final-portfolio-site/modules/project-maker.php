@@ -1,3 +1,9 @@
+<?php 
+
+	$json = file_get_contents("data/projects.json");
+	$projects = json_decode($json, true);
+ ?>
+
 <h1 class="intro-voice">Some things I've made</h1>
 
 <ul>
