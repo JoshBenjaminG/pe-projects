@@ -15,12 +15,12 @@
 	<header>
 
 		<nav>
-			<a href="#" class="logo">
+			<a href="?" class="logo">
 					<?php include('logosvg.php') ?>	
 			</a>
 			<div>
-				<a href="#aboutme">About Me</a>
-				<a href="#projects">Projects</a>
+				<a href="?#aboutme">About Me</a>
+				<a href="?#projects">Projects</a>
 				<a href="JoshuaGageResume.pdf" download>Resume</a>
 			</div>
 		</nav>

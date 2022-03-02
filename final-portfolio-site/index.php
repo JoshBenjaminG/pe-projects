@@ -1,28 +1,32 @@
-<?php include("modules/header.php"); ?>
+<?php 
+	
+	include("functions.php");
+	include("modules/header.php"); 
+
+?>
 
 <main>
 
-	<section class="landing">
+	<?php 
 
-		<?php include("modules/landing.php"); ?>
+		$page = 'home';
 
-	</section>
+		if (isset($_GET['page'])) {
+			$page = $_GET['page'];	
+		} 
 
-	<section class="aboutMe" id="aboutme">
-		<div class="inner-column">
-			
-			<?php include("modules/aboutMe.php"); ?>
+		if ($page == 'home') {
+			include('pages/home.php');
+		} 
 
-		</div>
-	</section>
+		if ($page == 'projectDetail') {
+			include('pages/project-detail.php');
+		}
 
-	<section class="projects" id="projects">
-		<div class="inner-column">
-				
-			<?php include 'modules/project-maker.php'; ?>
+	?>
 		
-		</div>
-	</section>
+
+
 
 </main>
 
