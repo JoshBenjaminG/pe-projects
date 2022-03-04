@@ -21,7 +21,7 @@
 			<div>
 				<a href="?#aboutme">About Me</a>
 				<a href="?#projects">Projects</a>
-				<a href="JoshuaGageResume.pdf" download>Resume</a>
+				<a href="?page=resume">Resume</a>
 			</div>
 		</nav>
 

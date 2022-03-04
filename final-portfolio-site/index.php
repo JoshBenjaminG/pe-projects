@@ -23,6 +23,10 @@
 			include('pages/project-detail.php');
 		}
 
+		if ($page == 'resume') {
+			include('pages/resume.php');
+		}
+
 	?>
 		
 
