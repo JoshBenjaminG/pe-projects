@@ -97,6 +97,11 @@ main {
 	padding-bottom: 3vh;
 }
 
+.dark {
+	background-color: black;
+	color: white;
+}
+
 .aboutMe .inner-column {
 	max-width: 80vw;
 }

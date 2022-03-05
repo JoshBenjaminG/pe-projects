@@ -27,6 +27,10 @@
 			include('pages/resume.php');
 		}
 
+		if ($page == 'goals') {
+			include('pages/goals.php');
+		}
+
 	?>
 		
 

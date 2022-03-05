@@ -8,7 +8,17 @@
 	<meta property="og:image" content="https://i.imgur.com/JrPzMm4.png">
 	<meta property="og:description" content="Joshua Gage - Front end web developer">
 </head>
-<body>
+
+<?php 
+
+	$theme = '';
+	if (isset($_POST['theme'])) {
+		$theme = 'dark';
+	}
+
+?> 
+
+<body class=" <?=$theme?> ">
 
 <section>
 
@@ -22,6 +32,7 @@
 				<a href="?#aboutme">About Me</a>
 				<a href="?#projects">Projects</a>
 				<a href="?page=resume">Resume</a>
+				<a href="?page=goals">Goals</a>
 			</div>
 		</nav>
 
