@@ -68,6 +68,23 @@ header nav a:hover {
 	color: #4d4d4d;
 }
 
+.form	{
+	display: flex;
+	justify-content: right;
+	max-width: 1300px;
+}
+
+.form input {
+	background-color: black;
+	color: white;
+} 
+
+.mode {
+	display: flex;
+	justify-content: right;
+	padding: 10px;
+}
+
 main {
 	flex-grow: 1;
 }

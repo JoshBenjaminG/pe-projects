@@ -12,15 +12,15 @@
 <?php 
 
 	$theme = '';
-	if (isset($_POST['theme'])) {
-		$theme = 'dark';
+	if (isset($_GET['theme'])) {
+		$theme = $_GET['theme'];
 	}
 
 ?> 
 
 <body class=" <?=$theme?> ">
 
-<section>
+<section >
 
 	<header>
 
@@ -35,7 +35,11 @@
 				<a href="?page=goals">Goals</a>
 			</div>
 		</nav>
+		<div class="mode">
+			<a href="?theme=light">Light Mode</a>
+			<a href="?theme=dark">dark Mode</a>
+		</div>
 
 	</header>
-
+	
 </section>
