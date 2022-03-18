@@ -26,7 +26,7 @@
 
 		<nav>
 			<a href="?" class="logo">
-					<?php include('logosvg.php') ?>	
+					<?php include('logosvg.php') ?>
 			</a>
 			<div>
 				<a href="?#aboutme">About Me</a>
@@ -41,5 +41,5 @@
 		</div>
 
 	</header>
-	
+
 </section>
