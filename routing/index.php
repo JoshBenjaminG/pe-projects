@@ -1,4 +1,7 @@
 <?php
+
+include('functions.php');
+
 include('header.php');
 
 include($page . '.php');

@@ -1,15 +1,11 @@
-<?php include('lecture-data.php'); ?>
-
 <ul>
-	<?php foreach ($lecture_data as $lecture) { ?>
+	<?php foreach (getLectures() as $lecture) { ?>
 		<li class='lecture'>
 			<card>
 				<h2><?=$lecture["title"]?></h2>
 				<h3><?=$lecture["length"]?></h3>
-				<a href= '?page=details&lecture=<?=$lecture["id"]?>'>details</a>
+				<h3><?=$lecture["description"]?></h3>
 			</card>
 		</li>
 	<?php } ?>
-
 </ul>
-

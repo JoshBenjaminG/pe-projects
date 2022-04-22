@@ -12,7 +12,7 @@ $lecture_data = [
 		'id' => '2',
 		'title' => 'Math',
 		'length' => '3:00',
-		'description' => 'this is an math video. this is the description of the video. You will learn AlOOOOOOOOT. Yep. That much!',
+		'description' => 'this is a math video. this is the description of the video. You will learn AlOOOOOOOOT. Yep. That much!',
 	],
 
 ];

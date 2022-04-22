@@ -1,0 +1,91 @@
+<?php //create record
+	function createRecord($record) {
+		$data = getDatabase();
+		$id = uniqid("a");
+		$data["lectures"][$id] = $record;
+		saveRecord($record);
+	}
+
+	//save record
+	function saveRecord($record) {
+		$json = json_encode($record);
+		file_put_contents('lectureJSON.json', $json);
+	}
+
+	//get the database
+	function getDatabase() {
+		//check to see if the database exists
+		$json = file_get_contents("lectureJSON.json");
+		//if the file isn't empty 
+		if($json) {
+			//turn the contents into PHP
+			return json_decode($json, true);
+		}
+		//else
+		else {
+			//create a structure 
+			return [
+				"name" => "databaseName",
+				"lastUpdated" => date("l"),
+				"lectures" =>  [
+					"1"=> [
+						"title"=>"Test",
+						"length"=>"250:00",
+						"description"=>"This is a test video",
+					],
+					"2"=> [
+						"title"=>"Test",
+						"length"=>"250:00",
+						"description"=>"This is a test video",
+					],
+				]
+			];
+		
+		}
+		//return the file
+	} 
+
+	function getLectures() {
+		$data = getDatabase();
+		$lectures = $data["lectures"];
+		return $lectures;
+	}
+
+	//get the record
+	function getRecordById($id) {
+		$data = getDatabase();
+		//look for the record that has the id
+		foreach ($data["lectures"] as $key => $value) {
+			print_r($key);
+			if($key == $id){
+				return $value;
+			}
+		}
+		//if it does
+			//return it
+		//else
+			//say it can't be found
+	}
+	var_dump(getRecordById("1"));
+	//delete record 
+	function deleteRecord($id) {
+		//function getRecordById($id) {
+		//if there is a record with the id
+			//delete it
+		//else 
+			//say you couldn't find it
+		//return the thing you deleted - and say you deleted it
+	}
+
+	//update record
+	function updateRecord($id) {
+		//function getRecordById($id) {
+		//if there is a record with the id
+			//put the new data there
+		//else 
+			//say you couldn't find it
+	}
+
+	
+
+

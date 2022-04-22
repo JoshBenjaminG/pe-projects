@@ -9,6 +9,9 @@
 	$titleError = "";
 	$lectureTitle = "";
 	$hasTitle = false;
+	$lectureDescription = '';
+	$descriptionError = '';	
+	$hasDescription = false;
 
 	// if something was submitted
 	if (isset($_POST["create"])) {
@@ -37,17 +40,33 @@
 			}
 		}
 
+		if(isset($_POST["description"])) {
+			$lectureDescription = $_POST["description"];
+			if(strlen($lectureDescription) > 0 ) {
+				$hasDescription = true;
+	// if there is not a length, make an error message
+			} else {
+				$descriptionError = "Please add a description";
+			}
+		}
+
 	// if it has a length and title, make a confirmation message
 	
 		if ($hasLength && $hasTitle) {
 			$submitMessage = "Lecture submitted";
 			$newLecture = [
-				"title" => $lectureTitle,
-				"length" => $lectureLength,
+				"name" => "databaseName",
+				"lastUpdated" => date("l"),
+				"lectures" =>  [
+					"1"=> [
+						"title"=> $lectureTitle,
+						"length"=> $lectureLength,
+						"description"=> $lectureDescription,
+					],
+				]
 			];
 
-			$lectureJSON = json_encode($newLecture);
-			file_put_contents('lectureJSON.json', $lectureJSON);
+			createRecord($newLecture);
 		}
 	}
 
@@ -69,6 +88,11 @@
 			<input type="string" name="length" value="<?=$lectureLength?>">
 		</field>
 			<p class="error"><?=$lengthError?></p>
+		<field>
+			<label>Description</label>
+			<input type="string" name="description" value="<?=$lectureDescription?>">
+		</field>
+			<p class="error"><?=$descriptionError?></p>
 
 		<button type="submit" name="create">Add Lecture</button>
 	</div>
