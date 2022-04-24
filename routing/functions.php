@@ -1,17 +1,4 @@
 <?php //create record
-	function createRecord($record) {
-		$data = getDatabase();
-		$id = uniqid("a");
-		$data["lectures"][$id] = $record;
-		saveRecord($record);
-	}
-
-	//save record
-	function saveRecord($record) {
-		$json = json_encode($record);
-		file_put_contents('lectureJSON.json', $json);
-	}
-
 	//get the database
 	function getDatabase() {
 		//check to see if the database exists
@@ -27,23 +14,26 @@
 			return [
 				"name" => "databaseName",
 				"lastUpdated" => date("l"),
-				"lectures" =>  [
-					"1"=> [
-						"title"=>"Test",
-						"length"=>"250:00",
-						"description"=>"This is a test video",
-					],
-					"2"=> [
-						"title"=>"Test",
-						"length"=>"250:00",
-						"description"=>"This is a test video",
-					],
-				]
+				"lectures" =>  [],
 			];
 		
 		}
 		//return the file
 	} 
+
+	//save record
+	function saveDatabase($data) {
+		$json = json_encode($data);
+		file_put_contents('lectureJSON.json', $json);
+	}
+
+	function createRecord($record) {
+		$data = getDatabase();
+		$id = uniqid("a");
+		$data["lectures"][$id] = $record;
+		saveDatabase($data);
+	}
+
 
 	function getLectures() {
 		$data = getDatabase();
@@ -56,7 +46,6 @@
 		$data = getDatabase();
 		//look for the record that has the id
 		foreach ($data["lectures"] as $key => $value) {
-			print_r($key);
 			if($key == $id){
 				return $value;
 			}
@@ -66,7 +55,6 @@
 		//else
 			//say it can't be found
 	}
-	var_dump(getRecordById("1"));
 	//delete record 
 	function deleteRecord($id) {
 		//function getRecordById($id) {

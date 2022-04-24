@@ -55,21 +55,11 @@
 		if ($hasLength && $hasTitle) {
 			$submitMessage = "Lecture submitted";
 			$newLecture = [
-				"name" => "databaseName",
-				"lastUpdated" => date("l"),
-				"lectures" =>  [
-					"1"=> [
-						"title"=> $lectureTitle,
-						"length"=> $lectureLength,
-						"description"=> $lectureDescription,
-					],
-				]
+				"title" => $lectureTitle,
 			];
-
 			createRecord($newLecture);
 		}
 	}
-
 ?>
 
 
