@@ -1,4 +1,4 @@
-<ul>
+<ul class="list-lecture">
 	<?php foreach (getLectures() as $lecture) { ?>
 		<li class='lecture'>
 			<card>

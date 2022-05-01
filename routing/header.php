@@ -38,10 +38,10 @@ function isActive($activePage) {
 
 <main>
 
-<header>
+<!-- <header>
 	<nav>
 			<a href='?page=home' class=" <?php isActive('home') ?> ">home page</a>
 			<a href='?page=list' class=" <?php isActive('list') ?> ">lectures page</a>
 			<a href='?page=create' class=" <?php isActive('create') ?> ">add lecture</a>
 	</nav>
-</header>
+</header> -->

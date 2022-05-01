@@ -54,3 +54,15 @@ form div {
 .success {
 	color: mediumspringgreen;
 }
+
+.list-lecture {
+	display: flex;
+	justify-content: center;
+	flex-direction: column;
+	align-items: center;
+
+}
+
+
+
+

@@ -2,16 +2,10 @@
 <?php
 
 	
-	$lengthError = "";
-	$lectureLength = "";
-	$hasLength = false;
 	$submitMessage = "";
 	$titleError = "";
 	$lectureTitle = "";
 	$hasTitle = false;
-	$lectureDescription = '';
-	$descriptionError = '';	
-	$hasDescription = false;
 
 	// if something was submitted
 	if (isset($_POST["create"])) {
@@ -28,31 +22,9 @@
 				$titleError = "Please add a title";
 			}
 		}
-	// is there a length
-		
-		if(isset($_POST["length"])) {
-			$lectureLength = $_POST["length"];
-			if(strlen($lectureLength) > 0 ) {
-				$hasLength = true;
-	// if there is not a length, make an error message
-			} else {
-				$lengthError = "Please add a length";
-			}
-		}
-
-		if(isset($_POST["description"])) {
-			$lectureDescription = $_POST["description"];
-			if(strlen($lectureDescription) > 0 ) {
-				$hasDescription = true;
-	// if there is not a length, make an error message
-			} else {
-				$descriptionError = "Please add a description";
-			}
-		}
-
 	// if it has a length and title, make a confirmation message
 	
-		if ($hasLength && $hasTitle) {
+		if ($hasTitle) {
 			$submitMessage = "Lecture submitted";
 			$newLecture = [
 				"title" => $lectureTitle,
@@ -73,19 +45,11 @@
 			<input type="name" name="title" value="<?=$lectureTitle?>">
 		</field>
 			<p class="error"><?=$titleError?></p>
-		<field>
-			<label>length (Minutes)</label>
-			<input type="string" name="length" value="<?=$lectureLength?>">
-		</field>
-			<p class="error"><?=$lengthError?></p>
-		<field>
-			<label>Description</label>
-			<input type="string" name="description" value="<?=$lectureDescription?>">
-		</field>
-			<p class="error"><?=$descriptionError?></p>
 
 		<button type="submit" name="create">Add Lecture</button>
 	</div>
 		
 </form>
+
+<?php include('list.php'); ?>
 

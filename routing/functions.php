@@ -57,6 +57,7 @@
 	}
 	//delete record 
 	function deleteRecord($id) {
+		
 		//function getRecordById($id) {
 		//if there is a record with the id
 			//delete it
