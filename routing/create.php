@@ -34,7 +34,7 @@
 	}
 ?>
 
-
+<div class="inner-column">
 
 <form method="POST">
 	<div>
@@ -52,4 +52,6 @@
 </form>
 
 <?php include('list.php'); ?>
+
+</div>
 

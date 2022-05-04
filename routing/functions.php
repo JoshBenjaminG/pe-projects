@@ -46,7 +46,7 @@
 		$data = getDatabase();
 		//look for the record that has the id
 		foreach ($data["lectures"] as $key => $value) {
-			if($key == $id){
+			if($key == $id) {
 				return $value;
 			}
 		}
@@ -57,7 +57,9 @@
 	}
 	//delete record 
 	function deleteRecord($id) {
-		
+		$data = getDatabase();
+		unset($data["lectures"][$id]);
+		saveDatabase($data);
 		//function getRecordById($id) {
 		//if there is a record with the id
 			//delete it
