@@ -2,7 +2,6 @@
 
 if (isset($_GET['deleted'])) {
 	$deleted = $_GET['deleted'];
-	echo "<p>$deleted was deleted.</p>";
 }
 
 ?>

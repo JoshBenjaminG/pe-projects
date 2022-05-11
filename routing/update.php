@@ -1,10 +1,9 @@
 <?php 
+	$message = "";
 	$id = $_GET["id"];
 	$lecture = getRecordById($id);
 	if(isset($_POST['update'])) {
-		$data = getDatabase();
-	    $data['lectures'][$id]['title'] = $_POST['title'];
-	    saveDatabase($data);
+		updateRecord($id);
 	    $message = 'UPDATED!';
 	}
 ?>
@@ -20,8 +19,8 @@
 		</field>
 		<button type="submit" name="update">Update</button>
 	</div>
-		
+	<a href="?page=create" class="button">List Page</a>
 </form>
 
-<a href="?page=create" class="button">List Page</a>
+
 </div>

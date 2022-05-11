@@ -70,11 +70,9 @@
 
 	//update record
 	function updateRecord($id) {
-		//function getRecordById($id) {
-		//if there is a record with the id
-			//put the new data there
-		//else 
-			//say you couldn't find it
+		$data = getDatabase();
+	    $data['lectures'][$id]['title'] = $_POST['title'];
+	    saveDatabase($data);
 	}
 
 	
