@@ -1,3 +1,161 @@
-/*@import 'meyer-reset.css';*/
+@import 'meyer-reset.css';
 
 @import 'typography.css';
+
+* {
+	box-sizing: border-box;
+}
+
+body * {
+	/*border: 2px solid red;*/
+}
+
+body {
+	background-color: #ffffff;
+	color: black;
+	min-height: 100vh;
+	display: flex;
+	flex-direction: column;
+}
+
+main {
+	flex-grow: 1;
+}
+
+.inner-column {
+	max-width: 900px;
+	margin-right: auto;
+	margin-left: auto;
+}
+
+.header {
+	background-color: #d2d8df;
+}
+
+span:nth-of-type(1) {
+	display: flex;
+	align-items: center;
+}
+
+span:nth-of-type(2) {
+	display: flex;
+	align-items: center;
+}
+
+.logo {
+	font-weight: 700;
+	font-size: 35px;
+}
+
+nav {
+	display: flex;
+	justify-content: space-between;
+}
+
+nav a {
+	padding: 1rem;
+	text-decoration: none;
+	color: black;
+}
+
+.landing {
+	display: flex;
+	align-items: center;	
+	min-height: 90vh;
+}
+
+.landing div h1 {
+}
+
+.landing-p-right {
+	display: flex;
+	justify-content: flex-end;
+	opacity: 0.5;
+}
+
+.about-heading div {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	padding-bottom: 35px;
+}
+
+.about div {
+	display: flex;
+	flex-direction: row;
+	min-height: 35vh;
+}
+
+.p-left{
+	order: 2px solid #d2d8df;
+	border-top-right-radius: 8px;
+	border-top-left-radius: 8px;
+	background-color: #ec5f66;
+	color: white;
+	padding: 20px;
+	margin-right: 40px;
+}
+
+.p-right {
+	border: 2px solid #d2d8df;
+	border-top-right-radius: 8px;
+	border-top-left-radius: 8px;
+	background-color: #d2d8df;
+	color: #3c506b;
+	padding: 20px;
+}
+
+.projects {
+	display: flex;
+	justify-content: flex-start;
+	align-items: center;
+	background-color: #d2d8df;
+	color: black;
+	min-height: 70vh;
+}
+
+.projects .inner-column {
+	padding-right: 300px;
+}
+
+ul {
+	list-style-type: none;
+}
+
+.project-list ul {
+	display: flex;
+	flex-direction: row;
+}
+
+ul li {
+	padding-right: 40px;
+}
+
+div footer {
+	display: flex;
+	flex-direction: row;
+	justify-content: flex-end;	
+}
+
+html, body {
+  width: 100%;
+  height:100%;
+}
+
+body {
+    background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+    background-size: 400% 400%;
+    animation: gradient 25s ease infinite;
+}
+
+@keyframes gradient {
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
+}

@@ -1,0 +1,125 @@
+h1, p, a {
+	font-family: 'Lato', sans-serif;
+}
+
+h1 {
+	font-weight: 700;
+	font-size: 100px;
+}
+
+p {
+	font-family: 400;
+	font-size: 20px;
+	line-height: 1.5;
+}
+
+h2 {
+	font-weight: 700;
+	font-size: 45px;
+}
+
+a {
+	color: white;
+}
+
+.hover-underline-animation {
+  display: inline-block;
+  position: relative;
+}
+
+.hover-underline-animation:after {
+  content: '';
+  position: absolute;
+  width: 100%;
+  transform: scaleX(0);
+  height: 10px;
+  bottom: 13px;
+  left: 0;
+  background-color: rgba(255, 240, 0, 0.7);
+  transform-origin: bottom right;
+  transition: transform 0.25s ease-out;
+}
+
+.hover-underline-animation:hover:after {
+  transform: scaleX(1);
+  transform-origin: bottom left;
+}
+
+.hover-h1-animation {
+  display: inline-block;
+  position: relative;
+}
+
+.hover-h1-animation:after {
+  content: '';
+  position: absolute;
+  width: 100%;
+  transform: scaleX(0);
+  height: 30px;
+  bottom: 13px;
+  left: 0;
+  background-color: rgba(255, 87, 51, 0.7);
+  transform-origin: bottom right;
+  transition: transform 0.25s ease-out;
+}
+
+.hover-h1-animation:hover:after {
+  transform: scaleX(1);
+  transform-origin: bottom left;
+}
+
+.hover-about-animation {
+  display: inline-block;
+  position: relative;
+}
+
+.hover-about-animation:after {
+  content: '';
+  position: absolute;
+  width: 100%;
+  transform: scaleX(0);
+  height: 15px;
+  bottom: 9px;
+  left: 0;
+  background-color: rgba(255, 105, 180, 0.7);
+  transform-origin: bottom right;
+  transition: transform 0.25s ease-out;
+}
+
+.hover-about-animation:hover:after {
+  transform: scaleX(1);
+  transform-origin: bottom left;
+}
+
+.logo {
+  background-image: linear-gradient(
+    to right,
+    #ec5f66,
+    #ec5f66 50%,
+    black 50%
+  );
+  background-size: 200% 100%;
+  background-position: -100%;
+  display: inline-block;
+  padding: 5px 0;
+  position: relative;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  transition: all 0.3s ease-in-out;
+}
+
+.logo:before{
+  content: '';
+  background: #54b3d6;
+  display: block;
+  position: absolute;
+  transition: all 0.3s ease-in-out;
+}
+
+.logo:hover {
+ background-position: 0;
+}
+
+.logo:hover::before{
+  width: 100%;
+}
