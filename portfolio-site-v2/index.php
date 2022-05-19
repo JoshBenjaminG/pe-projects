@@ -73,14 +73,14 @@
 		<h2 class="project-heading">My Work...</h1>
 			<ul>
 				<li>
-					<h3>Project Title</h2>
-					<p>This is the project description. This is going to be great. Imagine the best project you have ever seen! This one will knock your socks off.</p>
-					<a href="">Project demo</a>
+					<h3>Crud Application (Php)</h2>
+					<p>A fun challenge to create a very simplified CRUD app in PHP. My first experience with databases. JS and React versions coming (Soon)</p>
+					<a href="https://peprojects.dev/alpha-3/josh/routing/?page=create">Project demo</a>
 				</li>
 				<li>
-					<h3>Project Title</h2>
-					<p>This is the project description. This is going to be great. Imagine the best project you have ever seen! This one will knock your socks off.</p>
-					<a href="">Project demo</a>
+					<h3>Programming Challenges</h2>
+					<p>A collection of solutions to various challenges from "57 Excersises for programmers." A wonderful part of my learning path.</p>
+					<a href="https://peprojects.dev/alpha-3/josh/php-practice/">Table of Contents</a>
 				</li>
 			</ul>
 	</div>
