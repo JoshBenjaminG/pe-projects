@@ -5,7 +5,8 @@ h1, p, a {
 h1 {
 	font-weight: 700;
 	font-size: 100px;
-}
+/*  border: 2px solid red;
+*/}
 
 p {
 	font-family: 400;
@@ -15,12 +16,18 @@ p {
 
 h2 {
 	font-weight: 700;
-	font-size: 45px;
+	font-size: 60px;
 }
 
 a {
-	color: white;
+	color: black;
 }
+
+h3 {
+  font-weight: 700;
+  font-size: 40px;
+}
+
 
 .hover-underline-animation {
   display: inline-block;
@@ -48,6 +55,7 @@ a {
 .hover-h1-animation {
   display: inline-block;
   position: relative;
+  color: white;
 }
 
 .hover-h1-animation:after {
@@ -122,4 +130,27 @@ a {
 
 .logo:hover::before{
   width: 100%;
+}
+
+.arrow {
+  border: solid black;
+  border-width: 0 3px 3px 0;
+  display: inline-block;
+  padding: 3px;
+}
+
+.down {
+  transform: rotate(45deg);
+  -webkit-transform: rotate(45deg);
+}
+
+.calm-voice {
+  font-family: 400;
+  font-size: 25px;
+  line-height: 1.5;
+}
+
+.loud-voice {
+  font-weight: 700;
+  font-size: 120px;
 }

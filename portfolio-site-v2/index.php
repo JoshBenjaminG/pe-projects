@@ -32,15 +32,26 @@
 </div>
 
 
-<section class="landing">
+<!-- <section class="landing">
 	<div class="inner-column">
 		<p>Greetings,</p>
-		<h1 class="hover-h1-animation">I'm Josh!</h1>
+		<h1 class="hover-h1-animation"><span>I'm Josh!</span></h1>
 		<div class="landing-p-right">
 			<p>- Web Developer</p>
 		</div>
 	</div>
+</section> -->
 
+<section class="landing">
+	<div class="inner-column">
+		<div>
+			<h1 class="welcome">
+				<span class="greetings calm-voice">Greetings,</span>
+				<span class="loud-voice hover-h1-animation">I'm <span class="name">Josh!</span></span>
+				<span class="job calm-voice">- Web Developer</span>
+			</h1>
+		</div>
+	</div>
 </section>
 
 <!-- <section class="about-heading">
@@ -50,36 +61,28 @@
 </section> -->
 
 <section class="about">
-	<div class="inner-column">
+	<div class="wrapper">
 		<p class="p-left">A web developer from the Gulf Coast, I discovered my passion for development in my last year of college. While I completed my formal education, I enrolled in a remote web development program to build on and reinforce my learning progress.</p>
 		<p class="p-right">Below you will find a few projects of mine. A capstone project that combines everything I have learned so far, as well as other projects meant to cement my skills in a focused manner. Don't hesitate to contact me!</p>
+		<p>
 	</div>
 </section>
 
 <section class="projects">
 	<div class="inner-column">
-		<h2>My Projects</h1>
-		<p>Below are a list of a few projects that I have made.</p>
-		<div class="project-list">
+		<h2 class="project-heading">My Work...</h1>
 			<ul>
 				<li>
-					<h3>Project 1</h2>
-					<p>This is a project example</p>
-					<a href="">Live Demo</a>
+					<h3>Project Title</h2>
+					<p>This is the project description. This is going to be great. Imagine the best project you have ever seen! This one will knock your socks off.</p>
+					<a href="">Project demo</a>
 				</li>
 				<li>
-					<h3>Project 1</h2>
-					<p>This is a project example</p>
-					<a href="">Live Demo</a>
-				</li>
-				<li>
-					<h3>Project 1</h2>
-					<p>This is a project example</p>
-					<a href="">Live Demo</a>
+					<h3>Project Title</h2>
+					<p>This is the project description. This is going to be great. Imagine the best project you have ever seen! This one will knock your socks off.</p>
+					<a href="">Project demo</a>
 				</li>
 			</ul>
-		</div>
-		<a href="">View more</a>
 	</div>
 </section>
 

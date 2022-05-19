@@ -1,17 +1,22 @@
 <?php 
 
 	include('functions.php');
+	include('comments.JSON');
 	
 	$comment = "";
+	$key = "";
 
-	 if (isset($_POST['create'])) {
+	if (isset($_POST['create'])) {
 	 	$comment = $_POST['comment'];
 	 	$newComment = [
 	 		"comment" => $comment,
 	 	];
 	 	createRecord($newComment);
-	 }
+	}
 
+	 if (isset($_GET["delete"])) { 
+		deleteRecord($_GET["delete"]);
+	}
 ?>
 
 <!DOCTYPE html>
@@ -34,13 +39,9 @@
 <?php foreach (getComments() as $key => $comments) { ?>
 		<li>
 			<p><?=$comments["comment"]?></p>
-		</li>
-	<?php	if (isset($_POST[$key])) { ?>
-				<?php deleteRecord($key); ?>
-	 <?php } ?>
-		<form method="post">
-   			<button type="submit" name="<?=$key?>">Delete</button>
-		</form>
+			<a href="?delete=<?=$key?>">Delete</a>
+		</li>	
+
 	<?php } ?>
 </ul>
 
