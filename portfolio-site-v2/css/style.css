@@ -4,6 +4,7 @@
 
 * {
 	box-sizing: border-box;
+	scroll-behavior: smooth;	
 }
 
 body * {
@@ -130,7 +131,7 @@ nav a {
 	display: flex;
 	justify-content: flex-start;
 	align-items: center;
-	background-color: #f4f4f4;
+	background-color: #f1f1f1;
 	color: black;
 	min-height: 70vh;
 	padding-left: 20px;
@@ -156,18 +157,20 @@ ul li {
 	padding-top: 50px;
 	padding-bottom: 50px;
 	max-width: 370px;
-	background-color: #ffffff;
+	background-color: #fbfbfb;
 	margin: 30px;
+	border-radius: 28px;
 }
 
 li:hover {
-  box-shadow: 0 0 18px 6px #e2e2e2;
+  box-shadow: 0 0 20px 8px #e2e2e2;
+  background-color: white;
   transition-duration:.4s;
 }
 
 li:not(:hover) { 
 	box-shadow: none;
-	transition: .4s;
+	transition: .5s;
 } 
 
 li a {
@@ -208,7 +211,7 @@ html, body {
 body {
     background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
     background-size: 400% 400%;
-    animation: gradient 20s ease infinite;
+    animation: gradient 15s ease infinite;
 }
 
 @keyframes gradient {

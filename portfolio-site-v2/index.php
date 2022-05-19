@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title></title>
+	<title>Josh Gage - Developer</title>
 	<link rel='stylesheet' href='css/style.css'>
 	<link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -22,7 +22,7 @@
 					<a href="" class="logo">JG</a>
 				</span>
 				<span>
-					<a href="" class="hover-underline-animation">Projects</a>
+					<a href="#projects" class="hover-underline-animation">Projects</a>
 					<a href="" class="hover-underline-animation">Resume</a>
 					<a href="" class="hover-underline-animation">Contact</a>
 				</span>
@@ -68,7 +68,7 @@
 	</div>
 </section>
 
-<section class="projects">
+<section class="projects" id="projects">
 	<div class="inner-column">
 		<h2 class="project-heading">My Work...</h1>
 			<ul>
