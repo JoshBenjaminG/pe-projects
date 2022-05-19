@@ -76,7 +76,7 @@ nav a {
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	padding-bottom: 35px;
+	padding-bottom: 10px;
 }
 
 .about div {
@@ -86,23 +86,39 @@ nav a {
 }
 
 .p-left{
-	order: 2px solid #d2d8df;
 	border-top-right-radius: 8px;
 	border-top-left-radius: 8px;
-	background-color: #fbf16d;
 	color: #3c506b;
 	padding: 20px;
 	margin-right: 40px;
 }
 
 .p-right {
-	border: 2px solid #f1f3f4;
 	border-top-right-radius: 8px;
 	border-top-left-radius: 8px;
-	background-color: #f1f3f4;
 	color: #3c506b;
 	padding: 20px;
 }
+
+.p-left:hover{
+	background-color: rgba(251, 241, 109, .8);
+	transition-duration:.4s;
+}
+
+.p-left:not(:hover) { 
+	background-color: #fbf16d;
+	transition: .4s;
+} 
+
+.p-right:hover{
+	background-color: rgba(255, 255, 255, .8);
+	transition-duration:.4s;
+}
+
+.p-right:not(:hover) { 
+	background-color: #ffffff;
+	transition: .4s;
+} 
 
 @media(max-width: 600px) {
 	.about {
