@@ -29,6 +29,20 @@ h3 {
   font-size: 40px;
 }
 
+.calm-voice {
+  font-family: 'Ubuntu', sans-serif;
+  font-weight: 400;
+  line-height: 1.5;
+  font-size: clamp(15px, 25px, 40px);
+}
+
+.loud-voice {
+  font-family: 'Ubuntu', sans-serif;
+  font-weight: 700;
+  font-size:  clamp(80px, 120px, 140px);
+}
+
+/* animations */
 
 .hover-underline-animation {
   display: inline-block;
@@ -49,30 +63,6 @@ h3 {
 }
 
 .hover-underline-animation:hover:after {
-  transform: scaleX(1);
-  transform-origin: bottom left;
-}
-
-.hover-h1-animation {
-  display: inline-block;
-  position: relative;
-  color: white;
-}
-
-.hover-h1-animation:after {
-  content: '';
-  position: absolute;
-  width: 100%;
-  transform: scaleX(0);
-  height: 35px;
-  bottom: 30px;
-  left: 0;
-  background-color: rgba(255, 87, 51, 0.7);
-  transform-origin: bottom right;
-  transition: transform 0.25s ease-out;
-}
-
-.hover-h1-animation:hover:after {
   transform: scaleX(1);
   transform-origin: bottom left;
 }
@@ -103,9 +93,9 @@ h3 {
 .logo {
   background-image: linear-gradient(
     to right,
-    #ec5f66,
-    #ec5f66 50%,
-    black 50%
+    yellow,
+    yellow 50%,
+    white 50%
   );
   background-size: 200% 100%;
   background-position: -100%;
@@ -133,27 +123,3 @@ h3 {
   width: 100%;
 }
 
-.arrow {
-  border: solid black;
-  border-width: 0 3px 3px 0;
-  display: inline-block;
-  padding: 3px;
-}
-
-.down {
-  transform: rotate(45deg);
-  -webkit-transform: rotate(45deg);
-}
-
-.calm-voice {
-  font-family: 'Ubuntu', sans-serif;
-  font-weight: 400;
-  font-size: 25px;
-  line-height: 1.5;
-}
-
-.loud-voice {
-  font-family: 'Ubuntu', sans-serif;
-  font-weight: 700;
-  font-size: 120px;
-}

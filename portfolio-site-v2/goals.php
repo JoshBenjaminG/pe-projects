@@ -27,28 +27,6 @@
 	</nav>
 </header>
 
-
-<!-- <section class="landing">
-	<div class="inner-column">
-		<p>Greetings,</p>
-		<h1 class="hover-h1-animation"><span>I'm Josh!</span></h1>
-		<div class="landing-p-right">
-			<p>- Web Developer</p>
-		</div>
-	</div>
-</section> -->
-
-<section class="landing">
-	<div class="inner-column">
-		<div class="josh">
-			<h1 class="welcome">
-				<span class="greetings calm-voice">Greetings,</span>
-				<span class="loud-voice">I’m <span class="name">Josh!</span></span>
-			</h1>
-		</div>
-	</div>
-</section>
-
 <section class="about-heading">
 	<div class="inner-column">
 		<h3>About Me</h2>
