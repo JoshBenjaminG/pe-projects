@@ -14,6 +14,7 @@
 form {
 	display: flex;
 	flex-direction: column;
+	margin-top: 100px;
 }
 
 form button {

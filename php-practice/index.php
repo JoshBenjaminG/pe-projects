@@ -5,14 +5,14 @@ include("style.php");
 $array = [
 	"count",
 	"forms",
-	"loops",
-	"loops2",
 	"madlib",
 	"quotes",
 	"retirementCalculator",
 	"simpleMath",
 	"rectangle",
 	"triangle",
+	"hello",
+	"pizza",
 ];
 
 foreach($array as $exercise) {

@@ -60,9 +60,9 @@
 		<div class="story story-left">
 			<p><span>As a web developer</span> from the Gulf Coast, I discovered my passion for development in my last year of college. While I completed my formal education, I enrolled in a remote web development program to build on and reinforce my learning progress.</p>
 		</div>
-<!-- 		<div class="story story-right">
-			<p><span>Below you will find</span> a few projects of mine: A capstone project that combines everything I have learned so far, as well as other projects meant to cement my skills in a focused manner. (Work in progress)</p>
-		</div> -->
+		<div class="story story-right">
+			<p><span>I'm currently studying</span> the entire development process at Perpetual Education. Find me and other students at the <a href="https://peprojects.dev/alpha-4/">Alpha Net.</a></p>
+		</div>
 	</div>
 </section>
 

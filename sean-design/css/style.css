@@ -1,0 +1,59 @@
+@import 'meyer-reset.css';
+
+@import 'typography.css';
+
+@import 'setup.css';
+
+body * {
+	/*border: 2px solid red;*/
+}
+
+body {
+	background-color: #fefaf6;
+	min-height: 100vh;
+	display: flex;
+	flex-direction: column;
+}
+
+.inner-column {
+	width: 100%;
+	max-width: 1300px;
+	margin-right: auto;
+	margin-left: auto;
+	padding: 23px;
+}
+
+main {
+	flex-grow: 1;
+}
+
+header {
+	padding: ;
+}
+
+header div nav {
+	display: flex;
+	flex-direction: row;
+}
+
+nav a {
+	margin-right: 26px;
+}
+
+p {
+	padding-top: 30px;
+}
+
+picture {
+	margin-top: 25px;
+}
+
+
+
+
+
+
+
+
+
+
