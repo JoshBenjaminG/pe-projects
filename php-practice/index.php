@@ -13,6 +13,7 @@ $array = [
 	"triangle",
 	"hello",
 	"pizza",
+	"gpt-3",
 ];
 
 foreach($array as $exercise) {
