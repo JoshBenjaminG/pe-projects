@@ -1,42 +1,21 @@
-<?php 
+<form method="post">
+    <label>Width:</label>
+    <input type="text" name="width"><br>
+    <label>Length:</label>
+    <input type="text" name="length"><br>
+    <input type="submit">
+</form>
 
-    include("style.php");
+<?php
+if(isset($_POST['width']) && isset($_POST['length'])){
+    $width = $_POST['width'];
+    $height = $_POST['length'];
+    $area = $width * $height;
+}
 
-    $lima = [
-        "img" => "limabean.jpg",
-        "name" => "lima",
-        "food" => "beans",
-        "age" => 4,
-    ];
-
-    $cody = [
-        "img" => "codey.jpg",
-        "name" => "cody",
-        "food" => "cake",
-        "age" => 7,
-    ];
-
-    $reads = [
-        "img" => "miss-reads-a-lot.jpg",
-        "name" => "reads",
-        "food" => "pizza",
-        "age" => 6,
-    ];
-
-    $monsters = [$lima, $cody, $reads];
-
-    foreach($monsters as $monster) {
-        echo "<monster-card>" .
-
-                "<img src='" . $monster["img"] . "'></img>" .
-
-                "<p>Hello, I'm " . $monster["name"] . "! </p>" .
-
-                "<p>My favorite food is " . $monster["food"] . "! </p>" .
-
-                "<p>I am " . $monster["age"] . " years old.</p>" .
-
-            "</monster-card>";
-    }
-
+if ($area > 100) {
+  echo '<h1>big</h1>';
+} else {
+  echo '<h1>small</h1>';
+}
 ?>

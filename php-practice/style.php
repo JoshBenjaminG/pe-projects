@@ -39,4 +39,8 @@ monster-card {
 img {
 	width: 150px;
 }
+
+ul {
+	list-style: none;
+}
 </style>
