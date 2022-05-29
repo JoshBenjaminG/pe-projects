@@ -42,5 +42,16 @@ img {
 
 ul {
 	list-style: none;
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+}
+
+li {
+	border: 2px solid red;
+	padding: 20px;
+	margin: 20px;
+	background-color: green;
+	color: white;
 }
 </style>

@@ -13,57 +13,42 @@
 
 <main>
 
+<?php include('header.php'); ?>
 
-<header>
-	<div class="inner-column">
-	<nav>
-		<span>
-			<a href="" class="logo">JG</a>
-		</span>
-		<!-- <span class="nav-right">
-			<a href="#projects" class="hover-underline-animation">Projects</a>
-			<a href="" class="hover-underline-animation">Contact</a>
-		</span> -->
-	</nav>
-</header>
+<?php 
 
-<section class="about-heading">
-	<div class="inner-column">
-		<h3>About Me</h2>
-	</div>
+    $sections = [
+        [
+            "heading" => "",
+            "goals" => [""],
+        ],
+        [
+            "heading" => "End of course plan",
+            "goals" => [ "Complete v3 of my portfolio", "Have a large front-end project on my portfolio", "Complete a second project that is more design oriented."],
+        ],
+        [
+            "heading" => "End of month plan (June)",
+            "goals" => [ "Finish case study on responsive design", "Finish majority of E4P"],
+        ],          
+    ];
+
+?>
+
+<section class="inner-column">
+	<ul>
+	    
+	    <?php foreach ($sections as $section) { ?>
+	        <li>
+	            <h3><?=$section["heading"]?></h3>
+	            <?php foreach($section["goals"] as $goal) { ?>
+	                <li><?=$goal?></li>
+	            <?php } ?>
+	        </li>
+	    <?php } ?> 
+	</ul>
 </section>
-
-<section class="about">
-	<div class="inner-column">
-		<div class="story story-left">
-			<p><span>As a web developer</span> from the Gulf Coast, I discovered my passion for development in my last year of college. While I completed my formal education, I enrolled in a remote web development program to build on and reinforce my learning progress.</p>
-		</div>
-<!-- 		<div class="story story-right">
-			<p><span>Below you will find</span> a few projects of mine: A capstone project that combines everything I have learned so far, as well as other projects meant to cement my skills in a focused manner. (Work in progress)</p>
-		</div> -->
-	</div>
-</section>
-
-<!-- <section class="projects" id="projects">
-	<div class="inner-column">
-		<h2 class="project-heading">My Work...</h1>
-	</div>
-</section> -->
 
 </main>
-
-<!-- <div>	
-	<div class="inner-column">
-		<footer>
-			<p>Josh Gage</p>
-			<a href="">LinkedIn</a>
-			<a href="">Codepen</a>
-			<a href="">Github</a>
-		</footer>	
-	</div>
-</div> -->
-
-
 
 </body>
 </html>
