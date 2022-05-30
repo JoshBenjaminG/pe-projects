@@ -61,7 +61,7 @@
 			<p><span>As a web developer</span> from the Gulf Coast, I discovered my passion for development in my last year of college. While I completed my formal education, I enrolled in a remote web development program to build on and reinforce my learning progress.</p>
 		</div>
 		<div class="story story-right">
-			<p><span>I'm currently studying</span> the entire development process at Perpetual Education. Find me and other students at the <a href="https://peprojects.dev/alpha-4/">Alpha Net.</a></p>
+			<p><span>I'm currently studying</span> the entire development process at Perpetual Education. Find me and other students at the <a href="https://peprojects.dev/alpha-4/">Alpha Net.</a> Don’t hesitate to reach out to me on LinkedIn or github. Link: <a href="https://peprojects.dev/alpha-4/">Contact me here.</a></p>
 		</div>
 	</div>
 </section>
