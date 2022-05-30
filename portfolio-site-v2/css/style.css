@@ -192,6 +192,21 @@ nav a {
 	border: 2px solid white;
 }
 
+.story-right {
+  animation-name: floating;
+    animation-duration: 3s;
+    animation-iteration-count: infinite;
+    animation-timing-function: ease-in-out;
+    margin-left: 30px;
+    margin-top: 5px;
+}
+ 
+@keyframes floating {
+    0% { transform: translate(0,  0px); }
+    50%  { transform: translate(0, 15px); }
+    100%   { transform: translate(0, -0px); }   
+}
+
 @media only screen and (min-width: 650px) {
 	.story-right {
 		margin-right: 20px;
