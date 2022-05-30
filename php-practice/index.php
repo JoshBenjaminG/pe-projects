@@ -14,6 +14,7 @@ $array = [
 	"hello",
 	"pizza",
 	"gpt-3",
+	"magic",
 ];
 
 foreach($array as $exercise) {

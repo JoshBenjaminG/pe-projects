@@ -52,6 +52,38 @@ li {
 	padding: 20px;
 	margin: 20px;
 	background-color: green;
-	color: white;
+	color: black;
+}
+
+.red {
+	background-color: red;
+}
+.white {
+	background-color: white;
+}
+.green {
+	background-color: green;
+}
+.blue {
+	background-color: blue;
+}
+.black {
+	background-color: black;
+}
+
+.stats {
+	display: flex;
+	justify-content: flex-end;
+}
+.stats p {
+	margin-right: 10px;
+}
+.nameMana {
+	display: flex;
+	justify-content: space-between;
+}
+.text {
+	min-height: 80px;
+	border: 2px solid black;
 }
 </style>
