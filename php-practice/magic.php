@@ -32,7 +32,7 @@
 
 <ul>
 <?php foreach ($cards as $card) { ?>
-	<li class='<?=$card["color"]?>'>
+	<li class='<?=$card["color"]?> magic-card'>
 		<div class="nameMana">
 			<h3><?=$card["name"]?></h3>
 			<p><?=$card["mana"]?></p>

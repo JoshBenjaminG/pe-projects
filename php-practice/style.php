@@ -8,8 +8,20 @@
 		flex-direction: column;
 		align-items: center;
 		justify-content: center;
-		background-color: #FAEBD7;
+		background-color: #e3ddd5;
 	}
+
+body * {
+/*	border: 2px solid red;*/
+}
+
+.inner-column {
+	width: 100%;
+	max-width: 1000px;
+	margin-right: auto;
+	margin-left: auto;
+	padding: 10px;
+}
 
 form {
 	display: flex;
@@ -43,11 +55,17 @@ img {
 ul {
 	list-style: none;
 	display: flex;
-	flex-direction: row;
+	flex-direction: column;
 	flex-wrap: wrap;
+	justify-content: flex-start;
+	align-items: flex-start;
 }
 
 li {
+	margin-bottom: 10px;
+}
+
+.magic-card {
 	border: 2px solid red;
 	padding: 20px;
 	margin: 20px;
@@ -85,5 +103,61 @@ li {
 .text {
 	min-height: 80px;
 	border: 2px solid black;
+}
+
+html {
+  box-sizing: border-box;
+}
+
+*,
+*:before,
+*:after {
+  box-sizing: inherit;
+}
+
+body {
+  -webkit-font-smoothing: antialiased;
+}
+
+picture {
+  display: block;
+}
+
+picture img {
+  display: block;
+  height: auto;
+  width: 100%;
+}
+
+svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+a {
+  display: block;
+  text-decoration: underline;
+  color: inherit;
+}
+
+p a {
+  display: inline;
+  color: blue;
+  text-decoration: underline;
+}
+
+strong {
+  font-weight: bold;
+}
+
+em {
+  font-style: italic;
+}
+
+mark {
+  padding: 2px 5px;
+  border-radius: 4px;
+  background: #ffdd33;
 }
 </style>
