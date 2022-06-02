@@ -26,7 +26,7 @@ body * {
 form {
 	display: flex;
 	flex-direction: column;
-	margin-top: 100px;
+	margin-top: 50px;
 }
 
 form button {
@@ -159,5 +159,9 @@ mark {
   padding: 2px 5px;
   border-radius: 4px;
   background: #ffdd33;
+}
+
+main {
+	max-width: 340px;
 }
 </style>
