@@ -35,25 +35,15 @@
 			<section class="collections">
 			<inner-column>
 
-				<collection>
-					<div>
-						<a href="" class="calm-voice">Women’s Collection</a>
-						<a href="" class="calm-voice">Shop</a>
-					</div>
-					<picture>
-						<img src="https://i.imgur.com/m09xHEg.jpg">
-					</picture>
-				</collection>
+				<?php include("modules/featured-collection.php"); ?>
 
-				<collection>
-					<div>
-						<a href="" class="calm-voice">Men’s Collection</a>
-						<a href="" class="calm-voice">Shop</a>
-					</div>
-					<picture>
-						<img src="https://i.imgur.com/KoR4Hc6.jpg">
-					</picture>
-				</collection>
+			</inner-column>
+			</section>
+
+			<section class="collection-banner">
+			<inner-column>
+
+				<?php include("modules/collection-banner.php"); ?>
 
 			</inner-column>
 			</section>

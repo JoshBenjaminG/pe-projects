@@ -1,0 +1,28 @@
+collection-banner {
+	border: 2px solid red;
+	display: block;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+}
+
+.banner-action {
+	border: 2px solid blue;
+	padding: 20px;
+}
+
+@media(min-width: 600px) {
+	collection-banner {
+		background-image: url("https://i.imgur.com/k6jBE0a.jpg");
+		background-size: cover;
+		background-position: 50% center;
+		padding: 200px;
+	}
+	collection-banner picture {
+		display: none;
+	}
+	collection-banner .banner-action {
+		background-color: white;
+	}
+}

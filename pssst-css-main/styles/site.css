@@ -42,6 +42,7 @@ nav	{
 	display: flex;
 	justify-content: center;
 	align-self: center;
+	flex-wrap: wrap;
 }
 
 nav a {
@@ -56,38 +57,7 @@ header h1 {
 	padding-top: 10px;
 }
 
-collection:nth-of-type(1) {
-	padding-right: 20px;
-}
 
-collection div {
-	display: flex;
-	flex-direction: row;
-	justify-content: space-between;
-}
-
-collection div a:nth-of-type(2) {
-	border-bottom: 1px solid #000;
-}
-
-collection picture {
-	width: 600px;
-	height: 700px;
-}
-
-.collections inner-column {
-	display: flex;
-	justify-content: center;
-	flex-direction: row;
-}
-
-collection a {
-	font-weight: 600;
-}
-
-collection picture {
-	padding-top: 10px;
-}
 
 
 
