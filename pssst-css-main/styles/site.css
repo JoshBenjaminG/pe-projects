@@ -6,7 +6,7 @@
 
 /* S setings */
 @import 'settings.css';
-@import 'developer-styles.css';
+/*@import 'developer-styles.css';*/
 
 /* S tructure */
 @import 'structure.css';
@@ -24,7 +24,7 @@
 
 /* then other contextual styles */
 body {
-	background-color: var(--paper);
+	background-color: #ffffff;
 	color: var(--ink);
 }
 
@@ -32,3 +32,62 @@ body {
 	max-width: 300px;
 	border-bottom-right-radius: 30px;
 }
+
+header {
+	display: flex;
+	flex-direction: column;
+}
+
+nav	{
+	display: flex;
+	justify-content: center;
+	align-self: center;
+}
+
+nav a {
+	padding: 10px;
+	padding-right: 45px;
+	padding-left: 45px;
+}
+
+header h1 {
+	align-self: center;
+	padding-bottom: 20px;
+	padding-top: 10px;
+}
+
+collection:nth-of-type(1) {
+	padding-right: 20px;
+}
+
+collection div {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+}
+
+collection div a:nth-of-type(2) {
+	border-bottom: 1px solid #000;
+}
+
+collection picture {
+	width: 600px;
+	height: 700px;
+}
+
+.collections inner-column {
+	display: flex;
+	justify-content: center;
+	flex-direction: row;
+}
+
+collection a {
+	font-weight: 600;
+}
+
+collection picture {
+	padding-top: 10px;
+}
+
+
+
