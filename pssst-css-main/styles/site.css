@@ -40,15 +40,13 @@ header {
 
 nav	{
 	display: flex;
-	justify-content: center;
-	align-self: center;
+	align-self: flex-start;
 	flex-wrap: wrap;
 }
 
 nav a {
-	padding: 10px;
-	padding-right: 45px;
-	padding-left: 45px;
+	padding-right: 50px;
+	
 }
 
 header h1 {
@@ -56,6 +54,7 @@ header h1 {
 	padding-bottom: 20px;
 	padding-top: 10px;
 }
+
 
 
 

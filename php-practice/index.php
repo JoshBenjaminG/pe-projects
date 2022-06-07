@@ -15,6 +15,7 @@ $array = [
 	"pizza",
 	"gpt-3",
 	"magic",
+	"form-practice",
 ];
 
 ?>

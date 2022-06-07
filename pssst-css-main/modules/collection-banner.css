@@ -1,5 +1,5 @@
 collection-banner {
-	border: 2px solid red;
+	/*border: 2px solid red;*/
 	display: block;
 	display: flex;
 	flex-direction: column;
@@ -8,8 +8,20 @@ collection-banner {
 }
 
 .banner-action {
-	border: 2px solid blue;
+	/*border: 2px solid blue;*/
 	padding: 20px;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+}
+
+.banner-action h1 {
+	padding-bottom: 20px;
+}
+
+.banner-action a {
+	border-bottom: 2px solid black;
 }
 
 @media(min-width: 600px) {

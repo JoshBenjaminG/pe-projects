@@ -16,8 +16,10 @@
 
 
 	<body>
-		<header class="inner-column">
+		<header>
+
 			<h1 class='loud-voice'>RICHE</h1>
+			<inner-column>
 			<nav>
 				<a href="">MEN</a>
 				<a href="">WOMEN</a>
@@ -28,6 +30,8 @@
 				<a href="">CHILDREN</a>
 				<a href="">BEAUTY</a>
 			</nav>
+			</inner-column>
+	
 		</header>
 
 		<main>
@@ -51,7 +55,11 @@
 		</main>
 
 		<footer>
-			<h2>Zee footah</h2>
+			<inner-column>
+
+				<?php include("modules/footer.php"); ?>
+
+			</inner-column>
 		</footer>
 	</body>
 

@@ -27,6 +27,8 @@ form {
 	display: flex;
 	flex-direction: column;
 	margin-top: 50px;
+	background-color: white;
+	padding: 50px;
 }
 
 form button {
@@ -35,7 +37,7 @@ form button {
 
 label {
 	margin-bottom: 10px;
-	margin-top: 10px;
+
 }
 
 monster-card {
