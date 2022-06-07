@@ -1,10 +1,10 @@
 <header>
 
-	<a href="" class='loud-voice logo'>RICHE</a>
+	<a href="../index.php" class='loud-voice logo'>RICHE</a>
 	<inner-column>
 	<nav>
 		<a href="">MEN</a>
-		<a href="">WOMEN</a>
+		<a href="/modules/womens-collection.php">WOMEN</a>
 		<a href="">FORCE</a>
 		<a href="">WHAT’S NEW</a>
 		<a href="">HANDBAG</a>

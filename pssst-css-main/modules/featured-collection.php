@@ -3,9 +3,9 @@
 	<collection>
 		<div class="actions">
 			<a href="modules/womens-collection.php" class="calm-voice">Women’s Collection</a>
-			<a href="womens-collection" class="calm-voice">Shop</a>
+			<a href="modules/womens-collection.php" class="calm-voice">Shop</a>
 		</div>
-		<a href="">
+		<a href="modules/womens-collection.php">
 		<picture>
 			<img src="bathing-suit.jpg">
 		</picture>
