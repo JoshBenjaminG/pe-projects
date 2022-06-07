@@ -1,4 +1,3 @@
-<footer>
 	
 	<section>
 		<h3 class="calm-voice">DO YOU NEED HELP?</h3>
@@ -25,7 +24,3 @@
 			<a href="">Accessibility</a>
 		</nav>
 	</section>
-
-
-
-</footer>

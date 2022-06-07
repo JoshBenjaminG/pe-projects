@@ -36,6 +36,7 @@ body {
 header {
 	display: flex;
 	flex-direction: column;
+	border-bottom: 1px solid black;
 }
 
 nav	{
@@ -49,9 +50,9 @@ nav a {
 	
 }
 
-header h1 {
+header .logo {
 	align-self: center;
-	padding-bottom: 20px;
+	padding-bottom: 10px;
 	padding-top: 10px;
 }
 

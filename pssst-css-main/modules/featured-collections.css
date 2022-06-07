@@ -15,11 +15,16 @@ featured-collections .actions {
 	display: flex;
 	flex-direction: row;
 	justify-content: space-between;
+	margin-bottom: 10px;
 }
 
 .actions a {
 	padding-top: 10px;
-	padding-bottom: 10px;
+	padding-bottom: 3px;
+}
+
+.actions a:nth-of-type(2) {
+	border-bottom: 2px solid black;
 }
 
 @media(min-width: 600px) {

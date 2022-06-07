@@ -1,13 +1,19 @@
 footer {
-	display: flex;
-	flex-direction: column;
+	border-top: 1px solid black;
+	margin-top: 10px;
 }
 
-footer section {
+footer  inner-column{
+	display: flex;
+	flex-direction: column;
+
+}
+
+footer inner-column section {
 	margin-bottom: 20px;
 }
 
-footer nav {
+footer inner-column nav {
 	display: flex;
 	flex-direction: column;
 }
@@ -16,16 +22,16 @@ footer section h3 {
 	margin-bottom: 10px;
 }
 
-footer nav a {
+footer inner-column nav a {
 	padding-bottom: 10px;
 }
 
 @media(min-width: 600px) {
-	footer {
+	footer inner-column {
 		display: flex;
 		flex-direction: row;
 }
-	footer section {
+	footer inner-column section {
 		padding-right: 20px;
 	}
 }
