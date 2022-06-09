@@ -9,21 +9,39 @@ item-module {
 	gap: 20px;
 }
 
+item-module div {
+	display: flex;
+	flex-direction: column;
+	
+	max-width: 800px;
+}	
+
 @media(min-width: 600px) {
 	item-module {
 		display: flex;
 		flex-direction: row;
 	}
 	item-module div {
-		display: flex;
-		flex-direction: column;
-		align-items: center;
 		padding: 90px 40px 0px 40px ;
-		width: 50%;
+		width: 45%;
 
 	}
 	item-module picture {
-		width: 50%;
+		width: 55%;
 	}
+}
+
+item-module div p {
+	border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+	padding-bottom: 20px;
+	margin-bottom: 15px;
+}
+
+button {
+	width: 100%;
+	padding: 10px 0px 10px 0px;
+	background-color: black;
+	color: white;
+	border: 1px solid black;
 }
 

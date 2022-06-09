@@ -31,9 +31,11 @@ collection-banner {
 		background-position: 50% center;
 		padding: 200px;
 	}
+	
 	collection-banner picture {
 		display: none;
 	}
+
 	collection-banner .banner-action {
 		background-color: white;
 	}
