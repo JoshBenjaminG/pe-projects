@@ -1,14 +1,29 @@
+body * {
+	/*border: 2px solid blue;*/
+}
+
+item-module {
+	display: block;
+	display: flex;
+	flex-direction: column;
+	gap: 20px;
+}
+
 @media(min-width: 600px) {
 	item-module {
 		display: flex;
 		flex-direction: row;
 	}
 	item-module div {
-		align-self: center;
-		max-width: 200px;
-		margin-left: 80px;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		padding: 90px 40px 0px 40px ;
+		width: 50%;
+
 	}
-	item {
+	item-module picture {
 		width: 50%;
 	}
 }
+

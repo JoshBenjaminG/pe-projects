@@ -1,3 +1,5 @@
+
+
 <header>
 
 	<a href="../index.php" class='loud-voice logo'>RICHE</a>

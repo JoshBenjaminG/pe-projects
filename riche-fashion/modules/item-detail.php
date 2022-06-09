@@ -19,22 +19,20 @@
 <?php include("header.php"); ?>
 
 <inner-column>
+
 	<item-module>
-	<item class="item">
 		<picture>
 			<img src="../dress1.jpeg">
 		</picture>
 		</a>
-	</item>
 	<div>
 	<h2 class="loud-voice">Crepe satin dress with belt</h2>
 	<p class="calm-voice">$650</p>
 
-	<button>Add To Shopping Bag</button>
+	<button class="calm-voice">Add To Shopping Bag</button>
 	</div>
-	</item-module>
 
-<inner-column>
+</inner-column>
 
 	</main>
 
