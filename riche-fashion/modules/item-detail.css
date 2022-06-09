@@ -1,0 +1,14 @@
+@media(min-width: 600px) {
+	item-module {
+		display: flex;
+		flex-direction: row;
+	}
+	item-module div {
+		align-self: center;
+		max-width: 200px;
+		margin-left: 80px;
+	}
+	item {
+		width: 50%;
+	}
+}

@@ -10,7 +10,7 @@
 		<meta name='description' content='PSSST (CSS)'>
 		<meta property='og:image' content='A CSS methodology so great, it needed a name.'>
 
-		<link rel='stylesheet' href='../styles/site.css'>
+		<link rel='stylesheet' href='/styles/site.css'>
 
 	</head>
 
@@ -33,47 +33,47 @@
 <items>
 
 	<item>
-		<a href="">
+		<a href="item-detail.php">
 		<picture>
 			<img src="../dress1.jpeg">
 		</picture>
 		</a>
 		<p>Dress</p>
 		<p>$650</p>
-		<a href="">View Product ></a>
+		<a href="item-detail.php">View Product ></a>
 	</item>
 
 	<item>
-		<a href="">
+		<a href="item-detail.php">
 		<picture>
 			<img src="../dress1.jpeg">
 		</picture>
 		</a>
 		<p>Dress</p>
 		<p>$650</p>
-		<a href="">View Product ></a>
+		<a href="item-detail.php">View Product ></a>
 	</item>
 
 	<item>
-		<a href="">
+		<a href="item-detail.php">
 		<picture>
 			<img src="../dress1.jpeg">
 		</picture>
 		</a>
 		<p>Dress</p>
 		<p>$650</p>
-		<a href="">View Product ></a>
+		<a href="item-detail.php">View Product ></a>
 	</item>
 
 	<item>
-		<a href="">
+		<a href="item-detail.php">
 		<picture>
 			<img src="../dress1.jpeg">
 		</picture>
 		</a>
 		<p>Dress</p>
 		<p>$650</p>
-		<a href="">View Product ></a>
+		<a href="item-detail.php">View Product ></a>
 	</item>
 
 </items>
