@@ -1,0 +1,274 @@
+@import 'meyer-reset.css';
+
+@import 'typography.css';
+
+@import 'setup.css';
+
+* {
+	scroll-behavior: smooth;	
+}
+
+body * {
+	/*border: 2px solid red;*/
+}
+
+body {
+	/*background-color: #852909;*/
+	min-height: 100vh;
+	display: flex;
+	flex-direction: column;
+}
+
+/* body background animation */
+
+html, body {
+  width: 100%;
+  height:100%;
+}
+
+body {
+    background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+    background-size: 400% 400%;
+    animation: gradient 20s ease infinite;
+}
+
+@keyframes gradient {
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+.inner-column {
+	width: 100%;
+	max-width: 1000px;
+	margin-right: auto;
+	margin-left: auto;
+	padding: 10px;
+}
+
+@media only screen and (min-width: 650px) {
+  .inner-column {
+ 	max-width: 900px;
+  }
+}
+
+/* sticky footer */
+
+main {
+	flex-grow: 1;
+}
+
+/* Header section */
+
+header {
+	background-color: rgba(0, 0, 0, .05);
+}
+
+.logo {
+	font-weight: 700;
+	font-size: 35px;
+}
+
+nav {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+
+nav a {
+	padding: 1rem;
+	text-decoration: none;
+	color: white;
+}
+
+@media(max-width:  600px) {
+	.nav-right {
+		margin-right: 20px;
+	}
+}
+
+/* Landing section */ 
+
+@media(max-width: 600px) {
+	.loud-voice {
+		font-size: 60px;
+	}
+}
+
+.josh {
+	display: flex;
+	min-height: 40vh;
+	align-items: center;
+	padding-left: 5px;
+}
+
+.welcome {
+	display: flex;
+	flex-direction: column;
+}
+
+.welcome .job {
+	align-self: flex-end;
+	opacity: 0.4;
+}
+
+.welcome .calm-voice {
+	color: white;
+}
+
+.welcome .loud-voice {
+	color: white;
+}
+
+.welcome .name {
+	color: white;
+}
+
+/* About heading */
+
+.about-heading {
+	color: white;
+}
+
+@media only screen and (min-width: 650px) {
+  .about-heading .inner-column {
+  	display: flex;
+  	flex-direction: row;
+  	padding-left: 15px;
+  }
+}
+
+/* About section */
+
+.about .inner-column {
+	padding-left: 0px;
+	padding-right: 0px;
+}
+
+@media only screen and (min-width: 650px) {
+  .about .inner-column {
+  	display: flex;
+  	flex-direction: row;
+  	justify-content: space-between;
+  	padding-left: 15px;
+  }
+}
+
+.story {
+	padding: 15px;
+	max-width: auto;
+}
+
+.story p span {
+	font-weight: 700;
+}
+
+@media only screen and (min-width: 650px) {
+	.story {
+		border-radius: 10px;
+		max-width: 420px;
+	}
+}
+
+.story-left {
+	background-color: #fbf16d;
+	border: 2px solid #fbf16d;
+}
+
+@media only screen and (min-width: 650px) {
+	.story-left {
+		margin-right: 20px;
+	}
+}
+
+.story-right {
+	background-color: white;
+	border: 2px solid white;
+}
+
+.welcome {
+	animation: slide-in 1700ms;
+}
+ 
+@keyframes slide-in {
+  from {
+    margin-left: -100%;
+    width: 300%; 
+  }
+
+  to {
+    margin-left: 0%;
+    width: 100%;
+  }
+}
+
+
+@media only screen and (min-width: 650px) {
+	.story-right {
+		margin-right: 20px;
+	}
+}
+
+.story-left, .story-right {
+  overflow:hidden;
+}
+.story-left, .story-right {
+  animation: 3s slide-up;
+  margin-top:0%;
+}
+
+@keyframes slide-up {
+  from {
+    margin-top: 100%;
+    height: 100%; 
+  }
+
+  to {
+    margin-top: 0%;
+    height: 100%;
+  }
+}
+
+.about-heading div h3 {
+	animation: slide-in 2300ms;
+}
+ 
+@keyframes slide-in {
+  from {
+    margin-left: -100%;
+    width: 300%; 
+  }
+
+  to {
+    margin-left: 0%;
+    width: 100%;
+  }
+}
+
+/* Projects section */
+
+.projects {
+	background-color: white;
+}
+
+.project-heading {
+	padding-top: 50px;
+	padding-bottom: 80px;
+}
+
+
+
+
+
+
+
+
+
+
+
