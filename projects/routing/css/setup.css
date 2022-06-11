@@ -1,0 +1,48 @@
+
+/* https://www.paulirish.com/2012/box-sizing-border-box-ftw/ */
+html {
+  box-sizing: border-box;
+}
+*, *:before, *:after {
+  box-sizing: inherit;
+}
+
+a {
+	display: block;
+	text-decoration: none;
+	color: black;
+}
+
+header nav a {
+	border-bottom: 2px solid transparent;
+}
+
+nav .active {
+	border-bottom: 2px solid #03ffff;
+} 
+
+p a {
+	display: inline;
+	color: blue;
+	text-decoration: underline;
+}
+
+.lecture card a {
+	color: dodgerblue;
+}
+
+picture {
+	display: block;
+}
+
+img {
+	display: block;
+	width: 20vw;
+	height: auto;
+}
+
+svg {
+  display: block;
+  width: 100%;
+  /* may need height: 100%; Check all browsers */
+}

@@ -1,0 +1,49 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@100;300;400&display=swap');
+
+.loud-voice	{
+	font-family: 'Montserrat', sans-serif;
+	font-size: clamp(36px, 5vw, 60px);
+  	font-weight: 300;
+}
+@media (min-width: 600px) {
+	.loud-voice {
+		font-weight: 400;
+	}
+}
+
+.intro-voice	{
+	font-family: 'Montserrat', sans-serif;
+	font-size: 40px;
+  	font-weight: 400;
+}
+
+.attention-voice	{
+	font-family: 'Montserrat', sans-serif;
+	font-size: 30px;
+	font-weight: 300;
+}
+
+.something-for-site-map-headings {
+	/* */
+}
+
+.calm-voice {
+	font-family: 'Montserrat', sans-serif;
+	font-size: 1rem;
+	line-height: 1.4;
+	font-weight: 100;
+}
+
+/* these would be scoped to section or to an article element */
+/* this is just a loose setting for now $todo */
+p + p {
+	margin-top: 14px;
+}
+
+h1 + p {
+	margin-top: 20px;
+}
+
+h2 + p {
+	margin-top: 20px;
+}

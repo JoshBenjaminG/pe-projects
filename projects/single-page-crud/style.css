@@ -1,0 +1,12 @@
+ul {
+	list-style-type: none;
+}
+
+a {
+	background: #ffa41c;
+	padding: 7px;
+	text-decoration-line: none;
+	border: 2px solid #ff8f00;
+	border-radius: 10px;
+	color: black;
+}

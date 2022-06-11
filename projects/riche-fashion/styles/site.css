@@ -1,0 +1,63 @@
+/* P reset */
+@import 'preset.css';
+
+/* S etup */
+@import 'setup.css';
+
+/* S setings */
+@import 'settings.css';
+/*@import 'developer-styles.css';*/
+
+/* S tructure */
+@import 'structure.css';
+
+/* T ypography */
+@import 'typography.css';
+
+/* C omponents */
+@import 'components.css';
+
+/* S tuff (modules) */
+@import 'modules.css';
+
+/* S ections and more stuff */
+
+/* then other contextual styles */
+body {
+	background-color: #ffffff;
+	color: var(--ink);
+}
+
+.my-fantastic-image {
+	max-width: 300px;
+	border-bottom-right-radius: 30px;
+}
+
+header {
+	display: flex;
+	flex-direction: column;
+	border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+}
+
+nav	{
+	display: flex;
+	align-self: flex-start;
+	flex-wrap: wrap;
+}
+
+nav a {
+	padding-right: 50px;
+	
+}
+
+header .logo {
+	align-self: center;
+	padding-bottom: 10px;
+	padding-top: 10px;
+}
+
+
+
+
+
+

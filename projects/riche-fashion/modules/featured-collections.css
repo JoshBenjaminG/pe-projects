@@ -1,0 +1,37 @@
+featured-collections {
+	display: block;
+	/*border: 5px solid red;*/
+	display: flex;
+	flex-direction: column;
+	gap: 20px;
+}
+
+featured-collections collection {
+	display: block;
+/*	border: 2px solid blue;
+*/}
+
+featured-collections .actions {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	margin-bottom: 10px;
+}
+
+.actions a {
+	padding-top: 10px;
+	padding-bottom: 3px;
+}
+
+.actions a:nth-of-type(2) {
+	border-bottom: 2px solid black;
+}
+
+@media(min-width: 600px) {
+	featured-collections {
+		flex-direction: row;
+	}
+	collection {
+		width: 50%;
+	}
+}

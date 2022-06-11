@@ -1,0 +1,38 @@
+body * {
+	box-sizing: border-box;
+}
+
+body {
+	text-align: center;
+	font-family: sans-serif;
+	background-color: #05aa6d;
+}
+
+header {
+	font-size:  20px;
+	color: #c200fe;
+	border-bottom: 2px solid green;
+}
+
+section {
+	border-bottom: 2px solid green;
+}
+
+a {
+	text-decoration: none;
+	color: #4532cf;
+}
+
+a:hover {
+	color: #c200fe;
+	text-decoration: underline;
+}
+
+h2 {
+	color: #30c9f5;
+}
+
+p {
+	color: #f5b502;
+}
+

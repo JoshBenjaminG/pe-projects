@@ -1,0 +1,38 @@
+footer {
+	border-top: 1px solid rgba(0, 0, 0, 0.2);
+	margin-top: 10px;
+}
+
+footer  inner-column{
+	display: flex;
+	flex-direction: column;
+
+}
+
+footer inner-column section {
+	margin-bottom: 20px;
+}
+
+footer inner-column nav {
+	display: flex;
+	flex-direction: column;
+}
+
+footer section h3 {
+	margin-bottom: 10px;
+}
+
+footer inner-column nav a {
+	padding-bottom: 10px;
+}
+
+@media(min-width: 600px) {
+	footer inner-column {
+		display: flex;
+		flex-direction: row;
+}
+	footer inner-column section {
+		padding-right: 20px;
+	}
+}
+

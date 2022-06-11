@@ -1,0 +1,34 @@
+
+call-to-action {
+  display: block;
+  padding-top: 60px;
+  padding-bottom: 60px;
+  /* */
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+call-to-action a {
+  margin-top:  20px;
+  color: #1923b7;
+  width: 16rem;
+  height: 3rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 50px;
+  text-transform: uppercase;
+  transition: all 200ms ease-in-out;
+}
+
+call-to-action a:hover {
+  background-color: #ddd203;
+  color: #565fff;
+}
+
+@media (min-width: 600px) {
+  call-to-action {
+    padding: 150px;
+  }
+}
