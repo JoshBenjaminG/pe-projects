@@ -1,0 +1,27 @@
+
+
+
+main {
+	flex-grow: 1; /* fill up available space + push the footer down */
+}
+
+.inner-column {
+	display: block;
+	width: 100%;
+	max-width: 900px; /* could be a variable in settings */
+	margin-right: auto;
+	margin-left: auto;
+	padding: 10px;
+ /* a loose default */
+}
+
+section * {
+	padding: 10px;
+}
+
+/*.site-header {
+	position: sticky;
+	top: 0;
+	z-index: 5;
+}*/
+

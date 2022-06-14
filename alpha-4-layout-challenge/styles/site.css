@@ -1,0 +1,93 @@
+/* P reset */
+@import 'preset.css';
+
+/* S etup */
+@import 'setup.css';
+
+/* S setings */
+@import 'settings.css';
+/*@import 'developer-styles.css';*/
+
+/* S tructure */
+@import 'structure.css';
+
+/* T ypography */
+@import 'typography.css';
+
+/* C omponents */
+@import 'components.css';
+
+/* S tuff (modules) */
+@import 'modules.css';
+
+/* S ections and more stuff */
+
+/* then other contextual styles */
+
+body * {
+	border: 1px solid black;
+}
+
+.header {
+	background-color: #aed9bc;
+}
+
+.header .inner-column {
+	display: flex;
+	flex-direction: column;
+}
+
+.left-nav {
+	display: flex;
+	flex-direction: row;
+}
+
+.diptych {
+	background-color: #aadee9;
+}
+
+.cta {
+	background-color: #dc9dc8;
+}
+
+.article-header {
+	background-color: #fccb98;
+}
+
+.article-grid {
+	background-color: #fccb98;
+}
+
+.article-grid .inner-column {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+
+article-card {
+	display: block;
+	width: 400px;
+	align-self: center;
+}
+
+footer {
+	background-color: #faf0e4;
+}
+
+@media(min-width: 600px){
+	.diptych .inner-column {
+		display: flex;
+		flex-direction: row-reverse;
+		align-items: center;
+	}
+	.header .inner-column {
+		display: flex;
+		flex-direction: row;
+		justify-content: space-between;
+	}
+	.article-grid .inner-column {
+		display: flex;
+		flex-direction: row;
+		flex-wrap: wrap;
+		justify-content: center;
+}
