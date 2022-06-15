@@ -17,22 +17,13 @@
 
 	<body>
 
-<?php include("header.php"); ?>
+<?php include("header.php"); 
+
+
+?>
 
 <main>
 	
-<?php 
-
-$json = file_get_contents("../items.json");
-$item_data = json_decode($json, true);
-$items = $item_data["items"];
-
-//if filter = x
-//filter the array 
-//set the filtered array to $items
-
-?>
-		
 
 <section class="collection-header">
 	<inner-column>
@@ -45,16 +36,16 @@ $items = $item_data["items"];
 
 <items>
 
-	<?php foreach ($items as $item) { ?>
+	<?php foreach ($items as $id => $item) {  echo $id;?>
 		<item>
-		<a href="item-detail.php">
+		<a href="item-detail.php?id=<?=$id?>">
 		<picture>
 			<img src="../dress1.jpeg">
 		</picture>
 		</a>
 		<p><?=$item["name"]?></p>
 		<p><?=$item["price"]?></p>
-		<a href="item-detail.php">View Product ></a>
+		<a href="">View Product ></a>
 	</item>
 	<?php } ?>
 
@@ -62,3 +53,15 @@ $items = $item_data["items"];
 </items>
 
 </main>
+
+	<footer>
+			<inner-column>
+
+				<?php include("footer.php"); ?>
+
+			</inner-column>
+		</footer>
+
+</body>
+
+</html>

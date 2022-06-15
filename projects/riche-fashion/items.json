@@ -1,24 +1,20 @@
 {
-	"items": [
-		{
-			"id": "341",
+	"items": {
+		"341" : {
 			"name": "Crepe Satin Dress",
-			"price": "3,200"
+			"price": "$3,200"
 		},
-		{
-			"id": "465",
+		"465" : {
 			"name": "Twill Shirt",
-			"price": "2,400"
+			"price": "$2,400"
 		},
-		{
-			"id": "123",
+		"123" : {
 			"name": "Crepe chine shirt",
-			"price": "900"
+			"price": "$900"
 		},
-		{
-			"id": "987",
+		"987" : {
 			"name": "Long twill dress",
-			"price": "1,100"
+			"price": "$1,100"
 		}
-	]
+	}
 }

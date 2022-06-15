@@ -16,7 +16,18 @@
 
 	<body>
 
-<?php include("header.php"); ?>
+<?php include("header.php"); 
+
+
+$itemId = $_GET['id'];
+
+echo $items[$itemId]["name"];
+echo $items[$itemId]["price"];
+
+
+
+
+?>
 
 <inner-column>
 
@@ -26,8 +37,8 @@
 		</picture>
 		</a>
 	<div>
-	<h2 class="attention-voice">Crepe satin dress with belt</h2>
-	<p class="calm-voice">$650</p>
+	<h2 class="attention-voice"><?=$items[$itemId]["name"]?></h2>
+	<p class="calm-voice"><?=$items[$itemId]["price"]?></p>
 
 	<button class="calm-voice checkout-button">ADD TO SHOPPING BAG</button>
 	</div>
