@@ -2,8 +2,8 @@
 	<section>
 		<h3 class="calm-voice">DO YOU NEED HELP?</h3>
 		<nav>
-			<a href="">Call us</a>
-			<a href="">Contact us</a>
+			<a href="tel:123-456-7890">Call Us</a>
+			<a href="modules/contact-us.php">Contact us</a>
 			<a href="">FAQ</a>
 		</nav>
 	</section>

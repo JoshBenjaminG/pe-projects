@@ -1,0 +1,76 @@
+{
+	"students": [
+		{
+			"id": "andy",
+			"name": "Andy",
+			"teaser": "",
+			"cta": "",
+			"image":"",
+			"class":"alpha-4"
+		},
+		{
+			"id": "burooj",
+			"name": "Burooj",
+			"teaser": "Check out my stuff. Try dark mode!",
+			"cta": "Come come",
+			"image":"images/letter-b.png",
+			"class":"alpha-4"
+		},
+		{
+			"id": "derek",
+			"name": "Derek",
+			"teaser": "The Sheriff ",
+			"cta": "More",
+			"image":"",
+			"class":"alpha-4"
+		},
+		{
+			"id": "jesse",
+			"name": "Jesse",
+			"teaser": "Coding. Cool stuff. Me. What more do you need? 😉",
+			"cta": "Only a click away!",
+			"image":"",
+			"class":"alpha-4"
+		},
+		{
+			"id": "john",
+			"name": "John",
+			"teaser": "",
+			"cta": "",
+			"image":"",
+			"class":"alpha-4"
+		},
+		{
+			"id": "josh",
+			"name": "Josh",
+			"teaser": "Nice to meet you!",
+			"cta": "Check it out.",
+			"image":"",
+			"class":"alpha-3"
+		},
+		{
+			"id": "ned",
+			"name": "Ned",
+			"teaser": "Developing for the future.",
+			"cta": "Find out more!",
+			"image":"",
+			"class":"alpha-4"
+		},
+		{
+			"id": "steve",
+			"name": "Steve",
+			"teaser": "",
+			"cta": "",
+			"image":"",
+			"class":"alpha-4"
+		},
+		{
+			"id": "tara",
+			"name": "TareUhhhhhh",
+			"teaser": "A constant state of learning and building cool new stuff.",
+			"cta": "Enter here!",
+			"image":"",
+			"class":"alpha-3"
+		}
+	]
+}

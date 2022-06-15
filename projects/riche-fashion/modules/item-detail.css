@@ -37,7 +37,7 @@ item-module div p {
 	margin-bottom: 15px;
 }
 
-button {
+.checkout-button {
 	width: 100%;
 	padding: 10px 0px 10px 0px;
 	background-color: black;

@@ -20,6 +20,19 @@
 <?php include("header.php"); ?>
 
 <main>
+	
+<?php 
+
+$json = file_get_contents("../items.json");
+$item_data = json_decode($json, true);
+$items = $item_data["items"];
+
+//if filter = x
+//filter the array 
+//set the filtered array to $items
+
+?>
+		
 
 <section class="collection-header">
 	<inner-column>
@@ -32,49 +45,19 @@
 
 <items>
 
-	<item>
+	<?php foreach ($items as $item) { ?>
+		<item>
 		<a href="item-detail.php">
 		<picture>
 			<img src="../dress1.jpeg">
 		</picture>
 		</a>
-		<p>Dress</p>
-		<p>$650</p>
+		<p><?=$item["name"]?></p>
+		<p><?=$item["price"]?></p>
 		<a href="item-detail.php">View Product ></a>
 	</item>
+	<?php } ?>
 
-	<item>
-		<a href="item-detail.php">
-		<picture>
-			<img src="../dress1.jpeg">
-		</picture>
-		</a>
-		<p>Dress</p>
-		<p>$650</p>
-		<a href="item-detail.php">View Product ></a>
-	</item>
-
-	<item>
-		<a href="item-detail.php">
-		<picture>
-			<img src="../dress1.jpeg">
-		</picture>
-		</a>
-		<p>Dress</p>
-		<p>$650</p>
-		<a href="item-detail.php">View Product ></a>
-	</item>
-
-	<item>
-		<a href="item-detail.php">
-		<picture>
-			<img src="../dress1.jpeg">
-		</picture>
-		</a>
-		<p>Dress</p>
-		<p>$650</p>
-		<a href="item-detail.php">View Product ></a>
-	</item>
 
 </items>
 

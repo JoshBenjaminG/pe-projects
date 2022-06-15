@@ -5,12 +5,12 @@
 	<a href="../index.php" class='loud-voice logo'>RICHE</a>
 	<inner-column>
 	<nav>
-		<a href="">MEN</a>
-		<a href="/modules/womens-collection.php">WOMEN</a>
-		<a href="">FORCE</a>
-		<a href="">WHAT’S NEW</a>
-		<a href="">HANDBAG</a>
-		<a href="">BEAUTY</a>
+		<a href="/modules/items-collection.php">MEN</a>
+		<a href="/modules/items-collection.php">WOMEN</a>
+		<a href="/modules/items-collection.php">FORCE</a>
+		<a href="/modules/items-collection.php">WHAT’S NEW</a>
+		<a href="/modules/items-collection.php">HANDBAG</a>
+		<a href="/modules/items-collection.php">BEAUTY</a>
 	</nav>
 	</inner-column>
 

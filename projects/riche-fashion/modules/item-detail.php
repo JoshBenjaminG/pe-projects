@@ -29,7 +29,7 @@
 	<h2 class="attention-voice">Crepe satin dress with belt</h2>
 	<p class="calm-voice">$650</p>
 
-	<button class="calm-voice">ADD TO SHOPPING BAG</button>
+	<button class="calm-voice checkout-button">ADD TO SHOPPING BAG</button>
 	</div>
 
 </inner-column>
