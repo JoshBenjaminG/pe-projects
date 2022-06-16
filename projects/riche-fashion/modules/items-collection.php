@@ -19,8 +19,15 @@
 
 <?php include("header.php"); 
 
+$json = file_get_contents("../items.json");
+$item_data = json_decode($json, true);
+$items = $item_data["items"];
+$collections = $item_data["collections"];
+$collection = $_GET["collection"];
 
 ?>
+
+	
 
 <main>
 	
@@ -28,19 +35,19 @@
 <section class="collection-header">
 	<inner-column>
 	<collection-header>
-		<h2 class="header-voice">Love Parade with Donald Riche</h2>
-		<p class="header-p-voice">Between two different worlds, going in and out of character and showcasing the versatility of women's styles from the Riche Love Parade collection.</p>
+		<h2 class="header-voice"><?=$collections[$collection]["name"]?></h2>
+		<p class="header-p-voice"><?=$collections[$collection]["description"]?></p>
 	</collection-header>
 	</inner-column>
 </section>
 
 <items>
 
-	<?php foreach ($items as $id => $item) {  echo $id;?>
+	<?php foreach ($items as $id => $item) { ?>
 		<item>
 		<a href="item-detail.php?id=<?=$id?>">
 		<picture>
-			<img src="../dress1.jpeg">
+			<img src="../images/<?=$item["image"]?>">
 		</picture>
 		</a>
 		<p><?=$item["name"]?></p>

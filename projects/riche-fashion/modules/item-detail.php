@@ -21,9 +21,10 @@
 
 $itemId = $_GET['id'];
 
-echo $items[$itemId]["name"];
-echo $items[$itemId]["price"];
 
+$json = file_get_contents("../items.json");
+$item_data = json_decode($json, true);
+$items = $item_data["items"];
 
 
 
@@ -33,7 +34,7 @@ echo $items[$itemId]["price"];
 
 	<item-module>
 		<picture>
-			<img src="../dress1.jpeg">
+			<img src="../images/<?=$items[$itemId]["image"]?>">
 		</picture>
 		</a>
 	<div>
