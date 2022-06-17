@@ -66,10 +66,9 @@ foreach($data["items"] as $item) {
 
 	<?php foreach ($filtered as $id => $item) { 
 		$formattedPrice = number_format($item["price"]);
-
 		?>
 		<item>
-		<a href="item-detail.php?id=<?=$id?>">
+		<a href="item-detail.php?id=<?=$item["id"]?>">
 		<picture>
 			<img src="../images/<?=$item["image"]?>">
 		</picture>

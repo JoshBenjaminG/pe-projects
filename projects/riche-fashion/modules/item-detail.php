@@ -27,7 +27,6 @@ $item_data = json_decode($json, true);
 $items = $item_data["items"];
 
 
-
 ?>
 
 <inner-column>
@@ -39,7 +38,7 @@ $items = $item_data["items"];
 		</a>
 	<div>
 	<h2 class="attention-voice"><?=$items[$itemId]["name"]?></h2>
-	<p class="calm-voice"><?=$items[$itemId]["price"]?></p>
+	<p class="calm-voice">$<?=$items[$itemId]["price"]?></p>
 
 	<button class="calm-voice checkout-button">ADD TO SHOPPING BAG</button>
 	</div>

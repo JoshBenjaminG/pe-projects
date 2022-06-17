@@ -1,26 +1,53 @@
 {
 	"items": {
 		"341" : {
+			"id" : "341",
 			"name": "Crepe Satin Dress",
 			"price": 3200,
 			"image" : "crepedress.jpeg",
 			"includedIn" : [2]
 		},
 		"465" : {
+			"id" : "465",
 			"name": "Twill Shirt",
 			"price": 2400,
-			"image" : "twillshirt.jpeg"
+			"image" : "twillshirt.jpeg",
+			"includedIn" : [1]
 		},
 		"123" : {
+			"id" : "123",
 			"name": "Crepe chine shirt",
 			"price": 900,
-			"image" : "crepechineshirt.jpeg"
+			"image" : "crepechineshirt.jpeg",
+			"includedIn" : [2]
 		},
 		"987" : {
+			"id" : "987",
 			"name": "Long twill dress",
 			"price": 1100,
 			"image" : "longTwil.jpeg",
 			"includedIn" : [1]
+		},
+		"1" : {
+			"id" : "1",
+			"name" : "Handbag name",	
+			"price" : 12345,
+			"image" : "square.jpg",
+			"includedIn" : [4]
+		},
+		"2" : {
+			"id" : "2",
+			"name" : "Beauty name",
+			"price" : 12345,
+			"image" : "square.jpg",
+			"includedIn" : [3]
+		},
+		"22345" : {
+			"id" : "22345",
+			"name" : "Forceful",
+			"price" : 737345,
+			"image" : "square.jpg",
+			"includedIn" : [5]
 		}
 	},
 	"collections" : {
@@ -33,6 +60,21 @@
 			"id" : 2,
 			"name": "Merging Codes with Alessandro Michele",
 			"description": "Designed by Creative Director Alessandro Michele, merging the emblems of the House with those of the iconic sportswear brand. The collection expands on the sartorial streetwear creations with a spectrum of sport-inspired pieces in which the heritage of both brands is encoded in a trio of lines. "
+		},
+		"beauty" : {
+			"id" : 3,
+			"name" : "This is the beauty list",
+			"description" : "beauty is in the eye of the beholder"
+		},
+		"handbags" : {
+			"id" : 4,
+			"name" : "Welcome to handbags",
+			"description" : "Handbags are just bags that hold hands *hits blunt*"
+		},
+		"force" : {
+			"id" : 5,
+			"name" : "Welcome to Force, by Gage",
+			"description" : "I have never once smoked - inhaled? Yes. Wait - I mean no. I did not inhale, but I did smoke!"
 		}
 	}
 }
