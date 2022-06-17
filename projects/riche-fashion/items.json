@@ -2,31 +2,35 @@
 	"items": {
 		"341" : {
 			"name": "Crepe Satin Dress",
-			"price": "$3,200",
-			"image" : "crepedress.jpeg"
+			"price": 3200,
+			"image" : "crepedress.jpeg",
+			"includedIn" : [2]
 		},
 		"465" : {
 			"name": "Twill Shirt",
-			"price": "$2,400",
+			"price": 2400,
 			"image" : "twillshirt.jpeg"
 		},
 		"123" : {
 			"name": "Crepe chine shirt",
-			"price": "$900",
+			"price": 900,
 			"image" : "crepechineshirt.jpeg"
 		},
 		"987" : {
 			"name": "Long twill dress",
-			"price": "$1,100",
-			"image" : "longTwil.jpeg"
+			"price": 1100,
+			"image" : "longTwil.jpeg",
+			"includedIn" : [1]
 		}
 	},
 	"collections" : {
 		"women" : {
+			"id" : 1,
 			"name": "Love Parade with Donald Riche",
 			"description": "Between two different worlds, going in and out of character and showcasing the versatility of women's styles from the Riche Love Parade collection."
 		},
 		"men" : {
+			"id" : 2,
 			"name": "Merging Codes with Alessandro Michele",
 			"description": "Designed by Creative Director Alessandro Michele, merging the emblems of the House with those of the iconic sportswear brand. The collection expands on the sartorial streetwear creations with a spectrum of sport-inspired pieces in which the heritage of both brands is encoded in a trio of lines. "
 		}

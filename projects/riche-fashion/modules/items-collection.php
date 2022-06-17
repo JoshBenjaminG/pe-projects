@@ -20,12 +20,33 @@
 <?php include("header.php"); 
 
 $json = file_get_contents("../items.json");
-$item_data = json_decode($json, true);
-$items = $item_data["items"];
-$collections = $item_data["collections"];
-$collection = $_GET["collection"];
+
+$data = json_decode($json, true);
+
+$collections = $data["collections"];
+
+$collectionName = $_GET["collection"];
+
+$collection = $collections[$collectionName];
+
+$collectionId = $collection["id"];
+
+$filtered = [];
+
+foreach($data["items"] as $item) {
+	if (isset($item["includedIn"])) {
+		foreach ($item["includedIn"] as $id) {
+			if ($id == $collectionId) {
+				array_push($filtered, $item);
+			}
+		}
+	}
+}
+
+
 
 ?>
+
 
 	
 
@@ -35,15 +56,18 @@ $collection = $_GET["collection"];
 <section class="collection-header">
 	<inner-column>
 	<collection-header>
-		<h2 class="header-voice"><?=$collections[$collection]["name"]?></h2>
-		<p class="header-p-voice"><?=$collections[$collection]["description"]?></p>
+		<h2 class="header-voice"><?=$collection["name"]?></h2>
+		<p class="header-p-voice"><?=$collection["description"]?></p>
 	</collection-header>
 	</inner-column>
 </section>
 
 <items>
 
-	<?php foreach ($items as $id => $item) { ?>
+	<?php foreach ($filtered as $id => $item) { 
+		$formattedPrice = number_format($item["price"]);
+
+		?>
 		<item>
 		<a href="item-detail.php?id=<?=$id?>">
 		<picture>
@@ -51,7 +75,7 @@ $collection = $_GET["collection"];
 		</picture>
 		</a>
 		<p><?=$item["name"]?></p>
-		<p><?=$item["price"]?></p>
+		<p>$<?=$item["price"]?></p>
 		<a href="">View Product ></a>
 	</item>
 	<?php } ?>
