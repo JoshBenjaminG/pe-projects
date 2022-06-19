@@ -4,7 +4,7 @@
 		<nav>
 			<a href="tel:123-456-7890">Call Us</a>
 			<a href="modules/contact-us.php">Contact us</a>
-			<a href="">FAQ</a>
+			<a href="modules/contact-us.php">FAQ</a>
 		</nav>
 	</section>
 
@@ -19,8 +19,8 @@
 	<section>
 		<h3 class="calm-voice">LEGAL TERMS AND CONDITIONS</h3>
 		<nav>
-			<a href="">Legal Notice</a>
-			<a href="">Privacy Statement</a>
-			<a href="">Accessibility</a>
+			<a href="modules/legal.php">Legal Notice</a>
+			<a href="modules/legal.php">Privacy Statement</a>
+			<a href="modules/legal.php">Accessibility</a>
 		</nav>
 	</section>
