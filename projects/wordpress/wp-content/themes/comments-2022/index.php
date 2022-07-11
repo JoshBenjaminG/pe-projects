@@ -7,16 +7,20 @@
 
 	if (is_page('list')) {
 		$args = array(  
-	        'post_type' => 'comments',
-    	);
+		    'post_type' => 'people',
+		);
 
-	    $loop = new WP_Query( $args ); 
-	        
-	    while ( $loop->have_posts() ) : $loop->the_post(); 
-	        echo '</p>' . the_title() . "</p>"; 
-	    endwhile;
+		$loop = new WP_Query( $args ); 
+		    
+		while ( $loop->have_posts() ) : $loop->the_post(); 
+		    include("template/components/people-card.php"); 
+		endwhile;
 
-	    wp_reset_postdata(); 
+		wp_reset_postdata(); 
+	}
+
+	if (is_singular('people')) {
+		echo the_field("name");
 	}
 ?>
 
