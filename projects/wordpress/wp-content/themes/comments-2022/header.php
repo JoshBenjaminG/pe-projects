@@ -10,6 +10,8 @@
 
 	<header>
 		<h2>This is the header - Forever</h2>
+
+		<?php include("templates/pages/site-menu.php"); ?>
 	</header>
 
 	<main>

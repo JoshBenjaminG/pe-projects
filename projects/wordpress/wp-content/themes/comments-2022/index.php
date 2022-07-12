@@ -2,25 +2,19 @@
 
 <?php 
 	if (is_page('home')) {
-		echo 'home';
+		include("templates/pages/home.php");
 	}
 
 	if (is_page('list')) {
-		$args = array(  
-		    'post_type' => 'people',
-		);
-
-		$loop = new WP_Query( $args ); 
-		    
-		while ( $loop->have_posts() ) : $loop->the_post(); 
-		    include("template/components/people-card.php"); 
-		endwhile;
-
-		wp_reset_postdata(); 
+		include("templates/pages/list.php");
 	}
 
 	if (is_singular('people')) {
-		echo the_field("name");
+		include("templates/pages/detail.php");
+	}
+
+	if (is_404()) {
+		include("templates/pages/page-not-found.php");
 	}
 ?>
 
