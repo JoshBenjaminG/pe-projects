@@ -1,4 +1,10 @@
-<?php $portrait = get_field("portrait"); ?> 
+<?php 
+
+$portrait = get_field("portrait");
+$name = get_field("name");
+$age = get_field("age");
+
+?> 
 
 <people-card>
 

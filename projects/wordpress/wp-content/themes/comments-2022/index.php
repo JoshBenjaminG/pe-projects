@@ -9,6 +9,10 @@
 		include("templates/pages/list.php");
 	}
 
+	if (is_page('albums')) {
+		include("templates/pages/album-list.php");
+	}
+
 	if (is_singular('people')) {
 		include("templates/pages/detail.php");
 	}

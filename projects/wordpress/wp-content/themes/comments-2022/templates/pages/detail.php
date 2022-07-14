@@ -1,7 +1,15 @@
 <?php
 $album = get_field('favorite_album');
+$portrait = get_field("portrait");
+$name = get_field("name");
+$age = get_field("age");
+
 if( $album ): ?>
-    <div><?php the_field("name"); ?>'s page.</div>
+    <div><?=$name?>'s page.</div>
+    <label>Age: </label> <?=$age?>
+    <picture>
+        <img src="<?=$portrait["url"]?>">
+    </picture>
     <ul>
     <?php foreach( $album as $post ): 
 

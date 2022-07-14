@@ -24,18 +24,22 @@
         ],
         [
             "heading" => "End of course plan",
-            "goals" => [ "Complete v3 of my portfolio", "Have a large front-end project on my portfolio", "Complete a second project that is more design oriented."],
+            "goals" => [ "Complete v3 of my portfolio", "Have a few good projects on my site"],
         ],
         [
-            "heading" => "End of month plan (June)",
-            "goals" => [ "Finish case study on responsive design", "Finish majority of E4P"],
+            "heading" => "End of month plan (July)",
+            "goals" => [ "Finish case study on responsive design", "Create a good WP project", "Reach out to companies near me to introduce myself."],
         ],          
     ];
 
+    $projects = ["Portfolio Site v2", "Alpha-4 Homepage", "Layout Theme Challenge", "Responsive layout challenge", "Crud Challenge", "Routing PHP challenge", "WordPress Intro Project"];
+
 ?>
 
-<section class="inner-column">
-	<ul>
+<section class="inner-column goals-page">
+	<a href="index.php" class="calm-voice">Home</a>
+	<h1 class="loud-voice">Goals Page</h1>
+	<ul class="goals">
 	    
 	    <?php foreach ($sections as $section) { ?>
 	        <li>
@@ -44,6 +48,16 @@
 	                <li><?=$goal?></li>
 	            <?php } ?>
 	        </li>
+	    <?php } ?> 
+	</ul>
+</section>
+
+<section class="inner-column projects-list">
+	<h3 class="calm-voice">Projects List</h3>
+	<ul>
+	    <?php foreach ($projects as $project) { ?>
+	        <li><?=$project?></li>
+	        <br>
 	    <?php } ?> 
 	</ul>
 </section>
