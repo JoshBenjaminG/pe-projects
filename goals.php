@@ -13,7 +13,7 @@
 
 <main>
 
-<?php include('header.php'); ?>
+<?php include('modules/header.php'); ?>
 
 <?php 
 
@@ -37,7 +37,7 @@
 ?>
 
 <section class="inner-column goals-page">
-	<a href="index.php" class="calm-voice">Home</a>
+	<div>
 	<h1 class="loud-voice">Goals Page</h1>
 	<ul class="goals">
 	    
@@ -50,6 +50,7 @@
 	        </li>
 	    <?php } ?> 
 	</ul>
+	</div>
 </section>
 
 <section class="inner-column projects-list">
