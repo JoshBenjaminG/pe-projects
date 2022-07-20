@@ -15,12 +15,45 @@
 
 <?php include('modules/header.php'); ?>
 
-<section class="inner-column goals-page">
-	<div>
-	<h1 class="loud-voice">Resume</h1>
-	<ul class="goals">
-	    
-	   
-	</ul>
+<section class="inner-column resume-page">
+	<div class="resume-head">
+		<h3>Joshua Gage</h2>
+			<div>
+				<p>(251) 366-0976</p>
+				<p>|</p>
+				<p>Mobile, Alabama</p>
+				<p>|</p>
+				<p>Joshuaegage@gmail.com</p>
+			</div>
+	</div>
+	<div class="resume-section">
+		<h4 class="section-head">Interests</h4>
+		<h4>Web Development</h4>
+		<ul>
+			<li>Studied web development and design during Perpetual Education's web development program.</li>
+		</ul>
+	</div>
+	<div class="resume-section">
+		<h4 class="section-head">Projects</h4>
+		<h4>Responsive layout case study</h4>
+		<ul>
+			<li>Studied web development and design during Perpetual Education's web development program.</li>
+		</ul>
+		<h4>Responsive layout case study</h4>
+		<ul>
+			<li>Studied web development and design during Perpetual Education's web development program.</li>
+		</ul>
+		<h4>Responsive layout case study</h4>
+		<ul>
+			<li>Studied web development and design during Perpetual Education's web development program.</li>
+		</ul>
+	</div>
+	<div class="resume-section education">
+		<h4 class="section-head">Education</h4>
+		<div>
+			<h4>University of South Alabama | Bachelor of Secondary English Education</h4>
+			<h4>May 2022</h4>
+		</div>
+		
 	</div>
 </section>

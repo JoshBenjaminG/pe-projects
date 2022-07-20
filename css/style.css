@@ -282,7 +282,45 @@ nav a {
 	margin: 10px;
 }
 
+.resume-page {
+	margin-top: 5em;
+	background-color: #ffffff;
+	display: flex;
+	justify-content: center;
+	padding: 50px;
+	flex-direction: column;
+}
 
+.resume-head h3 {
+	text-align: center;
+}
+
+.resume-head div {
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+}
+
+.resume-head div p {
+	margin-right: 10px;
+}
+
+.section-head {
+	border-bottom: 1px solid black;
+	margin-top: 10px;
+	margin-bottom: 10px;
+}
+
+.resume-section ul {
+	list-style-type: circle;
+	margin-left: 15px;
+}
+
+.education div {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+}
 
 
 
