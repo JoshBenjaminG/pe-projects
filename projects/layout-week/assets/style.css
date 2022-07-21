@@ -2,6 +2,8 @@
 
 @import 'layout2.css';
 
+@import 'layout3.css';
+
 @import 'setup.css';
 
 h2 {
@@ -28,4 +30,6 @@ picture {
 
 inner-column {
 	border-bottom: 3px solid dodgerblue;
+	padding-top: 20px;
+	padding-bottom: 20px;
 }

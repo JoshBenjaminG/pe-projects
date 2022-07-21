@@ -6,5 +6,7 @@
 
 	<?php include("layout2.php"); ?>
 
+	<?php include("layout3.php"); ?>
+
 </main>
 </body>

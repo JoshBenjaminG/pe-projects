@@ -1,0 +1,71 @@
+.wednesday-ul, .wednesday-header, .wednesday-footer {
+	padding: 20px;
+}
+
+.wednesday-ul {
+	display: flex;
+	flex-direction: column;
+}
+
+.wednesday-svg {
+	width: 40px;
+}
+
+.wednesday-footer {
+	border-top: 2px solid dodgerblue;
+}
+
+.wednesday-header {
+	background-color: black;
+	color: white;
+}
+
+.wednesday-header p:nth-of-type(1){
+	color: pink;
+	font-weight: bold;
+	font-size: 25px;
+}
+
+@media(min-width: 600px) {
+	.wednesday-ul{
+		background: linear-gradient( var(--ink) 18%, var(--shade) 13%);
+	}
+	.wednesday-ul li {
+		width: 100%;
+		padding: 20px;
+		background-color: white;
+	}
+	picture {
+		width: 48%;
+	}
+	.wednesday-images {
+		display: flex;
+		flex-direction: row;
+		flex-wrap: wrap;
+		justify-content: space-between;
+	}
+	.wednesday-footer {
+		background-color: dodgerblue;
+		max-width: 49%;
+		color: white;
+	}
+	.wednesday-header {
+		max-width: 100%;
+	}
+}
+
+@media(min-width: 1000px) {
+	.wednesday-ul {
+		display: flex;
+		flex-direction: row;
+		gap: 20px;
+		background: linear-gradient( var(--ink) 30%, var(--shade) 13%);
+	}
+	.wednesday-li {
+		max-width: 33%;
+	}
+	.wednesday-images {
+		margin-left: 15px;
+		align-self: center;
+	}
+}

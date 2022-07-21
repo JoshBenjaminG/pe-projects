@@ -1,5 +1,8 @@
-.tuesday-ul li, .tuesday-header, .tuesday-footer {
+.tuesday-inner {
 	padding: 10px;
+}
+.tuesday-ul li, .tuesday-header, .tuesday-footer {
+	padding: 20px;
 }
 
 .tuesday-ul {
@@ -32,7 +35,7 @@
 		justify-content: space-between;
 	}
 	picture {
-		width: 49%;
+		width: 45%;
 	}
 	.tuesday-images {
 		display: flex;
@@ -45,7 +48,7 @@
 	}
 	.tuesday-footer {
 		background-color: dodgerblue;
-		max-width: 49%;
+		max-width: 40%;
 		color: white;
 	}
 	.tuesday-header {
