@@ -4,7 +4,7 @@
 
 	<?php include("layout1.php"); ?>
 
-	<?php include("layout1.php"); ?>
+	<?php include("layout2.php"); ?>
 
 </main>
 </body>

@@ -1,0 +1,65 @@
+.tuesday-ul li, .tuesday-header, .tuesday-footer {
+	padding: 10px;
+}
+
+.tuesday-ul {
+	display: flex;
+	flex-direction: column;
+}
+
+.tuesday-svg {
+	width: 30px;
+}
+
+.tuesday-footer {
+	border-top: 2px solid dodgerblue;
+}
+
+.tuesday-header p:nth-of-type(1){
+	color: pink;
+	font-weight: bold;
+	font-size: 25px;
+}
+
+@media(min-width: 700px) {
+	.tuesday-ul li {
+		width: 49%;
+	}
+	.tuesday-ul, picture {
+		display: flex;
+		flex-wrap: wrap;
+		flex-direction: row;
+		justify-content: space-between;
+	}
+	picture {
+		width: 49%;
+	}
+	.tuesday-images {
+		display: flex;
+		flex-direction: row;
+		flex-wrap: wrap;
+		justify-content: space-between;
+	}
+	.tuesday-li {
+		border: 2px solid black;
+	}
+	.tuesday-footer {
+		background-color: dodgerblue;
+		max-width: 49%;
+		color: white;
+	}
+	.tuesday-header {
+		max-width: 49%;
+	}
+}
+
+@media(min-width: 1000px) {
+	.tuesday {
+		display: flex;
+		flex-direction: row;
+	}
+	.tuesday-images {
+		margin-left: 15px;
+		align-self: center;
+	}
+}
