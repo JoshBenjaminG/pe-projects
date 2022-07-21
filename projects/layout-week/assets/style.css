@@ -1,0 +1,31 @@
+@import 'layout-1.css';
+
+@import 'layout2.css';
+
+@import 'setup.css';
+
+h2 {
+	font-size: 30px;
+	font-weight: bold;
+}
+
+h3 {
+	font-size: 20px;
+}
+
+h3, h2 {
+	margin-bottom: 5px;
+}
+
+li {
+	margin-top: 10px;
+	margin-bottom: 10px;
+}
+
+picture {
+	margin-bottom: 10px;
+}
+
+inner-column {
+	border-bottom: 3px solid dodgerblue;
+}

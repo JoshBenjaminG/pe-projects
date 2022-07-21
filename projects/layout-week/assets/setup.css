@@ -1,0 +1,166 @@
+@import 'reset.css';
+
+html {
+    box-sizing: border-box;
+    scroll-behavior: smooth;
+
+	--xs-height: 1vh;
+	--xs-width:1vw;
+	--small-height: 2vh;
+	--small-width:2vw;
+	--med-height: 5vh;    
+	--med-width:5vw;
+	--large-height: 8vh;    
+	--large-width:8vw;
+	--xlarge-height: 11vh;    
+	--xlarge-width: 11vw;
+
+	--ink: rgb(17, 16, 16);
+	--paper: rgb(240, 241, 238);
+	--color: rgb(246 214 242);
+	--accentColor: rgb(28 133 255);
+	--shade: rgb(221 220 220);
+	--circle: rgb(250 0 154);
+	--square: rgb(69 122 250);
+
+
+	--highlight: rgb(250 27 171);
+
+	--thin: 2px;
+	--thick: 6px;
+	--xthick: 9px;
+
+	background-color: rgb(255,255,255);
+}
+
+
+
+*, *:before, *:after {
+	box-sizing: inherit;
+} /* https://www.paulirish.com/2012/box-sizing-border-box-ftw */
+  
+  
+body {
+  -webkit-font-smoothing: antialiased;
+  scroll-behavior: smooth;
+  display: flex;	
+  flex-direction: column;	
+  min-height: 100vh;
+  
+
+  font-family: 'Work Sans', sans-serif;
+  font-weight: 400;
+  color: var(--ink);
+  background: var(--paper);
+}
+
+main {
+	flex-grow: 1;
+}
+
+inner-column{
+	display: block;
+  	width: 100%;
+  	margin-right: auto;
+	margin-left: auto;
+	padding: 4vh 1.5rem;
+	max-width: 1200px;
+}
+
+article-grid,
+text-content,
+module-header,
+module,
+module-footer{
+	display: block;
+  	width: 100%;
+
+}
+
+a {
+	display: block;
+	text-decoration: none;
+	color: inherit;
+}
+
+
+a:hover{
+    text-decoration: underline;
+    color: blue;
+}
+
+a p {
+	display: inline;
+}
+
+p a {
+	display: inline-block;
+	text-decoration: underline;
+	color: blue;
+}
+
+p {
+	line-height: 1.3;
+	letter-spacing: 0.01em;
+}
+
+strong {
+    font-weight: bold;
+}
+  
+em {
+    font-style: italic;
+}
+
+picture {
+	display: block;
+}
+
+picture img {
+    display: block;
+    height: auto;
+    width: 100%;
+}
+
+svg {
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
+/* $accesibility */
+
+.visually-hidden {
+	clip: rect(0 0 0 0);
+	clip-path: inset(50%);
+	height: 1px;
+	overflow: hidden;
+	position: absolute;
+	white-space: nowrap;
+	width: 1px;
+}
+
+/* $animations*/
+
+@keyframes drop-in {
+	from {
+	  transform: translateY(-200px);
+	}
+	to {
+	  transform: translateY(0%);
+	}
+  }
+  
+  @keyframes slide-in {
+	  from {
+		transform: translateX(-100%);
+	  }
+	  to {
+		transform: translateX(0%);
+	  }
+  }
+  
+  @keyframes smooth {
+	  0% { opacity: 0;}
+	  100% { opacity: 1;}
+  }
