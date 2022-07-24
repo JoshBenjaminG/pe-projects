@@ -55,11 +55,22 @@
 	</div>
 </section>
 
-<!-- <section class="projects" id="projects">
+<section class="projects" id="projects">
 	<div class="inner-column">
-		<h2 class="project-heading">My Work...</h1>
+		<h2>Projects</h2>
+		<ul class="article-list">
+			<?php for ($i=1; $i < 4; $i++) { ?>
+				<li>
+					<picture>
+						<img src="https://peprojects.dev/images/square.jpg">
+					</picture>
+					<h3>Project name</h3>
+					<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
+				</li>
+			<?php } ?>
+		</ul>
 	</div>
-</section> -->
+</section>
 
 </main>
 

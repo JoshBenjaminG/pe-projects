@@ -2,7 +2,10 @@
 	padding: 10px;
 }
 .wednesday2-ul li, .wednesday2-header, .wednesday2-footer {
-	padding: 20px;
+	margin-top: 10px;
+	margin-bottom: 10px;
+	padding-top: 10px;
+	padding-bottom: 10px;
 }
 
 .wednesday2-ul {
@@ -26,7 +29,25 @@
 
 .wednesday2-li {
 	border-bottom: 2px solid black;
-	font-weight: bold;
+}
+
+details > summary {
+  list-style: none;
+}
+details > summary::-webkit-details-marker {
+  display: none;
+}
+
+.wednesday2-li details{
+    list-style: none;
+    cursor: pointer;
+    position: relative;
+}
+
+.wednesday2-li details summary:after {
+    content: "\FF0B";
+    position: absolute;
+    right: 0;
 }
 
 @media(min-width: 700px) {
@@ -54,5 +75,13 @@
 	.wednesday2-images {
 		margin-left: 15px;
 		align-self: center;
+	}
+	.wednesday2-inner {
+		display: flex;
+		flex-direction: row;
+	}
+	.wednesday2-header {
+		max-width: 48%;
+		justify-content: center;
 	}
 }

@@ -23,7 +23,7 @@
 		justify-content: space-between;
 	}
 	picture {
-		
+		width: 48%;
 	}
 	.monday-images {
 		display: flex;
