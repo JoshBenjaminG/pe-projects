@@ -2,6 +2,7 @@
 * Logo - JG
 * Links
   * Home, Projects, Goals, Resume 
+* Light mode/dark mode switch
 # Landing area
 * Greetings, I'm Josh! - Web Developer
 * A short greeting and minimalistic animation
@@ -20,3 +21,20 @@
 * Logo
 * Links
   * Home, codepen, github, LinkedIn, Contact
+  * link to things not shown in projects section 
+    * responsive garden 
+# Goals page
+* end of month goals - 
+* end of 3 month goals - create a project in an in demand language
+  * based on what jobs I'm looking for at the time
+* end of year goals - 
+# Project detail page
+* Discussing the research and style tile phase
+* showing the first iteration of the project
+* showing the feedback and round 2
+* link to final design
+# Resume page
+* Job history
+* Work history
+* Education
+* Skills
