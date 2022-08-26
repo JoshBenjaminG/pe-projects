@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Document</title>
+	
+</head>
+<body>
+	
+	<h1>Retirement calc!</h1>
+
+
+<script type="text/javascript">
+		
+var button = document.createElement('button');
+
+document.body.appendChild(button);
+
+button.textContent = "Enter your age!";
+
+button.addEventListener('click', retire)
+
+var h1 = document.querySelector('h1');
+
+function retire() {
+	var age = prompt("Enter your age");
+	var retireGoal = prompt("Enter the year you want to retire");
+	var retireYear = parseInt(retireGoal) - 2022;
+	var retireAge = retireYear + parseInt(age);
+	h1.textContent = "Congrats, you have " + retireYear + " years left until you retire! You will be " + retireAge + " years old.";
+}
+
+</script>
+
+</body>
+</html>

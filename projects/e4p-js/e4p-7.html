@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Document</title>
+	
+</head>
+<body>
+	
+	<h1>Area calculator!</h1>
+
+
+<script type="text/javascript">
+		
+var button = document.createElement('button');
+
+document.body.appendChild(button);
+
+button.textContent = "Calculate area!";
+
+button.addEventListener('click', area)
+
+var h1 = document.querySelector('h1');
+
+function area() {
+	var width = prompt("Enter the width");
+	var length = prompt("Enter the legnth");
+	var area = parseInt(width) * parseInt(length)
+	h1.textContent = "The area is: " + area;
+}
+
+</script>
+
+</body>
+</html>

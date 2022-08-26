@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Document</title>
+	
+</head>
+<body>
+	
+	<h1>Sentence generator!</h1>
+
+<script type="text/javascript">
+		
+var button = document.createElement('button');
+
+document.body.appendChild(button);
+
+button.textContent = "Enter a sentence!";
+
+button.addEventListener('click', madLibs)
+
+var h1 = document.querySelector('h1');
+
+function madLibs() {
+	var noun = prompt("Enter a noun");
+	var adjective = prompt("Enter the adjective");
+	var verb = prompt("Enter a verb");
+	var adverb = prompt("Enter the adverb");
+	h1.textContent = "the " + adjective + " " + noun + " " + verb + " " + adverb;
+}
+
+</script>
+
+</body>
+</html>

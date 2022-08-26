@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Document</title>
+	
+</head>
+<body>
+	
+	<h1>Quote generator!</h1>
+
+<script type="text/javascript">
+		
+var button = document.createElement('button');
+
+document.body.appendChild(button);
+
+button.textContent = "Enter a quote!";
+
+button.addEventListener('click', quote)
+
+var h1 = document.querySelector('h1');
+
+function quote() {
+	var quote = prompt("Enter a quote");
+	var author = prompt("Enter the author");
+	h1.textContent = quote + " - " + author;
+}
+
+</script>
+
+</body>
+</html>

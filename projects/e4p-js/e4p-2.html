@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Document</title>
+	
+</head>
+<body>
+	
+	<h1>Count Characters!</h1>
+
+<script type="text/javascript">
+		
+var button = document.createElement('button');
+
+document.body.appendChild(button);
+
+button.textContent = "Enter a string!";
+
+button.addEventListener('click', countCharacters)
+
+var h1 = document.querySelector('h1');
+
+function countCharacters() {
+	var string = prompt("Enter a string");
+	h1.textContent = string.length;
+}
+
+</script>
+
+</body>
+</html>

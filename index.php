@@ -55,7 +55,7 @@
 	</div>
 </section>
 
-<section class="projects" id="projects">
+<section class="projects" id="projects">x
 	<div class="inner-column">
 		<h2>Projects</h2>
 		<ul class="article-list">

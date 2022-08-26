@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Document</title>
+	
+</head>
+<body>
+	
+	<h1>Simple math!</h1>
+
+
+<script type="text/javascript">
+		
+var button = document.createElement('button');
+
+document.body.appendChild(button);
+
+button.textContent = "Enter a number!";
+
+button.addEventListener('click', math)
+
+var h1 = document.querySelector('h1');
+
+function math() {
+	var num1 = prompt("Enter a number");
+	var num2 = prompt("Enter a number");
+	var total = parseInt(num1) + parseInt(num2);
+	var difference = num1 - num2;
+	var product = num1 * num2;
+	var quotient = num1 / num2;
+	h1.textContent = "The total is: " + total + ", The difference is: " + difference + ", The product is: " + product + ", The quotient is: " + quotient;
+}
+
+</script>
+
+</body>
+</html>
