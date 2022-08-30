@@ -12,26 +12,28 @@
 
 
 <script type="text/javascript">
-		
-var button = document.createElement('button');
 
-document.body.appendChild(button);
+	var h1 = document.querySelector('h1');
+	var button = document.createElement('button');
+	button.textContent = "Enter a number!";
+	document.body.appendChild(button);
 
-button.textContent = "Enter a number!";
+	function math() {
+		var num1 = prompt("Enter a number");
+		var num2 = prompt("Enter a number");
+		if (num1 && num2) {
+			var total = parseInt(num1) + parseInt(num2);
+			var difference = num1 - num2;
+			var product = num1 * num2;
+			var quotient = num1 / num2;
+			h1.textContent = "The total is: " + total + ", The difference is: " + difference + ", The product is: " + product + ", The quotient is: " + quotient;
+		} else {
+			alert("Add the numbas!");
+			math();
+		}
+	}
 
-button.addEventListener('click', math)
-
-var h1 = document.querySelector('h1');
-
-function math() {
-	var num1 = prompt("Enter a number");
-	var num2 = prompt("Enter a number");
-	var total = parseInt(num1) + parseInt(num2);
-	var difference = num1 - num2;
-	var product = num1 * num2;
-	var quotient = num1 / num2;
-	h1.textContent = "The total is: " + total + ", The difference is: " + difference + ", The product is: " + product + ", The quotient is: " + quotient;
-}
+	button.addEventListener('click', math);
 
 </script>
 
