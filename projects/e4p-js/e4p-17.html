@@ -1,0 +1,52 @@
+<!DOCTYPE html> 
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Document</title>
+	
+</head>
+<body>
+	
+	<h1>Are you legal to drive?</h1>
+
+<script type="text/javascript">
+
+var button = document.createElement('button');
+button.textContent = "How much to drink?";
+document.body.appendChild(button);
+button.addEventListener('click', checkLegal);
+
+var h2 = document.createElement('h2');
+
+function checkLegal(){
+	var weight = parseInt(prompt("what is your weight?"));
+	var ounces = parseInt(prompt("How many ounces have you consumed? (12 ounces in a standard beer.)"));
+	var hours = parseInt(prompt("How many hours since last drink?"));
+	var gender = prompt('are you male or female?');
+
+	var genderRatio = 123
+
+	if (gender == 'male || man') {
+		return genderRatio = 0.73;
+	}
+	var bac = (ounces * 5.14 / weight * genderRatio) - .015 * hours;
+
+	bac >= 0.08 ? (message = "You cannot drive. Your BAC is: " + bac.toFixed(2)) : (message = "You can drive. Your BAC is: " + bac.toFixed(2));
+	h2.textContent = message;
+
+	console.log("weight: " + weight);
+	console.log("ounces: " + ounces);
+	console.log("gender: " + gender);
+	console.log("genderRatio: " + genderRatio);
+	console.log("hours: " + hours);
+	console.log("bac: " + bac);
+
+}
+
+document.body.appendChild(h2);
+
+</script>
+
+</body>
+</html>
