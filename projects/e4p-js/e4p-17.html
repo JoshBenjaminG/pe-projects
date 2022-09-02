@@ -27,8 +27,10 @@ function checkLegal(){
 
 	var genderRatio = 123
 
-	if (gender == 'male || man') {
-		return genderRatio = 0.73;
+	if (gender == 'male' || 'man') {
+		genderRatio = 0.73;
+	} else if (gender == 'female' || 'woman') {
+		genderRatio = 0.66;
 	}
 	var bac = (ounces * 5.14 / weight * genderRatio) - .015 * hours;
 
