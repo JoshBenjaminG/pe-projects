@@ -1,39 +1,55 @@
+
 var city = "";
 
-var h1 = document.querySelector('h1');
-var p = document.getElementById('condition');
-var ph = document.getElementById('Humidity');
-var pl = document.getElementById('daytime');
-var ps = document.getElementById('visiblity');
-var lat = document.getElementById('latitude');
-var lon = document.getElementById('longitude');
+const output = document.querySelector('output');
 
-var button = document.createElement('button');
+const form = document.querySelector('form');
 
-document.body.appendChild(button);
+var input = document.querySelector('input');
 
-button.textContent = "Submit";
-
-button.addEventListener('click', getApi);
-
-var input = document.getElementById('input');
-
-async function getApi() {
-	var city = input.value;
-	var api = "http://api.weatherapi.com/v1/current.json?key=1893971150fa4bdd969223007221509&q=" + city + "&aqi=no";
-	const response = await fetch(api);
-	const data = await response.json();
-	console.log(data);
-	if (data.current.is_day == 0) {
-		pl.textContent = "It's Dark out!";
+function heatWarning(heat) {
+	if (heat > 65) {
+		return `It's really hot!`;
 	} else {
-		pl.textContent = "It's light outside!";
+		return `It's not hot.`;
 	}
-	h1.textContent = data.current.temp_f + " degrees fahrenheit";
-	// p.textContent = data.current.precip_in + " precipitation Inches";
-	p.textContent = "Condition: " + data.current.condition.text;
-	ph.textContent = "humidity: " + data.current.humidity;
-	ps.textContent = "visiblity in miles: " + data.current.vis_miles;
-	lat.textContent = "Latitude: " + data.location.lat;
-	lon.textContent = "Latitude: " + data.location.lon;
 }
+
+function createResults(result) {
+	return `
+		<h1>Temperature fahrenheit: ${result.current.temp_f}</h1>
+		<p>${heatWarning(result.current.temp_f)}</p>
+		<p>Condition is: ${result.current.condition.text}</p>
+		<p>Precipitation: ${result.current.precip_in}</p>
+		<p>Humidity: ${result.current.humidity}</p>
+		<p>Visibility in miles: ${result.current.vis_miles}</p>
+	`;
+}
+
+function createError(input) {
+	return `
+		<h1>There was an error: ${input} does not exist.</h1>
+	`;
+}
+
+function getApi() {
+	var city = input.value;
+	var request = "https://api.weatherapi.com/v1/current.json?key=1893971150fa4bdd969223007221509&q=" + city + "&aqi=no";
+	fetch(request)
+		.then( function (response) {
+			return response.json();
+		})
+		.then( function(json) {
+			output.innerHTML = createResults(json);
+		})
+		.catch( function(error) {
+			output.innerHTML = createError(city);
+		})
+	;
+}
+
+form.addEventListener('submit', function (event) {
+	event.preventDefault();
+	getApi();
+});
+
