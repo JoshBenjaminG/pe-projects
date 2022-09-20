@@ -17,7 +17,7 @@ function heatWarning(heat) {
 
 function createResults(result) {
 	return `
-		<h1>Temperature fahrenheit: ${result.current.temp_f}</h1>
+		<h1 id="temp">Temperature fahrenheit: ${result.current.temp_f}</h1>
 		<p>${heatWarning(result.current.temp_f)}</p>
 		<p>Condition is: ${result.current.condition.text}</p>
 		<p>Precipitation: ${result.current.precip_in}</p>
@@ -52,4 +52,11 @@ form.addEventListener('submit', function (event) {
 	event.preventDefault();
 	getApi();
 });
+
+var test = document.createElement('h2');
+test.textContent = "TESTING!";
+document.body.appendChild(test);
+test.style.color = "blue";
+
+
 
