@@ -46,16 +46,6 @@
 	</div>
 </section>
 
-<section class="cta">
-	<div class="inner-column">
-		<h1>this is a call to action</h1>
-		<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-		tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-		quis nostrud exercitation ullam.</p>
-		<a href="">CTA!!!</a>
-	</div>
-</section>
-
 <section class="article-header">
 		<div class="inner-column">
 			<h1>this is an article grid</h1>
@@ -66,18 +56,6 @@
 
 <section class="article-grid">
 	<div class="inner-column">
-		<article-card>
-			<h2>this is an article card</h2>
-			<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-			tempor incididunt.</p>
-			<a href="">Action!</a>
-		</article-card>
-		<article-card>
-			<h2>this is an article card</h2>
-			<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-			tempor incididunt.</p>
-			<a href="">Action!</a>
-		</article-card>
 		<article-card>
 			<h2>this is an article card</h2>
 			<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod

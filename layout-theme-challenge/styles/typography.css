@@ -1,0 +1,52 @@
+/* Should we pull in @fonts here? */
+
+.loud-voice	{
+	font-family: 'Gilda Display', serif;
+	font-size: clamp(25px, 4vw, 40px);
+}
+@media (min-width: 600px) {
+	.loud-voice {
+		 /* or variable font */
+	}
+}
+
+.attention-voice	{
+	font-family: 'Roboto Serif', serif;
+	font-size: 30px;
+}
+
+.strong-voice	{
+	font-family: 'Roboto Serif', serif;
+	font-weight: 700;
+	font-size:  1rem;
+}
+
+.calm-voice, p, li {
+	font-family: 'Roboto Serif', serif;
+	font-size: 1rem;
+	line-height: 1.4;
+}
+
+:is(.calm-voice, p, li) em {
+	font-style: ;
+}
+
+:is(.calm-voice, p, li) strong {
+	font-weight: ;
+}
+
+/* these would be scoped to section or to an article element */
+/* this is just a loose setting for now */
+p + p {
+	margin-top: 1em;
+}
+
+h2 + p {
+	margin-top: 20px;
+}
+
+code {
+	font-family: monospace;
+	font-size: 1.1em;
+	color: green;
+}

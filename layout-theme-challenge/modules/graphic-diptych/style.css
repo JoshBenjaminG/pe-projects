@@ -1,0 +1,40 @@
+
+
+.welcome inner-column {
+	width: 100%;
+}
+
+graphic-diptych {
+	display: block;
+	display: flex;
+	flex-direction: column;
+	gap: 30px;
+	margin-bottom: 50px;
+}
+
+graphic-diptych picture {
+	width: 100%;
+}
+
+graphic-diptych p {
+	margin-top: 20px;
+}
+
+graphic-diptych text-content {
+	display: flex;
+	flex-direction: column;
+	text-align: center;
+	padding: 60px;
+}
+
+
+@media (min-width:  700px) {
+	graphic-diptych {
+		flex-direction: column;
+		align-items: center;
+	}
+
+	graphic-diptych :is(picture, text-content) {
+		flex-basis: 50%;
+	}
+}

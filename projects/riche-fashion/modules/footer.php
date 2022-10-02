@@ -11,8 +11,8 @@
 	<section>
 		<h3 class="calm-voice">Company</h3>
 		<nav>
-			<a href="">Riche Group</a>
-			<a href="">Work with us</a>
+			<a href="modules/legal.php">Riche Group</a>
+			<a href="modules/legal.php">Work with us</a>
 		</nav>
 	</section>
 

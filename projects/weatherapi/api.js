@@ -41,6 +41,7 @@ function getApi() {
 		})
 		.then( function(json) {
 			output.innerHTML = createResults(json);
+			console.log(json);
 		})
 		.catch( function(error) {
 			output.innerHTML = createError(city);
@@ -52,11 +53,6 @@ form.addEventListener('submit', function (event) {
 	event.preventDefault();
 	getApi();
 });
-
-var test = document.createElement('h2');
-test.textContent = "TESTING!";
-document.body.appendChild(test);
-test.style.color = "blue";
 
 
 
