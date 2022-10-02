@@ -8,10 +8,10 @@
 
 	<collection>
 		<div class="actions">
-			<a href="modules/items-collection.php?collection=women" class="calm-voice">Women’s Collection</a>
-			<a href="modules/items-collection.php?collection=women" class="calm-voice">Shop</a>
+			<a href="https://peprojects.dev/alpha-3/josh/projects/riche-fashion/modules/items-collection.php?collection=women" class="calm-voice">Women’s Collection</a>
+			<a href="https://peprojects.dev/alpha-3/josh/projects/riche-fashion/modules/items-collection.php?collection=women" class="calm-voice">Shop</a>
 		</div>
-		<a href="modules/items-collection.php?collection=women">
+		<a href="https://peprojects.dev/alpha-3/josh/projects/riche-fashion/modules/items-collection.php?collection=women">
 		<picture>
 			<img src="images/bathing-suit.jpg">
 		</picture>
@@ -20,10 +20,10 @@
 
 	<collection>
 		<div class="actions">
-			<a href="modules/items-collection.php?collection=men" class="calm-voice">Men’s Collection</a>
-			<a href="modules/items-collection.php?collection=men" class="calm-voice">Shop</a>
+			<a href="https://peprojects.dev/alpha-3/josh/projects/riche-fashion/modules/items-collection.php?collection=men" class="calm-voice">Men’s Collection</a>
+			<a href="https://peprojects.dev/alpha-3/josh/projects/riche-fashion/modules/items-collection.php?collection=men" class="calm-voice">Shop</a>
 		</div>
-		<a href="modules/items-collection.php?collection=men">
+		<a href="https://peprojects.dev/alpha-3/josh/projects/riche-fashion/modules/items-collection.php?collection=men">
 		<picture>
 			<img src="images/red-man.jpg">
 		</picture>
