@@ -4,5 +4,68 @@
 
 
 body {
-	background-color: red;
+	background-color: #faead7;
+	display: center;
+	justify-content: center;
+	align-items: center;
+}
+
+section {
+
+}
+
+p, h1 {
+	color: white;
+}
+
+content  {
+	margin: 10px 0px;
+	background-color: black;
+}
+
+content {
+	display: block;
+	border: 1px solid black;
+	border-radius: 20px;
+	padding: 40px;
+}
+
+.forms {
+	display: flex;
+	flex-direction: row;
+}
+
+input {
+	border-radius: 18px;
+}
+
+button	{
+	border-radius: 20px;
+}
+
+input, button {
+	padding: 15px;
+}
+
+button {
+	margin-left: 20px;
+}
+
+p, h1{
+	margin-top: 10px;
+	font-family: 'Roboto', sans-serif;
+}
+
+p {
+	font-weight: 100;
+}
+
+h1 {
+	font-size: 1.5em;
+	font-weight: 400;
+}
+
+#temp {
+	font-weight: 400;
+	font-size: 1.2em;
 }

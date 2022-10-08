@@ -43,12 +43,7 @@ foreach($data["items"] as $item) {
 	}
 }
 
-
-
 ?>
-
-
-	
 
 <main>
 	

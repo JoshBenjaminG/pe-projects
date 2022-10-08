@@ -1,6 +1,8 @@
 
 var city = "";
 
+
+
 const output = document.querySelector('output');
 
 const form = document.querySelector('form');
@@ -17,12 +19,12 @@ function heatWarning(heat) {
 
 function createResults(result) {
 	return `
-		<h1 id="temp">Temperature fahrenheit: ${result.current.temp_f}</h1>
-		<p>${heatWarning(result.current.temp_f)}</p>
-		<p>Condition is: ${result.current.condition.text}</p>
-		<p>Precipitation: ${result.current.precip_in}</p>
-		<p>Humidity: ${result.current.humidity}</p>
-		<p>Visibility in miles: ${result.current.vis_miles}</p>
+		<h1>Weather in ${result.location.name}</h1>
+		<p id="temp">${result.current.temp_f}&#8457</p>
+		<p>Condition: ${result.current.condition.text}</p>
+		<p>Precipitation: ${result.current.precip_in} inches</p>
+		<p>Humidity: ${result.current.humidity}%</p>
+		<p>Visibility: ${result.current.vis_miles} miles</p>
 	`;
 }
 
