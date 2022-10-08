@@ -44,6 +44,7 @@ function getApi() {
 		.then( function(json) {
 			output.innerHTML = createResults(json);
 			console.log(json);
+			document.body.style.backgroundImage = "url('https://source.unsplash.com/1600x900/?" + city + "')";
 		})
 		.catch( function(error) {
 			output.innerHTML = createError(city);
