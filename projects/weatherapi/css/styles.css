@@ -8,10 +8,13 @@ body {
 	display: center;
 	justify-content: center;
 	align-items: center;
+	background-repeat: no-repeat;
+  	background-size: auto;
 }
 
 section {
 	opacity: 0.8;
+	min-width: 375px;
 }
 
 p, h1 {
@@ -52,7 +55,7 @@ button {
 	margin-left: 20px;
 }
 
-p, h1, output{
+p, h1, output, daysoutput{
 	margin: 10px 0px;
 	font-family: 'Roboto', sans-serif;
 	color: white;
@@ -68,14 +71,15 @@ h1 {
 	font-weight: 400;
 }
 
-#temp {
+.temp {
 	font-weight: 400;
 	font-size: 1.2em;
 }
 
 picture {
 	display: block;
-	max-width: 50px;
+	min-width: 40px;
+	max-width: 140px;
 }
 
 img {
@@ -86,4 +90,22 @@ img {
 
 .condition {
 	display: flex;
+}
+
+daysoutput {
+	display: flex;
+	flex-direction: column;
+}
+
+@media(min-width: 1000px) {
+	daysoutput {
+		flex-direction: row;
+	}
+	.day {
+		margin: 0px 10px;
+	}
+}
+
+.day {
+
 }
