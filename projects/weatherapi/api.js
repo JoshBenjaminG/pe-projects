@@ -1,12 +1,10 @@
 
 var city = "";
 
+var output = document.querySelector('output');
+var output2 = document.querySelector('daysoutput');
 
-
-const output = document.querySelector('output');
-const output2 = document.querySelector('daysoutput');
-
-const form = document.querySelector('form');
+var form = document.querySelector('form');
 
 var input = document.querySelector('input');
 
@@ -42,12 +40,15 @@ function createForecast(result) {
 			<content>
 				<p>${entry.date}</p>
 				<p class="temp">${entry.day.avgtemp_f}&#8457</p>
+				<p>Max Temp: ${entry.day.maxtemp_f}&#8457</p>
+				<p>Min Temp: ${entry.day.mintemp_f}&#8457</p>
 				<div class='condition'>
 				<picture>
 					<img src="${entry.day.condition.icon}" alt="">
 				</picture>
 				<p>Condition: ${entry.day.condition.text}</p>
 				</div>
+				<p>Chance of rain: ${entry.day.daily_chance_of_rain}%</p>
 			</content>
 			</div>
 		`;
@@ -74,7 +75,7 @@ function getApi() {
 			console.log(json);
 			if (city == "mobile") {
 				document.body.style.backgroundImage = "url('https://www.cityofmobile.org/assets/images/mobile-hdr.jpg')";
-			} else {
+			} else{
 				document.body.style.backgroundImage = "url('https://source.unsplash.com/1600x900/?" + city + "')";
 			}
 			
