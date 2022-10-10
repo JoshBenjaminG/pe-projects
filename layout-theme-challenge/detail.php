@@ -40,12 +40,11 @@ if (isset($edit)) {
 		
 		<h1 class="loud-voice"><?=$thisArticle["heading"]?></h1>
 		<p class="loud-voice"><?=$thisArticle["description"]?></p>
-		<picture>
-			<img src='<?=$thisArticle["thumbnail"]?>' alt='$todo'>
-		</picture>
 
 	</inner-column>
 </section>
+
+<inner-column>
 
 <form method="POST" class="create">
 	<field>
@@ -76,3 +75,4 @@ if (isset($edit)) {
 	<button type="submit" name="edit">edit</button>
 	<button type="submit" name="delete">delete article</button>
 </form>
+</inner-column>

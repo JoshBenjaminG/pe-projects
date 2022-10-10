@@ -17,6 +17,7 @@
 			<li>
 				<a href='?page=home&mode=dark' class="<?php if ($_GET['mode'] == "dark") { echo "active"; } ?>">Dark Mode</a>
 			</li>
+			<li><a href="?page=create&mode=light">Create Page</a></li>
 		</ul>
 	</nav>
 
