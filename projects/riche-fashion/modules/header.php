@@ -18,8 +18,6 @@
 		<a href="https://peprojects.dev/alpha-3/josh/projects/riche-fashion/modules/items-collection.php?collection=men">MEN</a>
 		<a href="https://peprojects.dev/alpha-3/josh/projects/riche-fashion/modules/items-collection.php?collection=women">WOMEN</a>
 		<a href="https://peprojects.dev/alpha-3/josh/projects/riche-fashion/modules/items-collection.php?collection=force">FORCE</a>
-		<a href="https://peprojects.dev/alpha-3/josh/projects/riche-fashion/modules/items-collection.php?collection=handbags">HANDBAG</a>
-		<a href="https://peprojects.dev/alpha-3/josh/projects/riche-fashion/modules/items-collection.php?collection=beauty">BEAUTY</a>
 	</nav>
 	</inner-column>
 

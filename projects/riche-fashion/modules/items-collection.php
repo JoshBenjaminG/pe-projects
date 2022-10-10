@@ -70,7 +70,7 @@ foreach($data["items"] as $item) {
 		</a>
 		<p><?=$item["name"]?></p>
 		<p>$<?=$item["price"]?></p>
-		<a href="">View Product ></a>
+		<a href="item-detail.php?id=<?=$item["id"]?>">View Product ></a>
 	</item>
 	<?php } ?>
 

@@ -5,7 +5,7 @@
 			"name": "Crepe Satin Dress",
 			"price": 3200,
 			"image" : "crepedress.jpeg",
-			"includedIn" : [2]
+			"includedIn" : [1]
 		},
 		"465" : {
 			"id" : "465",
@@ -19,34 +19,48 @@
 			"name": "Crepe chine shirt",
 			"price": 900,
 			"image" : "crepechineshirt.jpeg",
-			"includedIn" : [2]
-		},
-		"987" : {
-			"id" : "987",
-			"name": "Long twill dress",
-			"price": 1100,
-			"image" : "longTwil.jpeg",
 			"includedIn" : [1]
 		},
-		"1" : {
-			"id" : "1",
-			"name" : "Handbag name",	
-			"price" : 12345,
-			"image" : "square.jpg",
-			"includedIn" : [4]
+		"412" : {
+			"id" : "412",
+			"name": "Loose Fitted Down",
+			"price": 400,
+			"image" : "mens-shirt1.jpeg",
+			"includedIn" : [2]
 		},
-		"2" : {
-			"id" : "2",
-			"name" : "Beauty name",
-			"price" : 12345,
-			"image" : "square.jpg",
-			"includedIn" : [3]
+		"864" : {
+			"id" : "864",
+			"name": "Mountain Range Loose Fit Down",
+			"price": 300,
+			"image" : "mens-shirt2.jpeg",
+			"includedIn" : [2]
+		},
+		"902" : {
+			"id" : "902",
+			"name": "Men's Relaxed Button Down",
+			"price": 300,
+			"image" : "mens-shirt3.jpeg",
+			"includedIn" : [2]
+		},
+		"102" : {
+			"id" : "102",
+			"name": "Multi Color Button Down",
+			"price": 400,
+			"image" : "mens-shirt4.jpeg",
+			"includedIn" : [2]
 		},
 		"22345" : {
 			"id" : "22345",
-			"name" : "Forceful",
-			"price" : 737345,
-			"image" : "square.jpg",
+			"name" : "Men's Force Down",
+			"price" : 150,
+			"image" : "force1.jpeg",
+			"includedIn" : [5]
+		},
+		"10" : {
+			"id" : "10",
+			"name" : "Women's Force Button",
+			"price" : 150,
+			"image" : "force2.jpeg",
 			"includedIn" : [5]
 		}
 	},
@@ -74,7 +88,7 @@
 		"force" : {
 			"id" : 5,
 			"name" : "Welcome to Force, by Gage",
-			"description" : "I have never once smoked - inhaled? Yes. Wait - I mean no. I did not inhale, but I did smoke!"
+			"description" : "Designed by the one and only - Kanye West"
 		}
 	}
 }
