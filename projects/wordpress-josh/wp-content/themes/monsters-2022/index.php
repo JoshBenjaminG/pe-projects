@@ -14,11 +14,15 @@
     $loop = new WP_Query( $args ); 
         
     while ( $loop->have_posts() ) : $loop->the_post(); 
-        echo "<h1>" . get_the_title() . "</h1>"; 
+        include('monster-card.php'); 
     endwhile;
 
     wp_reset_postdata(); 
 
+	}
+
+	if (is_singular('monsters')) {
+		echo "<h2>" . the_field('name') . "</h2>";
 	}
 
 ?>
