@@ -18,6 +18,7 @@ $array = [
 	"form-practice",
 	"checkout",
 	"currency",
+	"phpdemo",
 ];
 
 ?>
