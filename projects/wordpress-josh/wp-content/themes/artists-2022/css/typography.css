@@ -1,0 +1,57 @@
+.loud-voice	{
+	font-family: 'Merriweather', serif;
+	font-size: 1.9rem;
+}
+
+.intro-voice	{
+	font-family: 'Merriweather', serif;
+	font-size: 40px;
+}
+
+.attention-voice, h3	{
+	font-family: 'Roboto', sans-serif;
+	font-size: 1.7rem;
+}
+
+.calm-voice, p, a, li{
+	font-family: 'Roboto', sans-serif;
+	font-size: 1.2rem;
+	line-height: 1.4;
+}
+
+.greetings {
+	font-family: 'Merriweather', serif;
+	font-size: 30px;
+}
+
+.josh {
+	font-family: 'Merriweather', serif;
+	font-size: 90px
+}
+
+.developer {
+	font-family: 'Merriweather', serif;
+	font-size: 30px;
+}
+
+/* these would be scoped to section or to an article element */
+/* this is just a loose setting for now $todo */
+p + p {
+
+}
+
+h1 + p {
+	margin-top: 0px;
+}
+
+h2 + p {
+	margin-top: 5px;
+}
+
+h2 {
+	margin-bottom: 5px;
+}
+
+span {
+  color: #f43c3c;
+}

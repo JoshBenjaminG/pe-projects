@@ -9,5 +9,6 @@
 <body <?php body_class(); ?>>
 	
 <h1>header</h1>
+<?php include('site-menu.php'); ?>
 
 <main>
