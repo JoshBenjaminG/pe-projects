@@ -7,8 +7,11 @@
 	<?php wp_head(); ?>
 </head>
 <body <?php body_class(); ?>>
-	
-<h1>header</h1>
+
+<header>
+<inner-column>
 <?php include('site-menu.php'); ?>
+</inner-column>
+</header>
 
 <main>

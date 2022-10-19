@@ -12,3 +12,12 @@ body {
 .current_page_item a {
 	color: red;
 }
+
+card {
+	display: block;
+}
+
+.menu ul {
+	display: flex;
+	flex-direction: row;
+}

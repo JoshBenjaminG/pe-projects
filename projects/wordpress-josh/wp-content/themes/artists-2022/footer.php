@@ -1,8 +1,10 @@
 </main>
 
-<h2>footer</h2>
-
-<?php wp_footer(); ?>
+<footer>
+	<inner-column>
+		<div>footer</div>
+	</inner-column>
+</footer>
 
 </body>
 </html>
