@@ -21,3 +21,11 @@ card {
 	display: flex;
 	flex-direction: row;
 }
+
+picture {
+	display: block;
+}
+
+picture img	{
+	width: 40%;
+}
