@@ -1,3 +1,3 @@
 <inner-column>
-	<div>home page asdfasd</div>
+	<div>home page</div>
 </inner-column>
