@@ -2,13 +2,13 @@
 
 <?php 
 
-	$args = array(  
+	$filter = [  
         'post_type' => 'artists',
-    );
+    ];
 
-    $loop = new WP_Query( $args ); 
+    $artists = new WP_Query( $filter ); 
         
-    while ( $loop->have_posts() ) : $loop->the_post(); 
+    while ( $artists->have_posts() ) : $artists->the_post(); 
         include('artist.php');
     endwhile;
 
