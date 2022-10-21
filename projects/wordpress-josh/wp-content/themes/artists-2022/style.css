@@ -17,22 +17,21 @@ Use it to make something cool, have fun, and share what you've learned with othe
 */
 
 @import "css/components.css";
-@import "css/developer-styles.css";
+/*@import "css/developer-styles.css";*/
 @import "css/meyer-reset.css";
 @import "css/settings.css";
 @import "css/typography.css";
 @import "css/structure.css";
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100;700&display=swap');
 
 body {
-	background-color: lightblue;
-}
-
-.current_page_item a {
-	color: red;
+	background-color: #ffffe2;
 }
 
 card {
-	display: block;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
 }
 
 .menu ul {
@@ -45,5 +44,11 @@ picture {
 }
 
 picture img	{
-	width: 40%;
+	width: 100%;
+}
+
+.artist-grid inner-column {
+	display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
 }

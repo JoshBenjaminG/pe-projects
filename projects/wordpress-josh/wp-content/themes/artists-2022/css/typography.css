@@ -1,14 +1,14 @@
-.loud-voice	{
-	font-family: 'Merriweather', serif;
-	font-size: 1.9rem;
+.loud-voice, h1	{
+	font-family: 'Roboto', sans-serif;
+	font-size: 2rem;
+	font-weight: 700;
 }
 
 .intro-voice	{
-	font-family: 'Merriweather', serif;
-	font-size: 40px;
+	font-family: 'Roboto', sans-serif;
 }
 
-.attention-voice, h3	{
+.attention-voice, h3, h2	{
 	font-family: 'Roboto', sans-serif;
 	font-size: 1.7rem;
 }
@@ -20,22 +20,30 @@
 }
 
 .greetings {
-	font-family: 'Merriweather', serif;
+	font-family: 'Roboto', sans-serif;
 	font-size: 30px;
 }
 
 .josh {
-	font-family: 'Merriweather', serif;
+	font-family: 'Roboto', sans-serif;
 	font-size: 90px
 }
 
 .developer {
-	font-family: 'Merriweather', serif;
+	font-family: 'Roboto', sans-serif;
 	font-size: 30px;
 }
 
 /* these would be scoped to section or to an article element */
 /* this is just a loose setting for now $todo */
+a, .current_page_item a {
+	color: black;
+}
+
+a:hover {
+	color: blue;
+}
+
 p + p {
 
 }

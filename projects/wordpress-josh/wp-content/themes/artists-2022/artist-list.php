@@ -1,3 +1,4 @@
+<section class="artist-grid">
 <inner-column>
 
 <?php 
@@ -17,3 +18,4 @@
 ?>
 
 </inner-column>
+</section>
