@@ -9,7 +9,7 @@
     $artists = new WP_Query( $filter ); 
         
     while ( $artists->have_posts() ) : $artists->the_post(); 
-        include('artist.php');
+        include('templates/artist.php');
     endwhile;
 
     wp_reset_postdata(); 

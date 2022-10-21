@@ -2,7 +2,7 @@
 <div>
 <?php 
 
-	include('album-card.php');
+	include('templates/album-card.php');
 
 ?>
 </div>

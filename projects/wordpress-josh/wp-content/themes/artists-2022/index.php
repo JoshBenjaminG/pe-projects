@@ -4,7 +4,7 @@
 <?php 
 
 	if (is_page('home')) {
-		include("home.php");
+		include("pages/home.php");
 	}
 
 	if (is_page('list')) {
