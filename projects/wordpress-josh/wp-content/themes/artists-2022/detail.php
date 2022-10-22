@@ -2,7 +2,8 @@
 <div>
 
 <?php
-echo the_field('name');
+$theName = get_field('name');
+echo "<p>" . $theName . "</p>";
 $albums = get_field('favorite_albums');
 if( $albums ): ?>
     <ul>

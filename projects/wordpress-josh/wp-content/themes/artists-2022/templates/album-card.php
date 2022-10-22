@@ -16,8 +16,7 @@ if( have_rows('track') ):
         // Load sub field value.
         $sub_value = get_sub_field('title');
         $sub_length = get_sub_field('length');
-        echo $sub_value . ": ";
-        echo $sub_length;
+        echo "<p class='calm-voice'>" . $sub_value . ": " . $sub_length . "</p>";
         echo "<br>";
 
     // End loop.
