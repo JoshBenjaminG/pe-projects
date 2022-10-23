@@ -52,8 +52,10 @@ picture {
 	margin-right: 18px;
 }
 
-
-
+.artist-grid inner-column {
+	display: grid;
+	grid-template-columns: 1fr;
+}
 .album-img img {
 	max-width: 100%;
 }
@@ -62,15 +64,14 @@ card .artist-img img {
 	width: 100%;
 }
 
-.artist-grid inner-column {
-	display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 20px;
-}
-
 @media(min-width: 600px) {
 		.container {
 		display: flex;
 		flex-direction: row;
+	}
+		.artist-grid inner-column {
+		display: grid;
+	    grid-template-columns: 1fr 1fr;
+	    gap: 20px;
 	}
 }
