@@ -1,8 +1,13 @@
-<card>
+<div class="container">
+<card class="album-card">	
 	<h2><?php echo the_title(); ?></h2>
-	<picture>
+	<picture class="album-img">
 		<img src="<?php echo the_field('album_image'); ?>" alt="">
 	</picture>
+	<a href="<?php echo the_field('wiki_link'); ?>" target="_blank">Read More</a>
+</card>
+
+	<text-content>
 	<h2>Release Date: <?php echo the_field('release_date'); ?></h2>
 	<h2>Album Length: <?php echo the_field('length'); ?></h2>
 <?php
@@ -27,4 +32,5 @@ else :
     // Do something...
 endif;
 ?>
-</card>
+</text-content>
+</div>

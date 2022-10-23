@@ -3,7 +3,11 @@
 
 <?php
 $theName = get_field('name');
+$theDescription = get_field('description');
 echo "<p>" . $theName . "</p>";
+echo "<br>";
+echo "<p class='calm-voice'>" . $theDescription . "</p>";
+echo "<br>";
 $albums = get_field('favorite_albums');
 if( $albums ): ?>
     <ul>
