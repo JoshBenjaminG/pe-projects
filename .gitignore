@@ -1,1 +1,10 @@
 .DS_Store
+!projects/record-label
+projects/record-label/*
+!projects/record-label/wp-content
+projects/record-label/wp-content/*
+!projects/record-label/wp-content/plugins
+!projects/record-label/wp-content/themes
+projects/record-label/wp-content/themes/*
+!projects/record-label/wp-content/themes/artists-2022
+

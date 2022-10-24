@@ -1,0 +1,65 @@
+.loud-voice, h1	{
+	font-family: 'Roboto', sans-serif;
+	font-size: 2rem;
+	font-weight: 700;
+}
+
+.intro-voice	{
+	font-family: 'Roboto', sans-serif;
+}
+
+.attention-voice, h3, h2	{
+	font-family: 'Roboto', sans-serif;
+	font-size: 1.7rem;
+}
+
+.calm-voice, p, a, li{
+	font-family: 'Roboto', sans-serif;
+	font-size: 1.2rem;
+	line-height: 1.4;
+}
+
+.greetings {
+	font-family: 'Roboto', sans-serif;
+	font-size: 30px;
+}
+
+.josh {
+	font-family: 'Roboto', sans-serif;
+	font-size: 90px
+}
+
+.developer {
+	font-family: 'Roboto', sans-serif;
+	font-size: 30px;
+}
+
+/* these would be scoped to section or to an article element */
+/* this is just a loose setting for now $todo */
+a, .current_page_item a {
+	color: black;
+}
+
+a:hover {
+	color: blue;
+}
+
+p + p {
+
+}
+
+h1 + p {
+	margin-top: 0px;
+}
+
+h2 + p {
+	margin-top: 5px;
+}
+
+h2 {
+
+}
+
+span {
+  color: #f43c3c;
+}

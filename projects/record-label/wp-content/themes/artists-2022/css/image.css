@@ -1,0 +1,37 @@
+generic-text picture {
+	margin-bottom: 0px;
+}
+
+generic-text picture {
+	box-shadow: 1px 1px 8px rgba(0, 0, 0, 0.4);
+}
+
+generic-text picture {
+	max-width: 800px;
+	margin-bottom: 20px;
+}
+
+generic-text p {
+
+}
+
+generic-text h2 {
+
+}
+
+.caption {
+ 	margin: 20px 0px;
+}
+
+@media(min-width: 1000px) {
+	.caption {
+		opacity: 0.7;
+		font-style: italic;
+		margin-top: 0px;
+		font-size: 1rem;
+	}
+	generic-text p {
+		margin: 30px 0px;
+		line-height: 1.9;
+	}
+}
