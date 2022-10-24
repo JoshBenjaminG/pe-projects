@@ -1,0 +1,46 @@
+
+mast-head {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.mast-head-animation {
+  opacity: 0;
+  animation: upFadeIn 0.3s forwards ease-in-out;
+  animation-delay: 0.2s;
+}
+
+
+mast-head nav {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+mast-head .logo {
+  max-width:  40px;
+}
+
+mast-head .links {
+  display: flex;
+  flex-direction: row;
+  text-align: center;
+  justify-content: center;
+  align-items: center;
+}
+
+mast-head  .links a {
+  padding: 0px 0px 2px 0px;
+  margin-left: 10px;
+  color: #f43c3c;
+}
+
+@media (min-width: 600px) {
+  
+}
+
+mast-head .links .projects-link {
+  scroll-behavior: smooth;
+}

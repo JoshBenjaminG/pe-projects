@@ -1,0 +1,60 @@
+form {
+  background-color: rgba(246, 87, 82, 0.9);
+  padding: 25px 15px;
+  border: 1px solid black;
+}
+
+form h2 {
+  color: white;
+}
+
+form * {
+  margin: 5px 0px;
+  padding: 20px 5px;
+}
+
+input {
+  width: 100%;
+  border-radius: 5px;
+  border: 1px solid black;
+}
+
+textarea {
+  width: 100%;
+  border-radius: 5px;
+  border: 1px solid black;
+}
+
+::placeholder {
+  color: rgba(0, 0, 0, 0.7);
+  font-family: 'Roboto', sans-serif;
+  font-size: .9rem;
+  line-height: 1.4;
+}
+
+.form-input:hover {
+  background-color: #e2e2e2;
+}
+
+contact-me form {
+  margin-top: 20px;
+}
+
+@media (min-width: 500px) {
+  contact-me form {
+    max-width: 500px;
+  }
+}
+
+contact-me {
+  opacity: 0;
+  animation: upFadeIn 0.5s forwards ease-in-out;
+  animation-delay: 1.5s;
+}
+
+contact-me div {
+  color: red;
+  margin-top: 20px;
+  font-size: 30px;
+  font-weight: bold;
+}

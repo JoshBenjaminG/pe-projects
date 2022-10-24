@@ -1,0 +1,19 @@
+
+graphic-diptych {
+  display: block;
+
+  /* */
+  display: grid;
+  min-height: 50vh;
+  place-items: center;
+}
+
+graphic-diptych landing-logo {
+  display: block;
+  width: 100%;
+  max-width: 500px;
+}
+
+
+
+

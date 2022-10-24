@@ -1,0 +1,41 @@
+
+writing-intro {
+  display: block;
+  opacity: 0;
+  animation: upFadeIn 0.5s forwards ease-in-out;
+  animation-delay: 1.2s;
+}
+
+writing-intro header {
+
+}
+
+writing-intro writing-grid {
+  display: grid;
+  grid-gap: 1em;
+}
+
+writing-intro header p {
+  margin-bottom: 20px;
+  
+}
+
+writing-intro header h2 {
+
+}
+
+@media(min-width: 600px){
+  writing-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media(min-width: 900px){
+  writing-grid {
+    grid-template-columns: 2fr 1fr;
+  }
+}
+
+writing-intro span {
+  color: #f43c3c;
+}

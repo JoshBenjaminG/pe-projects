@@ -1,331 +1,132 @@
+
+/* RESET */
 @import 'meyer-reset.css';
-
-@import 'typography.css';
-
 @import 'setup.css';
 
-* {
-	scroll-behavior: smooth;	
-}
+/*@import 'developer-styles.css'; */
+/* comment this ^ out - when you are ready */
 
-body * {
-	/*border: 2px solid red;*/
+
+/* SETTINGS */
+@import 'settings.css'; /* variables/ etc */
+
+
+/* STRUCTURE */
+@import 'structure.css';
+
+
+/* TYPOGRAPHY */
+@import 'typography.css';
+
+
+/* COMPONENTS */
+@import 'components.css';
+
+
+/* MODULES */
+@import 'modules/masthead.css';
+@import 'modules/graphic-diptych.css';
+@import 'modules/call-to-action.css';
+@import 'modules/projects-intro.css';
+@import 'modules/project-card.css';
+@import 'modules/writing-intro.css';
+@import 'modules/writing-card.css';
+@import 'modules/site-map.css';
+@import 'animation.css';
+@import 'detail.css';
+@import 'image.css';
+@import 'modules/resume.css';
+@import 'modules/goal-list.css';
+@import 'modules/goal.css';
+@import 'modules/resume-list.css';
+@import 'modules/project-links.css';
+@import 'modules/landing-area.css';
+@import 'modules/contact-me.css';
+@import 'modules/detail-goal.css';
+/*@import 'modules/layout-1.css';
+@import 'modules/layout2.css';*/
+/* should everything/nothing be in it's own file? */
+
+
+/* ACTUAL SITE STYLES */
+html {
+	
 }
 
 body {
-	/*background-color: #852909;*/
-	min-height: 100vh;
-	display: flex;
-	flex-direction: column;
-}
-
-/* body background animation */
-
-html, body {
-  width: 100%;
-  height:100%;
-}
-
-body {
-    background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
-    background-size: 400% 400%;
-    animation: gradient 20s ease infinite;
-}
-
-@keyframes gradient {
-    0% {
-        background-position: 0% 50%;
-    }
-    50% {
-        background-position: 100% 50%;
-    }
-    100% {
-        background-position: 0% 50%;
-    }
-}
-
-.inner-column {
-	width: 100%;
-	max-width: 1000px;
-	margin-right: auto;
-	margin-left: auto;
-	padding: 10px;
-}
-
-@media only screen and (min-width: 650px) {
-  .inner-column {
- 	max-width: 900px;
-  }
-}
-
-/* sticky footer */
-
-main {
-	flex-grow: 1;
-}
-
-/* Header section */
-
-header {
-	background-color: rgba(0, 0, 0, .05);
-}
-
-.logo {
-	font-weight: 700;
-	font-size: 35px;
-}
-
-nav {
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
-}
-
-nav a {
-	padding: 1rem;
-	text-decoration: none;
-	color: white;
-}
-
-.right-nav {
-	display: flex;
-	flex-direction: row;
-}
-
-@media(max-width:  600px) {
-	.nav-right {
-		margin-right: 20px;
-	}
-
-}
-
-/* Landing section */ 
-
-@media(max-width: 600px) {
-	.loud-voice {
-		font-size: 60px;
-	}
-}
-
-.josh {
-	display: flex;
-	min-height: 40vh;
-	align-items: center;
-	padding-left: 5px;
-}
-
-.welcome {
-	display: flex;
-	flex-direction: column;
-}
-
-.welcome .job {
-	align-self: flex-end;
-	opacity: 0.4;
-}
-
-.welcome .calm-voice {
-	color: white;
-}
-
-.welcome .loud-voice {
-	color: white;
-}
-
-.welcome .name {
-	color: white;
-}
-
-/* About heading */
-
-.about-heading {
-	color: white;
-}
-
-@media only screen and (min-width: 650px) {
-  .about-heading .inner-column {
-  	display: flex;
-  	flex-direction: row;
-  	padding-left: 15px;
-  }
-}
-
-/* About section */
-
-.about .inner-column {
-	padding-left: 0px;
-	padding-right: 0px;
-}
-
-@media only screen and (min-width: 650px) {
-  .about .inner-column {
-  	display: flex;
-  	flex-direction: row;
-  	justify-content: space-between;
-  	padding-left: 15px;
-  }
-}
-
-.story {
-	padding: 15px;
-	max-width: auto;
-}
-
-.story p span {
-	font-weight: 700;
-}
-
-@media only screen and (min-width: 650px) {
-	.story {
-		border-radius: 10px;
-		max-width: 420px;
-	}
-}
-
-.story-left {
-	background-color: #fbf16d;
-	border: 2px solid #fbf16d;
-}
-
-@media only screen and (min-width: 650px) {
-	.story-left {
-		margin-right: 20px;
-	}
-}
-
-.story-right {
-	background-color: white;
-	border: 2px solid white;
-}
-
-.welcome {
-	animation: slide-in 1700ms;
-}
- 
-@keyframes slide-in {
-  from {
-    margin-left: -100%;
-    width: 300%; 
-  }
-
-  to {
-    margin-left: 0%;
-    width: 100%;
-  }
+	background-color: #fffffb;
 }
 
 
-@media only screen and (min-width: 650px) {
-	.story-right {
-		margin-right: 20px;
-	}
+/*
+	This the area where you work out your styles 
+	If it makes sense, you can break these out into their own files.
+*/
+
+
+/* SITE SECTIONS */
+.site-header {
+	/*background-color: #9ec9eb;*/
+	position: sticky;
+	top: 0;
+	 border-bottom: 1px solid rgba(229, 229, 219, 0.7);
+	 z-index: 1;
+	/*box-shadow: 0 2px 5px 0px rgba(0,0,0,.4);*/
+}
+.site-header inner-column {
+	padding: 10px 14px;
 }
 
-.story-left, .story-right {
-  overflow:hidden;
-}
-.story-left, .story-right {
-  animation: 3s slide-up;
-  margin-top:0%;
-}
 
-@keyframes slide-up {
-  from {
-    margin-top: 100%;
-    height: 100%; 
-  }
 
-  to {
-    margin-top: 0%;
-    height: 100%;
-  }
+/* OK! SITE STYLES! */
+.site-header {
+  background-color: #fff4f3;
+  color: var(--white);
 }
 
-.about-heading div h3 {
-	animation: slide-in 2300ms;
-}
- 
-@keyframes slide-in {
-  from {
-    margin-left: -100%;
-    width: 300%; 
-  }
 
-  to {
-    margin-left: 0%;
-    width: 100%;
-  }
-}
 
-/* Projects section */
-
-.projects {
-	background-color: white;
-}
-
-.project-heading {
-	padding-top: 50px;
-	padding-bottom: 80px;
-}
-
-.goals-page h1 {
-	color: white;
-}
-
-.goals {
-	border: 2px solid rgba(0, 0, 0, .4);
-	padding: 20px;
+.landing {
 	margin-top: 50px;
 }
 
-.goals li {
-	margin: 10px;
+/* things kinda just start grouping up... and you'll know when something should be grouped into another file - most of the time */
+
+
+.get-involved {
+  padding-top: 30px;
+} /* interesting way to include the whole image in your CSS */
+
+.get-involved inner-column {
+	/*max-width:  700px;*/
 }
 
-.resume-page {
-	margin-top: 5em;
-	background-color: #ffffff;
-	display: flex;
-	justify-content: center;
-	padding: 50px;
-	flex-direction: column;
-}
+.get-involved call-to-action {
 
-.resume-head h3 {
-	text-align: center;
-}
-
-.resume-head div {
-	display: flex;
-	flex-direction: row;
-	justify-content: center;
-}
-
-.resume-head div p {
-	margin-right: 10px;
-}
-
-.section-head {
-	border-bottom: 1px solid black;
-	margin-top: 10px;
-	margin-bottom: 10px;
-}
-
-.resume-section ul {
-	list-style-type: circle;
-	margin-left: 15px;
-}
-
-.education div {
-	display: flex;
-	flex-direction: row;
-	justify-content: space-between;
 }
 
 
+.stuff {
+  background-color: #fefff7;
+}
 
+.writing {
+  background-color: #fefff7;
+	/*background-image:  url("data:image/svg+xml,%3Csvg width='4' height='4' viewBox='0 0 6 6' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23000000' fill-opacity='0.2' fill-rule='evenodd'%3E%3Cpath d='M5 0h1L0 6V5zM6 5v1H5z'/%3E%3C/g%3E%3C/svg%3E");*/
+}
 
+.help-us {
+  background-color: #fefff7;
+}
 
+.site-footer {
+  background-color: #f65752;
+	color: var(--white);
+	padding-bottom: 50px;
+}
 
+.site-footer .logo {
 
+}
 

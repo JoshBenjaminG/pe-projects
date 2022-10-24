@@ -1,0 +1,45 @@
+.monday-ul li, .monday-header {
+	border-bottom: 2px solid rgba(0, 0, 0, 0.4);
+	padding: 20px;
+}
+
+.monday-ul {
+	display: flex;
+	flex-direction: column;
+}
+
+.monday {
+	padding: 10px;
+}
+
+@media(min-width: 700px) {
+	.monday-ul li {
+		width: 49%;
+	}
+	.monday-ul, picture {
+		display: flex;
+		flex-wrap: wrap;
+		flex-direction: row;
+		justify-content: space-between;
+	}
+	picture {
+		width: 48%;
+	}
+	.monday-images {
+		display: flex;
+		flex-direction: row;
+		flex-wrap: wrap;
+		justify-content: space-between;
+	}
+}
+
+@media(min-width: 1000px) {
+	.monday {
+		display: flex;
+		flex-direction: row;
+	}
+	.monday-images {
+		margin-left: 15px;
+		align-self: center;
+	}
+}

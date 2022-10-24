@@ -1,0 +1,45 @@
+
+.site-map {
+  display: block;
+}
+
+footer .links {
+  display: grid;
+  grid-gap: 1em;
+}
+
+footer .links ul li a{
+ color: #fefff7;
+}
+
+
+.site-map .links ul {
+  display: flex;
+  align-items: flex-start;
+  flex-direction: column;
+  list-style-type: circle;
+  padding-left: 14px;
+}
+
+
+@media(min-width: 400px){
+  .site-map .links{
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+}
+
+@media(min-width: 900px){
+  .site-map .links ul{
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+}
+
+
+site-map nav {
+  flex-grow:  1;
+}
+
+
+footer .links ul li a:hover {
+  opacity: 0.5;
+}

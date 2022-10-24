@@ -1,0 +1,28 @@
+[
+  {
+    "module": "resume-list",
+    "header": "Resume 2022",
+    "sections": [
+      {
+        "header": "<h3 class=''>Joshua Gage | Web Developer</h3>",
+        "content": "<li>While in college, I learned about programming and development from a friend of mine. Ever since that experience, I immediately knew that development was my passion and I've been creating ever since.</li><li>I joined a web development and design program to give myself a leg up and to solidify my knowledge.</li>"
+      },
+      {
+        "header": "<h3>Interests</h3>",
+        "content": "<li>I enjoy reading books about various topics including Psychology, Biology, History, Economics, and various fiction novels as well.</li><li>I apply the things that I learn by seeing how they can help me approach and solve problems.</li>"
+      },
+      {
+        "header": "<h3>Education</h3>",
+        "content": "<li>University of South Alabama | Bachelor of English</li><li>Double Major, completed 140 credit hours. Graduated in May 2022</li><li>President's list for two years. Vice President of Tau Kappa Epsilon Fraternity.</li>"
+      },
+      {
+        "header": "<h3>Projects</h3>",
+        "content": "<li>Developer Portfolio version 4</li><li>Croatian Coasts and Riche Fashion Layouts.</li><li>PHP and JS coding Challenges from Exercises for Programmers 4.</li><li>Responsive Layout Garden.</li><li>Weather Forecast API project.</li>"
+      },
+      {
+        "header": "<h3>Experience</h3>",
+        "content": "<li>Education internship Jan 2022 - May 2022. Taught 8th Grade English for a semester.</li><li>Front-End developer - Crebbits | August 2022 - Current</li><li>Currently creating a game website for Crebbits the accounting card game. Releases October 2022.</li>"
+      } 
+    ]
+  }
+]

@@ -1,0 +1,76 @@
+writing-card {
+  display: block;
+
+  /* */
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.4);
+}
+
+writing-card h2 span {
+  color: black;
+  transition: color 0.2s ease-in-out;
+}
+
+writing-card h2:hover  {
+  opacity: 0.5;
+  text-decoration: underline;
+}
+
+writing-card  {
+  display: block;
+  display: flex;
+  flex-direction: column;
+}
+
+writing-card p {
+  margin-bottom: 10px;
+}
+
+writing-card p:nth-of-type(2) {
+  color: rgba(245, 87, 82, 0.7)
+}
+
+writing-card p:nth-of-type(2):hover {
+  color: #f65752;
+}
+
+writing-card .project-a {
+  margin-top: auto;
+  color: white;
+  text-align: center;
+  padding: 10px 20px;
+
+}
+
+.project-a {
+  
+}
+
+writing-card .project-a {
+  background-color: #f43f3d;
+  transition: background-color 0.1s linear;
+}
+
+writing-card .project-a:hover {
+  background-color: #f65b5a;
+  transition: background-color 0.1s linear;
+}
+
+
+
+/*article-card {
+  box-shadow: 0 0 0 rgba(0,0,0,0.15);
+  transition: box-shadow 0.2s ease-in-out;;
+}
+
+article-card:hover {
+  box-shadow: 0 8px 11px rgba(0,0,0,0.15);
+  transition: box-shadow 0.3s ease-in-out;
+}*/
+
+
+
+
+

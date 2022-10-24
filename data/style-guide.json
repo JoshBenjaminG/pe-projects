@@ -1,0 +1,46 @@
+[
+  {
+    "module": "call-to-action",
+    "header": "<h2 class='loud-voice'>Call to action header.</h2>",
+    "content":"<p class='calm-voice'><span class='intro'>Call to action content paragraph</p>"
+  },
+  {
+    "module": "projects-intro",
+    "header": "<h2 class='loud-voice'>Projects intro header</h2>",
+    "content": "<p class='calm-voice'>projects intro content</a>"
+  },
+  {
+    "module": "writing-intro"
+  },
+  {
+    "module": "resume-list",
+    "header": "Resume Modules",
+    "sections": [
+      {
+        "header": "<h3 class=''>Joshua Gage | Web Developer</h3>",
+        "content": "<li>While in college, I learned a little about programming and development from a friend of mine. Ever since that experience, I immediatly knew that development was my passion and I've been creating ever since.</li><li>I joined a development program to give myself a leg up and to solidify my knowledge.</li>"
+      },
+      {
+        "header": "<h3>Interests</h3>",
+        "content": "<li>I enjoy reading books about various topics including Sales, Psychology, Biology, History, Economics, and various fiction novels as well.</li><li>I try to apply the things that I learn by seeing how they can help me approach and solve problems.</li>"
+      },
+      {
+        "header": "<h3>Education</h3>",
+        "content": "<li>University of South Alabama | Bachelor of English Education</li><li>Double Major, completed 140 credit hours. Graduated in May 2022</li><li>President's list for two years. Vice President of Tau Kappa Epsilon Fraternity.</li>"
+      },
+      {
+        "header": "<h3>Projects</h3>",
+        "content": "<li>Developer Portfolio version 4</li><li>Croatian Coasts and Riche Fashion Layouts.</li><li>PHP and JS coding Challenges from Exercises for Programmers 4.</li>"
+      },
+      {
+        "header": "<h3>Experience</h3>",
+        "content": "<li>Middle School English Teacher Internship | Jan 2022 - May 2022</li><li>Taught 8th Grade English in accordance with Alabama State English curriculum standards for half of the school year.</li>"
+      }
+    ]
+  },
+  {
+    "module": "image",
+    "heading" : "This is an example of a case study heading",
+    "content" : "<p class='calm-voice'>This could be a paragraph for the case study module content.</p>"
+  }
+]

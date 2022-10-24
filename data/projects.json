@@ -1,0 +1,326 @@
+[
+    {
+        "heading": "Riche Fashion",
+        "technologies": "PHP, CSS, HTML",
+        "description": "A research project that implemented design principles found among fashion websites.",
+        "thumbnail": "images/project-image2.jpg",
+        "url": "https://peprojects.dev/alpha-3/josh/projects/riche-fashion/",
+        "slug": "345",
+        "case-study":
+        {
+            "sections":
+            [
+                {
+                    "module": "project-links",
+                    "github": "https://github.com/JoshBenjaminG/pe-projects/tree/master/projects/riche-fashion",
+                    "site_link": "https://peprojects.dev/alpha-3/josh/projects/riche-fashion/"
+                },
+                {
+                    "module": "image",
+                    "img": "images/trimmed-images/research1.jpg",
+                    "caption": "<p class='caption'>The primary inspiration for this project came from Gucci and Prada.</p>",
+                    "description": "<p>The first stage of this project came from researching different high-end fashion companies. I took a few examples of modules or cards to lead my design process for the landing page.</p>"
+                },
+                {
+                    "module": "image",
+                    "img": "images/trimmed-images/riche-fashion-research.jpg",
+                    "caption": "<p class='caption'>I got these images from Unslpash.com, and I keep a folder of images like this just in case I need them to design a card around.</p>",
+                    "description": "<p>Modules need content! Just like with Croatian Coasts, I keep images like this in storage to pull out when needed, and what I don't have I get from free resources like Unsplash.com</p>"
+                },
+                {
+                    "module": "image",
+                    "img": "images/trimmed-images/tile1.jpg",
+                    "caption": "<p class='caption'>This is an example of a style tile. This serves as the foundation for the design moving forward. Cheap and effective solutions like this allow us to get user feedback quicker, instead of having to spend time creating a fully fleshed mockup to start.</p>",
+                    "description": "<p>I created a style tile like this to organize the module designs, typography choices, and color and spacing ideas. As more modules get made, I can add those designs to the ones seen here.</p>"
+                },
+                {
+                    "module": "image",
+                    "img": "images/trimmed-images/layout1.jpg",
+                    "caption": "<p class='caption'>The landing page is very similar to the sites that inspired it. Compared to the original modules seen from Gucci and Prada, this gives a monocolored spin on the large blocky font and images to accentuate the models and clothing.</p>",
+                    "description": "<p></p>"
+                },
+                {
+                    "module": "image",
+                    "img": "images/project-image-riche100.jpg",
+                    "caption": "<p class='caption'>Once the items are compared, they are pushed into the new filtered array.</p>",
+                    "description": "<p>A quick example of item filtering. I check the value of what collection the item is included in and compare it to the collection number. This project was a great exercise in designing a high-end fashion site. Some of the hardest problems were figuring out the filtering and choosing what content would be best. I may add more items or functionality in the future!</p>"
+                },
+                {
+                    "module": "project-links",
+                    "github": "https://github.com/JoshBenjaminG/pe-projects/tree/master/projects/riche-fashion",
+                    "site_link": "https://peprojects.dev/alpha-3/josh/projects/riche-fashion/"
+                }
+            ]
+        }
+    },
+    {
+        "heading": "Portfolio v5",
+        "technologies": "PHP, HTML, CSS",
+        "description": "A case study of how the sausage is made - over 5 iterations and one year. A ton of JSON-backed, Modular PHP components, stacked on top of each other!",
+        "thumbnail": "images/portfolio-image1.jpg",
+        "url": "https://peprojects.dev/alpha-3/josh/",
+        "slug": "10",
+        "case-study":
+        {
+            "sections":
+            [
+                {
+                    "module": "project-links",
+                    "github": "https://github.com/JoshBenjaminG/personal-site-pro",
+                    "site_link": "https://peprojects.dev/alpha-3/josh/"
+                },
+               {
+                    "module": "image",
+                    "img": "images/portfolio-image-1.jpg",
+                    "caption": "<p class='caption'>We all start somewhere!</p>",
+                    "description": "<p>When I created the first design for this website, I knew I always wanted to keep it minimalistic. At this point, most of the css was based primarily on naive flexbox - so things didn't quite look like I wanted them to - because I hadn't committed to to the almighty grid yet. In any case, this minimalistic start managed to carry on to the current design despite all of the other additions and subtractions.</p>"
+                },
+               {
+                    "module": "image",
+                    "img": "images/portfolio-image-2.jpg",
+                    "caption": "<p class='caption'>Some of this carried on for the next few versions. I'm just predisposed to liking this sort of minimalism.</p>",
+                    "description": "<p>For the second version of the design I backed off of color and embraced a monochromatic look. I hadn't gotten into JSON backed modules yet - so this version of the website was more or less hardcoded and lacked variable project posts and detail pages. The css was still the same as I still hadn't included more advanced css into my design. I actually still have a soft spot for this look - but I don't think it accentuates the right aspects of me as a person and my abilities.</p>"
+                },
+               {
+                    "module": "image",
+                    "img": "images/portfolio-image-3.jpg",
+                    "caption": "<p class='caption'>Looking forward, I wanted to make a different statement about myself and include more content upon first visit.</p>",
+                    "description": "<p>After several iterations of monochrome and static color - I decided to invest some time into animated backgrounds and rainbows. I finally decided that I wanted more content visible upon the first viewing. Even though I eventually decided to reign the color back in, I still kept the animations and cards flying in. I hadn't yet gone all in on modular components, JSON, and data flow just yet.</p>"
+                },
+               {
+                    "module": "image",
+                    "img": "images/portfolio-image-5.jpg",
+                    "caption": "<p class='caption'>Version 4 reflected a big shift in my programming system.</p>",
+                    "description": "<p>A lot changed with this version - the biggest change being the design as well as the programming methodology. At this point I had messed around with WordPress pages and custom fields, and here I am using standard PHP with the whole gamut of website tools - queries, variable modules, and a single useful function! Layers of JSON direct the function to find each module and place it in order, and other JSON files tell other pages how to look as well. The design was more abstract and eye-catching, but it still wasn't as refined as I wanted it to be.</p>"
+                },
+               {
+                    "module": "image",
+                    "img": "images/portfolio-image-6.jpg",
+                    "caption": "<p class='caption'>An example of data flow. The top level module populates the project page and the inner data populates the image modules that make up the page you are seeing now.</p>",
+                    "description": "<p></p>"
+                },
+               {
+                    "module": "image",
+                    "img": "images/portfolio-image-7.jpg",
+                    "caption": "<p class='caption'>Meeting with Derek and sketching out a detailed design path was very productive and has guided the development of this site to this day.</p>",
+                    "description": "<p>After setting the foundation of the site in the form of PHP modules, the next step was to think about how I could elevate the design to fulfill the promise I made to myself that I would keep the site sleek and minimalistic - while still delivering the content in the order it should appear. The guiding words for this design session were: Simple, Clear, Refined, and Highly Skilled. I also fleshed out the data structure to make grid elements appear seamlessly on the page.</p>"
+                },
+               {
+                    "module": "image",
+                    "img": "images/portfolio-image-8.jpg",
+                    "caption": "<p class='caption'>An example of mobile-first design and further refinement to stick with the keywords we chose.</p>",
+                    "description": "<p></p>"
+                },
+               {
+                    "module": "image",
+                    "img": "images/portfolio-image-9.jpg",
+                    "caption": "<p class='caption'>It's an ongoing process.</p>",
+                    "description": "<p>So where to from here? I want to add some PHP and JS forms. I don't think I've completely lived up to the key words I've chosen - so this will be a perpetual project to serve as a hub point for my information and activities. As I change and grow, so will my site. I'll probably break out of minimalism and go back to a more colorful and abstract design next. And instead of stock PHP modules - I'll use a CMS next time.</p>"
+                },
+               {
+                    "module": "project-links",
+                    "github": "https://github.com/JoshBenjaminG/personal-site-pro",
+                    "site_link": "https://peprojects.dev/alpha-3/josh/"
+                }
+            ]
+        }
+    },
+    {
+        "heading": "Weather Forecast",
+        "technologies": "JS, HTML, CSS",
+        "description": "A forray into implementing an API using Javascript. This was both fun and useful!",
+        "thumbnail": "images/weather-api-image1.jpg",
+        "url": "https://peprojects.dev/alpha-3/josh/projects/weatherapi/",
+        "slug": "098",
+        "case-study":
+        {
+            "sections":
+            [
+                {
+                    "module": "project-links",
+                    "github": "https://github.com/JoshBenjaminG/pe-projects/tree/master/projects/weatherapi",
+                    "site_link": "https://peprojects.dev/alpha-3/josh/projects/weatherapi/"
+                },
+               {
+                    "module": "image",
+                    "img": "images/weather-api-image3.jpg",
+                    "caption": "<p class='caption'>This API is from weatherapi.com and the developer subscription is $4/month.</p>",
+                    "description": "<p>When I'm messing around with a new api, I like to just make the call in my browser. I downloaded an extension a while ago that formats json in the browser to make it more readable. Taking a first look around is good for powerful APIs like this with so many options. Knowing what the API can do can guide my thinking in terms of what I want to show the end user.</p>"
+                },
+               {
+                    "module": "image",
+                    "img": "images/weather-api-image4.jpg",
+                    "caption": "<p class='caption'>The console is my best friend when it comes to navigating an API!</p>",
+                    "description": "<p>Mobile first design is where I start, and while creating an application like this I make sure to log the response in the console. Before I render some information to the screen, I want to drill down the data structure and log that first just to isolate it. Then I'll start rendering it and styling it. I'll repeat this process as many times as I need until I've finished putting the elements where they need to be and having the cards look like how they should look.</p>"
+                },
+                {
+                    "module": "image",
+                    "img": "images/weather-api-image2.jpg",
+                    "caption": "<p class='caption'>Just some basic flex box styling. Using grid could make the layout more dynamic but flex does the job.</p>",
+                    "description": "<p></p>"
+                },
+               {
+                    "module": "image",
+                    "img": "images/weather-api-image5.jpg",
+                    "caption": "<p class='caption'></p>",
+                    "description": "<p>Working out stock Javascript templating is a bit of a chore, but I have fun doing it! I feel like working with APIs is like solving a puzzle. Of course, only one thing needs to go wrong to break the entire template - but when it works - it's so satisfying!</p>"
+                },
+                {
+                    "module": "project-links",
+                    "github": "https://github.com/JoshBenjaminG/pe-projects/tree/master/projects/weatherapi",
+                    "site_link": "https://peprojects.dev/alpha-3/josh/projects/weatherapi/"
+                }
+            ]
+        }
+    },
+    {
+        "heading": "Croatian Coasts",
+        "technologies": "PHP, CSS, HTML",
+        "description": "A PHP themeing project based on designs from a high-end resort chain from Croatia.",
+        "thumbnail": "images/project-image3.jpg",
+        "url": "https://peprojects.dev/alpha-3/josh/projects/layout-theme-challenge/",
+        "slug": "123",
+        "case-study":
+        {
+            "sections":
+            [
+                {
+                    "module": "project-links",
+                    "github": "https://github.com/JoshBenjaminG/Theme-Challenge/tree/main/layout-theme-challenge",
+                    "site_link": "https://peprojects.dev/alpha-3/josh/projects/layout-theme-challenge/"
+                },
+                {
+                    "module": "image",
+                    "img": "images/research-picture.jpg",
+                    "caption": "<p class='caption'>Unslpash has always been a good resource, and is usually where I get images for these projects from.</p>",
+                    "description": "<p>I like to begin the research phase by looking at content choices from free resources like Unslpash.com and websites that are similar to the niche I am looking at. In this image, I have added some images and sections taken from different websites to serve as a folder for inspiration.</p>"
+                },
+                {
+                    "module": "image",
+                    "img": "images/project-image-99.jpg",
+                    "caption": "<p class='caption'>Eric Meyer knows a lot about CSS, and this is a really good reset. You need a good reset to reduce browser inconsistencies. The link to the reset can be found <a href='https://meyerweb.com/eric/tools/css/reset/'>here.</a></p>",
+                    "description": "<p>This is the first mockup where I get a layout in place. I've done several of these as practice. This boilerplate contains the basic file structure as well, such as a css folder that contains typography choices, structure, and a css reset so that there are no default styles. Of course, there is some sort of default so you have to make some choices as to what things should look like. In this case, I am using the Meyer CSS reset.</p>"
+                },
+                {
+                    "module": "image",
+                    "img": "images/style-tilecasestudy1.jpg",
+                    "caption": "<p class='caption'></p>",
+                    "description": "<p>The website layout represents a combination of the content I compiled from Unsplash as well as the inspiration I got from looking at similar sites. I use a simple banner, some call to actions, and an article card grid. Just lists of things arranged in different orders!</p>"
+                },
+                {
+                    "module": "image",
+                    "img": "images/project-image-index.jpg",
+                    "caption": "<p class='caption'>This is just a basic PHP router. Nothing to see here. At this point I've added the module folders that contain the css and html. I'll use these to pull in JSON to populate each module.</p>",
+                    "description": "<p></p>"
+                },
+                {
+                    "module": "image",
+                    "img": "images/project-image-functions.jpg",
+                    "caption": "<p class='caption'>'The important part is that the code works' - Abraham Lincoln</p>",
+                    "description": "<p>When I was done with the basic layout, I added a little bit of CRUD functionality. Does this site really need it? Not really... but I need the PHP practice. This basically allows you to add and remove article cards. Could be a decent basis for a CMS though! But a regular CMS would be better for this type of project, or no CMS at all! It's just a basic landing page, maybe the owner doesn't need to control everything...</p>"
+                },
+                {
+                    "module": "project-links",
+                    "github": "https://github.com/JoshBenjaminG/Theme-Challenge/tree/main/layout-theme-challenge",
+                    "site_link": "https://peprojects.dev/alpha-3/josh/projects/layout-theme-challenge/"
+                }
+            ]
+        }
+    },
+   {
+        "heading": "Responsive Garden",
+        "technologies": "PHP, CSS, HTML",
+        "description": "A series of responsive JSON backed modules to practice mobile-first design using pure PHP.",
+        "thumbnail": "images/projectimage9.png",
+        "url": "https://peprojects.dev/alpha-3/josh/projects/figma/figma-conversion/",
+        "slug": "777",
+        "case-study":
+        {
+            "sections":
+            [
+                {
+                    "module": "project-links",
+                    "github": "https://github.com/JoshBenjaminG/figma/tree/main/figma-conversion",
+                    "site_link": "https://peprojects.dev/alpha-3/josh/projects/figma-conversion/"
+                },
+                {
+                    "module": "image",
+                    "img": "images/figma-image1.jpg",
+                    "caption": "<p class='caption'>An example of three modules that are unique to the first page. This is a living project where new modules can be added as time goes on. I always operate on a mobile-first basis.</p>",
+                    "description": "<p>This collection of responsive modules serves as a place where I can add more as time goes on. Each page has two different versions of the same module - that becomes populated with data that is unique to the pages with styles that are based on the page the module is on.</p>"
+                },
+                {
+                    "module": "image",
+                    "img": "images/figma-image2.jpg",
+                    "caption": "<p class='caption'>This article grid uses the same HTML as page 1's article grid, but has different styles based on the value of the page in JSON.</p>",
+                    "description": "<p></p>"
+                },
+                {
+                    "module": "image",
+                    "img": "images/figma-image3.jpg",
+                    "caption": "<p class='caption'>An example of one such module, with variables linked to JSON at the top. That JSON then populates the module's HTML.</p>",
+                    "description": "<p></p>"
+                },
+                {
+                    "module": "image",
+                    "img": "images/figma-image4.jpg",
+                    "caption": "<p class='caption'>An example of JSON for two modules that populates templates like the one seen above.</p>",
+                    "description": "<p>This project taught me a lot about scope and planning. I learned that I could tie CSS rules to the JSON as well, and that allows me to set unique CSS depending on the page. I used grid extensively on this project and that proved to be extremely useful! Splitting the page into separate modules allowed me to use JSON to give them distinct text and CSS.</p>"
+                },
+                {
+                    "module": "project-links",
+                    "github": "https://github.com/JoshBenjaminG/figma/tree/main/figma-conversion",
+                    "site_link": "https://peprojects.dev/alpha-3/josh/projects/figma-conversion/"
+                }
+            ]
+        }
+    },
+    {
+        "heading": "WordPress Excursion",
+        "technologies": "WordPress, PHP, HTML, CSS",
+        "description": "A guide on starting a WordPress project",
+        "thumbnail": "images/weather-api-image1.jpg",
+        "url": "https://peprojects.dev/alpha-3/josh/projects/weatherapi/",
+        "slug": "098",
+        "case-study":
+        {
+            "sections":
+            [
+                {
+                    "module": "project-links",
+                    "github": "https://github.com/JoshBenjaminG/pe-projects/tree/master/projects/weatherapi",
+                    "site_link": "https://peprojects.dev/alpha-3/josh/projects/wordpress-josh/"
+                },
+               {
+                    "module": "image",
+                    "img": "images/weather-api-image3.jpg",
+                    "caption": "<p class='caption'></p>",
+                    "description": "<p></p>"
+                },
+               {
+                    "module": "image",
+                    "img": "images/weather-api-image4.jpg",
+                    "caption": "<p class='caption'></p>",
+                    "description": "<p></p>"
+                },
+                {
+                    "module": "image",
+                    "img": "images/weather-api-image2.jpg",
+                    "caption": "<p class='caption'></p>",
+                    "description": "<p></p>"
+                },
+               {
+                    "module": "image",
+                    "img": "images/weather-api-image5.jpg",
+                    "caption": "<p class='caption'></p>",
+                    "description": "<p></p>"
+                },
+                {
+                    "module": "project-links",
+                    "github": "https://github.com/JoshBenjaminG/pe-projects/tree/master/projects/weatherapi",
+                    "site_link": "https://peprojects.dev/alpha-3/josh/projects/wordpress-josh/"
+                }
+            ]
+        }
+    }
+]

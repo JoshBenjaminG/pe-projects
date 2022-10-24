@@ -1,0 +1,20 @@
+[
+  {
+    "module": "goal-list",
+    "header": "My goals by the end of this week, month, and year.",
+    "sections": [
+      {
+        "header": "<h2 class='attention-voice'>End of Week Goals</h2>",
+        "content": "<p>Finish my portfolio site and get it prepared for the addition of Javascript where needed.</p><p>Research Craft CMS for the creation of a project that can utlize it.</p><p>Complete the JS dom lesson and the next one after that.</p>"
+      },
+      {
+        "header": "<h2 class='attention-voice'>End of Month Goals</h2>",
+        "content": "<p>Reach out to the top 3 companies on my short list with an application and my completed portfolio.</p><p>Complete a fullstack project that uses JS and a CMS.</p><p>Implement the next version of the design for my portfolio site.</p><p class='calm-voice'>Begin learning a JS framework and build on my portfolio site and CMS project with it.</p>"
+      },
+      {
+        "header": "<h2 class='attention-voice'>End of Year Goals</h2>",
+        "content": "<p>Start my first developer role and learn a lot more about the design and development process.</p><p>Become a CSS and JS wizard.</p><p>Dive into hard DS problems and sail through my algorithms text book.</p>"
+      }
+    ]
+  }
+]
