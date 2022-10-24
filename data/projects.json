@@ -274,53 +274,5 @@
                 }
             ]
         }
-    },
-    {
-        "heading": "WordPress Excursion",
-        "technologies": "WordPress, PHP, HTML, CSS",
-        "description": "A guide on starting a WordPress project",
-        "thumbnail": "images/weather-api-image1.jpg",
-        "url": "https://peprojects.dev/alpha-3/josh/projects/weatherapi/",
-        "slug": "098",
-        "case-study":
-        {
-            "sections":
-            [
-                {
-                    "module": "project-links",
-                    "github": "https://github.com/JoshBenjaminG/pe-projects/tree/master/projects/weatherapi",
-                    "site_link": "https://peprojects.dev/alpha-3/josh/projects/wordpress-josh/"
-                },
-               {
-                    "module": "image",
-                    "img": "images/weather-api-image3.jpg",
-                    "caption": "<p class='caption'></p>",
-                    "description": "<p></p>"
-                },
-               {
-                    "module": "image",
-                    "img": "images/weather-api-image4.jpg",
-                    "caption": "<p class='caption'></p>",
-                    "description": "<p></p>"
-                },
-                {
-                    "module": "image",
-                    "img": "images/weather-api-image2.jpg",
-                    "caption": "<p class='caption'></p>",
-                    "description": "<p></p>"
-                },
-               {
-                    "module": "image",
-                    "img": "images/weather-api-image5.jpg",
-                    "caption": "<p class='caption'></p>",
-                    "description": "<p></p>"
-                },
-                {
-                    "module": "project-links",
-                    "github": "https://github.com/JoshBenjaminG/pe-projects/tree/master/projects/weatherapi",
-                    "site_link": "https://peprojects.dev/alpha-3/josh/projects/wordpress-josh/"
-                }
-            ]
-        }
     }
 ]
