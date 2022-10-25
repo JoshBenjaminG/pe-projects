@@ -34,7 +34,7 @@ projects-intro header h2 {
   }
 }
 
-@media(min-width: 1000px){
+@media(min-width: 1100px){
   projects-intro project-grid {
     grid-template-columns: 1fr 1fr 1fr;
   }
