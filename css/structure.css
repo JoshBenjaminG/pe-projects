@@ -24,3 +24,11 @@ inner-column {
 		max-width: 1400px;
 	}
 }
+
+.wp-block-group {
+	display:  block;
+	max-width: 1100px; /* could be a variable in settings */
+	margin-right: auto;
+	margin-left: auto;
+	padding: 45px 15px; /* a default */
+}
