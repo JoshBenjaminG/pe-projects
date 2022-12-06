@@ -1,0 +1,49 @@
+.card-wrapper {
+  display: grid;
+  grid-template-columns: 1fr;
+  justify-content: center;
+  gap: 20px 20px;
+}
+
+picture {
+  display: block;
+}
+
+img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+
+  background-color: dodgerblue;
+  width: 100%;
+  justify-self: center;
+}
+
+.card .card-text-wrapper, a {
+  padding: 10px;
+}
+
+.card-text-wrapper {
+  flex: 1;
+}
+
+.card a {
+margin-top: auto;
+}
+
+@media (min-width: 600px) {
+  .card-wrapper {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (min-width: 900px) {
+  .card-wrapper {
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+}
