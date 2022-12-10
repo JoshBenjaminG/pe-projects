@@ -1,0 +1,33 @@
+picture {
+    display: block;
+}
+
+img {
+    display: block;
+    width: 100%;
+    height: auto;
+}
+
+section {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 10px;
+}
+
+
+
+.card {
+  /* PARENT ELEMENT */
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+
+
+a {
+    margin-top: auto
+}
+
+
+
