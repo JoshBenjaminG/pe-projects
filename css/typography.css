@@ -55,3 +55,8 @@ h2 {
 span {
   color: #f43c3c;
 }
+
+.form-message {
+	font-size: 35px;
+	color: green;
+}

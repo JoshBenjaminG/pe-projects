@@ -16,7 +16,7 @@ if(isset($_POST['submit'])) {
 	}
     if ($message) {
     	mail($to, $subject, $message);
-    	$message = "Message sent successfully!";
+    	$message = "<div class='form-message'>Message sent successfully!</div>";
     } else {
     	$message = "<div>There was an error.</div>";
     }
