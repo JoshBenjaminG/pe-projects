@@ -16,8 +16,9 @@ if(isset($_POST['submit'])) {
 	}
     if ($message) {
     	mail($to, $subject, $message);
+    	$message = "Message sent successfully!";
     } else {
-    	$error_message = "<div>There was an error.</div>";
+    	$message = "<div>There was an error.</div>";
     }
 }
 
@@ -33,7 +34,7 @@ if(isset($_POST['submit'])) {
 			<h2 class="loud-voice">Let's talk!</h2>
 			<p>Interesting in working with me? Let's get in touch.</p>
 
-			<?=$error_message?>
+			<?=$message?>
 			<form action="" method="post">
 
 				<input type="text" name="name" placeholder="Name"><br>
