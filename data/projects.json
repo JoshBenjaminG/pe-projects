@@ -1,5 +1,55 @@
 [
     {
+        "heading": "Promotional Email Template",
+        "technologies": "PHP, CSS, HTML",
+        "description": "A research project that implemented design principles found among fashion websites.",
+        "thumbnail": "images/promoemail.jpg",
+        "url": "https://peprojects.dev/alpha-3/josh/projects/riche-fashion/",
+        "slug": "369",
+        "case-study":
+        {
+            "sections":
+            [
+                {
+                    "module": "project-links",
+                    "github": "https://github.com/JoshBenjaminG/pe-projects/tree/master/projects/promotional%20email",
+                    "site_link": "https://peprojects.dev/alpha-3/josh/projects/promotional%20email/"
+                },
+                {
+                    "module": "image",
+                    "img": "images/promoemail.jpg",
+                    "caption": "<p class='caption'>Check out the live link or the source code to see more!</p>",
+                    "description": ""
+                }
+            ]
+        }
+    },
+    {
+        "heading": "Newsletter Email Template",
+        "technologies": "PHP, CSS, HTML",
+        "description": "A research project that implemented design principles found among fashion websites.",
+        "thumbnail": "images/newsemail.jpg",
+        "url": "https://peprojects.dev/alpha-3/josh/projects/riche-fashion/",
+        "slug": "231",
+        "case-study":
+        {
+            "sections":
+            [
+                {
+                    "module": "project-links",
+                    "github": "https://github.com/JoshBenjaminG/pe-projects/tree/master/projects/newsletteremail",
+                    "site_link": "https://peprojects.dev/alpha-3/josh/projects/newsletteremail/"
+                },
+                {
+                    "module": "image",
+                    "img": "images/newsemail.jpg",
+                    "caption": "<p class='caption'>Check out the live link or the source code to see more!</p>",
+                    "description": ""
+                }
+            ]
+        }
+    },
+    {
         "heading": "Riche Fashion",
         "technologies": "PHP, CSS, HTML",
         "description": "A research project that implemented design principles found among fashion websites.",
