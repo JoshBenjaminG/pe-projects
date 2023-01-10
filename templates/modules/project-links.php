@@ -11,9 +11,9 @@
 <generic-text>
 
 	<nav class="project-links">
-		<a href="<?=$github?>" target='_blank' class="hover-underline-animation">Github</a>
+		<a href="<?=$github?>" target='_blank'>Github</a>
 		<?php if(isset( $section["site_link"])) { ?>
-			<a href='<?=$site_link?>' target='_blank' class="hover-underline-animation">Live Site</a>
+			<a href='<?=$site_link?>' target='_blank'>Live Demo</a>
 		<?php } ?>
 	</nav>
 

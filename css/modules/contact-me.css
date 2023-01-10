@@ -47,9 +47,7 @@ contact-me form {
 }
 
 contact-me {
-  opacity: 0;
-  animation: upFadeIn 0.5s forwards ease-in-out;
-  animation-delay: 1.5s;
+
 }
 
 contact-me div {

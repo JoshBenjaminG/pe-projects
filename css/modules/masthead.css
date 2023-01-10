@@ -6,9 +6,7 @@ mast-head {
 }
 
 .mast-head-animation {
-  opacity: 0;
-  animation: upFadeIn 0.3s forwards ease-in-out;
-  animation-delay: 0.2s;
+
 }
 
 

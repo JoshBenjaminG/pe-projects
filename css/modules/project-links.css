@@ -8,7 +8,13 @@
 .project-links a {
 	margin-right: 10px;
 	margin-bottom: 10px;
-	color: black;
+	background-color: #f65752;
+	padding: 7px 25px 7px 25px;
+	border-radius: 10px;
 	font-size: 1.5em;
-	color: #f43c3c;
+	color: white;
+}
+
+.project-links a:hover {
+	opacity: 0.9;
 }
