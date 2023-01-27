@@ -1,0 +1,97 @@
+@import 'meyer-reset.css';
+
+body {
+	display: flex;
+	flex-direction: column;
+	min-height: 100vh; /* for the footer */
+} 
+
+/* explained here: https://philipwalton.github.io/solved-by-flexbox/demos/sticky-footer */
+
+main {
+	flex-grow:  1; /* push the footer down */
+}
+
+inner-column {
+	display:  block;
+	max-width: 1000px; /* could be a variable in settings */
+	margin-right: auto;
+	margin-left: auto;
+	padding: 45px 0;
+}
+
+section {
+	margin-bottom: 100px;
+}
+
+.logo {
+	width: 150px;
+}
+
+p,h1,h2,a {
+	font-family: sans-serif;
+}
+
+p {
+	line-height: 1.5;
+}
+
+h1 span {
+	color: #f34f51;
+}
+
+.calm-voice {
+
+}
+
+.loud-voice {
+
+}
+
+.attention-voice {
+	font-size: 35px;
+	font-weight: bold;
+}
+
+.button {
+	display: inline-block;
+	background-color: #f34f51;
+	color: white;
+	padding: 17px 85px;
+	text-decoration: none;
+	border-radius: 10px;
+}
+
+.landing {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: 50px;
+}
+
+.landing-img {
+	border-radius: 10px;
+	width: 100%;
+}
+
+text-content h1, p {
+	margin-bottom: 20px;
+}
+
+.info h1 {
+	text-align: center;
+}
+
+.info-card-grid {
+	display: grid;
+	grid-template-columns: 1fr 1fr 1fr 1fr;
+}
+
+.info-card {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+
+.info-card img {
+	width: 70px;
+}
