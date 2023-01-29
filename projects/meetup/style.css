@@ -143,6 +143,49 @@ blog-card text-content h4 {
 	font-weight: bold;
 }
 
+.blog-center {
+	text-align: center;
+	margin-top: 60px;
+}
+
+.cta {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+}
+
+.cta img {
+	width: 100px;
+}
+
+footer {
+	background-color: #212121;
+	min-height: 20vh;
+	color: white;
+}
+
+footer inner-column {
+	display: grid;
+	grid-template-columns: 1fr 1fr 1fr;
+	gap: 30px;
+}
+
+.footer1 {
+	display: flex;
+	flex-direction: column;
+}
+
+.footer1 div {
+	flex-direction: row;
+}
+
+.footer2, .footer3 {
+	display: flex;
+	flex-direction: column;
+}
+
+.footer2 {
+	
+}
 
 
 
