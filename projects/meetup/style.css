@@ -20,15 +20,23 @@ inner-column {
 	padding: 45px 0;
 }
 
+outer-column {
+	display:  block;
+	max-width: 1200px; /* could be a variable in settings */
+	margin-right: auto;
+	margin-left: auto;
+	padding: 45px 0;
+}
+
 section {
-	margin-bottom: 100px;
+	margin-bottom: 50px;
 }
 
 .logo {
 	width: 150px;
 }
 
-p,h1,h2,a {
+p,h1,h2,a,h4 {
 	font-family: sans-serif;
 }
 
@@ -73,12 +81,13 @@ h1 span {
 	width: 100%;
 }
 
-text-content h1, p {
+.landing text-content h1, .landing text-content p {
 	margin-bottom: 20px;
 }
 
 .info h1 {
 	text-align: center;
+	margin-bottom: 30px;
 }
 
 .info-card-grid {
@@ -90,8 +99,50 @@ text-content h1, p {
 	display: flex;
 	flex-direction: column;
 	align-items: center;
+	margin: 0 20px;
 }
 
 .info-card img {
 	width: 70px;
 }
+
+.blog-background {
+	background-color: #eeeeee;
+}
+
+.blog h1 {
+	text-align: center;
+}
+
+.blog .header-p {
+	text-align: center;
+}
+
+.blog-grid {
+	display: grid;
+	grid-template-columns: 1fr 1fr 1fr 1fr;
+	gap: 20px;
+}
+
+blog-card {
+	display: block;
+	background-color: white;
+}
+
+blog-card img {
+	width: 100%;
+}
+
+blog-card text-content{
+	display: block;
+	padding: 20px;
+	height: 200px;
+}
+
+blog-card text-content h4 {
+	font-weight: bold;
+}
+
+
+
+
