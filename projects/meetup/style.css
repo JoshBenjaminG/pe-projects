@@ -77,13 +77,38 @@ h1 span {
 
 .landing {
 	display: grid;
-	grid-template-columns: 1fr 1fr;
+	grid-template-columns: 1fr;
 	gap: 50px;
+}
+
+.landing text-content {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+
+.landing text-content h1,p {
+	text-align: center;
+}
+
+@media(min-width: 900px) {
+	.landing {
+		grid-template-columns: 1fr 1fr;
+	}
+	.landing text-content {
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+}
+	.landing text-content h1,p {
+		text-align: left;
+	}
 }
 
 .landing-img {
 	border-radius: 10px;
-	width: 100%;
+	width: clamp(300px, 400px, 500px);
+	margin: auto;
 }
 
 .landing text-content h1, .landing text-content p {
@@ -97,14 +122,21 @@ h1 span {
 
 .info-card-grid {
 	display: grid;
-	grid-template-columns: 1fr 1fr 1fr 1fr;
+	grid-template-columns: 1fr;
+}
+
+@media(min-width: 900px) {
+	.info-card-grid {
+		grid-template-columns: 1fr 1fr 1fr 1fr;
+	}
 }
 
 .info-card {
 	display: flex;
 	flex-direction: column;
 	align-items: center;
-	margin: 0 20px;
+	margin-bottom: 50px;
+	margin-left: 20px;
 }
 
 .info-card img {
@@ -121,6 +153,7 @@ h1 span {
 	font-weight: 300;
 	font-size: 13px;
 	margin-bottom: 20px;
+	max-width: 50ch;
 }
 
 .info-card a {
