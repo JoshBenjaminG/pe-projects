@@ -30,7 +30,7 @@ outer-column {
 }
 
 section {
-	margin-bottom: 50px;
+
 }
 
 .logo {
@@ -100,7 +100,7 @@ h1 span {
 	flex-direction: column;
 	align-items: flex-start;
 }
-	.landing text-content h1,p {
+	.landing text-content h1, .landing text-content p {
 		text-align: left;
 	}
 }
@@ -235,12 +235,25 @@ blog-card text-content p {
 }
 
 .cta {
-	display: grid;
-	grid-template-columns: 1fr 1fr;
+	display: flex;
+	flex-direction: column;
+	text-align: center;
 }
 
 .cta img {
 	width: 100px;
+}
+
+.cta text-content {
+	margin: 40px;
+}
+
+.cta text-content h1 {
+	margin-bottom: 20px;
+}
+
+.cta text-content p {
+	margin-bottom: 20px;
 }
 
 footer {
@@ -255,9 +268,38 @@ footer inner-column {
 	gap: 30px;
 }
 
+a {
+	color: white;
+	text-decoration: none;
+}
+
+footer a {
+	margin: 10px 0;
+}
+
+footer inner-column {
+	display: flex;
+	flex-direction: column;
+}
+
+@media(min-width: 700px) {
+	footer inner-column {
+		flex-direction: row;
+	}
+	.footer2 {
+	border-right: 1px solid white;
+	padding-right: 20px;
+	margin-left: 30px;
+}
+}
+
 .footer1 {
 	display: flex;
 	flex-direction: column;
+}
+
+.footer1 h4 {
+	margin-bottom: 10px;
 }
 
 .footer1 div {
@@ -269,9 +311,7 @@ footer inner-column {
 	flex-direction: column;
 }
 
-.footer2 {
-	border-right: 1px solid white;
-}
+
 
 .footer1 div a {
 	color: #f34f51;
