@@ -1,4 +1,5 @@
 @import 'meyer-reset.css';
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;700&display=swap');
 
 body {
 	display: flex;
@@ -17,7 +18,7 @@ inner-column {
 	max-width: 1000px; /* could be a variable in settings */
 	margin-right: auto;
 	margin-left: auto;
-	padding: 45px 0;
+	padding: 45px 20px;
 }
 
 outer-column {
@@ -25,7 +26,7 @@ outer-column {
 	max-width: 1200px; /* could be a variable in settings */
 	margin-right: auto;
 	margin-left: auto;
-	padding: 45px 0;
+	padding: 45px 20px;
 }
 
 section {
@@ -37,7 +38,7 @@ section {
 }
 
 p,h1,h2,a,h4 {
-	font-family: sans-serif;
+	font-family: 'Open Sans', sans-serif;	
 }
 
 p {
@@ -50,6 +51,10 @@ h1 span {
 
 .calm-voice {
 
+}
+
+.medium-voice {
+	font-weight: 700;
 }
 
 .loud-voice {
@@ -87,7 +92,7 @@ h1 span {
 
 .info h1 {
 	text-align: center;
-	margin-bottom: 30px;
+	margin-bottom: 40px;
 }
 
 .info-card-grid {
@@ -104,6 +109,26 @@ h1 span {
 
 .info-card img {
 	width: 70px;
+	margin-bottom: 10px;
+}
+
+.info-card h4 {
+	margin-bottom: 10px;
+}
+
+.info-card p {
+	text-align: center;
+	font-weight: 300;
+	font-size: 13px;
+	margin-bottom: 20px;
+}
+
+.info-card a {
+	text-decoration: none;
+	color: #f34f51;
+	font-weight: 700;
+	font-size: 12px;
+	margin-top: auto;
 }
 
 .blog-background {
@@ -139,13 +164,14 @@ blog-card text-content{
 	height: 200px;
 }
 
-blog-card text-content h4 {
-	font-weight: bold;
-}
-
 .blog-center {
 	text-align: center;
 	margin-top: 60px;
+}
+
+.blog-background iframe {
+	width: 90%;
+	height: 500px;
 }
 
 .cta {
@@ -184,7 +210,11 @@ footer inner-column {
 }
 
 .footer2 {
-	
+	border-right: 1px solid white;
+}
+
+.footer1 div a {
+	color: #f34f51;
 }
 
 
