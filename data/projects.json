@@ -4,7 +4,10 @@
         "technologies": "HTML, CSS",
         "description": "A mockup for an email template of a hotel chain.",
         "thumbnail": "images/promoemail.jpg",
-        "url": "https://peprojects.dev/alpha-3/josh/projects/riche-fashion/",
+        "url": "https://peprojects.dev/alpha-3/josh/projects/promotional%20email/",
+        "hasCaseStudy": false,
+        "hasRepo" : true,
+        "gitrepo": "https://github.com/JoshBenjaminG/pe-projects/tree/master/projects/promotional%20email",
         "slug": "369",
         "case-study":
         {
@@ -29,7 +32,38 @@
         "technologies": "HTML, CSS",
         "description": "A newsletter template for a favorite company of mine.",
         "thumbnail": "images/newsemail.jpg",
-        "url": "https://peprojects.dev/alpha-3/josh/projects/riche-fashion/",
+        "url": "https://peprojects.dev/alpha-3/josh/projects/newsletteremail/",
+        "hasCaseStudy": false,
+        "hasRepo" : true,
+        "gitrepo": "https://github.com/JoshBenjaminG/pe-projects/tree/master/projects/newsletteremail",
+        "slug": "231",
+        "case-study":
+        {
+            "sections":
+            [
+                {
+                    "module": "project-links",
+                    "github": "https://github.com/JoshBenjaminG/pe-projects/tree/master/projects/newsletteremail",
+                    "site_link": "https://peprojects.dev/alpha-3/josh/projects/newsletteremail/"
+                },
+                {
+                    "module": "image",
+                    "img": "images/newsemail.jpg",
+                    "caption": "<p class='caption'>Check out the live link or the source code to see more!</p>",
+                    "description": ""
+                }
+            ]
+        }
+    },
+    {
+        "heading": "Meetup.com",
+        "technologies": "HTML, CSS",
+        "description": "A landing page for Meetup, a site that has proven invaluable during the change to remote community organization.",
+        "thumbnail": "images/meetup.jpg",
+        "url": "https://peprojects.dev/alpha-3/josh/projects/meetup/",
+        "hasCaseStudy": false,
+        "hasRepo" : true,
+        "gitrepo": "https://github.com/JoshBenjaminG/pe-projects/tree/master/projects/meetup",
         "slug": "231",
         "case-study":
         {
@@ -55,6 +89,9 @@
         "description": "A research project that implemented design principles found among fashion websites.",
         "thumbnail": "images/project-image2.jpg",
         "url": "https://peprojects.dev/alpha-3/josh/projects/riche-fashion/",
+        "hasCaseStudy": true,
+        "hasRepo" : false,
+        "gitrepo": "https://github.com/JoshBenjaminG/pe-projects/tree/master/projects/promotional%20email",
         "slug": "345",
         "case-study":
         {
@@ -109,6 +146,9 @@
         "description": "A case study of how the sausage is made - over 5 iterations and one year. A ton of JSON-backed, Modular PHP components, stacked on top of each other!",
         "thumbnail": "images/portfolio-image1.jpg",
         "url": "https://peprojects.dev/alpha-3/josh/",
+        "hasCaseStudy": true,
+        "hasRepo" : false,
+        "gitrepo": "https://github.com/JoshBenjaminG/pe-projects/tree/master/projects/promotional%20email",
         "slug": "10",
         "case-study":
         {
@@ -181,6 +221,9 @@
         "description": "A forray into implementing an API using Javascript. This was both fun and useful!",
         "thumbnail": "images/weather-api-image1.jpg",
         "url": "https://peprojects.dev/alpha-3/josh/projects/weatherapi/",
+        "hasCaseStudy": true,
+        "hasRepo" : false,
+        "gitrepo": "https://github.com/JoshBenjaminG/pe-projects/tree/master/projects/promotional%20email",
         "slug": "098",
         "case-study":
         {
@@ -228,7 +271,10 @@
         "technologies": "PHP, CSS, HTML",
         "description": "A series of responsive JSON backed modules to practice mobile-first design using pure PHP.",
         "thumbnail": "images/projectimage9.png",
-        "url": "https://peprojects.dev/alpha-3/josh/projects/figma/figma-conversion/",
+        "url": "https://peprojects.dev/alpha-3/josh/projects/figma-conversion/",
+        "hasCaseStudy": true,
+        "hasRepo" : false,
+        "gitrepo": "https://github.com/JoshBenjaminG/pe-projects/tree/master/projects/promotional%20email",
         "slug": "777",
         "case-study":
         {
