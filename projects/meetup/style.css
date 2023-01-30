@@ -87,7 +87,7 @@ h1 span {
 	align-items: center;
 }
 
-.landing text-content h1,p {
+.landing text-content h1, .landing text-content p {
 	text-align: center;
 }
 
@@ -170,21 +170,40 @@ h1 span {
 
 .blog h1 {
 	text-align: center;
+	margin-bottom: 30px;
 }
 
 .blog .header-p {
 	text-align: center;
+	margin-bottom: 40px;
+	max-width: 80ch;
+	margin-left: auto;
+	margin-right: auto;
 }
 
 .blog-grid {
 	display: grid;
-	grid-template-columns: 1fr 1fr 1fr 1fr;
-	gap: 20px;
+	grid-template-columns: 1fr;
+}
+
+@media(min-width: 600px) {
+	.blog-grid {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+	}
+}
+
+@media(min-width: 900px) {
+	.blog-grid {
+		display: grid;
+		grid-template-columns: 1fr 1fr 1fr 1fr;
+	}
 }
 
 blog-card {
 	display: block;
 	background-color: white;
+	margin: 20px;
 }
 
 blog-card img {
@@ -195,6 +214,14 @@ blog-card text-content{
 	display: block;
 	padding: 20px;
 	height: 200px;
+}
+
+blog-card text-content h4 {
+	margin-bottom: 25px;
+}
+
+blog-card text-content p {
+	font-size: 80%;
 }
 
 .blog-center {
