@@ -105,9 +105,15 @@ h1 span {
 	}
 }
 
+@media(min-width:600px) {
+	.landing .landing-img {
+		width: clamp(300px, 400px, 500px);
+	}
+}
+
 .landing-img {
 	border-radius: 10px;
-	width: clamp(300px, 400px, 500px);
+	width: clamp(250px, 300px, 500px);
 	margin: auto;
 }
 
