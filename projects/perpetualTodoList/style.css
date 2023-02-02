@@ -1,0 +1,12 @@
+body {
+	background-color: beige;
+	display: flex;
+	align-items: center;
+	justify-content: center;	
+	height: 80vh;
+}
+
+body p {
+	font-family: sans-serif;
+	font-size: 50px;
+}
