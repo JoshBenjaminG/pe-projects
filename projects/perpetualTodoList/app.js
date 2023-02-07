@@ -1,34 +1,77 @@
-const todoApp = {
-	todos: [],
-	count: 0,
+var todos = [];
+var count = 0;
 
-	print(note = "") {
-		console.log(`---${note}`);
-		console.log("todos: ", this.todos);
-	},
+const $form = document.querySelector('form');
+const $input = document.querySelector('input');
+var $output = document.querySelector('output');
 
-	add(content) {
-		const todo = {
-			id: this.count++,
-			content: content,
-		};
-		this.todos = [...this.todos, todo];
-		this.print(`added ${content}`);
-	},
 
-	remove(id) {
-		this.todos.splice(id, 1);
-		this.print(`removed ${this.todos[id].content}`);
-	},
-
-	update(id, newText) {
-		this.todos[id].content = newText;
-		this.print(`updated to ${newText}`);
-	},
+function add(content) {
+	const todo = {
+		id: `a-${count++}`,
+		content: content,
+		complete: false,
+	};
+	todos = [...todos, todo];
+	renderTodos(todos);
 }
 
-todoApp.add("first one");
-todoApp.add("second one");
-todoApp.add("third one");
-todoApp.update(0, "new one");
-todoApp.remove(1);
+function remove(id) {
+	const filtered = todos.filter (function(todo) {
+		return todo.id != id;
+	});
+
+	todos = [...filtered];
+}
+
+function complete(id) {
+	for (let i = 0; i < todos.length; i++) {
+		if (todos[i].id == id) {
+			todos[i].complete = true;
+		}
+	}
+}
+
+function renderTodo(todo) {
+	return `
+		<li data-id=${todo.id}>
+			<card>
+			<h2>${todo.content}</h2>
+
+			<actions>
+				<button>remove</button>
+			</actions>
+
+			</card>
+		</li>
+	`;
+}
+
+function renderTodos(todos) {
+	var template = "<ul>";
+	todos.forEach (function(todo) {
+		template += renderTodo(todo);
+	});
+	template += "</ul>";
+	$output.innerHTML = template;
+}
+
+$form.addEventListener('submit', function(event) {
+	event.preventDefault();
+	add($input.value);
+	$input.value = "";
+
+	console.log(todos);
+});
+
+$output.addEventListener('click', function(event) {
+	if (event.target.textContent == 'remove') {
+		console.log(event.target.textContent);
+	}
+});
+
+
+
+
+
+
