@@ -22,6 +22,7 @@ function remove(id) {
 	});
 
 	todos = [...filtered];
+	renderTodos(todos);
 }
 
 function complete(id) {
@@ -30,6 +31,7 @@ function complete(id) {
 			todos[i].complete = true;
 		}
 	}
+	renderTodos(todos);
 }
 
 function renderTodo(todo) {
@@ -64,9 +66,10 @@ $form.addEventListener('submit', function(event) {
 	console.log(todos);
 });
 
-$output.addEventListener('click', function(event) {
+$output.addEventListener('click', function(event) {	
 	if (event.target.textContent == 'remove') {
-		console.log(event.target.textContent);
+		const id = event.target.closest('li').dataset.id;
+		remove(id);
 	}
 });
 

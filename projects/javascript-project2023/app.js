@@ -1,4 +1,4 @@
-var todos = [];
+var reviews = [];
 var count = 0;
 
 const $output = document.querySelector('output');
@@ -6,39 +6,41 @@ const $one = document.querySelector('#one');
 const $two = document.querySelector('#two');
 const $dombody = document.querySelector('dombody');
 
-function add(content) {
-	const todo = {
+function add(name, description) {
+	const review = {
 		id: `a-${count++}`,
-		content: content,
+		name: name,
+		description: description,
 		complete: false,
 	};
-	todos = [...todos, todo];
-	renderTodos(todos);
+	reviews = [...reviews, review];
+	renderReviews(reviews);
 }
 
 function remove(id) {
-	const filtered = todos.filter (function(todo) {
-		return todo.id != id;
+	const filtered = reviews.filter (function(review) {
+		return review.id != id;
 	});
 
-	todos = [...filtered];
-	renderTodos(todos);
+	reviews = [...filtered];
+	renderReviews(reviews);
 }
 
 function complete(id) {
-	for (let i = 0; i < todos.length; i++) {
-		if (todos[i].id == id) {
-			todos[i].complete = true;
+	for (let i = 0; i < reviews.length; i++) {
+		if (reviews[i].id == id) {
+			reviews[i].complete = true;
 		}
 	}
-	renderTodos(todos);
+	renderReviews(reviews);
 }
 
-function renderTodo(todo) {
+function renderReview(review) {
 	return `
-		<li data-id=${todo.id}>
+		<li data-id=${review.id}>
 			<card>
-			<h2>${todo.content}</h2>
+			<h2>${review.name}</h2>
+			<p>${review.description}</p>
 
 			<actions>
 				<button>remove</button>
@@ -49,10 +51,10 @@ function renderTodo(todo) {
 	`;
 }
 
-function renderTodos(todos) {
+function renderReviews(reviews) {
 	var template = "<ul>";
-	todos.forEach (function(todo) {
-		template += renderTodo(todo);
+	reviews.forEach (function(review) {
+		template += renderReview(review);
 	});
 	template += "</ul>";
 	$dombody.innerHTML = template;
@@ -70,8 +72,9 @@ $one.addEventListener('click', function(event){
 	template = 
 	`<form action="">
 		<field>
-			<label>Enter a Todo Below</label>
-			<input>
+			<label>Enter a review below</label>
+			<input placeholder="Resaurant name" id="name">
+			<input placeholder="Review..." id="review">
 		</field>
 
 		<button type="submit">Add</button>
@@ -79,17 +82,21 @@ $one.addEventListener('click', function(event){
 	;
 	$output.innerHTML = template;
 	const $form = document.querySelector('form');
-	const $input = document.querySelector('input');
+	const $name = document.querySelector('#name');name
+	const $description = document.querySelector('#review');
+	renderReviews(reviews);
 	$form.addEventListener('submit', function(event) {
 		event.preventDefault();
-		add($input.value);
-		$input.value = "";
+		add($name.value, $description.value);
+		$name.value = "";
+		$description.value = "";
 });
 });
 
 $two.addEventListener('click', function(event){
 	event.preventDefault();
-	template = "hello two";
+	template = "Restaurant list";
 	$output.innerHTML = template;
+	$dombody.innerHTML = "";
 });
 
