@@ -1,10 +1,20 @@
 import templates from './templates.js';
 
+var reviews = [];
 var count = 0;
 
 function renderPage(page) {
 	console.log(page);
 	document.querySelector('output').innerHTML = templates[page];
+}
+
+function test(name, place) {
+	const review = {
+		name: name,
+	};
+	reviews = [...reviews, review];
+	console.log(reviews);
+	renderReviews(reviews, place)
 }
 
 function add(name, description, place) {
@@ -17,13 +27,13 @@ function add(name, description, place) {
 	renderReviews(reviews, place);
 }
 
-function remove(id) {
+function remove(id, place) {
 	const filtered = reviews.filter (function(review) {
 		return review.id != id;
 	});
 
 	reviews = [...filtered];
-	renderReviews(reviews);
+	renderReviews(reviews, place);
 }
 
 function renderReview(review) {
@@ -34,7 +44,7 @@ function renderReview(review) {
 			<p>${review.description}</p>
 
 			<actions>
-				<button>remove</button>
+				<button class="remove">remove</button>
 			</actions>
 
 			</card>
@@ -56,5 +66,6 @@ export {
 	remove,
 	renderReview,
 	renderReviews,
-	renderPage
+	renderPage,
+	test
 }

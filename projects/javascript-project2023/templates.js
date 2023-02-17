@@ -8,7 +8,7 @@ templates.reviews =
 			<input placeholder="Review..." id="review">
 		</field>
 
-		<button type="submit">Add</button>
+		<button type="submit" class="add">Add</button>
 	</form>`
 	;
 
