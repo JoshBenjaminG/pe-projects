@@ -7,16 +7,29 @@ import templates from './templates.js';
 // 	var reviews = [];
 // }
 // }
-var count = 0;
 
 
 //fetch local storage
 //if no local storage, initialize nothing
 //print it
 
+var seedData = [
+		{
+			id: "12341234",
+			name: "mellow",
+			description: "good pizza"
+		},
+		{
+			id: "6234624362",
+			name: "KFC",
+			description: "good chicken"
+		},
+	]
+
 function initialize() {
 	if (!localStorage.getItem("reviews")) {
-		localStorage.setItem("reviews", JSON.stringify([]));
+		console.log(seedData);
+		localStorage.setItem("reviews", JSON.stringify(seedData));
 	}
 }
 initialize();
@@ -34,25 +47,24 @@ function setData(keyNameString, value) {
 	return localStorage.setItem(keyNameString, JSON.stringify(value) );
 }
 
-function add(name, description, place) {
+function add(name, description, type, place) { 
 	var reviews = getData("reviews");
 	console.log(reviews);
 	const review = {
-		id: `a-${count++}`,
+		id: Date.now(),
 		name: name,
-		description: description,
+		description: description
 	};
 	reviews.push(review);
 	setData("reviews", reviews);
 	renderReviews();
 }
 
-function remove(id, place) {
-	const filtered = reviews.filter (function(review) {
+function remove(id) {
+	const filtered = getData("reviews").filter(function(review) {
 		return review.id != id;
 	});
-
-	reviews = [...filtered];
+	setData("reviews", filtered);
 	renderReviews();
 }
 
@@ -72,13 +84,16 @@ function renderReview(review) {
 	`;
 }
 
-function renderReviews() {
+function renderReviews(filter = null) {
 	var template = "<ul>";
-	getData("reviews").forEach (function(review) {
+	if (!filter) {
+		filter = getData("reviews");
+	}
+	filter.forEach (function(review) {
 		template += renderReview(review);
 	});
 	template += "</ul>";
-	document.querySelector("dombody").innerHTML = template;
+	document.querySelector("outlet").innerHTML = template;
 }
 
 export {
@@ -86,5 +101,6 @@ export {
 	remove,
 	renderReview,
 	renderReviews,
-	renderPage
+	renderPage,
+	getData
 }

@@ -6,3 +6,7 @@ dombody {
 	display: block;
 	border: 1px solid red;
 }
+
+#filter {
+	min-width: 250px;
+}

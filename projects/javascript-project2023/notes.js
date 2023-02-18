@@ -33,3 +33,14 @@ $list.addEventListener('click', function(event){
 	$output.innerHTML = template;
 	renderRestraunts(reviews);
 });
+
+const filtered = getData("reviews").filter((review) => review.id != id);
+
+function renderReviews(filter = null) {
+	var template = "<ul>";
+	getData("reviews").forEach (function(review) {
+		template += renderReview(review);
+	});
+	template += "</ul>";
+	document.querySelector("outlet").innerHTML = template;
+}

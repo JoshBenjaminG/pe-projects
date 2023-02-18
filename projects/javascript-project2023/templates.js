@@ -1,7 +1,7 @@
 var templates = {};
 
-templates.reviews = 
-	`<form>
+templates.reviews = `
+		<form>
 		<field>
 			<label>Enter a review below</label>
 			<input placeholder="Resaurant name" id="name">
@@ -11,18 +11,18 @@ templates.reviews =
 		<button type="submit" class="add">Add</button>
 	</form>
 	<form>
-		<label>Filter resaurants by type of food</label>
-		<input id="filter">
+		<input id="filter" placeholder="Filter resaurants by type of food">
 	</form>
+	<outlet></outlet>
 	`
 	;
 
-templates.home = 
-	`<div>homepage page</div>`
+templates.home = `
+	<div>homepage page</div>`
 	;
 
-templates.list = 
-	`<div>list page</div>`
+templates.list = `
+	<div>list page</div>`
 	;
 
 export default templates;
