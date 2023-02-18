@@ -9,7 +9,12 @@ templates.reviews =
 		</field>
 
 		<button type="submit" class="add">Add</button>
-	</form>`
+	</form>
+	<form>
+		<label>Filter resaurants by type of food</label>
+		<input id="filter">
+	</form>
+	`
 	;
 
 templates.home = 

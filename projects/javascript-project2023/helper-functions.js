@@ -1,33 +1,50 @@
 import templates from './templates.js';
 
-var reviews = [];
+// function initialize() {
+// 	if (localStorage) {
+// 	var reviews = data.getItem('reviews');
+// } else {
+// 	var reviews = [];
+// }
+// }
 var count = 0;
+
+
+//fetch local storage
+//if no local storage, initialize nothing
+//print it
+
+function initialize() {
+	if (!localStorage.getItem("reviews")) {
+		localStorage.setItem("reviews", JSON.stringify([]));
+	}
+}
+initialize();
 
 function renderPage(page) {
 	console.log(page);
 	document.querySelector('output').innerHTML = templates[page];
 }
 
-function test(name, place) {
-	const review = {
-		name: name,
-	};
-	reviews = [...reviews, review];
-	console.log(reviews);
-	renderReviews(reviews, place)
+function getData(keyNameString) {
+	return JSON.parse(localStorage.getItem(keyNameString) );
+}
+
+function setData(keyNameString, value) {
+	return localStorage.setItem(keyNameString, JSON.stringify(value) );
 }
 
 function add(name, description, place) {
+	var reviews = getData("reviews");
+	console.log(reviews);
 	const review = {
 		id: `a-${count++}`,
 		name: name,
 		description: description,
 	};
-	reviews = [...reviews, review];
-	renderReviews(reviews, place);
-	localStorage.clear();	
-	var data = localStorage.setItem('reviews', JSON.stringify({ reviews }));
-	console.log(JSON.parse(data).name);
+	reviews.push(review);
+	setData("reviews", reviews);
+	renderReviews();
 }
 
 function remove(id, place) {
@@ -36,7 +53,7 @@ function remove(id, place) {
 	});
 
 	reviews = [...filtered];
-	renderReviews(reviews, place);
+	renderReviews();
 }
 
 function renderReview(review) {
@@ -55,13 +72,13 @@ function renderReview(review) {
 	`;
 }
 
-function renderReviews(reviews, place) {
+function renderReviews() {
 	var template = "<ul>";
-	reviews.forEach (function(review) {
+	getData("reviews").forEach (function(review) {
 		template += renderReview(review);
 	});
 	template += "</ul>";
-	place.innerHTML = template;
+	document.querySelector("dombody").innerHTML = template;
 }
 
 export {
@@ -69,6 +86,5 @@ export {
 	remove,
 	renderReview,
 	renderReviews,
-	renderPage,
-	test
+	renderPage
 }

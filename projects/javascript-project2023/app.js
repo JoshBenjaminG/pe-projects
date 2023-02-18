@@ -1,4 +1,4 @@
-import { add, remove, renderReview, renderReviews, renderPage, test } from "./helper-functions.js";
+import { add, remove, renderReview, renderReviews, renderPage } from "./helper-functions.js";
 
 
 
@@ -19,6 +19,9 @@ renderPage('home');
 window.addEventListener('click', function(event) {
 	if (event.target.matches('[data-to]')) {
 		renderPage(event.target.dataset.to);
+	} if(event.target.dataset.to == 'reviews') {
+		console.log('test');
+		renderReviews();
 	}
 });
 
@@ -37,6 +40,13 @@ window.addEventListener('click', function(event) {
 		remove(id, $dombody);
 	}
 });
+
+window.addEventListener("input", function(event) {
+	if (event.target.matches("#filter")) {
+		event.preventDefault();
+		console.log(event.target.value);
+	}
+})
 
 
 
