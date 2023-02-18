@@ -25,6 +25,9 @@ function add(name, description, place) {
 	};
 	reviews = [...reviews, review];
 	renderReviews(reviews, place);
+	localStorage.clear();	
+	var data = localStorage.setItem('reviews', JSON.stringify({ reviews }));
+	console.log(JSON.parse(data).name);
 }
 
 function remove(id, place) {
