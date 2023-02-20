@@ -1,4 +1,4 @@
-import { add, remove, renderReview, renderReviews, renderPage, getData } from "./helper-functions.js";
+import { add, remove, renderReview, renderReviews, renderPage, getData, renderName, renderNames } from "./helper-functions.js";
 
 
 
@@ -19,9 +19,10 @@ window.addEventListener('click', function(event) {
 	if (event.target.matches('[data-to]')) {
 		renderPage(event.target.dataset.to);
 	} 
-
+	if (event.target.dataset.to == 'list') {
+		renderNames();
+	} 
 	if (event.target.dataset.to == 'reviews') {
-		console.log('test');
 		renderReviews();
 	} 
 	if (event.target.matches('.add')) {

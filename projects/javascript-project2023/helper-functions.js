@@ -30,12 +30,14 @@ function initialize() {
 	if (!localStorage.getItem("reviews")) {
 		console.log(seedData);
 		localStorage.setItem("reviews", JSON.stringify(seedData));
+	} else {
+		console.log(getData("reviews"));
+		console.log(getData("reviews")[0].name);
 	}
 }
 initialize();
 
 function renderPage(page) {
-	console.log(page);
 	document.querySelector('output').innerHTML = templates[page];
 }
 
@@ -96,11 +98,35 @@ function renderReviews(filter = null) {
 	document.querySelector("outlet").innerHTML = template;
 }
 
+function renderName(review) {
+	return `
+		<li data-id=${review.id}>
+			<card>
+			<h2>${review.name}</h2>
+			</card>
+		</li>
+	`;
+}
+
+function renderNames(filter = null) {
+	var template = "<ul>";
+	if (!filter) {
+		filter = getData("reviews");
+	}
+	filter.forEach (function(review) {
+		template += renderName(review);
+	});
+	template += "</ul>";
+	document.querySelector("outlet").innerHTML = template;
+}
+
 export {
 	add,
 	remove,
 	renderReview,
 	renderReviews,
 	renderPage,
-	getData
+	getData,
+	renderName,
+	renderNames
 }

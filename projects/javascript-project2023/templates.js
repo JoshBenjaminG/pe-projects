@@ -11,7 +11,7 @@ templates.reviews = `
 		<button type="submit" class="add">Add</button>
 	</form>
 	<form>
-		<input id="filter" placeholder="Filter resaurants by type of food">
+		<input id="filter" placeholder="Filter resaurants by name">
 	</form>
 	<outlet></outlet>
 	`
@@ -22,7 +22,9 @@ templates.home = `
 	;
 
 templates.list = `
-	<div>list page</div>`
+	<div>list page</div>
+	<outlet></outlet>
+	`
 	;
 
 export default templates;
