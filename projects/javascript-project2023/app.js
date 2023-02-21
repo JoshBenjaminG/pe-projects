@@ -1,4 +1,4 @@
-import { add, remove, renderReview, renderReviews, renderPage, getData, renderName, renderNames } from "./helper-functions.js";
+import { add, remove, renderReview, renderReviews, renderPage, getData, renderName, renderNames, createUser } from "./helper-functions.js";
 
 
 
@@ -11,7 +11,8 @@ const $output = document.querySelector('output');
 // 	}
 // });
 
-renderPage('home');
+renderPage('reviews');
+renderReviews();
 
 
 //top level navigation handler
@@ -29,11 +30,20 @@ window.addEventListener('click', function(event) {
 		event.preventDefault();
 		const $name = document.querySelector('#name');
 		const $review = document.querySelector('#review');
-		add($name.value, $review.value);
+		const $rating = document.querySelector('#rating');
+		add($name.value, $review.value, $rating.value);
 	}
 	if (event.target.matches('.remove')) {
 		const id = event.target.closest('li').dataset.id;
 		remove(id);
+	}
+	if (event.target.matches('.create-user')) {
+		event.preventDefault();
+		const $username = document.querySelector('#username');
+		const $password = document.querySelector('#password');
+		createUser($username.value, $password.value);
+		console.log("username: " + $username.value);
+		console.log("password: " + $password.value);
 	}
 });
 
