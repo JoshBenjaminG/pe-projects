@@ -30,9 +30,6 @@ function initialize() {
 	if (!localStorage.getItem("reviews")) {
 		console.log(seedData);
 		localStorage.setItem("reviews", JSON.stringify(seedData));
-	} else {
-		console.log(getData("reviews"));
-		console.log(getData("reviews")[0].name);
 	}
 }
 initialize();

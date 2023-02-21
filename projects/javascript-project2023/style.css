@@ -1,5 +1,8 @@
 body {
-	background-color: beige;
+	background-color: white;
+	max-width: 1100px;
+	margin-left: auto;
+	margin-right: auto;
 }
 
 dombody {
@@ -9,4 +12,16 @@ dombody {
 
 #filter {
 	min-width: 250px;
+}
+
+li {
+	color: red;
+	border: 1px solid black;
+	max-width: 100px;
+	margin: 20px;
+	padding: 20px;
+}
+
+ul {
+	list-style-type: none;
 }
