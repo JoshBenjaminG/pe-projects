@@ -32,7 +32,8 @@ var seedUser = [
 		{
 			id: 18250452345,
 			name: "Josh",
-			password: "admin"
+			password: "admin",
+			logIn: false
 		},
 	]
 
@@ -42,13 +43,21 @@ function initialize() {
 
 	} if (!localStorage.getItem("users")) {
 		localStorage.setItem("users", JSON.stringify(seedUser));
-	} if (getData("users")[0].name == "Josh" && getData("users")[0].password == "admin") {
-
 	}
 }
 initialize();
 
 
+function logIn(username, password) {
+	var users = getData("users");
+	users.forEach(function(user) {
+  		if (username.value.toLowerCase() == user.name.toLowerCase() && password.value == user.password) {
+  			console.log(`You have been logged in: ${user.name}`);
+  		} else {
+  			console.log('Incorrect information');
+  		}
+  });
+}	
 
 function renderPage(page) {
 	document.querySelector('output').innerHTML = templates[page];
@@ -168,5 +177,6 @@ export {
 	getData,
 	renderName,
 	renderNames,
-	createUser
+	createUser,
+	logIn
 }

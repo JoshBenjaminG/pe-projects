@@ -44,3 +44,5 @@ function renderReviews(filter = null) {
 	template += "</ul>";
 	document.querySelector("outlet").innerHTML = template;
 }
+
+username.value.toLowerCase() == user.name.toLowerCase() && 

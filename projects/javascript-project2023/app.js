@@ -1,4 +1,4 @@
-import { add, remove, renderReview, renderReviews, renderPage, getData, renderName, renderNames, createUser } from "./helper-functions.js";
+import { add, remove, renderReview, renderReviews, renderPage, getData, renderName, renderNames, createUser, logIn } from "./helper-functions.js";
 
 
 
@@ -44,6 +44,12 @@ window.addEventListener('click', function(event) {
 		createUser($username.value, $password.value);
 		console.log("username: " + $username.value);
 		console.log("password: " + $password.value);
+	}
+	if (event.target.matches('.login')) {
+		event.preventDefault();
+		const $loginusername = document.querySelector('#loginusername');
+		const $loginpassword = document.querySelector('#loginpassword');
+		logIn($loginusername, $loginpassword);
 	}
 });
 
