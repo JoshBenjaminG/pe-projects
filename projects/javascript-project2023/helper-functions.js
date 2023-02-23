@@ -1,4 +1,5 @@
 import templates from './templates.js';
+// import { v4 as uuid } from 'uuid';
 
 // function initialize() {
 // 	if (localStorage) {
@@ -12,6 +13,7 @@ import templates from './templates.js';
 //fetch local storage
 //if no local storage, initialize nothing
 //print it
+
 
 var seedData = [
 		{
