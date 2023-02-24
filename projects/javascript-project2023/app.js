@@ -42,6 +42,12 @@ window.addEventListener('click', function(event) {
 	    	$message.classList.add("error");
 	    	return false;
 	    }
+	   	if (!$name.value || !review.value) {
+	    	$message.innerHTML = "All fields must be filled out to submit a review";
+	    	$message.classList.remove("success");
+	    	$message.classList.add("error");
+	    	return false;
+	    }
 	    add($name.value, $review.value, $rating.value, userId);
 	}
 	if (event.target.matches('.remove')) {
