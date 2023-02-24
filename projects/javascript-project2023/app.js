@@ -15,6 +15,7 @@ renderPage('reviews');
 renderReviews();
 
 
+
 //top level navigation handler
 window.addEventListener('click', function(event) {
 	if (event.target.matches('[data-to]')) {
@@ -27,11 +28,20 @@ window.addEventListener('click', function(event) {
 		renderReviews();
 	} 
 	if (event.target.matches('.add')) {
-		event.preventDefault();
-		const $name = document.querySelector('#name');
-		const $review = document.querySelector('#review');
-		const $rating = document.querySelector('#rating');
-		add($name.value, $review.value, $rating.value);
+	    event.preventDefault();
+	    const $name = document.querySelector('#name');
+	    const $review = document.querySelector('#review');
+	    const $rating = document.querySelector('#rating');
+	    var users = getData("users");
+	    console.log(users);
+	    var userId = null; // declare and initialize userId outside of the loop
+	    users.forEach(function(user) {
+	        if (user.logIn == true) {
+	            userId = user.name; // assign value of userId to user ID of logged-in user
+	            console.log(userId);
+	        }
+	    });
+	    add($name.value, $review.value, $rating.value, userId);
 	}
 	if (event.target.matches('.remove')) {
 		const id = event.target.closest('li').dataset.id;

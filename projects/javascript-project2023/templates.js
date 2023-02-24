@@ -2,16 +2,16 @@ var templates = {};
 
 templates.reviews = `
 		<form>
-		<field>
+		<field autocomplete="off">
 			<label>Enter a review below</label>
-			<input placeholder="Resaurant name" id="name">
-			<input placeholder="Review..." id="review">
+			<input placeholder="Resaurant name" id="name" autocomplete="off">
+			<input placeholder="Review..." id="review" autocomplete="off">
 			<input type="range" min="1" max="5" class="slider" id="rating">
 		</field>
 
 		<button type="submit" class="add">Add</button>
 	</form>
-	<form>
+	<form autocomplete="off">
 		<input id="filter" placeholder="Filter resaurants by name">
 	</form>
 	<outlet></outlet>

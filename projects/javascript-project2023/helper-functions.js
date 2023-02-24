@@ -35,7 +35,6 @@ var seedUser = [
 			id: 18250452345,
 			name: "Josh",
 			password: "admin",
-			logIn: false
 		},
 	]
 
@@ -46,6 +45,11 @@ function initialize() {
 	} if (!localStorage.getItem("users")) {
 		localStorage.setItem("users", JSON.stringify(seedUser));
 	}
+	var users = getData("users");
+	users.forEach(function(user) {
+		user.logIn = false;
+		console.log(users);
+	});
 }
 initialize();
 
@@ -54,12 +58,17 @@ function logIn(username, password) {
 	var users = getData("users");
 	users.forEach(function(user) {
   		if (username.value.toLowerCase() == user.name.toLowerCase() && password.value == user.password) {
-  			console.log(`You have been logged in: ${user.name}`);
-  		} else {
-  			console.log('Incorrect information');
+  			user.logIn = true;
+  			console.log('you have been logged in');
+  			console.log(user.logIn);
+  			console.log(user.id);
+  			setData("users", users);
+  			console.log(users);
   		}
   });
 }	
+
+
 
 function renderPage(page) {
 	document.querySelector('output').innerHTML = templates[page];
@@ -84,18 +93,19 @@ function createUser(username, password) {
 	setData("users", users);
 }
 
-function add(name, description, rating) { 
+function add(name, description, rating, userId) { 
 	var reviews = getData("reviews");
-	console.log(reviews);
 	const review = {
 		id: Date.now(),
 		name: name,
 		description: description,
-		rating: rating
+		rating: rating,
+		belongsTo: userId
 	};
 	reviews.push(review);
 	setData("reviews", reviews);
 	renderReviews();
+	console.log(review.belongsTo);
 }
 
 function remove(id) {
@@ -122,6 +132,7 @@ function renderReview(review) {
 	return `
 		<li data-id=${review.id}>
 			<card>
+			<h1>${review.belongsTo} wrote a review</h1>
 			<h2>${review.name}</h2>
 			<p>${review.description}</p>
 			<p>${stars}</p>
