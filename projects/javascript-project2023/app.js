@@ -43,25 +43,45 @@ window.addEventListener('click', function(event) {
 		remove(id);
 	}
 	if (event.target.matches('.create-user')) {
-		event.preventDefault();
-		const $username = document.querySelector('#username');
-		const $password = document.querySelector('#password');
-		createUser($username.value, $password.value);
-		console.log("username: " + $username.value);
-		console.log("password: " + $password.value);
-		$message.innerHTML = "user created";
+	    event.preventDefault();
+	    const $username = document.querySelector('#username');
+	    const $password = document.querySelector('#password');
+	    if ($username.value.trim() === "" || $password.value.trim() === "") {
+	        $message.innerHTML = "Please fill out all fields before submitting";
+	        $message.classList.add("error");
+	        return;
+	    }
+	    createUser($username.value, $password.value);
+	    console.log("username: " + $username.value);
+	    console.log("password: " + $password.value);
+	    $message.innerHTML = "user created";
+	    $message.classList.remove("error");
+	    $message.classList.add("success");
 	}
 	if (event.target.matches('.login')) {
-		event.preventDefault();
-		const $loginusername = document.querySelector('#loginusername');
-		const $loginpassword = document.querySelector('#loginpassword');
-		logIn($loginusername, $loginpassword);
-		$message.innerHTML = "user logged in";
+	  event.preventDefault();
+	  const $loginusername = document.querySelector('#loginusername');
+	  const $loginpassword = document.querySelector('#loginpassword');
+	  if ($loginusername.value.trim() === "" || $loginpassword.value.trim() === "") {
+	    $message.innerHTML = "Please fill out all fields before submitting";
+	    $message.classList.add("error");
+	    return;
+	  }
+	  if (!logIn($loginusername, $loginpassword)) {
+	    $message.innerHTML = "user not found";
+	    $message.classList.add("error");
+	    $message.classList.remove("success");
+	    return;
+	  }
+	  $message.innerHTML = "user logged in";
+	  $message.classList.remove("error");
+	  $message.classList.add("success");
 	}
 	if (event.target.matches('.logOut')) {
 		event.preventDefault();
 		logOut();
 		$message.innerHTML = "user logged out";
+		$message.classList.add("success");
 	}
 });
 

@@ -20,13 +20,15 @@ var seedData = [
 			id: 12341234,
 			name: "mellow",
 			description: "good pizza",
-			rating: 5
+			rating: 5,
+			belongsTo: "Mark"
 		},
 		{
 			id: 6234624362,
 			name: "KFC",
 			description: "good chicken",
-			rating: 5
+			rating: 5,
+			belongsTo: "Tim"
 		},
 	]
 
@@ -60,26 +62,43 @@ function logOut(){
 			user.logIn = false;
 			setData("users", users);
 		}
-		console.log(users);
 	});
+	console.log('you have logged out');
 }
 
 
+// function logIn(username, password) {
+// 	var users = getData("users");
+// 	users.forEach(function(user) {
+//   		if (username.value.toLowerCase() == user.name.toLowerCase() && password.value == user.password) {
+//   			user.logIn = true;
+//   			console.log('you have been logged in');
+//   			setData("users", users);
+//   		} else {
+//   			return false;
+//   			console.log('failed');
+//   		}
+//   });
+// }
+
 function logIn(username, password) {
-	var users = getData("users");
-	users.forEach(function(user) {
-  		if (username.value.toLowerCase() == user.name.toLowerCase() && password.value == user.password) {
-  			user.logIn = true;
-  			console.log('you have been logged in');
-  			console.log(user.logIn);
-  			console.log(user.id);
-  			setData("users", users);
-  			console.log(users);
-  		}
+  var users = getData("users");
+  var success = false;
+  users.forEach(function(user) {
+    if (username.value.toLowerCase() == user.name.toLowerCase() && password.value == user.password) {
+      user.logIn = true;
+      console.log('you have been logged in');
+      setData("users", users);
+      success = true;
+      console.log('successful');
+    }
   });
-}	
-
-
+  if (!success) {
+    console.log('failed');
+    return false;
+  }
+  return true;
+}
 
 function renderPage(page) {
 	document.querySelector('output').innerHTML = templates[page];
