@@ -53,6 +53,17 @@ function initialize() {
 }
 initialize();
 
+function logOut(){
+	var users = getData("users");
+	users.forEach(function(user) {
+		if (user.logIn == true) {
+			user.logIn = false;
+			setData("users", users);
+		}
+		console.log(users);
+	});
+}
+
 
 function logIn(username, password) {
 	var users = getData("users");
@@ -191,5 +202,6 @@ export {
 	renderName,
 	renderNames,
 	createUser,
-	logIn
+	logIn,
+	logOut
 }

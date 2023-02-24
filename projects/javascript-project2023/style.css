@@ -19,6 +19,11 @@ outlet ul {
 	grid-template-columns: 1fr 1fr 1fr;
 }
 
+message {
+	color: green;
+	font-weight: bold;
+}
+
 #filter {
 	min-width: 250px;
 }

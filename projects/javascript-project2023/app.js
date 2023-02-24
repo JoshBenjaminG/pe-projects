@@ -1,18 +1,13 @@
-import { add, remove, renderReview, renderReviews, renderPage, getData, renderName, renderNames, createUser, logIn } from "./helper-functions.js";
+import { add, remove, renderReview, renderReviews, renderPage, getData, renderName, renderNames, createUser, logIn, logOut } from "./helper-functions.js";
 
 
 
 const $output = document.querySelector('output');
-
-// $dombody.addEventListener('click', function(event) {	
-// 	if (event.target.textContent == 'remove') {
-// 		const id = event.target.closest('li').dataset.id;
-// 		remove(id);
-// 	}
-// });
+const $message = document.querySelector('message');
 
 renderPage('reviews');
 renderReviews();
+
 
 
 
@@ -54,12 +49,19 @@ window.addEventListener('click', function(event) {
 		createUser($username.value, $password.value);
 		console.log("username: " + $username.value);
 		console.log("password: " + $password.value);
+		$message.innerHTML = "user created";
 	}
 	if (event.target.matches('.login')) {
 		event.preventDefault();
 		const $loginusername = document.querySelector('#loginusername');
 		const $loginpassword = document.querySelector('#loginpassword');
 		logIn($loginusername, $loginpassword);
+		$message.innerHTML = "user logged in";
+	}
+	if (event.target.matches('.logOut')) {
+		event.preventDefault();
+		logOut();
+		$message.innerHTML = "user logged out";
 	}
 });
 
