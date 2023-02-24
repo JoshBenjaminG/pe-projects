@@ -29,13 +29,19 @@ window.addEventListener('click', function(event) {
 	    const $rating = document.querySelector('#rating');
 	    var users = getData("users");
 	    console.log(users);
-	    var userId = null; // declare and initialize userId outside of the loop
+	    var userId = null;
 	    users.forEach(function(user) {
 	        if (user.logIn == true) {
-	            userId = user.name; // assign value of userId to user ID of logged-in user
+	            userId = user.name; 
 	            console.log(userId);
 	        }
 	    });
+	    if (userId == null) {
+	    	$message.innerHTML = "User must sign in to create a review";
+	    	$message.classList.remove("success");
+	    	$message.classList.add("error");
+	    	return false;
+	    }
 	    add($name.value, $review.value, $rating.value, userId);
 	}
 	if (event.target.matches('.remove')) {
