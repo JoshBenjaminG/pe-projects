@@ -1,19 +1,4 @@
 import templates from './templates.js';
-// import { v4 as uuid } from 'uuid';
-
-// function initialize() {
-// 	if (localStorage) {
-// 	var reviews = data.getItem('reviews');
-// } else {
-// 	var reviews = [];
-// }
-// }
-
-
-//fetch local storage
-//if no local storage, initialize nothing
-//print it
-
 
 var seedData = [
 		{
@@ -122,6 +107,32 @@ function createUser(username, password) {
 	users.push(user);
 	setData("users", users);
 }
+
+
+// first chatbot suggestion
+// function createUser(username, password) {
+//     var users = getData("users");
+//     const user = {
+//         id: Date.now(),
+//         name: username,
+//         password: password,
+//         logIn: true
+//     };
+//     users.push(user);
+//     setData("users", users);
+// }
+
+// function createUser(username, password) {
+//   var users = getData("users");
+//   const user = {
+//     id: Date.now(),
+//     name: username,
+//     password: password
+//   };
+//   users.push(user);
+//   setData("users", users);
+//   logIn(user.name, user.password);
+// }
 
 function add(name, description, rating, userId) { 
 	var reviews = getData("reviews");
