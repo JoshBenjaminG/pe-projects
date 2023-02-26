@@ -6,6 +6,11 @@
 	<title>Document</title>
 	<link rel="stylesheet" href="style.css">
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+	<link rel="stylesheet" href="https://kit.fontawesome.com/361ef636ce.css" crossorigin="anonymous">
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@200;400;500&display=swap" rel="stylesheet">
+
 </head>
 <body>
 
@@ -13,20 +18,19 @@
 	
 	<header>
 		<div>
-		<button data-to="home">Homepage</button>
 		<button data-to="reviews">See Reviews</button>
 		<button data-to="list">Restaurant list</button>
 		</div>
-		<div>
-			<message></message>
+		<div class="form-grid">
 			<form>
+				<message></message>
 				<field>
 					<input placeholder="username" id="username">
 					<input placeholder="password" id="password">
 				</field>
 				<button class="create-user">Create account</button>
 			</form>
-			<form>
+			<form class="sign-in-form">
 				<field>
 					<input placeholder="Login: Username" id="loginusername">
 					<input placeholder="Login: Password" id="loginpassword">
@@ -41,5 +45,7 @@
 	<output></output>
 
 <script src="app.js" type="module"></script>
+<script src="https://kit.fontawesome.com/361ef636ce.js" crossorigin="anonymous"></script>
+
 </body>
 </html>

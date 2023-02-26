@@ -2,7 +2,7 @@ var templates = {};
 
 templates.reviews = `
 	<form novalidate>
-		<field autocomplete="off">
+		<field autocomplete="off" class="review-field">
 			<label>Enter a review below</label>
 			<input placeholder="Resaurant name" id="name" autocomplete="off" required>
 			<input placeholder="Review..." id="review" autocomplete="off" required>

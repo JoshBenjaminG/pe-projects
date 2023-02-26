@@ -19,9 +19,100 @@ outlet ul {
 	grid-template-columns: 1fr 1fr 1fr;
 }
 
+p, h1, h2 {
+	font-family: 'Poppins', sans-serif;
+}
+
+header button {
+  font-size: 14px;
+  padding: 5px 10px;
+  background-color: #ff5a5f;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  margin-right: 10px;
+}
+
+header button:hover {
+  background-color: #e81123;
+  cursor: pointer;
+}
+
+header .form-grid {
+	display: flex;
+	flex-direction: row;
+	gap: 50px;
+}
+
+.sign-in-form {
+	margin-top: 40px;
+}
+
+
+button {
+  font-family: 'Poppins', sans-serif;
+  border: none;
+  border-radius: 4px;
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: #fff;
+  font-size: 16px;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
+}
+
+button:hover {
+  background-color: #0069d9;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+
 message {
 	font-weight: bold;
 }
+
+.review {
+  display: flex;
+  align-items: center;
+}
+
+.review i {
+  font-size: 35px;
+  margin-right: 10px;
+}
+
+.review .text {
+  display: flex;
+  flex-direction: column;
+}
+
+.review .name {
+  font-weight: bold;
+  font-size: 16px;
+  margin: 0;
+}
+
+.review .wrote {
+  font-size: 14px;
+  margin: 0;
+  color: #999;
+}
+
+.fa-star.checked.red {
+  color: #ff4f4f;
+}
+
+.fa-star.checked.orange {
+  color: #ff8c00;
+}
+
+.fa-star.checked.light-orange {
+  color: #ffc107;
+}
+
 
 .success {
 	color: green;
@@ -47,42 +138,81 @@ ul {
 	list-style-type: none;
 }
 
-.five-pointed-star {
- --star-color:orange;
- margin:1em auto;
- font-size:10em;
- position: relative;
- display: block;
- width: px;
- height: 0px;
- border-right: 1em solid transparent;
- border-bottom: 0.7em solid var(--star-color);
- border-left: 1em solid transparent;
- transform: rotate(35deg);
+form {
+  margin-top: 20px;
+  margin-bottom: 20px;
+  text-align: center;
+  font-size: 18px;
 }
-.five-pointed-star:before {
- border-bottom: 0.8em solid var(--star-color);
- border-left: 0.3em solid transparent;
- border-right: 0.3em solid transparent;
- position: absolute;
- height: 0;
- width: 0;
- top: -0.45em;
- left: -0.65em;
- display: block;
- content:"";
- transform: rotate(-35deg);
+
+form field {
+  display: block;
+  margin-bottom: 20px;
 }
-.five-pointed-star:after {
- position: absolute;
- display: block;
- top: 0.03em;
- left: -1.05em;
- width: 0;
- height: 0;
- border-right: 1em solid transparent;
- border-bottom: 0.7em solid var(--star-color);
- border-left: 1em solid transparent;
- transform: rotate(-70deg);
- content:"";
+
+form field label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+  text-align: left;
 }
+
+form field input {
+  display: block;
+  margin-bottom: 10px;
+  padding: 10px;
+  width: 100%;
+  border: none;
+  border-radius: 5px;
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+  font-size: 16px;
+}
+
+form field input:focus {
+  outline: none;
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+form field input[type="range"] {
+  -webkit-appearance: none;
+  width: 100%;
+  height: 10px;
+  border-radius: 5px;
+  background: #ccc;
+  outline: none;
+}
+
+form field input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #ff6a00;
+  cursor: pointer;
+}
+
+form button {
+  background-color: #ff6a00;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+  transition: background-color 0.3s ease;
+}
+
+form button:hover {
+  background-color: #ff9040;
+}
+
+form {
+  text-align: left;
+}
+
+.review-field {
+  width: 50%;
+}
+

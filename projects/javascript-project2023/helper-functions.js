@@ -168,13 +168,28 @@ function tester() {
 function renderReview(review) {
 	var stars = "";
 	for(var i = 0; i < review.rating; i++) {
-		stars += `<span class="fa fa-star checked"></span>`;
+	  var starClass;
+	  if(review.rating >= 4) {
+	    starClass = 'red';
+	  } else if(review.rating >= 3) {
+	    starClass = 'orange';
+	  } else if(review.rating >= 1) {
+	    starClass = 'light-orange';
+	  }
+	  stars += `<span class="fa fa-star checked ${starClass}"></span>`;
 	}
+
 	return `
 		<li data-id=${review.id}>
 			<card>
-			<h1>${review.belongsTo} wrote a review</h1>
-			<h2>${review.name}</h2>
+			<div class="card-header">
+			<div class="review">
+			  <i class="fa-regular fa-user"></i>
+			  <div class="text">
+			    <p class="name">${review.belongsTo}</p>
+			    <p class="wrote">Wrote a review</p>
+			  </div>
+			</div>
 			<p>${review.description}</p>
 			<p>${stars}</p>
 

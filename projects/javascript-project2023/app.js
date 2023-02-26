@@ -7,8 +7,7 @@ const $message = document.querySelector('message');
 
 renderPage('reviews');
 renderReviews();
-
-
+$message.innerHTML = "Sign in to create a review";
 
 
 //top level navigation handler
