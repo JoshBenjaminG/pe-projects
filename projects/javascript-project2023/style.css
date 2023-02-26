@@ -25,7 +25,13 @@ body {
 	header form field input {
    	 width: 90%;
   }
-  
+  	form field input {
+		box-shadow: 0px 2px 5px black !important;
+	}
+}
+
+ul {
+	padding: 0;
 }
 
 header {
@@ -70,7 +76,6 @@ header .form-grid {
 .sign-in-form {
 	margin-top: 40px;
 }
-
 
 button {
   font-family: 'Poppins', sans-serif;
