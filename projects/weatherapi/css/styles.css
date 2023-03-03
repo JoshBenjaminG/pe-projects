@@ -19,6 +19,7 @@ section {
 
 p, h1 {
 	color: white;
+
 }
 
 content  {
@@ -62,8 +63,9 @@ p, h1, output, daysoutput{
 }
 
 p {
-	font-weight: 100;
+	font-weight: 400;
 	align-self: center;
+	font-size: 20px;
 }
 
 h1 {

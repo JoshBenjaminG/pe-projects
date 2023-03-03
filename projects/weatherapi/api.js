@@ -39,7 +39,7 @@ function createForecast(result) {
 			<div class="day">
 			<content>
 				<p>${entry.date}</p>
-				<p class="temp">${entry.day.avgtemp_f}&#8457</p>
+				<p class="temp">Current Temp: ${entry.day.avgtemp_f}&#8457</p>
 				<p>Max Temp: ${entry.day.maxtemp_f}&#8457</p>
 				<p>Min Temp: ${entry.day.mintemp_f}&#8457</p>
 				<div class='condition'>
@@ -69,12 +69,14 @@ function getApi() {
 			return response.json();
 		})
 		.then( function(json) {
-			output.innerHTML = createResults(json);
+			// output.innerHTML = createResults(json);
 			output2.innerHTML = "";
 			createForecast(json);
 			console.log(json);
 			if (city == "mobile") {
 				document.body.style.backgroundImage = "url('https://www.cityofmobile.org/assets/images/mobile-hdr.jpg')";
+			} if (city == "leakesville") {
+				document.body.style.backgroundImage = "url('https://cdn.britannica.com/63/93563-050-65FC416F/State-capitol-building-cityscape-Jackson-Miss.jpg')";
 			} else{
 				document.body.style.backgroundImage = "url('https://source.unsplash.com/1600x900/?" + city + "')";
 			}
