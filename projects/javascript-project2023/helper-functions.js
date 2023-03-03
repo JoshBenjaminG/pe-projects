@@ -190,6 +190,7 @@ function renderReview(review) {
 			    <p class="wrote">Wrote a review</p>
 			  </div>
 			</div>
+			<p>${review.name}</p>
 			<p>${review.description}</p>
 			<p>${stars}</p>
 
