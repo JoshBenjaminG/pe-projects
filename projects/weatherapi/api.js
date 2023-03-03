@@ -69,7 +69,7 @@ function getApi() {
 			return response.json();
 		})
 		.then( function(json) {
-			// output.innerHTML = createResults(json);
+			output.innerHTML = `<h1>City: ${city}</h1>`;
 			output2.innerHTML = "";
 			createForecast(json);
 			console.log(json);
