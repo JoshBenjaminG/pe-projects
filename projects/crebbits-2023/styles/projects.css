@@ -102,20 +102,31 @@
 <---    Final Call To Action    -->
 <--- -------------------------- -*/
 /* Mobile */
+.title {
+  font-size: 36px;
+}
+
+@media (max-width: 600px) {
+  .title {
+    font-size: 24px;
+  }
+}
+
 @media only screen and (min-width: 0em) {
   #cta {
     position: relative;
     padding: 3.125em 0;
-    background-color: green;
+
+
   }
   #cta:before {
-    content: '';
+
     position: absolute;
     display: block;
     height: 100%;
     width: 100%;
     background: #000;
-    opacity: .7;
+
     top: 0;
     left: 0;
     z-index: -1;
@@ -142,9 +153,8 @@
   }
   #cta .title {
     font-weight: 900;
-    font-size: min(9vw, 3em);
     line-height: 1.20833333;
-    color: #fff;
+    color: green;
     position: relative;
     margin-bottom: 0.75em;
     text-align: center;
@@ -175,7 +185,7 @@
     display: none;
   }
   #cta:after {
-    content: '';
+
     position: absolute;
     display: block;
     height: 69.25em;
@@ -202,7 +212,7 @@
             transform: translateX(-50%);
   }
   #cta picture:before {
-    content: '';
+
     position: absolute;
     display: block;
     height: 100%;
