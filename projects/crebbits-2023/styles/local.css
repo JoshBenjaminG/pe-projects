@@ -253,7 +253,6 @@
     padding: 3.125em 0;
   }
   #cta:before {
-    
     position: absolute;
     display: block;
     height: 100%;
@@ -285,7 +284,7 @@
   }
   #cta .title {
     font-weight: 900;
-   
+  
     line-height: 1.20833333;
     color: green;
     position: relative;
@@ -344,7 +343,7 @@
   }
   #cta .title {
     font-weight: 900;
-    font-size: min(9vw, 3em);
+  
     line-height: 1.20833333;
     color: green;
     position: relative;
