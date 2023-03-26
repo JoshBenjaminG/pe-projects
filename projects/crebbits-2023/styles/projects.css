@@ -106,6 +106,7 @@
   #cta {
     position: relative;
     padding: 3.125em 0;
+    background-color: green;
   }
   #cta:before {
     content: '';
