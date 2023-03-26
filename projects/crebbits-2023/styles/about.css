@@ -157,16 +157,17 @@ li span{
   #cta {
     position: relative;
     padding: 3.125em 0;
-    background-color: green;
+
+
   }
   #cta:before {
-    content: '';
+
     position: absolute;
     display: block;
     height: 100%;
     width: 100%;
     background: #000;
-    opacity: .7;
+
     top: 0;
     left: 0;
     z-index: -1;
@@ -195,7 +196,7 @@ li span{
     font-weight: 900;
     font-size: min(9vw, 3em);
     line-height: 1.20833333;
-    color: #fff;
+    color: green;
     position: relative;
     margin-bottom: 0.75em;
     text-align: center;
@@ -226,7 +227,7 @@ li span{
     display: none;
   }
   #cta:after {
-    content: '';
+
     position: absolute;
     display: block;
     height: 69.25em;
@@ -253,7 +254,7 @@ li span{
             transform: translateX(-50%);
   }
   #cta picture:before {
-    content: '';
+
     position: absolute;
     display: block;
     height: 100%;
