@@ -153,6 +153,16 @@ li span{
 <---    Final Call To Action    -->
 <--- -------------------------- -*/
 /* Mobile */
+.title {
+  font-size: 36px;
+}
+
+@media (max-width: 600px) {
+  .title {
+    font-size: 24px;
+  }
+}
+
 @media only screen and (min-width: 0em) {
   #cta {
     position: relative;
@@ -194,7 +204,6 @@ li span{
   }
   #cta .title {
     font-weight: 900;
-    font-size: min(9vw, 3em);
     line-height: 1.20833333;
     color: green;
     position: relative;
