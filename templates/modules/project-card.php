@@ -1,14 +1,11 @@
 <?php
-	// you could simplify the $variables up here if you want....
-	// example
+
 	$thumbnail = $project["thumbnail"];
 	$url = $project["url"];
 	$caseStudy = $project["hasCaseStudy"];
 	$hasRepo = $project["hasRepo"];
 	$repo = $project["gitrepo"];
 	
-	// it may or may not - be more readableloud
-
 ?>
 
 
@@ -17,7 +14,7 @@
 			<img src='<?=$thumbnail?>' loading='lazy' alt='$todo'>
 		</picture>
 
-		<h2 class='attention-voice project-title'><?=$project['heading']?></h2>
+		<a href='?page=detail&project=<?=$project['slug']?>' target="_blank"><h2 class='attention-voice project-title'><?=$project['heading']?></h2></a>
 
 		<h3 class='calm-voice tech'><?=$project['technologies']?></h3>
 
