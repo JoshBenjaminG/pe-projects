@@ -1,38 +1,48 @@
-<?php 
+<?php
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+
+require 'vendor/autoload.php';
 
 $error_message = "";
 $message = false;
 
 if (isset($_POST['submit'])) {
-    $to = "joshuaegage@gmail.com";
-    $subject = "Personal site message";
+    $name = $_POST['name'];
+    $email = $_POST['email'];
+    $bodyMessage = $_POST['message'];
 
-    // Collect form data
-    if (strlen($_POST['name']) > 0) {
-        $name = $_POST['name'];
-    }
-    if (strlen($_POST['message']) > 0) {
-        $message = $name . " wrote:" . "\n\n" . $_POST['message'] . "\n\n" . "The email is: " . $_POST['email'];
-    }
+    if (!empty($name) && !empty($bodyMessage)) {
+        try {
+            // Instantiate PHPMailer
+            $mail = new PHPMailer(true);
 
-    // Send email if message is valid
-    if ($message) {
-        $mail_sent = mail($to, $subject, $message);
+            // Set up SMTP
+            $mail->isSMTP();
+            $mail->Host = 'smtp.gmail.com';  // Gmail SMTP server
+            $mail->SMTPAuth = true;
+            $mail->Username = 'joshuaegage@gmail.com';  // Your Gmail username
+            $mail->Password = 'your_app_password';  // Your Gmail app password (if 2FA is enabled)
+            $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+            $mail->Port = 587;
 
-        // Check if mail was sent successfully
-        if ($mail_sent) {
+            // Recipients
+            $mail->setFrom('joshuaegage@gmail.com', 'Joshua Gage');
+            $mail->addAddress('joshuaegage@gmail.com');  // Send the email to yourself
+
+            // Content
+            $mail->isHTML(true);
+            $mail->Subject = 'Personal site message';
+            $mail->Body    = $name . " wrote:\n\n" . $bodyMessage . "\n\nThe email is: " . $email;
+
+            // Send the email
+            $mail->send();
             $message = "<div class='form-message'>Message sent successfully!</div>";
-        } else {
-            // Get the error code and message
-            $error = error_get_last();
-            if ($error) {
-                $message = "<div>There was an error sending your message. Error: " . htmlspecialchars($error['message']) . "</div>";
-            } else {
-                $message = "<div>Unknown error occurred while sending the email.</div>";
-            }
+        } catch (Exception $e) {
+            $message = "<div>Error sending email. Mailer Error: " . $mail->ErrorInfo . "</div>";
         }
     } else {
-        $message = "<div>There was an error with your form submission.</div>";
+        $message = "<div>Please fill out all fields.</div>";
     }
 }
 
