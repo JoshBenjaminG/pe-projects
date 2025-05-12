@@ -24,7 +24,7 @@ if ($page == 'home') {
 
 
 	<nav class='links'>
-		<a href="?page=home" class="hover-underline-animation calm-voice">Home</a>
+		<a href="?page=home" class="hover-underline-animation calm-voice">Home test</a>
 		<a href="https://codepen.io/JoshuaEg/pens/public" target="_blank" class="hover-underline-animation calm-voice">Codepen</a>
 		<a href="https://github.com/JoshBenjaminG" target="_blank" class="hover-underline-animation calm-voice">Github</a>
 	</nav>
