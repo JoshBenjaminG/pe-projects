@@ -140,58 +140,6 @@
             ]
         }
     },
-   
-    {
-        "heading": "Weather Forecast",
-        "technologies": "JS, HTML, CSS",
-        "description": "A forray into implementing an API using Javascript. This was both fun and useful!",
-        "thumbnail": "images/weather-api-image1.jpg",
-        "url": "https://peprojects.dev/alpha-3/josh/projects/weatherapi/",
-        "hasCaseStudy": true,
-        "hasRepo" : false,
-        "gitrepo": "https://github.com/JoshBenjaminG/pe-projects/tree/master/projects/promotional%20email",
-        "slug": "098",
-        "case-study":
-        {
-            "sections":
-            [
-                {
-                    "module": "project-links",
-                    "github": "https://github.com/JoshBenjaminG/pe-projects/tree/master/projects/weatherapi",
-                    "site_link": "https://peprojects.dev/alpha-3/josh/projects/weatherapi/"
-                },
-               {
-                    "module": "image",
-                    "img": "images/weather-api-image3.jpg",
-                    "caption": "<p class='caption'>This API is from weatherapi.com and the developer subscription is $4/month.</p>",
-                    "description": "<p>When I'm messing around with a new api, I like to just make the call in my browser. I downloaded an extension a while ago that formats json in the browser to make it more readable. Taking a first look around is good for powerful APIs like this with so many options. Knowing what the API can do can guide my thinking in terms of what I want to show the end user.</p>"
-                },
-               {
-                    "module": "image",
-                    "img": "images/weather-api-image4.jpg",
-                    "caption": "<p class='caption'>The console is my best friend when it comes to navigating an API!</p>",
-                    "description": "<p>Mobile first design is where I start, and while creating an application like this I make sure to log the response in the console. Before I render some information to the screen, I want to drill down the data structure and log that first just to isolate it. Then I'll start rendering it and styling it. I'll repeat this process as many times as I need until I've finished putting the elements where they need to be and having the cards look like how they should look.</p>"
-                },
-                {
-                    "module": "image",
-                    "img": "images/weather-api-image2.jpg",
-                    "caption": "<p class='caption'>Just some basic flex box styling. Using grid could make the layout more dynamic but flex does the job.</p>",
-                    "description": "<p></p>"
-                },
-               {
-                    "module": "image",
-                    "img": "images/weather-api-image5.jpg",
-                    "caption": "<p class='caption'></p>",
-                    "description": "<p>Working out stock Javascript templating is a bit of a chore, but I have fun doing it! I feel like working with APIs is like solving a puzzle. Of course, only one thing needs to go wrong to break the entire template - but when it works - it's so satisfying!</p>"
-                },
-                {
-                    "module": "project-links",
-                    "github": "https://github.com/JoshBenjaminG/pe-projects/tree/master/projects/weatherapi",
-                    "site_link": "https://peprojects.dev/alpha-3/josh/projects/weatherapi/"
-                }
-            ]
-        }
-    },
    {
         "heading": "Responsive Garden",
         "technologies": "PHP, CSS, HTML",
