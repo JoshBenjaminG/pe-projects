@@ -1,52 +1,43 @@
 <?php 
 
-$error_message = "";
-$message = false;
+$feedback = "";
 
-
-if(isset($_POST['submit'])) {
-	$to = "joshuaegage@gmail.com";
+if (isset($_POST['submit'])) {
+    $to = "joshuaegage@gmail.com";
     $subject = "Personal site message";
 
-	if (strlen($_POST['name']) > 0) {
-		$name = $_POST['name'];
-	}
-	if (strlen($_POST['message']) > 0) {
-		$message = $name . " wrote:" . "\n\n" . $_POST['message'] . "\n\n" . "The email is: " . $_POST['email'];
-	}
-    if ($message) {
-    	mail($to, $subject, $message);
-    	$message = "<div class='form-message'>Message sent successfully!</div>";
-    	return $message;
+    $name = isset($_POST['name']) ? trim($_POST['name']) : '';
+    $email = isset($_POST['email']) ? trim($_POST['email']) : '';
+    $userMessage = isset($_POST['message']) ? trim($_POST['message']) : '';
+
+    if ($name && $email && $userMessage) {
+        $mailBody = "$name wrote:\n\n$userMessage\n\nThe email is: $email";
+
+        if (mail($to, $subject, $mailBody)) {
+            $feedback = "<div class='form-message'>Message sent successfully!</div>";
+        } else {
+            $feedback = "<div class='form-message error'>Message failed to send.</div>";
+        }
     } else {
-    	$message = "<div>There was an error.</div>";
+        $feedback = "<div class='form-message error'>Please fill in all fields.</div>";
     }
 }
-
-
 ?>
 
 <section class='contact-me'>
-	<inner-column>
+    <inner-column>
+        <contact-me>
+            <h2 class="loud-voice">Let's talk!</h2>
+            <p>Interested in working with me? Let's get in touch.</p>
 
-		<contact-me>
-	
+            <?=$feedback?>
 
-			<h2 class="loud-voice">Let's talk!</h2>
-			<p>Interesting in working with me? Let's get in touch.</p>
-
-			<?=$message?>
-			<form action="" method="post">
-
-				<input type="text" name="name" placeholder="Name"><br>
-				<input type="text" name="email" placeholder="Enter your email..."><br>
-				<textarea rows="5" name="message" cols="30" placeholder="Enter Message..."></textarea><br>
-				<input type="submit" name="submit" value="Submit" class="form-input">
-			</form>
-			
-
-		</contact-me>
-
-	</inner-column>
+            <form action="" method="post">
+                <input type="text" name="name" placeholder="Name" required><br>
+                <input type="email" name="email" placeholder="Enter your email..." required><br>
+                <textarea rows="5" name="message" cols="30" placeholder="Enter Message..." required></textarea><br>
+                <input type="submit" name="submit" value="Submit" class="form-input">
+            </form>
+        </contact-me>
+    </inner-column>
 </section>
-

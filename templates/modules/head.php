@@ -2,7 +2,7 @@
 	<meta charset='utf-8'>
 	<meta name='viewport' content='width=device-width, initial-scale=1'>
 
-	<title>Joshua G | Front-end Developer</title>
+	<title>Joshua G</title>
 	<meta name='description' content='Front-End Developer'>
 	<meta property='og:image' content='images/project-image2.jpg'>
 
