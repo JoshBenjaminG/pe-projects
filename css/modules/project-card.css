@@ -19,7 +19,7 @@ project-card div {
   margin-top: auto;
 }
 
-project-card a {
+project-card a.calm-voice {
   color: white;
   background-color: #f35651;
   padding: 10px;

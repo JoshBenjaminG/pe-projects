@@ -14,7 +14,7 @@
 			<img src='<?=$thumbnail?>' loading='lazy' alt='$todo'>
 		</picture>
 
-		<h2 class='attention-voice project-title'><?=$project['heading']?></h2>
+		<a href="<?=$url?>" target="_blank"><h2 class='attention-voice project-title'><?=$project['heading']?></h2></a>
 
 		<h3 class='calm-voice tech'><?=$project['technologies']?></h3>
 
