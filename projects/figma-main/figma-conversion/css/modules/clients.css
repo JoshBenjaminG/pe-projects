@@ -1,0 +1,36 @@
+clients {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+}
+
+.clients inner-column {
+	min-height: 60vh;
+}
+
+.star {
+	width: 20px;
+}
+
+card div {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: center;
+}
+
+client-card {
+	display: grid;
+	grid-template-columns: 1fr;
+	margin-top: 80px;
+}
+
+@media(min-width: 700px) {
+	.clients_1 client-card {
+		grid-template-columns: 1fr 1fr;
+	}
+}
+
+
+

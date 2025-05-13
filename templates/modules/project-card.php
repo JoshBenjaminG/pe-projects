@@ -5,6 +5,7 @@
 	$caseStudy = $project["hasCaseStudy"];
 	$hasRepo = $project["hasRepo"];
 	$repo = $project["gitrepo"];
+	$hasDemo = $project["hasDemo"];
 	
 ?>
 
@@ -27,6 +28,8 @@
 		<?php if ($hasRepo == true) { ?>
 		<a href='<?=$repo?>' target="_blank" class="calm-voice">Github Repo</a>
 		<?php } ?>
+		<?php if ($hasDemo == true) { ?>
 		<a href='<?=$url?>' target="_blank" class="calm-voice">Live Demo</a>
+		<?php } ?>
 		</div>
 </project-card>

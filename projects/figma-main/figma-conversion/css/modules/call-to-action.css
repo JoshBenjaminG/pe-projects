@@ -1,0 +1,12 @@
+.call-to-action inner-column {
+	background-color: #f7f9ff;
+	min-height: 50vh;
+}
+
+call-to-action {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+}
+

@@ -1,0 +1,69 @@
+@import 'meyer-reset.css';
+@import 'setup.css';
+
+/*@import 'developer-styles.css'; */
+/* comment this ^ out - when you are ready */
+
+
+/* SETTINGS */
+@import 'settings.css'; /* variables/ etc */
+
+
+/* STRUCTURE */
+@import 'structure.css';
+
+
+/* TYPOGRAPHY */
+@import 'typography.css';
+
+
+/* COMPONENTS */
+@import 'components.css';
+
+
+/* MODULES */
+@import 'modules/masthead.css';
+@import 'modules/header.css';
+@import 'modules/footer.css';
+@import 'modules/landing.css';
+@import 'modules/center-content.css';
+@import 'modules/clients.css';
+@import 'modules/call-to-action.css';
+@import 'modules/FAQ.css';
+@import 'modules/feature.css';
+
+.logo { 
+  width: 150px;
+}
+
+:root {
+  --blue: #3563e9;
+  --white: #ffffff;
+}
+
+.blue-button {
+  padding: 8px 20px;
+  background-color: var(--blue);
+  border-radius: 5px;
+  color: white;
+}
+
+.blue-button-2 {
+  border: 1px solid var(--blue);
+  padding: 15px 50px;
+  background-color: var(--blue);
+  color: white;
+}
+
+.white-button {
+  border: 1px solid var(--blue);
+  padding: 15px 50px;
+  background-color: var(--white);
+  color: var(--blue);
+}
+
+.site-footer {
+	background-color: var(--blue);
+}
+
+

@@ -1,0 +1,25 @@
+.footer_7 {
+	display: flex;
+	justify-content: space-between;
+}
+
+.footer_7 nav { 
+	display: flex;
+	flex-direction: column;
+}
+
+.footer_7 .links a{
+	
+}
+
+.footer_7 div {
+	max-width: 300px;
+}
+
+.footer_7 nav a {
+	color: #a7bcf6;
+}
+
+.footer_7 nav p {
+	color: var(--white);
+}

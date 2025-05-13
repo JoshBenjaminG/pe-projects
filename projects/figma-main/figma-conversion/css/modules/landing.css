@@ -1,0 +1,27 @@
+landing div {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 10px;
+}
+
+.landing {
+	background-image: url("../page-1-background.svg");
+	background-repeat: no-repeat;
+  	background-size: cover;
+  	/*background-color: red;*/
+}
+
+.landing inner-column {
+	min-height: 90vh;
+}
+
+.landing_2 {
+	background-image: url("../page-2-background.svg");
+	background-repeat: no-repeat;
+  	background-size: cover;
+}
+
+.landing_2 inner-column {
+	min-height: 90vh;
+}

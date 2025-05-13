@@ -1,0 +1,29 @@
+.site-header {
+	border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+}
+
+.site-header inner-column {
+	display:  block;
+	max-width: 1300px; /* could be a variable in settings */
+	margin-right: auto;
+	margin-left: auto;
+	padding: 15px 0px; /* a default */
+}
+
+.header_1 {
+	display: flex;
+	justify-content: space-between;
+}
+
+.header_1 .links {
+	align-items: center;
+}
+
+.header_1 nav { 
+	display: flex;
+	flex-direction: row;
+}
+
+.header_1 .links a{
+	margin: 0px 10px;
+}

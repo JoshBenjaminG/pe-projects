@@ -1,0 +1,138 @@
+
+[ 
+  {
+    "module": "header",
+    "type": "header_1",
+    "actions": [ 
+      {
+        "link": "Page 3",
+        "link_class": ""
+      },
+      {
+        "link": "LogIn",
+        "link_class": "blue-button"
+      }
+    ]
+  },
+  {
+    "module": "landing",
+    "type": "landing_2",
+    "header": "Arcu suscipit massa aliquam proin amet",
+    "content": "Luctus felis sit lectus tristique diam ornare bibendum. Arcu auctor suspendisse luctus amet bibendum pellentesque lorem. Malesuada lobortis tristique tortor,",
+    "actions": [
+      {
+        "link": "Get Started",
+        "link_class": "blue-button-2"
+      }
+    ]
+  },
+  {
+    "module": "center_content",
+    "header": "Etiam Nulla Lectus Amet Nunc Molestie At Vulputate.",
+    "content": "Lorem ipsum, dolor sit amet consectetur adipisicing, elit.",
+    "preheader": "Lorem ipsum, dolor sit amet consectetur adipisicing, elit.",
+    "type": "center_content_1",
+    "icon" : "images/icon1.png",
+    "linkValue": "",
+    "linkText": "Learn More >"
+  },
+  {
+    "module": "feature",
+    "header": "Etiam Nulla Lectus Amet Nunc Molestie At Vulputate.",
+    "content": "Lorem ipsum, dolor sit amet consectetur adipisicing, elit.",
+    "type": "feature_2",
+    "articles": [
+      {
+        "title": "Etiam Nulla Lectus Amet Nunc Molestie At Vulputate.",
+        "content": "Lorem ipsum, dolor sit amet consectetur adipisicing, elit.",
+        "icon": "images/icon1.png"
+      },
+      {
+        "title": "Etiam Nulla Lectus Amet Nunc Molestie At Vulputate.",
+        "content": "Lorem ipsum, dolor sit amet consectetur adipisicing, elit.",
+        "icon": "images/icon1.png"
+      },
+      {
+        "title": "Etiam Nulla Lectus Amet Nunc Molestie At Vulputate.",
+        "content": "Lorem ipsum, dolor sit amet consectetur adipisicing, elit.",
+        "icon": "images/icon1.png"
+      },
+      {
+        "title": "Etiam Nulla Lectus Amet Nunc Molestie At Vulputate.",
+        "content": "Lorem ipsum, dolor sit amet consectetur adipisicing, elit.",
+        "icon": "images/icon1.png"
+      },
+      {
+        "title": "Etiam Nulla Lectus Amet Nunc Molestie At Vulputate.",
+        "content": "Lorem ipsum, dolor sit amet consectetur adipisicing, elit.",
+        "icon": "images/icon1.png"
+      },
+      {
+        "title": "Etiam Nulla Lectus Amet Nunc Molestie At Vulputate.",
+        "content": "Lorem ipsum, dolor sit amet consectetur adipisicing, elit.",
+        "icon": "images/icon1.png"
+      }
+    ]
+  },
+  {
+    "module": "clients",
+    "header": "What Our Clients Say",
+    "content": "Neque, pulvinar vestibulum non aliquam.",
+    "type": "clients_2",
+    "reviews": [
+      {
+        "rating": 5,
+        "content": "Orci vel eget in eu. Integer amet porttitor hendrerit etiam arcu, aliquet duis pretium consequat. Semper sed viverra enim ut nunc.",
+        "name": "Courtney Henry",
+        "review-image": ""
+      }
+    ]
+  },
+  {
+    "module": "call-to-action",
+    "header": "Etiam Nulla Lectus Molestie At Vulputate.",
+    "content": "Rhoncus, accumsan dictum",
+    "type": "cta_1",
+    "actions": [
+      {
+        "link": "Get Free Quote",
+        "link_class": "blue-button-2"
+      },
+      {
+        "link": "Free SignUp",
+        "link_class": "white-button"
+      }
+    ]
+  },
+  {
+    "module": "FAQ",
+    "header": "Frequently Ask Questions",
+    "content": "Pellentesque cras adipiscing tempus libero vel nullam mauris tellus. Aliquam ultrices tellus consequat amet, lectus aliquam est in neque.",
+    "type": "cta_1",
+    "details": [
+      {
+        "summary": "How soon will my order ship?",
+        "content": "Elementum ullamcorper felis nulla scelerisque. Nunc enim nunc mattis leo massa."
+      },
+      {
+        "summary": "Is there any warranty exclusions?",
+        "content": "Elementum ullamcorper felis nulla scelerisque. Nunc enim nunc mattis leo massa."
+      },
+      {
+        "summary": "Are there any return exclusions??",
+        "content": "Elementum ullamcorper felis nulla scelerisque. Nunc enim nunc mattis leo massa."
+      },
+      {
+        "summary": "Will I be charged for a replacement item?",
+        "content": "Elementum ullamcorper felis nulla scelerisque. Nunc enim nunc mattis leo massa."
+      },
+      {
+        "summary": "How can I track my orders & payment?",
+        "content": "Elementum ullamcorper felis nulla scelerisque. Nunc enim nunc mattis leo massa."
+      }
+    ]
+  },
+  {
+    "module": "footer"
+  }
+]
