@@ -184,11 +184,11 @@
         "technologies": "PHP, CSS, HTML",
         "description": "A series of responsive JSON backed modules to practice mobile-first design using pure PHP.",
         "thumbnail": "images/projectimage9.png",
-        "url": "https://peprojects.dev/alpha-3/josh/projects/figma-conversion/",
+        "url": "https://peprojects.dev/alpha-3/josh/projects/figma-main/",
         "hasCaseStudy": true,
         "hasRepo" : false,
         "hasDemo": true,
-        "gitrepo": "https://github.com/JoshBenjaminG/pe-projects/tree/master/projects/promotional%20email",
+        "gitrepo": "https://github.com/JoshBenjaminG/pe-projects/tree/master/projects/figma-main",
         "slug": "777",
         "case-study":
         {
