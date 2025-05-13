@@ -4,7 +4,7 @@
         "technologies": "Wordpress",
         "description": "A survey of my professional career.",
         "thumbnail": "images/promoemail.jpg",
-        "url": "https://peprojects.dev/alpha-3/josh/projects/promotional%20email/",
+        "url": "https://josheg.com/projects/promotional%20email/",
         "hasCaseStudy": true,
         "hasRepo" : false,
         "hasDemo": false,
@@ -17,7 +17,7 @@
                 {
                     "module": "project-links",
                     "github": "https://github.com/JoshBenjaminG/pe-projects/tree/master/projects/promotional%20email",
-                    "site_link": "https://peprojects.dev/alpha-3/josh/projects/promotional%20email/"
+                    "site_link": "https://josheg.com/projects/promotional%20email/"
                 },
                 {
                     "module": "video",
@@ -52,7 +52,7 @@
                 {
                     "module": "project-links",
                     "github": "https://github.com/JoshBenjaminG/pe-projects/tree/master/projects/promotional%20email",
-                    "site_link": "https://peprojects.dev/alpha-3/josh/projects/promotional%20email/"
+                    "site_link": "https://josheg.com/projects/promotional%20email/"
                 },
                 {
                     "module": "image",
@@ -81,7 +81,7 @@
                 {
                     "module": "project-links",
                     "github": "https://github.com/JoshBenjaminG/pe-projects/tree/master/projects/newsletteremail",
-                    "site_link": "https://peprojects.dev/alpha-3/josh/projects/newsletteremail/"
+                    "site_link": "https://josheg.com/projects/newsletteremail/"
                 },
                 {
                     "module": "image",
@@ -110,7 +110,7 @@
                 {
                     "module": "project-links",
                     "github": "https://github.com/JoshBenjaminG/pe-projects/tree/master/projects/newsletteremail",
-                    "site_link": "https://peprojects.dev/alpha-3/josh/projects/newsletteremail/"
+                    "site_link": "https://josheg.com/projects/meetup/"
                 },
                 {
                     "module": "image",
@@ -139,7 +139,7 @@
                 {
                     "module": "project-links",
                     "github": "https://github.com/JoshBenjaminG/pe-projects/tree/master/projects/riche-fashion",
-                    "site_link": "https://peprojects.dev/alpha-3/josh/projects/riche-fashion/"
+                    "site_link": "https://josheg.com/projects/riche-fashion/"
                 },
                 {
                     "module": "image",
@@ -174,7 +174,7 @@
                 {
                     "module": "project-links",
                     "github": "https://github.com/JoshBenjaminG/pe-projects/tree/master/projects/riche-fashion",
-                    "site_link": "https://peprojects.dev/alpha-3/josh/projects/riche-fashion/"
+                    "site_link": "https://josheg.com/projects/riche-fashion/"
                 }
             ]
         }
@@ -184,7 +184,7 @@
         "technologies": "PHP, CSS, HTML",
         "description": "A series of responsive JSON backed modules to practice mobile-first design using pure PHP.",
         "thumbnail": "images/projectimage9.png",
-        "url": "https://peprojects.dev/alpha-3/josh/projects/figma-main/",
+        "url": "https://josheg.com/projects/figma-main/figma-conversion",
         "hasCaseStudy": true,
         "hasRepo" : false,
         "hasDemo": true,
@@ -197,7 +197,7 @@
                 {
                     "module": "project-links",
                     "github": "https://github.com/JoshBenjaminG/figma/tree/main/figma-conversion",
-                    "site_link": "https://peprojects.dev/alpha-3/josh/projects/figma-conversion/"
+                    "site_link": "https://josheg.com/projects/figma-main/figma-conversion/"
                 },
                 {
                     "module": "image",
@@ -226,7 +226,7 @@
                 {
                     "module": "project-links",
                     "github": "https://github.com/JoshBenjaminG/figma/tree/main/figma-conversion",
-                    "site_link": "https://peprojects.dev/alpha-3/josh/projects/figma-conversion/"
+                    "site_link": "https://josheg.com/projects/figma-main/figma-conversion/"
                 }
             ]
         }
