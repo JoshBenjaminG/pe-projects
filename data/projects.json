@@ -15,21 +15,46 @@
             "sections":
             [
                 {
-                    "module": "project-links",
-                    "github": "https://github.com/JoshBenjaminG/pe-projects/tree/master/projects/promotional%20email",
-                    "site_link": "https://josheg.com/projects/promotional%20email/"
-                },
-                {
                     "module": "video",
-                    "video": "https://www.youtube.com/embed/jNQXAC9IVRw?si=szK3b-wUy367uxRY",
-                    "caption": "<p class='caption'>Test Caption</p>",
-                    "description": "Test description"
+                    "video": "https://www.youtube.com/embed/eHtQnhvledg?si=zL85DUpRAvtmzFPZ",
+                    "caption": "<p class='caption'></p>",
+                    "description": ""
                 },
                 {
                     "module": "image",
-                    "img": "images/trimmed-images/research1.jpg",
-                    "caption": "<p class='caption'>Check out the live link or the source code to see more!</p>",
-                    "description": ""
+                    "img": "images/perpetual.png",
+                    "caption": "<p class='caption'></p>",
+                    "description": "<p>I enrolled into the Design and Development mentorship program at Perpetual Education. More details about what I learned can be found in my portfolio projects, but I personally gravitated towards anything related to front-end Design.</p>"
+                },
+                {
+                    "module": "image",
+                    "img": "images/gg.png",
+                    "caption": "<p class='caption'></p>",
+                    "description": "<p>At my first job as a contractor for Classic City Consulting, we created website landing pages using Gutenberg blocks. Work included anything from social media apps to...</p>"
+                },
+                {
+                    "module": "image",
+                    "img": "images/inteleca.png",
+                    "caption": "<p class='caption'></p>",
+                    "description": "<p>hardware stores! Agency work brings with it variety.</p>"
+                },
+                {
+                    "module": "image",
+                    "img": "images/coastal.png",
+                    "caption": "<p class='caption'></p>",
+                    "description": "<p>Starting at my second job at Bizcor, I was mainly responsible for content updates and small design tweeks. The occasional bug fix perhaps.</p>"
+                },
+                {
+                    "module": "image",
+                    "img": "images/roelenspopup.png",
+                    "caption": "<p class='caption'></p>",
+                    "description": "<p>As time went on, clients who were close to me would reach out for feature implementations such as popup design and development, among other things.</p>"
+                },
+                {
+                    "module": "image",
+                    "img": "images/stowerefresh.png",
+                    "caption": "<p class='caption'></p>",
+                    "description": "<p>My largest projects have been overseeing landing page design and creation. At this point I spend a lot of time talking to clients and our different teams to deliver site updates as needed.</p>"
                 }
             ]
         }
