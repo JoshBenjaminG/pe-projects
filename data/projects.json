@@ -22,37 +22,37 @@
                 },
                 {
                     "module": "image",
-                    "img": "images/perpetual.png",
+                    "img": "https://i.imgur.com/nnwWyEa.png",
                     "caption": "<p class='caption'></p>",
                     "description": "<p>I enrolled into the Design and Development mentorship program at Perpetual Education. More details about what I learned can be found in my portfolio projects, but I personally gravitated towards anything related to front-end Design.</p>"
                 },
                 {
                     "module": "image",
-                    "img": "images/gg.png",
+                    "img": "https://i.imgur.com/Yta9inm.png",
                     "caption": "<p class='caption'></p>",
                     "description": "<p>At my first job as a contractor for Classic City Consulting, we created website landing pages using Gutenberg blocks. Work included anything from social media apps to...</p>"
                 },
                 {
                     "module": "image",
-                    "img": "images/inteleca.png",
+                    "img": "https://i.imgur.com/EVVOpwM.png",
                     "caption": "<p class='caption'></p>",
-                    "description": "<p>hardware stores! Agency work brings with it variety.</p>"
+                    "description": "<p>hardware stores! One of the traits of agency work is that it brings variety.</p>"
                 },
                 {
                     "module": "image",
-                    "img": "images/coastal.png",
+                    "img": "https://i.imgur.com/ltC5az9.png",
                     "caption": "<p class='caption'></p>",
                     "description": "<p>Starting at my second job at Bizcor, I was mainly responsible for content updates and small design tweeks. The occasional bug fix perhaps.</p>"
                 },
                 {
                     "module": "image",
-                    "img": "images/roelenspopup.png",
+                    "img": "https://i.imgur.com/4rstcjH.png",
                     "caption": "<p class='caption'></p>",
                     "description": "<p>As time went on, clients who were close to me would reach out for feature implementations such as popup design and development, among other things.</p>"
                 },
                 {
                     "module": "image",
-                    "img": "images/stowerefresh.png",
+                    "img": "https://i.imgur.com/h0a5pUS.png",
                     "caption": "<p class='caption'></p>",
                     "description": "<p>My largest projects have been overseeing landing page design and creation. At this point I spend a lot of time talking to clients and our different teams to deliver site updates as needed.</p>"
                 }
