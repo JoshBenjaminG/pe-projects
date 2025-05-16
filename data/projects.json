@@ -3,7 +3,7 @@
         "heading": "2023-Present",
         "technologies": "Wordpress",
         "description": "A survey of my professional career so far.",
-        "thumbnail": "images/stower4.png",
+        "thumbnail": "https://i.imgur.com/jjSNMC3.png",
         "url": "https://josheg.com/?page=detail&project=100",
         "hasCaseStudy": true,
         "hasRepo" : false,
