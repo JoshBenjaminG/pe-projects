@@ -55,3 +55,8 @@ h2 {
 span {
   color: #f43c3c;
 }
+
+p a {
+	color:#f43c3c;
+	text-decoration: none;
+}

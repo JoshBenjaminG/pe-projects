@@ -23,10 +23,12 @@ if ($page == 'home') {
 	</nav>
 
 
-	<nav class='links'>
-		<a href="https://josheg.com/" class="hover-underline-animation calm-voice">Home</a>
-		<a href="https://codepen.io/JoshuaEg/pens/public" target="_blank" class="hover-underline-animation calm-voice">Codepen</a>
-		<a href="https://github.com/JoshBenjaminG" target="_blank" class="hover-underline-animation calm-voice">Github</a>
-	</nav>
+<nav class='links'>
+  <a href="mailto:joshuaegage@gmail.com" class="hover-underline-animation calm-voice">Contact</a>
+  <a href="https://josheg.com/" class="hover-underline-animation calm-voice">Home</a>
+  <a href="https://codepen.io/JoshuaEg/pens/public" target="_blank" class="hover-underline-animation calm-voice">Codepen</a>
+  <a href="https://github.com/JoshBenjaminG" target="_blank" class="hover-underline-animation calm-voice">Github</a>
+</nav>
+
 
 </mast-head>
