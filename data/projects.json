@@ -1,15 +1,15 @@
 [
         {
         "heading": "OWA Digital Marketing Campaign Showcase",
-        "technologies": "Wordpress",
+        "technologies": "Websites, Emails, Ads",
         "description": "under construction.",
-        "thumbnail": "https://i.imgur.com/jjSNMC3.png",
+        "thumbnail": "images/under_construction_PNG42.png",
         "url": "josheg.com",
         "hasCaseStudy": true,
         "hasRepo" : false,
         "hasDemo": false,
         "gitrepo": "",
-        "slug": "100",
+        "slug": "hide",
         "case-study":
         {
             "sections":

@@ -6,6 +6,7 @@
 	$hasRepo = $project["hasRepo"];
 	$repo = $project["gitrepo"];
 	$hasDemo = $project["hasDemo"];
+	$slug = $project["slug"];
 	
 ?>
 
@@ -22,9 +23,9 @@
 		<p class='calm-voice'><?=$project['description']?></p>
 
 		<div>
-		<?php if ($caseStudy == true) { ?>
+		<?php if ($caseStudy == true && $slug != 'hide') { ?>
 			<a href='?page=detail&project=<?=$project['slug']?>' target="_blank" class="calm-voice">Read Case Study</a>
-		<?php }?>
+		<?php }?> 
 		<?php if ($hasRepo == true) { ?>
 		<a href='<?=$repo?>' target="_blank" class="calm-voice">Github Repo</a>
 		<?php } ?>
