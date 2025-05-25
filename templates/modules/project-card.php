@@ -7,6 +7,7 @@
 	$repo = $project["gitrepo"];
 	$hasDemo = $project["hasDemo"];
 	$slug = $project["slug"];
+	$youtube = $project["youtube"];
 	
 ?>
 
@@ -23,9 +24,14 @@
 		<p class='calm-voice'><?=$project['description']?></p>
 
 		<div>
-		<?php if ($caseStudy == true && $slug != 'hide') { ?>
-			<a href='?page=detail&project=<?=$project['slug']?>' target="_blank" class="calm-voice">Read Case Study</a>
-		<?php }?> 
+<?php if ($caseStudy == true && $slug != 'hide') { ?>
+  <?php if (isset($youtube) && $youtube == true) { ?>
+    <a href="https://www.youtube.com/" target="_blank" class="calm-voice">Watch Case Study</a>
+  <?php } else { ?>
+    <a href='?page=detail&project=<?=$project['slug']?>' target="_blank" class="calm-voice">Read Case Study</a>
+  <?php } ?>
+<?php } ?>
+
 		<?php if ($hasRepo == true) { ?>
 		<a href='<?=$repo?>' target="_blank" class="calm-voice">Github Repo</a>
 		<?php } ?>
