@@ -63,6 +63,50 @@
   .sidebar a {
     font-size: 12px;
   }
+
+  @media screen and (max-width: 768px) {
+  .sidebar {
+    display: none;
+  }
+  @media only screen and (max-width: 600px) {
+  img {
+    max-width: 100% !important;
+    height: auto !important;
+  }
+
+  .main {
+    width: 100% !important;
+  }
+
+  .email-section {
+    padding: 10px !important;
+  }
+
+  h1, h2, h3, h4 {
+    font-size: 22px !important;
+  }
+
+  p {
+    font-size: 14px !important;
+  }
+}
+@media only screen and (max-width: 600px) {
+  .main {
+    width: 100% !important;
+  }
+
+  table {
+    width: 100% !important;
+  }
+
+  td {
+    padding-left: 10px !important;
+    padding-right: 10px !important;
+  }
+}
+
+}
+
   </style>
 </head>
 <body>
@@ -74,6 +118,7 @@
   <em>Watch the video breakdown here!</em>
 </a>
 
+<a href="#intro" id="link-intro" style="font-size: 20px; font-weight: bold; margin-bottom: 10px; display: block;">Introduction</a>
 
   <a href="#email-journey" id="link-email-journey" style="font-size: 20px; font-weight: bold; margin-bottom: 10px; display: block;">Email Journey</a>
   <a href="#email1" id="link-email1">Email 1: Returning Guests</a>
@@ -163,6 +208,20 @@
 </style>
 </head>
 <body>
+
+<div style="max-width: 600px; margin: 0 auto; text-align: left; color: black;">
+
+  <h1 id="intro" style="text-align: center; font-size: 80px; font-weight: ; margin-top: 60px;">
+    Introduction <span style="font-size: 15px;">(What is this?)</span>
+  </h1>
+
+  <p style="color:black;">From OWA's website: "OWA Parks & Resort is centered around Tropic Falls, featuring year-round island vibes in the region’s largest indoor water park plus outdoor wave pool and 23 theme-park attractions."</p>
+
+  <p style="color:black;">The great people over at OWA have asked me to create their Summer Digital Marketing Campaign with the goal of centering OWA as the premier family-friendly destination. You'll find email templates, website update suggestions, social media post examples, data analytics breakdowns, and a complete video walkthrough link in the top left corner. The theme of the campaign is memory.</p> <span style="font-size: 12px;">(This website is not mobile-friendly and is best viewed on a larger screen. I'm so sorry.)</span>
+
+</div>
+
+
 <h1 id="email-journey" style="text-align: center; font-size: 80px; font-weight: bold; color: #1a2650; margin-top: 60px;">
   Email Marketing Campaign
 </h1>
@@ -928,8 +987,8 @@
 
 
 <script>
-  const links = document.querySelectorAll('.sidebar a');
-  const sections = document.querySelectorAll('div[id]');
+  const links = document.querySelectorAll('.sidebar a[id^="link-"]');
+  const sections = document.querySelectorAll('div[id], h1[id]');
 
   const observer = new IntersectionObserver(
     entries => {
@@ -938,13 +997,17 @@
         const link = document.querySelector(`#link-${id}`);
 
         if (entry.isIntersecting) {
+          // Clear all existing active links
           links.forEach(l => l.classList.remove('active'));
+
+          // Highlight the currently visible section
           if (link) link.classList.add('active');
         }
       });
     },
     {
-      threshold: 0.5
+      rootMargin: '0px 0px -70% 0px', // triggers earlier in scroll
+      threshold: 0.1 // lower value = quicker updates
     }
   );
 
@@ -952,6 +1015,7 @@
     observer.observe(section);
   });
 </script>
+
 
 
 
