@@ -59,6 +59,10 @@
       .sidebar a.active {
     text-decoration: underline;
   }
+
+  .sidebar a {
+    font-size: 12px;
+  }
   </style>
 </head>
 <body>
@@ -81,6 +85,10 @@
   <a href="#banner-note" id="link-banner-note">Website Banner Update</a>
   <a href="#web-sub" id="link-web-sub">Website Subpage</a>
   <a href="#web-popup" id="link-web-popup">Website Popup Example</a>
+
+    <a href="#social-content-plan" id="link-social-content-plan" style="font-size: 20px; font-weight: bold; margin-top: 20px; margin-bottom: 10px; display: block;">Social Media</a>
+  <a href="#facebook" id="link-facebook">Facebook</a>
+  <a href="#insta" id="link-instagram">Instagram</a>
 </div>
 
 
@@ -892,9 +900,23 @@
 </div>
 
 
+<h1 id="social-content-plan" style="text-align: center; font-size: 80px; font-weight: bold; color: #1a2650; margin-top: 60px;">
+  Social Media
+</h1>
 
+<div id="facebook" style="margin-top: 60px; text-align: center;">
+  <p style="font-weight: ; font-size: 20px; text-align: left; color: black; max-width: 800px; margin: 20px auto 0 auto;">
+    Social media posts can fit in with the summer theme we've built towards so far by using similar language. Looks like Kim Barber agrees with me! (I have no idea who that is but she seems nice!!)
+  </p>
+  <img src="img/facebookpost.png" alt="OWA Summer Fun" style="width: 100%; max-width: 800px; height: auto; display: block; margin: 0 auto; margin-top: 20px;">
+</div>
 
-
+<div id="insta" style="margin-top: 60px; text-align: center;">
+  <p style="font-weight: ; font-size: 20px; text-align: left; color: black; max-width: 800px; margin: 20px auto 0 auto;">
+    insta post notes
+  </p>
+  <img src="https://i.postimg.cc/L8vPZvKP/Screenshot-2025-05-25-at-1-12-21-PM.png" alt="OWA Summer Fun" style="width: 100%; max-width: 800px; height: auto; display: block; margin: 0 auto; margin-top: 20px;">
+</div>
 
 <script>
   const links = document.querySelectorAll('.sidebar a');
@@ -921,6 +943,8 @@
     observer.observe(section);
   });
 </script>
+
+
 
 
 </body>
