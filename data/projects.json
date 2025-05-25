@@ -4,12 +4,12 @@
         "technologies": "Websites, Emails, Ads",
         "description": "A campaign.",
         "thumbnail": "https://i.postimg.cc/Qtb4VwkT/asdfawefqw.png",
-        "url": "josheg.com",
+        "url": "https://josheg.com/projects/OWA%20Summer%20Campaign%20Alternate/",
         "hasCaseStudy": true,
         "hasRepo" : false,
-        "hasDemo": false,
-        "gitrepo": "",
-        "slug": "hide",
+        "hasDemo": true,
+        "gitrepo": "https://github.com/JoshBenjaminG/pe-projects/tree/master/projects/OWA%20Summer%20Campaign%20Alternate",
+        "slug": "1011",
         "case-study":
         {
             "sections":
