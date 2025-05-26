@@ -26,7 +26,7 @@
 		<div>
 <?php if ($caseStudy == true && $slug != 'hide') { ?>
   <?php if (isset($youtube) && $youtube == true) { ?>
-    <a href="https://www.youtube.com/" target="_blank" class="calm-voice">Watch Case Study</a>
+    <a href="https://www.youtube.com/watch?v=4c5K4ctal7o&feature=youtu.be" target="_blank" class="calm-voice">Watch Case Study</a>
   <?php } else { ?>
     <a href='?page=detail&project=<?=$project['slug']?>' target="_blank" class="calm-voice">Read Case Study</a>
   <?php } ?>
