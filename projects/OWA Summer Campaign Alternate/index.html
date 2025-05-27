@@ -99,6 +99,18 @@
 }
 
 
+.nav-link {
+  opacity: 0;
+  transform: translateX(-20px);
+  transition: transform 0.25s ease-out, opacity 0.25s ease-out;
+}
+
+.nav-link.slide-in {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+
 
 
 
@@ -158,34 +170,32 @@
 
   <!-- Sidebar -->
 <div class="sidebar">
-  <a href="https://www.youtube.com/watch?v=Cha-xyOnRus&ab_channel=JBG" target="_blank" style="display: inline-flex; align-items: center; gap: 8px; text-decoration: none;" onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'">
+<a class="nav-link" href="https://www.youtube.com/watch?v=Cha-xyOnRus&ab_channel=JBG" target="_blank" style="display: inline-flex; align-items: center; gap: 8px; text-decoration: none;" onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'">
   <img src="https://i.postimg.cc/tJWhcY81/You-Tube-full-color-icon-2024-svg.png" alt="YouTube" style="width: 20px; height: 20px;">
   <em>Watch the video breakdown here!</em>
 </a>
 
-<a href="#intro" id="link-intro" style="font-size: 20px; font-weight: bold; margin-bottom: 10px; display: block;">Introduction</a>
+<a class="nav-link" href="#intro" id="link-intro" style="font-size: 20px; font-weight: bold; margin-bottom: 10px; display: block;">Introduction</a>
+<a class="nav-link" href="#email-journey" id="link-email-journey" style="font-size: 20px; font-weight: bold; margin-bottom: 10px; display: block;">Email Journey</a>
+<a class="nav-link" href="#email1" id="link-email1">Email 1: Returning Guests</a>
+<a class="nav-link" href="#email2" id="link-email2">Email 2: Prospective Guests</a>
+<a class="nav-link" href="#email3" id="link-email3">Email 3: Urgent Reminder</a>
+<a class="nav-link" href="#email4" id="link-email4">Email 4: Final Call/Last Chance</a>
 
-  <a href="#email-journey" id="link-email-journey" style="font-size: 20px; font-weight: bold; margin-bottom: 10px; display: block;">Email Journey</a>
-  <a href="#email1" id="link-email1">Email 1: Returning Guests</a>
-  <a href="#email2" id="link-email2">Email 2: Prospective Guests</a>
-  <a href="#email3" id="link-email3">Email 3: Urgent Reminder</a>
-  <a href="#email4" id="link-email4">Email 4: Final Call/Last Chance</a>
+<a class="nav-link" href="#website-content-plan" id="link-website-content-plan" style="font-size: 20px; font-weight: bold; margin-top: 20px; margin-bottom: 10px; display: block;">Website Content</a>
+<a class="nav-link" href="#banner-note" id="link-banner-note">Website Banner Update</a>
+<a class="nav-link" href="#web-sub" id="link-web-sub">Website Subpage</a>
+<a class="nav-link" href="#web-popup" id="link-web-popup">Website Popup Example</a>
 
-  <a href="#website-content-plan" id="link-website-content-plan" style="font-size: 20px; font-weight: bold; margin-top: 20px; margin-bottom: 10px; display: block;">Website Content</a>
-  <a href="#banner-note" id="link-banner-note">Website Banner Update</a>
-  <a href="#web-sub" id="link-web-sub">Website Subpage</a>
-  <a href="#web-popup" id="link-web-popup">Website Popup Example</a>
+<a class="nav-link" href="#social-content-plan" id="link-social-content-plan" style="font-size: 20px; font-weight: bold; margin-top: 20px; margin-bottom: 10px; display: block;">Social Media</a>
+<a class="nav-link" href="#facebook" id="link-facebook">Facebook</a>
+<a class="nav-link" href="#instagram" id="link-instagram">Instagram</a>
+<a class="nav-link" href="#twitter" id="link-twitter">X</a>
 
-    <a href="#social-content-plan" id="link-social-content-plan" style="font-size: 20px; font-weight: bold; margin-top: 20px; margin-bottom: 10px; display: block;">Social Media</a>
-  <a href="#facebook" id="link-facebook">Facebook</a>
-  <a href="#instagram" id="link-instagram">Instagram</a>
-  <a href="#twitter" id="link-twitter">X</a>
+<a class="nav-link" href="#analytics" id="link-analytics" style="font-size: 15px; font-weight: bold; margin-top: 20px; margin-bottom: 10px; display: block;">Analytics</a>
+<a class="nav-link" href="#best" id="link-best" style="font-size: 15px; font-weight: bold; margin-top: 20px; margin-bottom: 10px; display: block;">Best Practices</a>
+<a class="nav-link" href="#ending" id="link-ending" style="font-size: 15px; font-weight: bold; margin-top: 20px; margin-bottom: 10px; display: block;">Conclusion</a>
 
-  <a href="#analytics" id="link-analytics" style="font-size: 15px; font-weight: bold; margin-top: 20px; margin-bottom: 10px; display: block;">Analytics</a>
-
-  <a href="#best" id="link-best" style="font-size: 15px; font-weight: bold; margin-top: 20px; margin-bottom: 10px; display: block;">Best Practices</a>
-
-    <a href="#ending" id="link-ending" style="font-size: 15px; font-weight: bold; margin-top: 20px; margin-bottom: 10px; display: block;">Conclusion</a>
 </div>
 
 
@@ -1131,6 +1141,30 @@
 
   window.addEventListener('scroll', revealOnScroll);
   window.addEventListener('load', revealOnScroll);
+
+
+
+
+  window.addEventListener('load', () => {
+    const links = document.querySelectorAll('.nav-link');
+    let index = 0;
+
+    function animateNext() {
+      if (index < links.length) {
+        links[index].classList.add('slide-in');
+        index++;
+        setTimeout(() => requestAnimationFrame(animateNext), 40); // smooth 40ms gap
+      }
+    }
+
+    animateNext();
+  });
+</script>
+
+</script>
+
+</script>
+
 </script>
 
 </script>
