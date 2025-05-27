@@ -66,6 +66,18 @@
     font-size: 12px;
   }
 
+  .slide-in-right {
+  opacity: 0;
+  transform: translateX(100px);
+  transition: all 0.6s ease-out;
+}
+
+.slide-in-right.visible {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+
   @media screen and (max-width: 880px) {
   .sidebar {
     display: none;
@@ -252,7 +264,7 @@
 
 
 
-
+<section class="slide-in-right">
 <h1 id="email-journey" style="text-align: center; font-size: 50px; font-weight: bold; color: #1a2650; margin-top: 60px;">
   Email Marketing Campaign
 </h1>
@@ -267,7 +279,7 @@
 
 <div  style="padding-top:20px;">
 
-<div id="email1" style="max-width: 600px; width: 100%; text-align: left; padding: 40px 10px 10px 10px;" class="mobile-side-margin">
+<div id="email1" style="max-width: 600px; width: 100%; text-align: left; padding: 20px 10px 10px 10px;" class="mobile-side-margin">
   Returning Guests - This email is targeted to previous guests. Playing on the theme of memory, these guests are asked to relive their favorite OWA adventure again.
   <br>
 </div>
@@ -565,8 +577,8 @@
 </style>
 </head>
 <body>
-
-<center class="wrapper">
+</section>
+<center class="wrapper slide-in-right">
   <div id="email2"></div>
 
 <div style="width:600px; font-weight:; text-align: left; padding: 40px 10px 10px 10px;" class="mobile-side-margin">
@@ -745,6 +757,7 @@
   </style>
 </head>
 <body>
+<section class="slide-in-right">
 <div id="email3"></div>
 <center style="width: 100%; background-color: #f3f3f3;">
   <div style="max-width:600px; width:100%; text-align:left; background-color: #f3f3f3; padding: 40px 10px 10px 10px; box-sizing: border-box;">
@@ -821,11 +834,12 @@
       </tr>
     </table>
   </center>
-
+</section>
 </body>
 </html>
 <!-- email 4 -->
-<body>
+
+<section class="slide-in-right">
 <div id="email4"></div>
 
 <center style="width: 100%; background-color: #f3f3f3;">
@@ -912,12 +926,13 @@
       </td>
     </tr>
   </table>
-</center>
 
+</center>
+</section>
 
 <!-- Final highlight section outside of the emails -->
 <!-- Final highlight section -->
-<div style="margin-left: 10px; margin-right: 10px;">
+<div style="margin-left: 10px; margin-right: 10px;" class="slide-in-right">
 <h1 id="website-content-plan" style="text-align: center; font-size: 50px; font-weight: bold; color: #1a2650; margin-top: 60px;">
   Website Content Plan
 </h1>
@@ -943,7 +958,7 @@
   <img src="https://i.postimg.cc/G20rqwvs/popup.png" alt="Website Popup Example" style="width: 100%; max-width: 600px; height: auto; display: block; margin: 0 auto; margin-top: 20px;">
 </div>
 </div>
-
+<section class="slide-in-right">
 <h1 id="social-content-plan" style="text-align: center; font-size: 50px; font-weight: bold; color: #1a2650; margin-top: 60px;">
   Social Media
 </h1>
@@ -968,7 +983,9 @@
   </p>
   <img src="img/twitter.png" alt="OWA Summer Fun" style="width: 100%; max-width: 600px; height: auto; display: block; margin: 0 auto; margin-top: 20px;">
 </div>
+</section>
 
+<section class="slide-in-right">
 <h1 id="analytics" style="text-align: center; font-size: 30px; color: #1a2650; margin-top: 60px;">Campaign Analytics Overview</h1>
 
 <div style="text-align: center; max-width: 600px; margin: 0 auto; padding: 20px;">
@@ -1004,7 +1021,8 @@
   <img src="img/dataimg.png" alt="Website Engagement Mockup" style="width:100%; max-width: 600px; margin-top: 30px;">
 
 </div>
-
+</section>
+<section class="slide-in-right">
 <!-- Best Practices Section -->
 <h1 id="best" style="text-align: center; font-size: 50px; font-weight: bold; color: #1a2650; margin-top: 60px;">
   Best Practices
@@ -1026,7 +1044,8 @@
 <p style="font-weight: ; text-align: left; color: black; max-width: 600px; margin: 20px auto 0 auto;">
   This campaign could benefit greatly from looking at email statistics after the fact to determine which email succeeded the most.
 </p>
-
+</section>
+<section class="slide-in-right">
 <h1 id="ending" style="text-align: center; font-size: 50px; font-weight: bold; color: #1a2650; margin-top: 60px;">
   Conclusion
 </h1>
@@ -1040,6 +1059,7 @@
 <p style="font-weight: ; text-align: left; color: black; max-width: 600px; margin: 20px auto 0 auto; margin-bottom: 80px;" class="mobile-side-margin">
   Check out more <a href="https://josheg.com/" target="_blank">here.</a> Project repo <a href="https://github.com/JoshBenjaminG/pe-projects/tree/2bf2033a8bae313988d1eb9ba0314c477e1075c2/projects/OWA%20Summer%20Campaign%20Alternate" target="_blank"> here.</a>
 </p>
+</section>
 
 <script>
   const links = document.querySelectorAll('.sidebar a[id^="link-"]');
@@ -1069,6 +1089,25 @@
   sections.forEach(section => {
     observer.observe(section);
   });
+
+  function revealOnScroll() {
+    const elements = document.querySelectorAll('.slide-in-right');
+    const windowHeight = window.innerHeight;
+
+    elements.forEach(el => {
+      const elementTop = el.getBoundingClientRect().top;
+      const isVisible = elementTop < windowHeight - 100;
+
+      if (isVisible) {
+        el.classList.add('visible');
+      }
+    });
+  }
+
+  window.addEventListener('scroll', revealOnScroll);
+  window.addEventListener('load', revealOnScroll);
+</script>
+
 </script>
 
 
