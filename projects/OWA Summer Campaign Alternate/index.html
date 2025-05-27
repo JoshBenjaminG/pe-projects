@@ -101,14 +101,14 @@
 
 .nav-link {
   opacity: 0;
-  transform: translateX(-20px);
-  transition: transform 0.25s ease-out, opacity 0.25s ease-out;
+  transition: opacity 0.2s ease-out;
 }
 
-.nav-link.slide-in {
+.nav-link.fade-in {
   opacity: 1;
-  transform: translateX(0);
 }
+
+
 
 
 
@@ -270,7 +270,7 @@
 </head>
 <body>
 
-<div style="max-width: 600px; margin: 0 auto; text-align: left; color: #1a2650;">
+<div style="max-width: 600px; margin: 0 auto; text-align: left; color: #1a2650;" class="phase-in">
 
   <h1 id="intro" style="text-align: center; font-size: 60px; font-weight: ; margin-top: 60px;">
     Introduction <span style="font-size: 15px;">(What is this?)</span>
@@ -1145,20 +1145,23 @@
 
 
 
+
+
   window.addEventListener('load', () => {
     const links = document.querySelectorAll('.nav-link');
-    let index = 0;
+    let delay = 0;
 
-    function animateNext() {
-      if (index < links.length) {
-        links[index].classList.add('slide-in');
-        index++;
-        setTimeout(() => requestAnimationFrame(animateNext), 40); // smooth 40ms gap
-      }
-    }
-
-    animateNext();
+    links.forEach(link => {
+      setTimeout(() => {
+        link.classList.add('fade-in');
+      }, delay);
+      delay += 40; // stagger tightly for smooth flow
+    });
   });
+</script>
+
+</script>
+
 </script>
 
 </script>
