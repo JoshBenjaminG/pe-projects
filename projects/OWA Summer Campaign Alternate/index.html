@@ -6,6 +6,10 @@
 
   <title>OWA Email Journey Demo</title>
   <style>
+    * {
+  outline: 1px solid red;
+}
+
     body {
       margin: 0;
       font-family: sans-serif;
@@ -66,7 +70,8 @@
     font-size: 12px;
   }
 
-  .slide-in-right {
+/* Default animation */
+.slide-in-right {
   opacity: 0;
   transform: translateX(100px);
   transition: all 0.6s ease-out;
@@ -76,6 +81,16 @@
   opacity: 1;
   transform: translateX(0);
 }
+
+/* Disable animation on small screens */
+@media (max-width: 768px) {
+  .slide-in-right {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+}
+
 
 
   @media screen and (max-width: 880px) {
