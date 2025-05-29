@@ -221,7 +221,7 @@
     {
         "heading": "Riche Fashion",
         "technologies": "PHP, CSS, HTML",
-        "description": "A research project that implemented design principles found among fashion websites.",
+        "description": "An implementation of design principles found among fashion websites.",
         "thumbnail": "images/project-image2.jpg",
         "url": "https://josheg.com/projects/riche-fashion/",
         "hasCaseStudy": true,
