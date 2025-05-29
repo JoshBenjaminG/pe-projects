@@ -9,8 +9,8 @@ projects-intro header {
 
 projects-intro project-grid {
   display: grid;
-  gap: 7em 1em;
-  
+  gap: 5em 1em;
+  margin-bottom: 100px;
   margin-top: 20px;
 }
 
