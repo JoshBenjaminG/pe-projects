@@ -8,6 +8,7 @@
 	$hasDemo = $project["hasDemo"];
 	$slug = $project["slug"];
 	$youtube = $project["youtube"];
+	$youtubeurl = $project["youtubeurl"];
 	
 ?>
 
@@ -26,7 +27,7 @@
 		<div>
 <?php if ($caseStudy == true && $slug != 'hide') { ?>
   <?php if (isset($youtube) && $youtube == true) { ?>
-    <a href="https://www.youtube.com/watch?v=Cha-xyOnRus&ab_channel=JBG" target="_blank" class="calm-voice">Watch Case Study</a>
+    <a href="<?=$youtubeurl?>" target="_blank" class="calm-voice">Watch Case Study</a>
   <?php } else { ?>
     <a href='?page=detail&project=<?=$project['slug']?>' target="_blank" class="calm-voice">Read Case Study</a>
   <?php } ?>

@@ -9,6 +9,7 @@
         "hasRepo" : false,
         "hasDemo": true,
         "youtube": true,
+        "youtubeurl": "https://www.youtube.com/watch?v=Cha-xyOnRus&ab_channel=JBG",
         "gitrepo": "https://github.com/JoshBenjaminG/pe-projects/tree/master/projects/OWA%20Summer%20Campaign%20Alternate",
         "slug": "1011",
         "case-study":
@@ -71,6 +72,7 @@
         "hasRepo" : false,
         "hasDemo": false,
         "youtube": false,
+        "youtubeurl": false,
         "gitrepo": "https://github.com/JoshBenjaminG/pe-projects/tree/master/projects/promotional%20email",
         "slug": "100",
         "case-study":
@@ -133,6 +135,7 @@
         "hasRepo" : true,
         "hasDemo": true,
         "youtube": false,
+        "youtubeurl": false,
         "gitrepo": "https://github.com/JoshBenjaminG/pe-projects/tree/master/projects/promotional%20email",
         "slug": "369",
         "case-study":
@@ -163,6 +166,7 @@
         "hasRepo" : true,
         "hasDemo": true,
         "youtube": false,
+        "youtubeurl": false,
         "gitrepo": "https://github.com/JoshBenjaminG/pe-projects/tree/master/projects/newsletteremail",
         "slug": "231",
         "case-study":
@@ -193,6 +197,7 @@
         "hasRepo" : true,
         "hasDemo": true,
         "youtube": false,
+        "youtubeurl": false,
         "gitrepo": "https://github.com/JoshBenjaminG/pe-projects/tree/master/projects/meetup",
         "slug": "231",
         "case-study":
@@ -223,6 +228,7 @@
         "hasRepo" : false,
         "hasDemo": true,
         "youtube": false,
+        "youtubeurl": false,
         "gitrepo": "https://github.com/JoshBenjaminG/pe-projects/tree/master/projects/promotional%20email",
         "slug": "345",
         "case-study":
@@ -282,6 +288,7 @@
         "hasRepo" : false,
         "hasDemo": true,
         "youtube": false,
+        "youtubeurl": false,
         "gitrepo": "https://github.com/JoshBenjaminG/pe-projects/tree/master/projects/figma-main",
         "slug": "777",
         "case-study":
