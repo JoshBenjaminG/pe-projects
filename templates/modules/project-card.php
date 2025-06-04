@@ -13,31 +13,36 @@
 ?>
 
 
+<?php if ($slug != 'hide') { ?>
 <project-card>
-		<picture>
-			<img src='<?=$thumbnail?>' loading='lazy' alt='$todo'>
-		</picture>
+	<picture>
+		<img src='<?=$thumbnail?>' loading='lazy' alt='$todo'>
+	</picture>
 
-		<a href="<?=$url?>" target="_blank"><h2 class='attention-voice project-title'><?=$project['heading']?></h2></a>
+	<a href="<?=$url?>" target="_blank">
+		<h2 class='attention-voice project-title'><?=$project['heading']?></h2>
+	</a>
 
-		<h3 class='calm-voice tech'><?=$project['technologies']?></h3>
+	<h3 class='calm-voice tech'><?=$project['technologies']?></h3>
 
-		<p class='calm-voice'><?=$project['description']?></p>
+	<p class='calm-voice'><?=$project['description']?></p>
 
-		<div>
-<?php if ($caseStudy == true && $slug != 'hide') { ?>
-  <?php if (isset($youtube) && $youtube == true) { ?>
-    <a href="<?=$youtubeurl?>" target="_blank" class="calm-voice">Watch Case Study</a>
-  <?php } else { ?>
-    <a href='?page=detail&project=<?=$project['slug']?>' target="_blank" class="calm-voice">Read Case Study</a>
-  <?php } ?>
-<?php } ?>
+	<div>
+		<?php if ($caseStudy == true) { ?>
+			<?php if (isset($youtube) && $youtube == true) { ?>
+				<a href="<?=$youtubeurl?>" target="_blank" class="calm-voice">Watch Case Study</a>
+			<?php } else { ?>
+				<a href='?page=detail&project=<?=$project['slug']?>' target="_blank" class="calm-voice">Read Case Study</a>
+			<?php } ?>
+		<?php } ?>
 
 		<?php if ($hasRepo == true) { ?>
-		<a href='<?=$repo?>' target="_blank" class="calm-voice">Github Repo</a>
+			<a href='<?=$repo?>' target="_blank" class="calm-voice">Github Repo</a>
 		<?php } ?>
 		<?php if ($hasDemo == true) { ?>
-		<a href='<?=$url?>' target="_blank" class="calm-voice">Live Demo</a>
+			<a href='<?=$url?>' target="_blank" class="calm-voice">Live Demo</a>
 		<?php } ?>
-		</div>
+	</div>
 </project-card>
+<?php } ?>
+
