@@ -8,3 +8,5 @@ projects/record-label/wp-content/*
 projects/record-label/wp-content/themes/*
 !projects/record-label/wp-content/themes/artists-2022
 
+
+music/*.mp3

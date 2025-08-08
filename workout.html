@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Exercise Tracker</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 20px; background:#f9fafb; color:#333; }
+    h1 { text-align:center; color:#2c3e50; }
+    input, button { margin:5px; padding:8px; border-radius:5px; border:1px solid #ccc; font-size:14px; }
+    input:focus { outline:none; border-color:#3498db; box-shadow:0 0 4px rgba(52,152,219,.3); }
+    button { background:#3498db; color:#fff; border:none; transition:.2s; cursor:pointer; }
+    button:hover { background:#2980b9; }
+    table { border-collapse:collapse; width:100%; margin-top:15px; background:#fff; border-radius:6px; overflow:hidden; box-shadow:0 2px 6px rgba(0,0,0,.05); }
+    th, td { border:1px solid #ddd; padding:10px; text-align:center; }
+    th { background:#f0f4f8; color:#2c3e50; }
+    tr:nth-child(even) { background:#f9f9f9; }
+    tr:hover { background:#eef6fb; }
+    .action-btn { padding:5px 8px; font-size:12px; margin:2px; border-radius:4px; }
+    .edit-btn { background:#f39c12; color:#fff; }
+    .edit-btn:hover { background:#d68910; }
+    .delete-btn { background:#e74c3c; color:#fff; }
+    .delete-btn:hover { background:#c0392b; }
+    .secondary-btn { background:#7f8c8d; color:#fff; }
+    .success-btn { background:#27ae60; color:#fff; }
+    .neutral-btn { background:#576574; color:#fff; }
+    /* Modal */
+    .modal-backdrop { display:none; position:fixed; inset:0; background:rgba(0,0,0,.35); align-items:center; justify-content:center; }
+    .modal { width:90%; max-width:600px; background:#fff; border-radius:8px; box-shadow:0 10px 25px rgba(0,0,0,.2); }
+    .modal header { padding:12px 16px; border-bottom:1px solid #eee; display:flex; justify-content:space-between; align-items:center; }
+    .modal h2 { margin:0; font-size:18px; color:#2c3e50; }
+    .modal .close { background:#e74c3c; color:#fff; border:none; border-radius:4px; padding:6px 10px; cursor:pointer; }
+    .modal .content { max-height:60vh; overflow:auto; padding:12px 16px; }
+    .history-table { width:100%; border-collapse:collapse; }
+    .history-table th, .history-table td { border:1px solid #eee; padding:8px; font-size:14px; }
+    .history-table th { background:#f7fafc; }
+  </style>
+</head>
+<body>
+  <h1>Exercise Progress Tracker</h1>
+
+  <div style="text-align:center;">
+    <input type="text" id="exercise" placeholder="Exercise name">
+    <input type="number" id="sets" placeholder="Sets">
+    <input type="number" id="reps" placeholder="Reps">
+    <input type="number" id="weight" placeholder="Weight (lbs)">
+    <button onclick="addExercise()">Add Exercise</button>
+    <button class="success-btn" onclick="exportToCSV()">Export to CSV</button>
+    <button class="neutral-btn" onclick="exportBackup()">Export Backup (JSON)</button>
+    <label class="action-btn secondary-btn" for="importFile" style="display:inline-block;">Import Backup (JSON)</label>
+    <input id="importFile" type="file" accept="application/json" style="display:none" onchange="importBackup(event)">
+  </div>
+
+  <table id="exerciseTable">
+    <thead>
+      <tr>
+        <th>Exercise</th>
+        <th>Sets</th>
+        <th>Reps</th>
+        <th>Weight</th>
+        <th>Last Updated</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+
+  <!-- History Modal -->
+  <div id="historyModal" class="modal-backdrop">
+    <div class="modal">
+      <header>
+        <h2 id="historyTitle">History</h2>
+        <button class="close" onclick="closeHistory()">Close</button>
+      </header>
+      <div class="content">
+        <table class="history-table">
+          <thead>
+            <tr>
+              <th>Date/Time</th>
+              <th>Sets</th>
+              <th>Reps</th>
+              <th>Weight</th>
+            </tr>
+          </thead>
+          <tbody id="historyBody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let exercises = JSON.parse(localStorage.getItem('exercises')) || [];
+
+    const uid = () => Math.random().toString(36).slice(2, 10);
+
+    function saveData() {
+      localStorage.setItem('exercises', JSON.stringify(exercises));
+    }
+
+    function nowStamp() {
+      return new Date().toLocaleString(); // date + time for history
+    }
+
+    function todayDate() {
+      return new Date().toLocaleDateString(); // for Last Updated
+    }
+
+    function renderTable() {
+      const tbody = document.querySelector('#exerciseTable tbody');
+      tbody.innerHTML = '';
+      exercises.forEach((ex, index) => {
+        tbody.innerHTML += `
+          <tr>
+            <td>${ex.name}</td>
+            <td>${ex.sets}</td>
+            <td>${ex.reps}</td>
+            <td>${ex.weight}</td>
+            <td>${ex.lastUpdated}</td>
+            <td>
+              <button class="action-btn" onclick="showHistory(${index})">History</button>
+              <button class="action-btn edit-btn" onclick="editExercise(${index})">Edit</button>
+              <button class="action-btn delete-btn" onclick="deleteExercise(${index})">Delete</button>
+            </td>
+          </tr>
+        `;
+      });
+    }
+
+    function addExercise() {
+      const name = document.getElementById('exercise').value.trim();
+      const sets = document.getElementById('sets').value;
+      const reps = document.getElementById('reps').value;
+      const weight = document.getElementById('weight').value;
+      if (!name || !sets || !reps || !weight) return alert('Please fill all fields');
+
+      const entry = {
+        id: uid(),
+        name, sets, reps, weight,
+        lastUpdated: todayDate(),
+        history: [{ timestamp: nowStamp(), sets, reps, weight }]
+      };
+      exercises.push(entry);
+      saveData();
+      renderTable();
+
+      document.getElementById('exercise').value = '';
+      document.getElementById('sets').value = '';
+      document.getElementById('reps').value = '';
+      document.getElementById('weight').value = '';
+    }
+
+    function editExercise(index) {
+      const tbody = document.querySelector('#exerciseTable tbody');
+      const row = tbody.rows[index];
+      const ex = exercises[index];
+
+      row.innerHTML = `
+        <td><input type="text" id="edit-name-${index}" value="${ex.name}"></td>
+        <td><input type="number" id="edit-sets-${index}" value="${ex.sets}"></td>
+        <td><input type="number" id="edit-reps-${index}" value="${ex.reps}"></td>
+        <td><input type="number" id="edit-weight-${index}" value="${ex.weight}"></td>
+        <td>${todayDate()}</td>
+        <td>
+          <button class="action-btn success-btn" onclick="saveEdit(${index})">Save</button>
+          <button class="action-btn secondary-btn" onclick="renderTable()">Cancel</button>
+        </td>
+      `;
+    }
+
+    function saveEdit(index) {
+      const newName = document.getElementById(`edit-name-${index}`).value.trim();
+      const newSets = document.getElementById(`edit-sets-${index}`).value;
+      const newReps = document.getElementById(`edit-reps-${index}`).value;
+      const newWeight = document.getElementById(`edit-weight-${index}`).value;
+
+      if (!newName || !newSets || !newReps || !newWeight) return alert('Please fill all fields');
+
+      const ex = exercises[index];
+      if (ex.sets != newSets || ex.reps != newReps || ex.weight != newWeight || ex.name != newName) {
+        ex.history = ex.history || [];
+        ex.history.unshift({ timestamp: nowStamp(), sets: newSets, reps: newReps, weight: newWeight });
+      }
+
+      exercises[index] = { ...ex, name: newName, sets: newSets, reps: newReps, weight: newWeight, lastUpdated: todayDate() };
+      saveData();
+      renderTable();
+    }
+
+    function deleteExercise(index) {
+      if (confirm('Delete this exercise?')) {
+        exercises.splice(index, 1);
+        saveData();
+        renderTable();
+      }
+    }
+
+    function showHistory(index) {
+      const ex = exercises[index];
+      document.getElementById('historyTitle').textContent = `History — ${ex.name}`;
+      const body = document.getElementById('historyBody');
+      body.innerHTML = '';
+
+      const rows = (ex.history && ex.history.length ? ex.history : [])
+        .map(h => `
+          <tr>
+            <td>${h.timestamp}</td>
+            <td>${h.sets}</td>
+            <td>${h.reps}</td>
+            <td>${h.weight}</td>
+          </tr>
+        `).join('');
+
+      body.innerHTML = rows || `<tr><td colspan="4" style="padding:12px;">No history yet.</td></tr>`;
+      openHistory();
+    }
+
+    function openHistory() { document.getElementById('historyModal').style.display = 'flex'; }
+    function closeHistory() { document.getElementById('historyModal').style.display = 'none'; }
+
+    /* === CSV Export of latest snapshot === */
+    function exportToCSV() {
+      let csv = "data:text/csv;charset=utf-8,Exercise,Sets,Reps,Weight,Last Updated\n";
+      exercises.forEach(ex => { csv += `${ex.name},${ex.sets},${ex.reps},${ex.weight},${ex.lastUpdated}\n`; });
+      const link = document.createElement("a");
+      link.href = encodeURI(csv);
+      link.download = "exercise_log.csv";
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
+
+    /* === NEW: Export & Import Backup (JSON) === */
+    function exportBackup() {
+      const blob = new Blob([JSON.stringify(exercises, null, 2)], { type: "application/json" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "exercise_backup.json";
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+    }
+
+    function importBackup(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = () => {
+        try {
+          const data = JSON.parse(reader.result);
+          if (!Array.isArray(data)) throw new Error("Invalid backup format.");
+          // basic validation of fields
+          const valid = data.every(item =>
+            typeof item.name === "string" &&
+            "sets" in item && "reps" in item && "weight" in item &&
+            ("history" in item ? Array.isArray(item.history) : true)
+          );
+          if (!valid) throw new Error("Backup missing required fields.");
+          exercises = data;
+          saveData();
+          renderTable();
+          alert("Backup imported successfully.");
+        } catch (e) {
+          alert("Import failed: " + e.message);
+        } finally {
+          event.target.value = ""; // reset file input
+        }
+      };
+      reader.readAsText(file);
+    }
+
+    renderTable();
+  </script>
+</body>
+</html>
