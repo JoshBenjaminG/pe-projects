@@ -233,6 +233,37 @@
       margin-top: 0.75rem;
     }
 
+
+
+    .problem-list {
+      display: grid;
+      gap: 1rem;
+    }
+
+    .problem-card {
+      border: 1px solid var(--border);
+      border-radius: 0.8rem;
+      padding: 1rem;
+      background: #fbfdff;
+    }
+
+    .problem-card h3 {
+      margin-top: 0;
+    }
+
+    .solution {
+      margin-top: 1rem;
+      border-top: 1px solid var(--border);
+      padding-top: 1rem;
+      background: #f8fafc;
+      border-radius: 0.5rem;
+      padding: 1rem;
+    }
+
+    .solution p:first-child {
+      margin-top: 0;
+    }
+
     footer {
       color: var(--muted);
       padding: 1rem 0 2rem;
@@ -585,6 +616,16 @@ dog1.hasOwnProperty('bark'); // true</code></pre>
         </div>
       </section>
 
+
+
+      <section id="practiceProblems" class="screen hidden">
+        <div class="card">
+          <h2>Practice Problems by Concept</h2>
+          <p>Each concept has one or two assessment-style problems. Explain the code out loud first, then use <strong>View solution</strong> to check your answer.</p>
+          <div id="practiceProblemsList" class="problem-list"></div>
+        </div>
+      </section>
+
       <section id="drills" class="screen hidden">
         <div class="card">
           <h2>Quick Drill</h2>
@@ -626,6 +667,7 @@ dog1.hasOwnProperty('bark'); // true</code></pre>
       ["staticPrivate", "Static / Private / Getters"],
       ["mixinsFactories", "Mixins and Factories"],
       ["phrases", "Assessment Phrases"],
+      ["practiceProblems", "Practice Problems"],
       ["drills", "Quick Drill"],
       ["readiness", "Readiness Checklist"]
     ];
@@ -818,6 +860,509 @@ console.log(dog1.hasOwnProperty('bark'));`,
     });
 
     renderDrill();
+
+    const practiceProblems = [
+      {
+        concept: "this binding: method vs plain function call",
+        code: `'use strict';
+
+let person = {
+  name: 'Nina',
+  sayName: function() {
+    console.log(this.name);
+  }
+};
+
+let sayName = person.sayName;
+sayName();`,
+        solution: `This throws a TypeError. person.sayName is looked up and the function value is stored in sayName. The later call is sayName(), which is a plain function call. In strict mode, this is undefined, so this.name throws.`
+      },
+      {
+        concept: "this binding: bind cannot be overridden",
+        code: `'use strict';
+
+let person = {
+  name: 'Nina',
+  sayName() {
+    console.log(this.name);
+  }
+};
+
+let sayName = person.sayName.bind(person);
+sayName.call({ name: 'Maya' });`,
+        solution: `This logs Nina. bind creates a new function with this permanently set to person. The later call cannot override the bound this.`
+      },
+      {
+        concept: "constructor functions and new",
+        code: `'use strict';
+
+function Dog(name) {
+  this.name = name;
+}
+
+let dog = new Dog('Rex');
+
+console.log(dog.name);
+console.log(dog.hasOwnProperty('name'));`,
+        solution: `This logs Rex and true. new creates a new object, sets its prototype to Dog.prototype, calls Dog with this set to the new object, and returns it. this.name = name creates an own property on the instance.`
+      },
+      {
+        concept: "constructor called without new in strict mode",
+        code: `'use strict';
+
+function Dog(name) {
+  this.name = name;
+}
+
+let dog = Dog('Rex');
+console.log(dog);`,
+        solution: `This throws a TypeError before console.log runs. Dog('Rex') is a plain function call. In strict mode, this is undefined, so this.name = name throws.`
+      },
+      {
+        concept: "own properties vs prototype methods",
+        code: `'use strict';
+
+function Dog(name) {
+  this.name = name;
+}
+
+Dog.prototype.bark = function() {
+  console.log(\`${this.name} barks.\`);
+};
+
+let dog = new Dog('Rex');
+
+console.log(dog.hasOwnProperty('name'));
+console.log(dog.hasOwnProperty('bark'));
+console.log(Dog.prototype.hasOwnProperty('bark'));`,
+        solution: `This logs true, false, true. name is created as an own property by the constructor. bark is stored on Dog.prototype, so the instance can use it but does not own it.`
+      },
+      {
+        concept: "prototype shadowing",
+        code: `'use strict';
+
+function Dog(name) {
+  this.name = name;
+}
+
+Dog.prototype.bark = function() {
+  console.log(\`${this.name} barks.\`);
+};
+
+let dog = new Dog('Rex');
+
+dog.bark = function() {
+  console.log(\`${this.name} yips.\`);
+};
+
+dog.bark();
+console.log(dog.hasOwnProperty('bark'));
+console.log(Dog.prototype.hasOwnProperty('bark'));`,
+        solution: `This logs Rex yips., true, true. Assigning dog.bark creates an own bark property on dog. Own properties are checked before prototype properties, so the own method shadows Dog.prototype.bark. The original prototype method still exists.`
+      },
+      {
+        concept: "delete and prototype lookup",
+        code: `'use strict';
+
+function Dog(name) {
+  this.name = name;
+}
+
+Dog.prototype.bark = function() {
+  console.log(\`${this.name} barks.\`);
+};
+
+let dog = new Dog('Rex');
+
+dog.bark = function() {
+  console.log(\`${this.name} yips.\`);
+};
+
+delete dog.bark;
+
+dog.bark();
+console.log(dog.hasOwnProperty('bark'));`,
+        solution: `This logs Rex barks. and false. delete removes the own bark property from dog. It does not remove Dog.prototype.bark. After deletion, lookup finds bark on the prototype.`
+      },
+      {
+        concept: "shared prototype methods",
+        code: `'use strict';
+
+function Dog(name) {
+  this.name = name;
+}
+
+Dog.prototype.bark = function() {
+  console.log(\`${this.name} barks.\`);
+};
+
+let dog1 = new Dog('Rex');
+let dog2 = new Dog('Maya');
+
+console.log(dog1.bark === dog2.bark);
+dog1.bark();
+dog2.bark();`,
+        solution: `This logs true, Rex barks., Maya barks. Both instances find the same bark function on Dog.prototype. The function is shared, but each call site sets this to the receiver: dog1 for dog1.bark() and dog2 for dog2.bark().`
+      },
+      {
+        concept: "constructor property: default behavior",
+        code: `'use strict';
+
+function Dog(name) {
+  this.name = name;
+}
+
+let dog = new Dog('Rex');
+
+console.log(dog.constructor === Dog);
+console.log(dog.hasOwnProperty('constructor'));
+console.log(Dog.prototype.hasOwnProperty('constructor'));`,
+        solution: `This logs true, false, true. dog does not have its own constructor property. Lookup finds constructor on Dog.prototype. The default Dog.prototype.constructor property points back to the Dog function.`
+      },
+      {
+        concept: "replacing prototypes and losing constructor",
+        code: `'use strict';
+
+function Dog(name) {
+  this.name = name;
+}
+
+Dog.prototype = {
+  bark() {
+    console.log(\`${this.name} barks.\`);
+  }
+};
+
+let dog = new Dog('Rex');
+
+console.log(dog.constructor === Dog);
+console.log(dog.constructor === Object);
+dog.bark();`,
+        solution: `This logs false, true, Rex barks. Replacing Dog.prototype with an object literal discards the original default constructor property. The new prototype object does not have constructor: Dog, so lookup eventually finds Object.prototype.constructor. bark still works because it exists on the new Dog.prototype.`
+      },
+      {
+        concept: "restoring constructor after prototype replacement",
+        code: `'use strict';
+
+function Dog(name) {
+  this.name = name;
+}
+
+Dog.prototype = {
+  constructor: Dog,
+  bark() {
+    console.log(\`${this.name} barks.\`);
+  }
+};
+
+let dog = new Dog('Rex');
+
+console.log(dog.constructor === Dog);
+console.log(Dog.prototype.hasOwnProperty('constructor'));`,
+        solution: `This logs true and true. The prototype was replaced, but constructor: Dog was manually added to the new prototype object. dog.constructor is found through the prototype chain and points to the Dog function.`
+      },
+      {
+        concept: "pseudo-classical inheritance setup",
+        code: `'use strict';
+
+function Animal(name) {
+  this.name = name;
+}
+
+Animal.prototype.speak = function() {
+  console.log(\`${this.name} makes a noise.\`);
+};
+
+function Dog(name, breed) {
+  Animal.call(this, name);
+  this.breed = breed;
+}
+
+Dog.prototype = Object.create(Animal.prototype);
+Dog.prototype.constructor = Dog;
+
+let dog = new Dog('Rex', 'Lab');
+
+dog.speak();
+console.log(dog.name);
+console.log(dog.breed);
+console.log(dog instanceof Dog);
+console.log(dog instanceof Animal);`,
+        solution: `This logs Rex makes a noise., Rex, Lab, true, true. Animal.call(this, name) initializes name on the dog instance. this.breed creates another own property. Object.create(Animal.prototype) links Dog.prototype to Animal.prototype, so dog can use speak and is an instance of both Dog and Animal.`
+      },
+      {
+        concept: "overriding inherited methods",
+        code: `'use strict';
+
+function Animal(name) {
+  this.name = name;
+}
+
+Animal.prototype.speak = function() {
+  console.log(\`${this.name} makes a noise.\`);
+};
+
+function Dog(name) {
+  Animal.call(this, name);
+}
+
+Dog.prototype = Object.create(Animal.prototype);
+Dog.prototype.constructor = Dog;
+
+Dog.prototype.speak = function() {
+  console.log(\`${this.name} barks loudly.\`);
+};
+
+let dog = new Dog('Rex');
+
+dog.speak();
+console.log(Dog.prototype.hasOwnProperty('speak'));
+console.log(Animal.prototype.hasOwnProperty('speak'));`,
+        solution: `This logs Rex barks loudly., true, true. Dog.prototype.speak shadows Animal.prototype.speak. It does not delete the parent method; lookup finds the dog version first.`
+      },
+      {
+        concept: "manually calling parent prototype method",
+        code: `'use strict';
+
+function Animal(name) {
+  this.name = name;
+}
+
+Animal.prototype.speak = function() {
+  console.log(\`${this.name} makes a noise.\`);
+};
+
+function Dog(name) {
+  Animal.call(this, name);
+}
+
+Dog.prototype = Object.create(Animal.prototype);
+Dog.prototype.constructor = Dog;
+
+Dog.prototype.speak = function() {
+  Animal.prototype.speak.call(this);
+  console.log(\`${this.name} barks loudly.\`);
+};
+
+let dog = new Dog('Rex');
+dog.speak();`,
+        solution: `This logs Rex makes a noise. then Rex barks loudly. dog.speak() finds Dog.prototype.speak. Inside it, Animal.prototype.speak.call(this) calls the parent method with the same this value, the dog instance. Then the dog method continues.`
+      },
+      {
+        concept: "class inheritance and super constructor",
+        code: `'use strict';
+
+class Animal {
+  constructor(name) {
+    this.name = name;
+  }
+
+  speak() {
+    console.log(\`${this.name} makes a noise.\`);
+  }
+}
+
+class Dog extends Animal {
+  constructor(name, breed) {
+    super(name);
+    this.breed = breed;
+  }
+}
+
+let dog = new Dog('Rex', 'Lab');
+
+console.log(dog.name);
+console.log(dog.breed);
+dog.speak();`,
+        solution: `This logs Rex, Lab, Rex makes a noise. super(name) calls the parent constructor and initializes name on the current dog instance. this.breed creates an own property on dog. speak is inherited from Animal.prototype.`
+      },
+      {
+        concept: "super.method keeps current this",
+        code: `'use strict';
+
+class Animal {
+  constructor(name) {
+    this.name = name;
+  }
+
+  speak() {
+    console.log(\`${this.name} makes a noise.\`);
+  }
+}
+
+class Dog extends Animal {
+  speak() {
+    super.speak();
+    console.log(\`${this.name} barks loudly.\`);
+  }
+}
+
+let dog = new Dog('Rex');
+dog.speak();`,
+        solution: `This logs Rex makes a noise. then Rex barks loudly. super.speak() calls Animal.prototype.speak, but it keeps this as the current dog instance.`
+      },
+      {
+        concept: "static vs instance methods",
+        code: `'use strict';
+
+class Dog {
+  constructor(name) {
+    this.name = name;
+  }
+
+  bark() {
+    console.log(\`${this.name} barks.\`);
+  }
+
+  static describe() {
+    console.log('Dogs are loyal animals.');
+  }
+}
+
+let dog = new Dog('Rex');
+
+dog.bark();
+Dog.describe();
+console.log(Dog.hasOwnProperty('describe'));
+dog.describe();`,
+        solution: `This logs Rex barks., Dogs are loyal animals., true, then throws a TypeError at dog.describe(). bark is on Dog.prototype. describe is static, so it is stored on Dog itself, not on instances or Dog.prototype.`
+      },
+      {
+        concept: "class method extraction loses this",
+        code: `'use strict';
+
+class Dog {
+  constructor(name) {
+    this.name = name;
+  }
+
+  bark() {
+    console.log(\`${this.name} barks.\`);
+  }
+}
+
+let dog = new Dog('Rex');
+let bark = dog.bark;
+bark();`,
+        solution: `This throws a TypeError. Class methods are not automatically bound. bark is extracted into a variable, then called as a plain function. In strict mode, this is undefined.`
+      },
+      {
+        concept: "private fields and getters",
+        code: `'use strict';
+
+class Dog {
+  #name;
+
+  constructor(name) {
+    this.#name = name;
+  }
+
+  get name() {
+    return this.#name;
+  }
+}
+
+let dog = new Dog('Rex');
+
+console.log(dog.name);
+console.log(dog.hasOwnProperty('name'));`,
+        solution: `This logs Rex and false. #name is a private field, not a normal public property. dog.name calls the getter on the prototype, so name is not an own property on the instance.`
+      },
+      {
+        concept: "mixins with Object.assign",
+        code: `'use strict';
+
+const Swimmable = {
+  swim() {
+    console.log(\`${this.name} swims.\`);
+  }
+};
+
+class Dog {
+  constructor(name) {
+    this.name = name;
+  }
+}
+
+Object.assign(Dog.prototype, Swimmable);
+
+let dog = new Dog('Rex');
+
+dog.swim();
+console.log(dog.hasOwnProperty('swim'));
+console.log(Dog.prototype.hasOwnProperty('swim'));`,
+        solution: `This logs Rex swims., false, true. Object.assign copies swim from Swimmable onto Dog.prototype. dog uses swim through prototype lookup. The call site dog.swim() makes this equal to dog.`
+      },
+      {
+        concept: "factory functions vs constructors/classes",
+        code: `'use strict';
+
+function createDog(name) {
+  return {
+    name,
+    bark() {
+      console.log(\`${this.name} barks.\`);
+    }
+  };
+}
+
+let dog1 = createDog('Rex');
+let dog2 = createDog('Maya');
+
+console.log(dog1.bark === dog2.bark);
+console.log(dog1 instanceof createDog);
+console.log(dog1.hasOwnProperty('bark'));`,
+        solution: `This logs false, false, true. createDog is a factory function here, not a constructor. Each call returns a new object literal with its own bark method. The returned object does not delegate to createDog.prototype, so instanceof is false.`
+      },
+      {
+        concept: "polymorphism and overriding",
+        code: `'use strict';
+
+class Dog {
+  speak() {
+    console.log('woof');
+  }
+}
+
+class Cat {
+  speak() {
+    console.log('meow');
+  }
+}
+
+let animals = [new Dog(), new Cat()];
+animals.forEach(animal => animal.speak());`,
+        solution: `This logs woof and meow. This is polymorphism: different object types implement the same method name, speak, and the caller can use the same interface without caring which class each object belongs to.`
+      }
+    ];
+
+    function renderPracticeProblems() {
+      const container = document.getElementById("practiceProblemsList");
+      if (!container) return;
+
+      container.innerHTML = practiceProblems.map((problem, index) => `
+        <article class="problem-card">
+          <h3>${index + 1}. ${problem.concept}</h3>
+          <pre><code>${escapeHtml(problem.code)}</code></pre>
+          <button class="btn secondary solution-toggle" data-index="${index}">View solution</button>
+          <div class="solution hidden" id="solution-${index}">
+            <p><strong>Solution:</strong></p>
+            <p>${escapeHtml(problem.solution)}</p>
+          </div>
+        </article>
+      `).join("");
+
+      container.addEventListener("click", event => {
+        if (!event.target.classList.contains("solution-toggle")) return;
+        const index = event.target.dataset.index;
+        const solution = document.getElementById(`solution-${index}`);
+        const isHidden = solution.classList.toggle("hidden");
+        event.target.textContent = isHidden ? "View solution" : "Hide solution";
+      });
+    }
+
+    renderPracticeProblems();
+
 
     const checklistItems = [
       "I can explain method invocation vs plain function invocation.",
