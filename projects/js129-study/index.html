@@ -1,0 +1,865 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>JS129 OOP Assessment Study Interface</title>
+  <style>
+    :root {
+      --bg: #f6f7fb;
+      --panel: #ffffff;
+      --text: #1f2937;
+      --muted: #6b7280;
+      --border: #d1d5db;
+      --accent: #1f4b99;
+      --accent-light: #e8f0ff;
+      --code-bg: #111827;
+      --code-text: #f9fafb;
+      --good: #166534;
+      --warn: #92400e;
+      --bad: #991b1b;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+    }
+
+    header {
+      background: var(--panel);
+      border-bottom: 1px solid var(--border);
+      padding: 1.25rem 1.5rem;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    header h1 {
+      margin: 0 0 0.25rem;
+      font-size: 1.5rem;
+    }
+
+    header p {
+      margin: 0;
+      color: var(--muted);
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      min-height: calc(100vh - 86px);
+    }
+
+    nav {
+      border-right: 1px solid var(--border);
+      background: var(--panel);
+      padding: 1rem;
+      position: sticky;
+      top: 86px;
+      height: calc(100vh - 86px);
+      overflow-y: auto;
+    }
+
+    nav button {
+      display: block;
+      width: 100%;
+      text-align: left;
+      border: 1px solid transparent;
+      background: transparent;
+      padding: 0.65rem 0.75rem;
+      border-radius: 0.5rem;
+      color: var(--text);
+      cursor: pointer;
+      font-size: 0.95rem;
+    }
+
+    nav button:hover,
+    nav button.active {
+      background: var(--accent-light);
+      border-color: #bfd3ff;
+      color: var(--accent);
+    }
+
+    main {
+      padding: 1.5rem;
+      max-width: 980px;
+    }
+
+    .card {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 0.9rem;
+      padding: 1.25rem;
+      margin-bottom: 1rem;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+    }
+
+    h2 {
+      margin-top: 0;
+      font-size: 1.35rem;
+    }
+
+    h3 {
+      margin-bottom: 0.4rem;
+    }
+
+    .pill-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin: 0.75rem 0;
+    }
+
+    .pill {
+      background: var(--accent-light);
+      color: var(--accent);
+      border: 1px solid #bfd3ff;
+      border-radius: 999px;
+      padding: 0.25rem 0.6rem;
+      font-size: 0.85rem;
+    }
+
+    pre {
+      background: var(--code-bg);
+      color: var(--code-text);
+      padding: 1rem;
+      border-radius: 0.7rem;
+      overflow-x: auto;
+      font-size: 0.9rem;
+    }
+
+    code {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    }
+
+    .note {
+      border-left: 4px solid var(--accent);
+      background: var(--accent-light);
+      padding: 0.8rem 1rem;
+      border-radius: 0.4rem;
+      margin: 1rem 0;
+    }
+
+    .danger {
+      border-left-color: var(--bad);
+      background: #fee2e2;
+    }
+
+    .warning {
+      border-left-color: var(--warn);
+      background: #fef3c7;
+    }
+
+    .success {
+      border-left-color: var(--good);
+      background: #dcfce7;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+      gap: 1rem;
+    }
+
+    .mini {
+      padding: 1rem;
+      border: 1px solid var(--border);
+      border-radius: 0.7rem;
+      background: #fbfdff;
+    }
+
+    .mini h3 {
+      margin-top: 0;
+      font-size: 1rem;
+    }
+
+    .controls {
+      display: flex;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+      margin-top: 1rem;
+    }
+
+    .btn {
+      border: 1px solid var(--accent);
+      background: var(--accent);
+      color: white;
+      padding: 0.6rem 0.85rem;
+      border-radius: 0.55rem;
+      cursor: pointer;
+      font-weight: 600;
+    }
+
+    .btn.secondary {
+      background: white;
+      color: var(--accent);
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    textarea {
+      width: 100%;
+      min-height: 120px;
+      border: 1px solid var(--border);
+      border-radius: 0.6rem;
+      padding: 0.75rem;
+      font-family: inherit;
+      font-size: 1rem;
+    }
+
+    .answer {
+      margin-top: 1rem;
+      border-top: 1px solid var(--border);
+      padding-top: 1rem;
+    }
+
+    .checklist label {
+      display: block;
+      margin: 0.5rem 0;
+      cursor: pointer;
+    }
+
+    .score {
+      font-weight: 700;
+      margin-top: 0.75rem;
+    }
+
+    footer {
+      color: var(--muted);
+      padding: 1rem 0 2rem;
+    }
+
+    @media (max-width: 800px) {
+      .layout {
+        grid-template-columns: 1fr;
+      }
+
+      nav {
+        position: static;
+        height: auto;
+        border-right: none;
+        border-bottom: 1px solid var(--border);
+      }
+
+      main {
+        padding: 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>JS129 Object-Oriented JavaScript Study Interface</h1>
+    <p>Prototype lookup, constructors, classes, inheritance, <code>this</code>, mixins, and assessment wording.</p>
+  </header>
+
+  <div class="layout">
+    <nav id="nav"></nav>
+
+    <main>
+      <section id="overview" class="screen">
+        <div class="card">
+          <h2>Assessment Strategy</h2>
+          <p>For every snippet, explain the mechanism before the output. Your core loop:</p>
+          <div class="grid">
+            <div class="mini"><h3>1. Creation</h3><p>What objects, functions, classes, or instances are created?</p></div>
+            <div class="mini"><h3>2. Storage</h3><p>Where are properties and methods stored?</p></div>
+            <div class="mini"><h3>3. Lookup</h3><p>Does JavaScript find the property on the object or on the prototype chain?</p></div>
+            <div class="mini"><h3>4. Call site</h3><p>How is the function invoked? What is directly left of the dot?</p></div>
+            <div class="mini"><h3>5. this</h3><p>What is <code>this</code>, or does it become <code>undefined</code> in strict mode?</p></div>
+            <div class="mini"><h3>6. Output</h3><p>What logs, or where does it throw?</p></div>
+          </div>
+          <div class="note">
+            Best short mantra: <strong>Where is the property? Where is the method? What does lookup find? What is the call site? What is <code>this</code>?</strong>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2>High-Priority Weak Spots</h2>
+          <div class="pill-row">
+            <span class="pill">constructor property</span>
+            <span class="pill">replacing prototypes</span>
+            <span class="pill">pseudo-classical inheritance</span>
+            <span class="pill">Object.create</span>
+            <span class="pill">Animal.call(this)</span>
+            <span class="pill">lost this</span>
+          </div>
+          <p>These should get extra reps before your next mixed assessment session.</p>
+        </div>
+      </section>
+
+      <section id="this" class="screen hidden">
+        <div class="card">
+          <h2><code>this</code> Binding Checklist</h2>
+          <ol>
+            <li>Locate the exact <code>this</code>.</li>
+            <li>Ask what function body directly contains that <code>this</code>.</li>
+            <li>Is that function regular or arrow?</li>
+            <li>If regular: how is that exact function invoked?</li>
+            <li>If arrow: what surrounding function/scope does it capture <code>this</code> from?</li>
+            <li>Then decide what <code>this.name</code> is, or whether it throws.</li>
+          </ol>
+
+          <h3>Strict mode plain call</h3>
+          <pre><code>'use strict';
+
+let bark = dog.bark;
+bark(); // plain function call; this = undefined; TypeError</code></pre>
+
+          <h3>Bound function</h3>
+          <pre><code>let bark = dog.bark.bind(dog);
+bark.call({ name: 'Maya' }); // still uses dog; bind cannot be overridden</code></pre>
+
+          <div class="note warning">
+            Say “arrow captures <code>this</code>,” not “arrow is bound,” unless <code>.bind()</code> is literally used.
+          </div>
+        </div>
+      </section>
+
+      <section id="constructors" class="screen hidden">
+        <div class="card">
+          <h2>Constructor Functions and <code>new</code></h2>
+          <pre><code>'use strict';
+
+function Dog(name) {
+  this.name = name;
+}
+
+Dog.prototype.bark = function() {
+  console.log(`${this.name} barks.`);
+};
+
+let dog = new Dog('Rex');</code></pre>
+          <p><code>new Dog('Rex')</code> does roughly four things:</p>
+          <ol>
+            <li>Creates a new object.</li>
+            <li>Sets that object’s prototype to <code>Dog.prototype</code>.</li>
+            <li>Calls <code>Dog</code> with <code>this</code> set to the new object.</li>
+            <li>Returns the new object.</li>
+          </ol>
+          <div class="note">
+            <code>this.name = name</code> creates an own property on the instance. <code>Dog.prototype.bark</code> creates shared behavior on the prototype.
+          </div>
+        </div>
+      </section>
+
+      <section id="prototype" class="screen hidden">
+        <div class="card">
+          <h2>Prototype Lookup and Shadowing</h2>
+          <pre><code>dog = {
+  name: "Rex"
+  // [[Prototype]] → Dog.prototype
+}
+
+Dog.prototype = {
+  constructor: Dog,
+  bark: function() {}
+}</code></pre>
+          <p>Lookup starts on the object, then walks up the prototype chain.</p>
+          <pre><code>dog.bark = function() {
+  console.log(`${this.name} yips.`);
+};
+
+dog.bark(); // own method shadows prototype method</code></pre>
+          <div class="note success">
+            Own properties are checked before prototype properties. Shadowing does not delete the prototype method.
+          </div>
+          <pre><code>delete dog.bark;
+dog.bark(); // prototype method is visible again</code></pre>
+        </div>
+      </section>
+
+      <section id="constructorProp" class="screen hidden">
+        <div class="card">
+          <h2>The <code>constructor</code> Property</h2>
+          <p><code>Dog</code> is a function object. The default prototype has a property that points back to that function.</p>
+          <pre><code>function Dog(name) {
+  this.name = name;
+}
+
+Dog.prototype.constructor === Dog; // true</code></pre>
+
+          <div class="note warning">
+            <code>constructor</code> is mostly just a property lookup. It is not magic proof of what created the object.
+          </div>
+
+          <h3>Replacing the prototype loses the default constructor property</h3>
+          <pre><code>Dog.prototype = {
+  bark: function() {}
+};
+
+let dog = new Dog('Rex');
+
+dog.constructor === Dog;    // false
+dog.constructor === Object; // true</code></pre>
+
+          <h3>Restore it manually</h3>
+          <pre><code>Dog.prototype = {
+  constructor: Dog,
+  bark: function() {}
+};</code></pre>
+        </div>
+      </section>
+
+      <section id="inheritance" class="screen hidden">
+        <div class="card">
+          <h2>Pseudo-Classical Inheritance</h2>
+          <pre><code>function Animal(name) {
+  this.name = name;
+}
+
+Animal.prototype.speak = function() {
+  console.log(`${this.name} makes a noise.`);
+};
+
+function Dog(name, breed) {
+  Animal.call(this, name);
+  this.breed = breed;
+}
+
+Dog.prototype = Object.create(Animal.prototype);
+Dog.prototype.constructor = Dog;
+
+Dog.prototype.bark = function() {
+  console.log(`${this.name} barks.`);
+};</code></pre>
+
+          <div class="grid">
+            <div class="mini">
+              <h3><code>Animal.call(this, name)</code></h3>
+              <p>Borrow the parent constructor to initialize <code>name</code> on the current dog instance.</p>
+            </div>
+            <div class="mini">
+              <h3><code>Object.create</code></h3>
+              <p>Creates a new object that delegates to <code>Animal.prototype</code>.</p>
+            </div>
+            <div class="mini">
+              <h3>Prototype chain</h3>
+              <p><code>dog → Dog.prototype → Animal.prototype → Object.prototype</code></p>
+            </div>
+            <div class="mini">
+              <h3><code>instanceof</code></h3>
+              <p>Checks whether a constructor’s prototype appears in the object’s prototype chain.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="classes" class="screen hidden">
+        <div class="card">
+          <h2>Classes, <code>extends</code>, and <code>super</code></h2>
+          <pre><code>class Animal {
+  constructor(name) {
+    this.name = name;
+  }
+
+  speak() {
+    console.log(`${this.name} makes a noise.`);
+  }
+}
+
+class Dog extends Animal {
+  constructor(name, breed) {
+    super(name);
+    this.breed = breed;
+  }
+
+  speak() {
+    super.speak();
+    console.log(`${this.name} barks loudly.`);
+  }
+}</code></pre>
+
+          <p><code>super(name)</code> calls the parent constructor. <code>super.speak()</code> calls the parent method but keeps the current <code>this</code>.</p>
+
+          <div class="note">
+            Class methods are placed on prototypes. They are not copied onto each instance and are not automatically bound.
+          </div>
+        </div>
+      </section>
+
+      <section id="staticPrivate" class="screen hidden">
+        <div class="card">
+          <h2>Static Methods, Private Fields, and Getters</h2>
+
+          <h3>Static methods</h3>
+          <pre><code>class Dog {
+  bark() {}
+
+  static describe() {
+    console.log('Dogs are loyal animals.');
+  }
+}
+
+Dog.describe(); // works
+dog.describe(); // TypeError</code></pre>
+          <p>Static methods live on the class/constructor itself, not on the prototype.</p>
+
+          <h3>Private fields and getters</h3>
+          <pre><code>class Dog {
+  #name;
+
+  constructor(name) {
+    this.#name = name;
+  }
+
+  get name() {
+    return this.#name;
+  }
+}
+
+dog.name; // calls getter
+dog.hasOwnProperty('name'); // false</code></pre>
+
+          <div class="note">
+            <code>#name</code> is private state. <code>name</code> is a getter on the prototype, not an own public data property.
+          </div>
+        </div>
+      </section>
+
+      <section id="mixinsFactories" class="screen hidden">
+        <div class="card">
+          <h2>Mixins and Factory Functions</h2>
+
+          <h3>Mixin pattern</h3>
+          <pre><code>const Swimmable = {
+  swim() {
+    console.log(`${this.name} swims.`);
+  }
+};
+
+Object.assign(Dog.prototype, Swimmable);</code></pre>
+          <p>This copies <code>swim</code> onto <code>Dog.prototype</code>. Instances use it through prototype lookup.</p>
+
+          <h3>Factory function</h3>
+          <pre><code>function createDog(name) {
+  return {
+    name,
+    bark() {
+      console.log(`${this.name} barks.`);
+    }
+  };
+}
+
+let dog1 = createDog('Rex');
+let dog2 = createDog('Maya');
+
+dog1.bark === dog2.bark; // false
+dog1 instanceof createDog; // false
+dog1.hasOwnProperty('bark'); // true</code></pre>
+
+          <div class="note warning">
+            A factory returns an object directly. It does not use <code>new</code>, and the returned object does not delegate to <code>createDog.prototype</code>.
+          </div>
+        </div>
+      </section>
+
+      <section id="phrases" class="screen hidden">
+        <div class="card">
+          <h2>Assessment Phrases to Memorize</h2>
+          <ul>
+            <li>“The call site is <code>dog.bark()</code>, so <code>this</code> is <code>dog</code>.”</li>
+            <li>“The function is extracted, so the original receiver is lost.”</li>
+            <li>“In strict mode, a plain function call has <code>this</code> set to <code>undefined</code>.”</li>
+            <li>“Own properties are checked before prototype properties.”</li>
+            <li>“This shadows the prototype method; it does not delete it.”</li>
+            <li>“The method is found on the prototype, but <code>this</code> is still determined by the call site.”</li>
+            <li>“<code>Dog</code> is a function object being used as a constructor.”</li>
+            <li>“<code>Dog.prototype.constructor</code> is a property that points back to the <code>Dog</code> function.”</li>
+            <li>“Replacing the prototype object loses the default <code>constructor</code> property.”</li>
+            <li>“<code>Object.create(Animal.prototype)</code> creates a new object that delegates to <code>Animal.prototype</code>.”</li>
+            <li>“<code>Animal.call(this, name)</code> borrows the parent constructor to initialize state on the current instance.”</li>
+            <li>“<code>super.method()</code> calls the parent method but keeps the current <code>this</code>.”</li>
+            <li>“Static methods live on the class/constructor itself, not on the prototype.”</li>
+            <li>“Factory functions return objects directly and do not use <code>new</code>.”</li>
+          </ul>
+        </div>
+      </section>
+
+      <section id="drills" class="screen hidden">
+        <div class="card">
+          <h2>Quick Drill</h2>
+          <p>Answer out loud first. Then reveal the answer.</p>
+          <div id="drillBox"></div>
+          <textarea id="userAnswer" placeholder="Type your explanation here, or answer verbally and use this as scratch space."></textarea>
+          <div class="controls">
+            <button class="btn" id="showAnswer">Show answer</button>
+            <button class="btn secondary" id="nextDrill">Next drill</button>
+          </div>
+          <div id="drillAnswer" class="answer hidden"></div>
+        </div>
+      </section>
+
+      <section id="readiness" class="screen hidden">
+        <div class="card">
+          <h2>Readiness Checklist</h2>
+          <p>Check each item you can explain without notes.</p>
+          <div class="checklist" id="checklist"></div>
+          <div class="score" id="score"></div>
+        </div>
+      </section>
+
+      <footer>
+        Built as a local standalone study interface. Open this file in any browser.
+      </footer>
+    </main>
+  </div>
+
+  <script>
+    const screens = [
+      ["overview", "Overview"],
+      ["this", "this Binding"],
+      ["constructors", "Constructors and new"],
+      ["prototype", "Prototype Lookup"],
+      ["constructorProp", "constructor Property"],
+      ["inheritance", "Pseudo-Classical Inheritance"],
+      ["classes", "Classes and super"],
+      ["staticPrivate", "Static / Private / Getters"],
+      ["mixinsFactories", "Mixins and Factories"],
+      ["phrases", "Assessment Phrases"],
+      ["drills", "Quick Drill"],
+      ["readiness", "Readiness Checklist"]
+    ];
+
+    const nav = document.getElementById("nav");
+
+    function showScreen(id) {
+      document.querySelectorAll(".screen").forEach(section => {
+        section.classList.toggle("hidden", section.id !== id);
+      });
+      document.querySelectorAll("nav button").forEach(button => {
+        button.classList.toggle("active", button.dataset.target === id);
+      });
+      window.scrollTo(0, 0);
+    }
+
+    screens.forEach(([id, label], index) => {
+      const button = document.createElement("button");
+      button.textContent = label;
+      button.dataset.target = id;
+      button.className = index === 0 ? "active" : "";
+      button.addEventListener("click", () => showScreen(id));
+      nav.appendChild(button);
+    });
+
+    const drills = [
+      {
+        title: "Lost this",
+        code: `'use strict';
+
+class Dog {
+  constructor(name) {
+    this.name = name;
+  }
+
+  bark() {
+    console.log(\`\${this.name} barks.\`);
+  }
+}
+
+let dog = new Dog('Rex');
+let bark = dog.bark;
+bark();`,
+        answer: "TypeError. bark is extracted into a variable, then called as a plain function. In strict mode, this is undefined, so this.name throws."
+      },
+      {
+        title: "Prototype shadowing",
+        code: `'use strict';
+
+function Dog(name) {
+  this.name = name;
+}
+
+Dog.prototype.bark = function() {
+  console.log(\`\${this.name} barks.\`);
+};
+
+let dog = new Dog('Rex');
+
+dog.bark = function() {
+  console.log(\`\${this.name} yips.\`);
+};
+
+dog.bark();
+console.log(dog.hasOwnProperty('bark'));
+console.log(Dog.prototype.hasOwnProperty('bark'));`,
+        answer: "Rex yips., true, true. The own bark property shadows the prototype bark method. Both still exist."
+      },
+      {
+        title: "Replacing prototype loses constructor",
+        code: `'use strict';
+
+function Dog(name) {
+  this.name = name;
+}
+
+Dog.prototype = {
+  bark: function() {}
+};
+
+let dog = new Dog('Rex');
+
+console.log(dog.constructor === Dog);
+console.log(dog.constructor === Object);`,
+        answer: "false, true. Replacing Dog.prototype with an object literal loses the default constructor property. Lookup eventually finds Object.prototype.constructor."
+      },
+      {
+        title: "Pseudo-classical inheritance",
+        code: `'use strict';
+
+function Animal(name) {
+  this.name = name;
+}
+
+Animal.prototype.speak = function() {
+  console.log(\`\${this.name} makes a noise.\`);
+};
+
+function Dog(name) {
+  Animal.call(this, name);
+}
+
+Dog.prototype = Object.create(Animal.prototype);
+Dog.prototype.constructor = Dog;
+
+let dog = new Dog('Rex');
+dog.speak();
+
+console.log(dog instanceof Dog);
+console.log(dog instanceof Animal);`,
+        answer: "Rex makes a noise., true, true. Animal.call initializes name on dog. Object.create links Dog.prototype to Animal.prototype, so both prototypes are in the chain."
+      },
+      {
+        title: "super method",
+        code: `'use strict';
+
+class Animal {
+  constructor(name) {
+    this.name = name;
+  }
+
+  speak() {
+    console.log(\`\${this.name} makes a noise.\`);
+  }
+}
+
+class Dog extends Animal {
+  speak() {
+    super.speak();
+    console.log(\`\${this.name} barks loudly.\`);
+  }
+}
+
+let dog = new Dog('Rex');
+dog.speak();`,
+        answer: "Rex makes a noise., then Rex barks loudly. super.speak() calls the parent method but keeps this as the dog instance."
+      },
+      {
+        title: "Factory vs constructor",
+        code: `'use strict';
+
+function createDog(name) {
+  return {
+    name,
+    bark() {
+      console.log(\`\${this.name} barks.\`);
+    }
+  };
+}
+
+let dog1 = createDog('Rex');
+let dog2 = createDog('Maya');
+
+console.log(dog1.bark === dog2.bark);
+console.log(dog1 instanceof createDog);
+console.log(dog1.hasOwnProperty('bark'));`,
+        answer: "false, false, true. Each factory call returns a new object with its own bark method. It does not use new, so instanceof createDog is false."
+      }
+    ];
+
+    let currentDrill = 0;
+
+    function renderDrill() {
+      const drill = drills[currentDrill];
+      document.getElementById("drillBox").innerHTML = `
+        <h3>${drill.title}</h3>
+        <pre><code>${escapeHtml(drill.code)}</code></pre>
+      `;
+      document.getElementById("drillAnswer").classList.add("hidden");
+      document.getElementById("drillAnswer").innerHTML = "";
+      document.getElementById("userAnswer").value = "";
+    }
+
+    function escapeHtml(str) {
+      return str
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;");
+    }
+
+    document.getElementById("showAnswer").addEventListener("click", () => {
+      const answer = document.getElementById("drillAnswer");
+      answer.classList.remove("hidden");
+      answer.innerHTML = `<strong>Answer:</strong> ${drills[currentDrill].answer}`;
+    });
+
+    document.getElementById("nextDrill").addEventListener("click", () => {
+      currentDrill = (currentDrill + 1) % drills.length;
+      renderDrill();
+    });
+
+    renderDrill();
+
+    const checklistItems = [
+      "I can explain method invocation vs plain function invocation.",
+      "I can explain strict-mode this = undefined for plain calls.",
+      "I can explain own properties vs prototype properties.",
+      "I can explain prototype shadowing and delete.",
+      "I can explain why two instances share a prototype method.",
+      "I can explain Dog as a function object.",
+      "I can explain Dog.prototype.constructor = Dog.",
+      "I can explain what happens when a prototype is replaced.",
+      "I can explain Object.create(Animal.prototype).",
+      "I can explain Animal.call(this, name).",
+      "I can explain instanceof using the prototype chain.",
+      "I can explain class methods as prototype methods.",
+      "I can explain static methods vs instance methods.",
+      "I can explain super(name) and super.method().",
+      "I can explain private fields and getters.",
+      "I can explain mixins with Object.assign.",
+      "I can explain factory functions vs constructors/classes.",
+      "I can explain polymorphism and method overriding."
+    ];
+
+    const checklist = document.getElementById("checklist");
+
+    checklistItems.forEach((item, index) => {
+      const label = document.createElement("label");
+      label.innerHTML = `<input type="checkbox" data-index="${index}"> ${item}`;
+      checklist.appendChild(label);
+    });
+
+    function updateScore() {
+      const checked = document.querySelectorAll("#checklist input:checked").length;
+      const total = checklistItems.length;
+      const pct = Math.round((checked / total) * 100);
+      let message = "Keep drilling.";
+      if (pct >= 85) message = "Strong readiness for another mixed practice pass.";
+      else if (pct >= 65) message = "Good progress, but keep targeting weak spots.";
+      document.getElementById("score").textContent = `${checked}/${total} checked (${pct}%). ${message}`;
+    }
+
+    checklist.addEventListener("change", updateScore);
+    updateScore();
+  </script>
+</body>
+</html>
