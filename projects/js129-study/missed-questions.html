@@ -1,0 +1,788 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>JS129 Missed Questions Breakdown</title>
+  <style>
+    :root {
+      --bg: #0f172a;
+      --panel: #111827;
+      --panel-2: #1f2937;
+      --text: #e5e7eb;
+      --muted: #9ca3af;
+      --accent: #38bdf8;
+      --border: #374151;
+      --code-bg: #020617;
+      --good: #22c55e;
+      --warn: #f59e0b;
+    }
+
+```
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  line-height: 1.6;
+  background: var(--bg);
+  color: var(--text);
+}
+
+.container {
+  width: min(1100px, 92%);
+  margin: 0 auto;
+  padding: 40px 0 80px;
+}
+
+header {
+  margin-bottom: 36px;
+  padding: 32px;
+  background: linear-gradient(135deg, #111827, #1e293b);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+}
+
+h1 {
+  margin: 0 0 12px;
+  font-size: clamp(2rem, 4vw, 3.2rem);
+  line-height: 1.1;
+}
+
+h2 {
+  margin-top: 48px;
+  padding-top: 28px;
+  border-top: 1px solid var(--border);
+  color: #f8fafc;
+  font-size: 1.7rem;
+}
+
+h3 {
+  margin-top: 28px;
+  color: var(--accent);
+  font-size: 1.1rem;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+p {
+  color: var(--text);
+  margin: 12px 0;
+}
+
+.subtitle {
+  color: var(--muted);
+  max-width: 800px;
+  font-size: 1.05rem;
+}
+
+.nav {
+  margin-top: 24px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.nav a {
+  color: var(--text);
+  text-decoration: none;
+  background: var(--panel-2);
+  border: 1px solid var(--border);
+  padding: 8px 12px;
+  border-radius: 999px;
+  font-size: 0.92rem;
+}
+
+.nav a:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.card {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 28px;
+  margin: 26px 0;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.18);
+}
+
+.note {
+  border-left: 4px solid var(--accent);
+  padding: 14px 18px;
+  background: rgba(56, 189, 248, 0.08);
+  border-radius: 10px;
+  margin: 18px 0;
+}
+
+.mistake {
+  border-left: 4px solid var(--warn);
+  padding: 14px 18px;
+  background: rgba(245, 158, 11, 0.08);
+  border-radius: 10px;
+  margin: 18px 0;
+}
+
+.correct {
+  border-left: 4px solid var(--good);
+  padding: 14px 18px;
+  background: rgba(34, 197, 94, 0.08);
+  border-radius: 10px;
+  margin: 18px 0;
+}
+
+code {
+  font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
+  font-size: 0.95em;
+  color: #bae6fd;
+}
+
+pre {
+  background: var(--code-bg);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 18px;
+  overflow-x: auto;
+  margin: 18px 0;
+}
+
+pre code {
+  color: #e5e7eb;
+  font-size: 0.92rem;
+}
+
+.rule {
+  font-weight: bold;
+  color: #f8fafc;
+}
+
+.footer {
+  margin-top: 60px;
+  color: var(--muted);
+  font-size: 0.95rem;
+  border-top: 1px solid var(--border);
+  padding-top: 24px;
+}
+
+a {
+  color: var(--accent);
+}
+```
+
+  </style>
+</head>
+<body>
+  <main class="container">
+    <header>
+      <h1>JS129 Missed Questions Breakdown</h1>
+      <p class="subtitle">
+        A focused review of the questions I missed, partially missed, or found confusing during the JS129 OOP drill set. The main themes are constructor properties, prototype chains, own properties, static methods, private getters, <code>super</code>, and <code>instanceof</code>.
+      </p>
+
+```
+  <div class="nav">
+    <a href="#problem-2">Problem 2</a>
+    <a href="#problem-7">Problem 7</a>
+    <a href="#problem-8">Problem 8</a>
+    <a href="#problem-12b">Problem 12b</a>
+    <a href="#problem-13">Problem 13</a>
+    <a href="#final-problem">Final Problem</a>
+    <a href="#big-patterns">Big Patterns</a>
+  </div>
+</header>
+
+<section id="problem-2" class="card">
+  <h2>Problem 2: Replacing <code>Dog.prototype</code> without restoring <code>constructor</code></h2>
+
+  <h3>Code</h3>
+  <pre><code>'use strict';
+```
+
+function Dog(name) {
+this.name = name;
+}
+
+Dog.prototype = {
+bark() {
+console.log(`${this.name} barks.`);
+}
+};
+
+let dog = new Dog('Rex');
+
+console.log(Dog.prototype.hasOwnProperty('constructor'));
+console.log(dog.constructor === Dog);
+console.log(dog.constructor === Object);</code></pre>
+
+```
+  <h3>My answer</h3>
+  <pre><code>Dog.prototype.hasOwnProperty('constructor') // false
+```
+
+dog.constructor === Dog                    // true / unsure
+dog.constructor === Object                 // unsure</code></pre>
+
+```
+  <h3>Correct answer</h3>
+  <pre><code>false
+```
+
+false
+true</code></pre>
+
+```
+  <div class="mistake">
+    <p><strong>What was wrong:</strong> I treated <code>dog.constructor</code> as if it automatically remembered that <code>dog</code> was created by <code>Dog</code>.</p>
+  </div>
+
+  <p>
+    But <code>dog.constructor</code> is not a hidden record of which constructor function created the object.
+    It is just a normal property lookup for a property named <code>constructor</code>.
+  </p>
+
+  <p>Normally, a constructor function starts with a default prototype object that has a <code>constructor</code> property:</p>
+
+  <pre><code>Dog.prototype.constructor === Dog;</code></pre>
+
+  <p>But when I replace the prototype with an object literal:</p>
+
+  <pre><code>Dog.prototype = {
+```
+
+bark() {
+console.log(`${this.name} barks.`);
+}
+};</code></pre>
+
+```
+  <p>I throw away the original default prototype object. The new object has <code>bark</code>, but it does not have its own <code>constructor</code> property.</p>
+
+  <p>The prototype chain is:</p>
+
+  <pre><code>dog -> Dog.prototype -> Object.prototype -> null</code></pre>
+
+  <p>So when JavaScript evaluates <code>dog.constructor</code>, it searches like this:</p>
+
+  <pre><code>dog.hasOwnProperty('constructor')              // false
+```
+
+Dog.prototype.hasOwnProperty('constructor')    // false
+Object.prototype.hasOwnProperty('constructor') // true</code></pre>
+
+```
+  <p><code>Object.prototype.constructor</code> points to <code>Object</code>, so:</p>
+
+  <pre><code>dog.constructor === Dog    // false
+```
+
+dog.constructor === Object // true</code></pre>
+
+```
+  <div class="correct">
+    <p><span class="rule">Rule:</span> <code>constructor</code> is just a property. Replacing a prototype object can remove the default <code>constructor</code> property unless I manually restore it.</p>
+  </div>
+</section>
+
+<section id="problem-7" class="card">
+  <h2>Problem 7: Class method vs method assigned inside the constructor</h2>
+
+  <h3>Code</h3>
+  <pre><code>'use strict';
+```
+
+class Dog {
+constructor(name) {
+this.name = name;
+this.bark = function() {
+console.log(`${this.name} barks.`);
+};
+}
+}
+
+let dog1 = new Dog('Rex');
+let dog2 = new Dog('Maya');
+
+console.log(dog1.hasOwnProperty('bark'));
+console.log(Dog.prototype.hasOwnProperty('bark'));
+console.log(dog1.bark === dog2.bark);</code></pre>
+
+```
+  <h3>Correct answer</h3>
+  <pre><code>true
+```
+
+false
+false</code></pre>
+
+```
+  <div class="mistake">
+    <p><strong>What was shaky:</strong> I needed to be more precise about whether <code>bark</code> was on the instance or on <code>Dog.prototype</code>.</p>
+  </div>
+
+  <p>These two patterns are very different:</p>
+
+  <pre><code>class Dog {
+```
+
+bark() {}
+}</code></pre>
+
+```
+  <p>versus:</p>
+
+  <pre><code>class Dog {
+```
+
+constructor() {
+this.bark = function() {};
+}
+}</code></pre>
+
+```
+  <p>This form:</p>
+
+  <pre><code>bark() {}</code></pre>
+
+  <p>puts the method on <code>Dog.prototype</code>. Every dog shares the same method.</p>
+
+  <p>But this form:</p>
+
+  <pre><code>this.bark = function() {};</code></pre>
+
+  <p>runs inside the constructor every time a new dog is created. It creates a new function object and assigns it directly to that specific instance.</p>
+
+  <p>So with:</p>
+
+  <pre><code>let dog1 = new Dog('Rex');
+```
+
+let dog2 = new Dog('Maya');</code></pre>
+
+```
+  <p>the structure is:</p>
+
+  <pre><code>dog1 owns name
+```
+
+dog1 owns bark
+
+dog2 owns name
+dog2 owns bark
+
+Dog.prototype does not own bark</code></pre>
+
+```
+  <p>That is why:</p>
+
+  <pre><code>dog1.hasOwnProperty('bark')          // true
+```
+
+Dog.prototype.hasOwnProperty('bark') // false
+dog1.bark === dog2.bark              // false</code></pre>
+
+```
+  <div class="correct">
+    <p><span class="rule">Rule:</span></p>
+    <pre><code>this.bark = function() {}; // instance owns bark
+```
+
+bark() {}                  // Dog.prototype owns bark
+
+static bark() {}           // Dog owns bark</code></pre> </div> </section>
+
+```
+<section id="problem-8" class="card">
+  <h2>Problem 8: Private field plus getter nuance</h2>
+
+  <h3>Code</h3>
+  <pre><code>'use strict';
+```
+
+class Dog {
+#name;
+
+constructor(name) {
+this.#name = name;
+}
+
+get name() {
+return this.#name;
+}
+
+rename(newName) {
+this.#name = newName;
+}
+}
+
+let dog = new Dog('Rex');
+
+console.log(dog.name);
+console.log(dog.hasOwnProperty('name'));
+console.log(dog.hasOwnProperty('rename'));
+console.log(Dog.prototype.hasOwnProperty('rename'));
+
+dog.rename('Maya');
+console.log(dog.name);</code></pre>
+
+```
+  <h3>Correct answer</h3>
+  <pre><code>Rex
+```
+
+false
+false
+true
+Maya</code></pre>
+
+```
+  <div class="mistake">
+    <p><strong>What needed correction:</strong> The phrase “the dog has <code>name</code>” can be misleading here.</p>
+  </div>
+
+  <p>This class has a private field:</p>
+
+  <pre><code>#name</code></pre>
+
+  <p>That private field is internal class state. It is not the same thing as a public own property called <code>name</code>.</p>
+
+  <p>This works:</p>
+
+  <pre><code>dog.name</code></pre>
+
+  <p>because the class defines a getter:</p>
+
+  <pre><code>get name() {
+```
+
+return this.#name;
+}</code></pre>
+
+```
+  <p>The getter lives on <code>Dog.prototype</code>. So the lookup is roughly:</p>
+
+  <pre><code>Does dog have an own public property named "name"? No.
+```
+
+Does Dog.prototype have a getter named "name"? Yes.
+Run the getter with this = dog.
+Return dog.#name.</code></pre>
+
+```
+  <p>That is why both of these can be true:</p>
+
+  <pre><code>dog.name                  // "Rex"
+```
+
+dog.hasOwnProperty('name') // false</code></pre>
+
+```
+  <div class="correct">
+    <p><span class="rule">Rule:</span> A property access working does not automatically mean the instance owns that property. It may be found through the prototype chain, or it may be a getter.</p>
+  </div>
+</section>
+
+<section id="problem-12b" class="card">
+  <h2>Problem 12b: Extracting <code>super.speak</code> into a variable</h2>
+
+  <h3>Code</h3>
+  <pre><code>'use strict';
+```
+
+class Animal {
+speak() {
+console.log(`${this.name} makes a noise.`);
+}
+}
+
+class Dog extends Animal {
+constructor(name) {
+super();
+this.name = name;
+}
+
+speak() {
+let parentSpeak = super.speak;
+parentSpeak();
+console.log(`${this.name} barks.`);
+}
+}
+
+let dog = new Dog('Rex');
+
+dog.speak();</code></pre>
+
+```
+  <h3>My answer</h3>
+  <pre><code>// super does not fix lost this</code></pre>
+
+  <h3>Correct answer</h3>
+  <pre><code>TypeError</code></pre>
+
+  <p>The second log never runs.</p>
+
+  <p>This line:</p>
+
+  <pre><code>let parentSpeak = super.speak;</code></pre>
+
+  <p>gets the parent method from <code>Animal.prototype</code>. Conceptually:</p>
+
+  <pre><code>let parentSpeak = Animal.prototype.speak;</code></pre>
+
+  <p>But once the method is stored in a variable, the receiver is gone.</p>
+
+  <p>Then this line:</p>
+
+  <pre><code>parentSpeak();</code></pre>
+
+  <p>is a plain function call. There is no object before the dot. In strict mode:</p>
+
+  <pre><code>this = undefined</code></pre>
+
+  <p>So inside <code>Animal.prototype.speak</code>, this line throws:</p>
+
+  <pre><code>console.log(`${this.name} makes a noise.`);</code></pre>
+
+  <p>because <code>this</code> is <code>undefined</code>.</p>
+
+  <div class="correct">
+    <p><span class="rule">Rule:</span> <code>super.speak()</code> preserves the current <code>this</code>. But extracting <code>super.speak</code> into a variable loses the receiver.</p>
+  </div>
+</section>
+
+<section id="problem-13" class="card">
+  <h2>Problem 13: Extracting <code>dog.speak</code> when the method contains <code>super</code></h2>
+
+  <h3>Code</h3>
+  <pre><code>'use strict';
+```
+
+class Animal {
+speak() {
+console.log(`${this.name} makes a noise.`);
+}
+}
+
+class Dog extends Animal {
+constructor(name) {
+super();
+this.name = name;
+}
+
+speak() {
+super.speak();
+}
+}
+
+let dog = new Dog('Rex');
+
+let speak = dog.speak;
+speak();</code></pre>
+
+```
+  <h3>My answer</h3>
+  <pre><code>// don't understand this one</code></pre>
+
+  <h3>Correct answer</h3>
+  <pre><code>TypeError</code></pre>
+
+  <p>The confusing part is that <code>super.speak()</code> feels like it should somehow know that the method came from <code>dog</code>. It does not.</p>
+
+  <p>This line:</p>
+
+  <pre><code>let speak = dog.speak;</code></pre>
+
+  <p>copies the function value. It does not copy the receiver.</p>
+
+  <p>So this:</p>
+
+  <pre><code>speak();</code></pre>
+
+  <p>is not the same as:</p>
+
+  <pre><code>dog.speak();</code></pre>
+
+  <p>This call:</p>
+
+  <pre><code>dog.speak();</code></pre>
+
+  <p>sets:</p>
+
+  <pre><code>this = dog</code></pre>
+
+  <p>But this call:</p>
+
+  <pre><code>speak();</code></pre>
+
+  <p>sets, in strict mode:</p>
+
+  <pre><code>this = undefined</code></pre>
+
+  <p>So when <code>Dog.prototype.speak</code> starts running, <code>this</code> is already undefined.</p>
+
+  <p>Then <code>super.speak()</code> can still find <code>Animal.prototype.speak</code>, but it keeps the same current <code>this</code>. Since the current <code>this</code> is undefined, the parent method also receives undefined.</p>
+
+  <div class="correct">
+    <p><span class="rule">Assessment phrase:</span> <code>super.speak()</code> finds <code>Animal.prototype.speak</code>, but it does not fix a lost <code>this</code>. Since <code>dog.speak</code> was extracted and called as <code>speak()</code>, <code>this</code> is undefined, so the parent method throws.</p>
+  </div>
+</section>
+
+<section id="final-problem" class="card">
+  <h2>Final Problem: <code>constructor</code> vs <code>instanceof</code> after restoring constructor</h2>
+
+  <h3>Code</h3>
+  <pre><code>'use strict';
+```
+
+function Animal(name) {
+this.name = name;
+}
+
+function Dog(name) {
+Animal.call(this, name);
+}
+
+Dog.prototype = Object.create(Animal.prototype);
+
+let dog = new Dog('Rex');
+
+console.log(dog.constructor === Dog);
+console.log(dog.constructor === Animal);
+console.log(dog instanceof Dog);
+console.log(dog instanceof Animal);
+
+Dog.prototype.constructor = Dog;
+
+console.log(dog.constructor === Dog);
+console.log(dog.constructor === Animal);
+console.log(dog instanceof Dog);
+console.log(dog instanceof Animal);</code></pre>
+
+```
+  <h3>My answer</h3>
+  <pre><code>false
+```
+
+true
+true
+true
+
+true
+false
+true
+false</code></pre>
+
+```
+  <h3>Correct answer</h3>
+  <pre><code>false
+```
+
+true
+true
+true
+
+true
+false
+true
+true</code></pre>
+
+```
+  <div class="mistake">
+    <p><strong>What was wrong:</strong> The final line should be <code>true</code>, not <code>false</code>.</p>
+  </div>
+
+  <p>This line:</p>
+
+  <pre><code>Dog.prototype = Object.create(Animal.prototype);</code></pre>
+
+  <p>sets up this prototype chain:</p>
+
+  <pre><code>dog -> Dog.prototype -> Animal.prototype -> Object.prototype -> null</code></pre>
+
+  <p>Before restoring <code>constructor</code>, <code>Dog.prototype</code> does not have its own <code>constructor</code> property. So <code>dog.constructor</code> searches like this:</p>
+
+  <pre><code>dog has own constructor? No.
+```
+
+Dog.prototype has own constructor? No.
+Animal.prototype has own constructor? Yes.</code></pre>
+
+```
+  <p>So before the restoration:</p>
+
+  <pre><code>dog.constructor === Dog      // false
+```
+
+dog.constructor === Animal   // true
+dog instanceof Dog           // true
+dog instanceof Animal        // true</code></pre>
+
+```
+  <p>Then we do:</p>
+
+  <pre><code>Dog.prototype.constructor = Dog;</code></pre>
+
+  <p>Now <code>Dog.prototype</code> has its own <code>constructor</code> property. So <code>dog.constructor</code> now finds <code>Dog</code> before it reaches <code>Animal.prototype</code>.</p>
+
+  <pre><code>dog.constructor === Dog      // true
+```
+
+dog.constructor === Animal   // false</code></pre>
+
+```
+  <p>But this assignment did not change the prototype chain. The chain is still:</p>
+
+  <pre><code>dog -> Dog.prototype -> Animal.prototype -> Object.prototype -> null</code></pre>
+
+  <p>Since <code>Animal.prototype</code> is still in the chain:</p>
+
+  <pre><code>dog instanceof Animal // true</code></pre>
+
+  <div class="correct">
+    <p><span class="rule">Rule:</span> Changing <code>Dog.prototype.constructor</code> changes a property. It does not remove <code>Animal.prototype</code> from the prototype chain.</p>
+  </div>
+</section>
+
+<section id="big-patterns" class="card">
+  <h2>Big Patterns Across the Misses</h2>
+
+  <h3>1. <code>constructor</code> is mostly just a property lookup</h3>
+  <pre><code>dog.constructor</code></pre>
+  <p>This means: find a property named <code>constructor</code> on <code>dog</code> or its prototype chain.</p>
+
+  <h3>2. <code>instanceof</code> checks the prototype chain, not the <code>constructor</code> property</h3>
+  <pre><code>dog instanceof Dog</code></pre>
+  <p>This means: is <code>Dog.prototype</code> anywhere in <code>dog</code>'s prototype chain?</p>
+
+  <h3>3. <code>super</code> finds the parent method, but keeps the current <code>this</code></h3>
+  <pre><code>super.speak()</code></pre>
+  <p>This means: find the parent version of <code>speak</code> and call it with the current <code>this</code>. If the current <code>this</code> is already lost, <code>super</code> does not restore it.</p>
+
+  <h3>4. <code>hasOwnProperty</code> only checks the object itself</h3>
+  <pre><code>dog.hasOwnProperty('bark')</code></pre>
+  <p>This asks whether <code>dog</code> directly owns <code>bark</code>. It does not matter whether <code>dog.bark()</code> works through the prototype chain.</p>
+
+  <h3>5. Method placement matters</h3>
+  <pre><code>this.method = function() {}; // instance owns it
+```
+
+method() {}                  // prototype owns it
+
+static method() {}           // class / constructor owns it</code></pre>
+
+```
+  <div class="note">
+    <p><strong>Main takeaway:</strong> Most of the mistakes came from treating <code>constructor</code>, <code>super</code>, or <code>instanceof</code> as more magical than they are. The correct approach is to reduce each one to the mechanical rule: property lookup, prototype-chain check, or current-<code>this</code> method call.</p>
+  </div>
+</section>
+
+<p class="footer">
+  JS129 OOP study notes. Focus areas: constructor property, prototype chains, own properties, <code>super</code>, <code>instanceof</code>, static methods, private fields, and getters.
+</p>
+```
+
+  </main>
+</body>
+</html>
