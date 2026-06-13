@@ -1,0 +1,743 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>JS129 Weak Spots Review Guide</title>
+  <style>
+    :root {
+      --bg: #f5f7fb;
+      --panel: #ffffff;
+      --text: #172033;
+      --muted: #64748b;
+      --border: #d8dee9;
+      --accent: #1f4b99;
+      --accent-soft: #eaf1ff;
+      --code-bg: #111827;
+      --code-text: #f9fafb;
+      --warning-bg: #fff7df;
+      --warning-border: #b7791f;
+      --good-bg: #e8f7ed;
+      --good-border: #1f7a3f;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.55;
+    }
+
+    header {
+      background: linear-gradient(135deg, #172033, #1f4b99);
+      color: white;
+      padding: 3rem 1.5rem;
+    }
+
+    .header-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    header h1 {
+      margin: 0 0 0.75rem;
+      font-size: clamp(2rem, 4vw, 3.3rem);
+      line-height: 1.1;
+    }
+
+    header p {
+      max-width: 760px;
+      margin: 0;
+      font-size: 1.1rem;
+      color: #e6edf8;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 290px 1fr;
+      max-width: 1280px;
+      margin: 0 auto;
+      gap: 1.25rem;
+      padding: 1.25rem;
+    }
+
+    nav {
+      position: sticky;
+      top: 1rem;
+      align-self: start;
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 1rem;
+      padding: 1rem;
+      max-height: calc(100vh - 2rem);
+      overflow-y: auto;
+    }
+
+    nav h2 {
+      font-size: 0.85rem;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin: 0 0 0.75rem;
+    }
+
+    nav a {
+      display: block;
+      color: var(--text);
+      text-decoration: none;
+      padding: 0.55rem 0.65rem;
+      border-radius: 0.55rem;
+      font-size: 0.95rem;
+    }
+
+    nav a:hover {
+      background: var(--accent-soft);
+      color: var(--accent);
+    }
+
+    main { min-width: 0; }
+
+    section {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 1rem;
+      padding: 1.35rem;
+      margin-bottom: 1.25rem;
+      box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04);
+    }
+
+    h2 {
+      margin-top: 0;
+      font-size: 1.55rem;
+      line-height: 1.25;
+    }
+
+    h3 {
+      margin-top: 1.4rem;
+      margin-bottom: 0.45rem;
+      font-size: 1.1rem;
+    }
+
+    p { margin: 0.45rem 0 0.9rem; }
+
+    code, pre {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+    }
+
+    pre {
+      background: var(--code-bg);
+      color: var(--code-text);
+      padding: 1rem;
+      border-radius: 0.85rem;
+      overflow-x: auto;
+      font-size: 0.92rem;
+      line-height: 1.45;
+    }
+
+    .callout {
+      border-left: 5px solid var(--accent);
+      background: var(--accent-soft);
+      padding: 0.85rem 1rem;
+      border-radius: 0.55rem;
+      margin: 1rem 0;
+    }
+
+    .warning {
+      background: var(--warning-bg);
+      border-left-color: var(--warning-border);
+    }
+
+    .good {
+      background: var(--good-bg);
+      border-left-color: var(--good-border);
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 1rem;
+      margin: 1rem 0;
+    }
+
+    .mini {
+      border: 1px solid var(--border);
+      background: #fbfdff;
+      padding: 1rem;
+      border-radius: 0.85rem;
+    }
+
+    .mini h3 {
+      margin-top: 0;
+      font-size: 1rem;
+    }
+
+    .phrase {
+      border: 1px solid var(--border);
+      border-radius: 0.75rem;
+      padding: 0.75rem 0.85rem;
+      background: #fbfdff;
+      margin: 0.6rem 0;
+    }
+
+    details {
+      border: 1px solid var(--border);
+      border-radius: 0.85rem;
+      padding: 0.85rem 1rem;
+      margin: 0.8rem 0;
+      background: #fbfdff;
+    }
+
+    summary {
+      cursor: pointer;
+      font-weight: 700;
+      color: var(--accent);
+    }
+
+    footer {
+      color: var(--muted);
+      text-align: center;
+      padding: 2rem 1rem 3rem;
+    }
+
+    @media (max-width: 860px) {
+      .layout { grid-template-columns: 1fr; }
+      nav {
+        position: static;
+        max-height: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-inner">
+      <h1>JS129 Weak Spots Review Guide</h1>
+      <p>A focused review page for constructor, prototype, hasOwnProperty, static methods, private fields, factories, and super.</p>
+    </div>
+  </header>
+
+  <div class="layout">
+    <nav>
+      <h2>Review Topics</h2>
+      <a href="#constructor">constructor property</a>
+      <a href="#prototype-replacement">Replacing prototypes</a>
+      <a href="#object-create">Object.create inheritance</a>
+      <a href="#constructor-vs-instanceof">constructor vs instanceof</a>
+      <a href="#has-own-property">hasOwnProperty locations</a>
+      <a href="#static-methods">Static methods</a>
+      <a href="#private-fields">Private fields and getters</a>
+      <a href="#factory-functions">Factory functions</a>
+      <a href="#super">super basics</a>
+      <a href="#drills">Practice drills</a>
+      <a href="#phrases">Assessment phrases</a>
+    </nav>
+
+    <main>
+      <section id="intro">
+        <h2>How to use this page</h2>
+        <p>This page is not a full JS129 guide. It only covers the weak spots from the last mock session.</p>
+        <div class="callout">
+          <strong>Main question to ask:</strong> where exactly does this property live? Instance, prototype, constructor/class function, or farther up the prototype chain?
+        </div>
+      </section>
+
+      <section id="constructor">
+        <h2>1. The <code>constructor</code> property</h2>
+        <p>The default <code>constructor</code> property lives on the prototype object and points back to the constructor function.</p>
+
+<pre><code>'use strict';
+
+function Dog(name) {
+  this.name = name;
+}
+
+console.log(Dog.prototype.hasOwnProperty('constructor')); // true
+console.log(Dog.prototype.constructor === Dog);           // true
+
+let dog = new Dog('Rex');
+
+console.log(dog.hasOwnProperty('constructor')); // false
+console.log(dog.constructor === Dog);           // true</code></pre>
+
+        <div class="callout good">
+          <strong>Correct wording:</strong> <code>Dog.prototype</code> owns a property named <code>constructor</code>, and that property points back to the <code>Dog</code> function.
+        </div>
+
+        <div class="callout warning">
+          Do not say the instance directly points back to the constructor. The instance finds <code>constructor</code> through prototype lookup.
+        </div>
+      </section>
+
+      <section id="prototype-replacement">
+        <h2>2. Replacing prototypes and losing <code>constructor</code></h2>
+        <p>When you replace <code>Dog.prototype</code> with a new object literal, you lose the original default <code>constructor</code> property.</p>
+
+<pre><code>'use strict';
+
+function Dog(name) {
+  this.name = name;
+}
+
+Dog.prototype = {
+  bark() {
+    console.log(`${this.name} barks.`);
+  }
+};
+
+let dog = new Dog('Rex');
+
+console.log(dog.constructor === Dog);    // false
+console.log(dog.constructor === Object); // true
+console.log(Dog.prototype.hasOwnProperty('constructor')); // false</code></pre>
+
+        <p>The lookup is:</p>
+
+<pre><code>dog
+  → Dog.prototype        // no constructor here
+    → Object.prototype   // constructor is found here, points to Object</code></pre>
+
+        <div class="callout">
+          The chain is <code>dog → Dog.prototype → Object.prototype</code>, not <code>dog → Dog → Object</code>.
+        </div>
+
+        <h3>Restore it manually</h3>
+<pre><code>Dog.prototype = {
+  constructor: Dog,
+
+  bark() {
+    console.log(`${this.name} barks.`);
+  }
+};</code></pre>
+      </section>
+
+      <section id="object-create">
+        <h2>3. <code>Object.create</code> inheritance</h2>
+        <p><code>Object.create(Animal.prototype)</code> creates a new object whose prototype is <code>Animal.prototype</code>.</p>
+
+<pre><code>'use strict';
+
+function Animal(name) {
+  this.name = name;
+}
+
+function Dog(name) {
+  Animal.call(this, name);
+}
+
+Dog.prototype = Object.create(Animal.prototype);
+
+let dog = new Dog('Rex');
+
+console.log(dog.constructor === Dog);    // false
+console.log(dog.constructor === Animal); // true
+console.log(dog instanceof Dog);         // true
+console.log(dog instanceof Animal);      // true</code></pre>
+
+        <p>Because <code>Dog.prototype.constructor = Dog</code> was not restored, <code>dog.constructor</code> climbs to <code>Animal.prototype.constructor</code>.</p>
+
+<pre><code>dog
+  → Dog.prototype
+    → Animal.prototype   // constructor found here, points to Animal
+      → Object.prototype</code></pre>
+
+        <h3>Correct setup</h3>
+<pre><code>Dog.prototype = Object.create(Animal.prototype);
+Dog.prototype.constructor = Dog;</code></pre>
+      </section>
+
+      <section id="constructor-vs-instanceof">
+        <h2>4. <code>constructor</code> vs <code>instanceof</code></h2>
+        <div class="grid">
+          <div class="mini">
+            <h3><code>dog.constructor</code></h3>
+            <p>Property lookup. It asks where the property named <code>constructor</code> is found.</p>
+          </div>
+          <div class="mini">
+            <h3><code>dog instanceof Dog</code></h3>
+            <p>Prototype-chain check. It asks whether <code>Dog.prototype</code> appears in the object's prototype chain.</p>
+          </div>
+        </div>
+
+<pre><code>Dog.prototype = Object.create(Animal.prototype);
+
+let dog = new Dog('Rex');
+
+dog.constructor === Animal; // true, property lookup
+dog instanceof Dog;         // true, Dog.prototype is in the chain</code></pre>
+
+        <div class="callout warning">
+          These can disagree. <code>constructor</code> is not the same thing as <code>instanceof</code>.
+        </div>
+      </section>
+
+      <section id="has-own-property">
+        <h2>5. <code>hasOwnProperty</code> locations</h2>
+        <p><code>hasOwnProperty</code> checks only the object you call it on. It does not search the prototype chain.</p>
+
+<pre><code>dog.hasOwnProperty('x')
+// Does the instance itself own x?
+
+Dog.prototype.hasOwnProperty('x')
+// Does the prototype object itself own x?
+
+Dog.hasOwnProperty('x')
+// Does the constructor/class function itself own x?</code></pre>
+
+<pre><code>'use strict';
+
+class Dog {
+  constructor(name) {
+    this.name = name;
+  }
+
+  bark() {
+    console.log(`${this.name} barks.`);
+  }
+
+  static describe() {
+    console.log('Dogs are loyal.');
+  }
+}
+
+let dog = new Dog('Rex');
+
+console.log(dog.hasOwnProperty('name'));           // true
+console.log(dog.hasOwnProperty('bark'));           // false
+console.log(Dog.prototype.hasOwnProperty('bark')); // true
+console.log(Dog.hasOwnProperty('describe'));       // true</code></pre>
+
+        <div class="callout">
+          A method is still a property. It is a property whose value is a function.
+        </div>
+      </section>
+
+      <section id="static-methods">
+        <h2>6. Static methods</h2>
+        <p>Static methods live directly on the class/constructor function, not on the prototype.</p>
+
+<pre><code>'use strict';
+
+class Dog {
+  bark() {
+    console.log('woof');
+  }
+
+  static describe() {
+    console.log('Dogs are loyal.');
+  }
+}
+
+let dog = new Dog();
+
+console.log(Dog.prototype.hasOwnProperty('bark')); // true
+console.log(Dog.hasOwnProperty('describe'));       // true
+
+Dog.describe(); // works
+dog.describe(); // TypeError</code></pre>
+
+        <div class="callout good">
+          <strong>Assessment phrase:</strong> <code>describe</code> is static, so it lives directly on <code>Dog</code>. Instances do not access it through their normal prototype chain.
+        </div>
+      </section>
+
+      <section id="private-fields">
+        <h2>7. Private fields and getters</h2>
+        <p><code>#name</code> is private state. It is not a normal public own property called <code>name</code>.</p>
+
+<pre><code>'use strict';
+
+class Dog {
+  #name;
+
+  constructor(name) {
+    this.#name = name;
+  }
+
+  get name() {
+    return this.#name;
+  }
+
+  rename(newName) {
+    this.#name = newName;
+  }
+}
+
+let dog = new Dog('Rex');
+
+console.log(dog.name);                    // Rex
+console.log(dog.hasOwnProperty('name'));  // false
+
+dog.rename('Maya');
+console.log(dog.name);                    // Maya
+
+console.log(dog.hasOwnProperty('rename'));           // false
+console.log(Dog.prototype.hasOwnProperty('rename')); // true</code></pre>
+
+        <div class="callout">
+          <code>dog.name</code> works because it invokes a getter. But <code>name</code> is not an own public property on the instance.
+        </div>
+      </section>
+
+      <section id="factory-functions">
+        <h2>8. Factory functions and <code>instanceof</code></h2>
+        <p>A factory function returns an object directly. It does not create an instance through <code>new</code>.</p>
+
+<pre><code>'use strict';
+
+function createDog(name) {
+  return {
+    name,
+
+    bark() {
+      console.log(`${this.name} barks.`);
+    }
+  };
+}
+
+let dog1 = createDog('Rex');
+let dog2 = createDog('Maya');
+
+console.log(dog1.bark === dog2.bark); // false
+console.log(dog1.hasOwnProperty('bark')); // true
+console.log(dog1 instanceof createDog); // false</code></pre>
+
+        <div class="callout warning">
+          <code>dog1 instanceof createDog</code> is false because <code>createDog.prototype</code> is not in <code>dog1</code>'s prototype chain.
+        </div>
+      </section>
+
+      <section id="super">
+        <h2>9. <code>super</code> basics</h2>
+        <p><code>super.method()</code> starts lookup one level above the current class's prototype and calls the first matching method it finds.</p>
+
+        <h3>Normal parent method call</h3>
+<pre><code>'use strict';
+
+class Animal {
+  constructor(name) {
+    this.name = name;
+  }
+
+  speak() {
+    console.log(`${this.name} makes a noise.`);
+  }
+}
+
+class Dog extends Animal {
+  speak() {
+    super.speak();
+    console.log(`${this.name} barks.`);
+  }
+}
+
+let dog = new Dog('Rex');
+dog.speak();
+
+// Rex makes a noise.
+// Rex barks.</code></pre>
+
+        <div class="callout good">
+          <code>super.speak()</code> calls the parent method, but keeps the current <code>this</code>.
+        </div>
+
+        <h3><code>super</code> does not fix lost <code>this</code></h3>
+<pre><code>let speak = dog.speak;
+speak(); // TypeError</code></pre>
+
+        <p>If the method is extracted and called plainly, <code>this</code> is undefined in strict mode. <code>super</code> can find the parent method, but it does not repair the lost receiver.</p>
+
+        <h3>Explicit <code>this</code> with <code>.call</code></h3>
+<pre><code>class Dog extends Animal {
+  speak() {
+    super.speak.call({ name: 'Maya' });
+  }
+}
+
+new Dog('Rex').speak(); // Maya makes a noise.</code></pre>
+      </section>
+
+      <section id="drills">
+        <h2>Practice drills</h2>
+        <p>Answer out loud first, then reveal the solution.</p>
+
+        <details>
+          <summary>Drill 1: default constructor property</summary>
+<pre><code>'use strict';
+
+function Dog(name) {
+  this.name = name;
+}
+
+let dog = new Dog('Rex');
+
+console.log(Dog.prototype.hasOwnProperty('constructor'));
+console.log(dog.hasOwnProperty('constructor'));
+console.log(dog.constructor === Dog);</code></pre>
+          <div class="callout good">
+            Output: <code>true</code>, <code>false</code>, <code>true</code>. The prototype owns <code>constructor</code>; the instance finds it through lookup.
+          </div>
+        </details>
+
+        <details>
+          <summary>Drill 2: replaced prototype</summary>
+<pre><code>'use strict';
+
+function Dog(name) {
+  this.name = name;
+}
+
+Dog.prototype = {
+  bark() {
+    console.log(`${this.name} barks.`);
+  }
+};
+
+let dog = new Dog('Rex');
+
+console.log(dog.constructor === Dog);
+console.log(dog.constructor === Object);</code></pre>
+          <div class="callout good">
+            Output: <code>false</code>, <code>true</code>. The new prototype object lacks <code>constructor</code>, so lookup reaches <code>Object.prototype.constructor</code>.
+          </div>
+        </details>
+
+        <details>
+          <summary>Drill 3: Object.create without constructor restoration</summary>
+<pre><code>'use strict';
+
+function Animal() {}
+function Dog() {}
+
+Dog.prototype = Object.create(Animal.prototype);
+
+let dog = new Dog();
+
+console.log(dog.constructor === Dog);
+console.log(dog.constructor === Animal);
+console.log(dog instanceof Dog);
+console.log(dog instanceof Animal);</code></pre>
+          <div class="callout good">
+            Output: <code>false</code>, <code>true</code>, <code>true</code>, <code>true</code>. <code>constructor</code> is found on <code>Animal.prototype</code>, but both prototypes are in the chain.
+          </div>
+        </details>
+
+        <details>
+          <summary>Drill 4: static vs prototype</summary>
+<pre><code>'use strict';
+
+class Dog {
+  bark() {}
+  static describe() {}
+}
+
+let dog = new Dog();
+
+console.log(dog.hasOwnProperty('bark'));
+console.log(Dog.prototype.hasOwnProperty('bark'));
+console.log(Dog.hasOwnProperty('describe'));
+console.log(dog.describe);</code></pre>
+          <div class="callout good">
+            Output: <code>false</code>, <code>true</code>, <code>true</code>, <code>undefined</code>. <code>bark</code> is on the prototype; <code>describe</code> is on the class itself.
+          </div>
+        </details>
+
+        <details>
+          <summary>Drill 5: private field and getter</summary>
+<pre><code>'use strict';
+
+class Dog {
+  #name;
+
+  constructor(name) {
+    this.#name = name;
+  }
+
+  get name() {
+    return this.#name;
+  }
+}
+
+let dog = new Dog('Rex');
+
+console.log(dog.name);
+console.log(dog.hasOwnProperty('name'));
+console.log(Dog.prototype.hasOwnProperty('name'));</code></pre>
+          <div class="callout good">
+            Output: <code>Rex</code>, <code>false</code>, <code>true</code>. <code>name</code> is a getter on the prototype, not an own public property.
+          </div>
+        </details>
+
+        <details>
+          <summary>Drill 6: factory function</summary>
+<pre><code>'use strict';
+
+function createDog(name) {
+  return {
+    name,
+    bark() {}
+  };
+}
+
+let dog = createDog('Rex');
+
+console.log(dog.hasOwnProperty('bark'));
+console.log(dog instanceof createDog);</code></pre>
+          <div class="callout good">
+            Output: <code>true</code>, <code>false</code>. The object is returned directly by a factory. It is not linked to <code>createDog.prototype</code>.
+          </div>
+        </details>
+
+        <details>
+          <summary>Drill 7: super keeps current this</summary>
+<pre><code>'use strict';
+
+class Animal {
+  speak() {
+    console.log(this.name);
+  }
+}
+
+class Dog extends Animal {
+  constructor(name) {
+    super();
+    this.name = name;
+  }
+
+  speak() {
+    super.speak();
+  }
+}
+
+new Dog('Rex').speak();</code></pre>
+          <div class="callout good">
+            Output: <code>Rex</code>. <code>super.speak()</code> calls the parent method with the current dog instance as <code>this</code>.
+          </div>
+        </details>
+      </section>
+
+      <section id="phrases">
+        <h2>Assessment phrases to memorize</h2>
+
+        <div class="phrase">“<code>Dog.prototype</code> owns a <code>constructor</code> property, and that property points back to the <code>Dog</code> function.”</div>
+        <div class="phrase">“The instance does not own <code>constructor</code>; it finds it through prototype lookup.”</div>
+        <div class="phrase">“Replacing the prototype object loses the default <code>constructor</code> property.”</div>
+        <div class="phrase">“<code>constructor</code> is property lookup, while <code>instanceof</code> checks the prototype chain.”</div>
+        <div class="phrase">“<code>hasOwnProperty</code> checks only the specific object it is called on.”</div>
+        <div class="phrase">“Static methods live directly on the class/constructor function, not on the prototype.”</div>
+        <div class="phrase">“A getter can make <code>dog.name</code> work even when <code>name</code> is not an own property.”</div>
+        <div class="phrase">“A factory function returns an object directly, so the result is not automatically an instance of the factory.”</div>
+        <div class="phrase">“<code>super.method()</code> calls the parent method while keeping the current <code>this</code>.”</div>
+        <div class="phrase">“<code>super</code> can find the parent method, but it does not fix a lost <code>this</code>.”</div>
+      </section>
+
+      <footer>
+        JS129 weak spots review page.
+      </footer>
+    </main>
+  </div>
+</body>
+</html>
