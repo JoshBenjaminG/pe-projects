@@ -1,10 +1,23 @@
-/* Lift Tracker — mobile-first styles.
-   Reuses the site's color/font variables from settings.css + typography.css
-   (loaded first via css/style.css) but otherwise is a self-contained
-   component stylesheet, since this page is an app, not a content page. */
+/* Lift Tracker — dark theme with a red accent, inspired by a reference
+   fitness-app screenshot. Mobile-first; desktop gets a wider container via
+   the media query at the bottom. Self-contained component stylesheet (the
+   variables below are scoped to this file, not the site's settings.css). */
+
+:root {
+  --lt-bg: #121317;
+  --lt-surface: #1b1c22;
+  --lt-surface-alt: #23242c;
+  --lt-border: #2c2d36;
+  --lt-text: #f2f2f4;
+  --lt-text-muted: #9a9ca6;
+  --lt-accent: #e8242c;
+  --lt-accent-strong: #c81b22;
+  --lt-accent-soft: rgba(232, 36, 44, 0.16);
+  --lt-gold: #f2b134;
+}
 
 .lt-body {
-  background: #fffffb;
+  background: var(--lt-bg);
 }
 
 .lt-app {
@@ -12,34 +25,37 @@
   margin: 0 auto;
   padding: 16px 16px 96px;
   font-family: 'Roboto', sans-serif;
-  color: var(--black, #111);
+  color: var(--lt-text);
 }
 
 .lt-loading,
 .lt-empty,
 .lt-error {
   text-align: center;
-  color: #666;
+  color: var(--lt-text-muted);
   padding: 24px 8px;
   font-size: 1rem;
 }
 
 .lt-error {
-  color: #c0392b;
+  color: var(--lt-accent);
 }
 
 /* ---------- Header ---------- */
 .lt-header h1 {
   font-size: 1.5rem;
+  font-weight: 800;
+  letter-spacing: 0.01em;
   margin: 8px 0 16px;
+  color: var(--lt-text);
 }
 
 /* ---------- Composite section ---------- */
 .lt-composite {
-  border: 1px solid #e7e2d8;
-  border-radius: 10px;
+  border: 1px solid var(--lt-border);
+  border-radius: 12px;
   margin-bottom: 20px;
-  background: #fff;
+  background: var(--lt-surface);
   overflow: hidden;
 }
 
@@ -55,11 +71,12 @@
   font-weight: 700;
   text-align: left;
   min-height: 48px;
+  color: var(--lt-text);
 }
 
 .lt-chevron {
   font-size: 0.75rem;
-  color: #888;
+  color: var(--lt-text-muted);
 }
 
 .lt-composite-body {
@@ -83,8 +100,14 @@
   min-width: 0;
   font-size: 1rem;
   padding: 12px 14px;
-  border: 1px solid #ccc;
+  border: 1px solid var(--lt-border);
   border-radius: 8px;
+  background: var(--lt-surface);
+  color: var(--lt-text);
+}
+
+.lt-add-lift input::placeholder {
+  color: var(--lt-text-muted);
 }
 
 .lt-add-lift button,
@@ -97,9 +120,16 @@
   min-height: 44px;
   border-radius: 8px;
   border: none;
-  background: var(--black, #111);
-  color: var(--white, #fff);
+  background: var(--lt-accent);
+  color: #fff;
   cursor: pointer;
+}
+
+.lt-add-lift button:active,
+.lt-log-btn:active,
+.lt-edit-actions button:active,
+.lt-toast-undo:active {
+  background: var(--lt-accent-strong);
 }
 
 /* ---------- Lift list ---------- */
@@ -115,9 +145,9 @@
 .lt-lift-row {
   display: flex;
   align-items: stretch;
-  background: #fff;
-  border: 1px solid #e7e2d8;
-  border-radius: 10px;
+  background: var(--lt-surface);
+  border: 1px solid var(--lt-border);
+  border-radius: 12px;
   overflow: hidden;
 }
 
@@ -126,9 +156,9 @@
   flex-shrink: 0;
   background: none;
   border: none;
-  border-right: 1px solid #eee;
+  border-right: 1px solid var(--lt-border);
   font-size: 1.1rem;
-  color: #999;
+  color: var(--lt-text-muted);
   cursor: grab;
   touch-action: none;
 }
@@ -151,11 +181,12 @@
   font-weight: 700;
   font-size: 1.05rem;
   word-break: break-word;
+  color: var(--lt-text);
 }
 
 .lt-lift-last {
   font-size: 0.85rem;
-  color: #777;
+  color: var(--lt-text-muted);
 }
 
 .lt-lift-delete {
@@ -163,19 +194,19 @@
   flex-shrink: 0;
   background: none;
   border: none;
-  border-left: 1px solid #eee;
-  color: #c0392b;
+  border-left: 1px solid var(--lt-border);
+  color: var(--lt-accent);
   font-size: 1.3rem;
 }
 
 .lt-dragging {
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.18);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.5);
 }
 
 .lt-reorder-placeholder {
-  border: 1px dashed #ccc;
-  border-radius: 10px;
-  background: #f6f4ee;
+  border: 1px dashed var(--lt-border);
+  border-radius: 12px;
+  background: var(--lt-surface-alt);
 }
 
 /* ---------- Detail view header ---------- */
@@ -191,8 +222,9 @@
   height: 44px;
   flex-shrink: 0;
   border-radius: 8px;
-  border: 1px solid #e7e2d8;
-  background: #fff;
+  border: 1px solid var(--lt-border);
+  background: var(--lt-surface);
+  color: var(--lt-text);
   font-size: 1.2rem;
 }
 
@@ -205,18 +237,19 @@
   padding: 8px 4px;
   background: none;
   min-width: 0;
+  color: var(--lt-text);
 }
 
 .lt-lift-name-input:focus {
-  border-bottom-color: var(--color, #9ec9eb);
+  border-bottom-color: var(--lt-accent);
   outline: none;
 }
 
 /* ---------- Quick log form ---------- */
 .lt-quick-log {
-  background: #fff;
-  border: 1px solid #e7e2d8;
-  border-radius: 10px;
+  background: var(--lt-surface);
+  border: 1px solid var(--lt-border);
+  border-radius: 12px;
   padding: 14px;
   margin-bottom: 16px;
 }
@@ -233,39 +266,41 @@
   flex-direction: column;
   gap: 4px;
   font-size: 0.8rem;
-  color: #666;
+  color: var(--lt-text-muted);
 }
 
 .lt-field input {
   font-size: 1.3rem;
   padding: 12px;
-  border: 1px solid #ccc;
+  border: 1px solid var(--lt-border);
   border-radius: 8px;
   min-height: 48px;
   width: 100%;
+  background: var(--lt-surface-alt);
+  color: var(--lt-text);
 }
 
 .lt-log-btn {
   width: 100%;
-  background: #2c7be5;
+  background: var(--lt-accent);
 }
 
 .lt-log-feedback {
   margin: 10px 0 0;
   font-size: 0.95rem;
-  color: #2c7be5;
+  color: var(--lt-text-muted);
   text-align: center;
 }
 
 .lt-log-feedback.lt-pr {
-  color: #d68910;
+  color: var(--lt-gold);
   font-weight: 700;
 }
 
 /* ---------- Tabs ---------- */
 .lt-tabs {
   display: flex;
-  border-bottom: 1px solid #e7e2d8;
+  border-bottom: 1px solid var(--lt-border);
   margin-bottom: 12px;
 }
 
@@ -276,14 +311,14 @@
   padding: 12px 8px;
   font-size: 1rem;
   font-weight: 700;
-  color: #999;
+  color: var(--lt-text-muted);
   border-bottom: 2px solid transparent;
   min-height: 44px;
 }
 
 .lt-tab[aria-selected="true"] {
-  color: var(--black, #111);
-  border-bottom-color: var(--black, #111);
+  color: var(--lt-accent);
+  border-bottom-color: var(--lt-accent);
 }
 
 /* ---------- History tab ---------- */
@@ -295,7 +330,7 @@
   display: flex;
   justify-content: space-between;
   font-size: 0.85rem;
-  color: #777;
+  color: var(--lt-text-muted);
   padding: 0 4px 6px;
 }
 
@@ -309,9 +344,9 @@
 }
 
 .lt-history-row {
-  background: #fff;
-  border: 1px solid #eee;
-  border-radius: 8px;
+  background: var(--lt-surface);
+  border: 1px solid var(--lt-border);
+  border-radius: 10px;
 }
 
 .lt-history-main {
@@ -325,10 +360,11 @@
   min-height: 48px;
   font-size: 1rem;
   text-align: left;
+  color: var(--lt-text);
 }
 
 .lt-history-e1rm {
-  color: #777;
+  color: var(--lt-text-muted);
   font-size: 0.9rem;
 }
 
@@ -344,15 +380,17 @@
   flex-direction: column;
   gap: 4px;
   font-size: 0.8rem;
-  color: #666;
+  color: var(--lt-text-muted);
   flex: 1 1 100px;
 }
 
 .lt-edit-set-form input {
   font-size: 1rem;
   padding: 10px;
-  border: 1px solid #ccc;
+  border: 1px solid var(--lt-border);
   border-radius: 8px;
+  background: var(--lt-surface-alt);
+  color: var(--lt-text);
 }
 
 .lt-edit-actions {
@@ -363,22 +401,24 @@
 
 .lt-edit-actions button {
   flex: 1;
-  background: #2c7be5;
+  background: var(--lt-accent);
 }
 
 .lt-edit-actions [data-edit-cancel] {
-  background: #999;
+  background: none;
+  border: 1px solid var(--lt-border);
+  color: var(--lt-text-muted);
 }
 
 .lt-edit-actions .lt-delete-set {
-  background: #c0392b;
+  background: var(--lt-accent-strong);
 }
 
 /* ---------- Details tab ---------- */
 .lt-point-detail {
   text-align: center;
   font-size: 0.9rem;
-  color: #555;
+  color: var(--lt-text-muted);
   margin-top: 10px;
 }
 
@@ -388,9 +428,10 @@
   left: 16px;
   right: 16px;
   bottom: 16px;
-  background: #222;
-  color: #fff;
-  border-radius: 10px;
+  background: var(--lt-surface-alt);
+  border: 1px solid var(--lt-border);
+  color: var(--lt-text);
+  border-radius: 12px;
   padding: 12px 14px;
   display: flex;
   align-items: center;
@@ -414,7 +455,7 @@
 }
 
 .lt-toast-undo {
-  background: #2c7be5;
+  background: var(--lt-accent);
   padding: 8px 14px;
   min-height: 36px;
   flex-shrink: 0;
@@ -444,15 +485,17 @@
 
 .lt-gate-form label {
   font-size: 0.9rem;
-  color: #666;
+  color: var(--lt-text-muted);
 }
 
 .lt-gate-form input {
   font-size: 1.1rem;
   padding: 12px;
-  border: 1px solid #ccc;
+  border: 1px solid var(--lt-border);
   border-radius: 8px;
   min-height: 48px;
+  background: var(--lt-surface);
+  color: var(--lt-text);
 }
 
 .lt-gate-form button {
@@ -462,13 +505,24 @@
   min-height: 44px;
   border-radius: 8px;
   border: none;
-  background: var(--black, #111);
-  color: var(--white, #fff);
+  background: var(--lt-accent);
+  color: #fff;
   cursor: pointer;
 }
 
 .lt-gate-error {
-  color: #c0392b;
+  color: var(--lt-accent);
   font-size: 0.9rem;
   margin: 0;
+}
+
+/* ---------- Desktop ---------- */
+@media (min-width: 768px) {
+  .lt-app {
+    max-width: 800px;
+  }
+
+  .lt-toast {
+    max-width: 800px;
+  }
 }
