@@ -93,6 +93,13 @@
   display: flex;
   gap: 8px;
   margin-bottom: 16px;
+  background: none;
+}
+
+.lt-add-lift:invalid {
+  background: none;
+  box-shadow: none;
+  outline: none;
 }
 
 .lt-add-lift input {
