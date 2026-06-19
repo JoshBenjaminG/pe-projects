@@ -1,0 +1,474 @@
+/* Lift Tracker — mobile-first styles.
+   Reuses the site's color/font variables from settings.css + typography.css
+   (loaded first via css/style.css) but otherwise is a self-contained
+   component stylesheet, since this page is an app, not a content page. */
+
+.lt-body {
+  background: #fffffb;
+}
+
+.lt-app {
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 16px 16px 96px;
+  font-family: 'Roboto', sans-serif;
+  color: var(--black, #111);
+}
+
+.lt-loading,
+.lt-empty,
+.lt-error {
+  text-align: center;
+  color: #666;
+  padding: 24px 8px;
+  font-size: 1rem;
+}
+
+.lt-error {
+  color: #c0392b;
+}
+
+/* ---------- Header ---------- */
+.lt-header h1 {
+  font-size: 1.5rem;
+  margin: 8px 0 16px;
+}
+
+/* ---------- Composite section ---------- */
+.lt-composite {
+  border: 1px solid #e7e2d8;
+  border-radius: 10px;
+  margin-bottom: 20px;
+  background: #fff;
+  overflow: hidden;
+}
+
+.lt-composite-toggle {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 16px;
+  background: none;
+  border: none;
+  font-size: 1rem;
+  font-weight: 700;
+  text-align: left;
+  min-height: 48px;
+}
+
+.lt-chevron {
+  font-size: 0.75rem;
+  color: #888;
+}
+
+.lt-composite-body {
+  padding: 4px 12px 16px;
+}
+
+.lt-chart-wrap {
+  position: relative;
+  height: 200px;
+}
+
+/* ---------- Add lift form ---------- */
+.lt-add-lift {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.lt-add-lift input {
+  flex: 1;
+  min-width: 0;
+  font-size: 1rem;
+  padding: 12px 14px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+}
+
+.lt-add-lift button,
+.lt-log-btn,
+.lt-edit-actions button,
+.lt-toast-undo {
+  font-size: 1rem;
+  font-weight: 700;
+  padding: 12px 16px;
+  min-height: 44px;
+  border-radius: 8px;
+  border: none;
+  background: var(--black, #111);
+  color: var(--white, #fff);
+  cursor: pointer;
+}
+
+/* ---------- Lift list ---------- */
+.lt-lift-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.lt-lift-row {
+  display: flex;
+  align-items: stretch;
+  background: #fff;
+  border: 1px solid #e7e2d8;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.lt-drag-handle {
+  width: 44px;
+  flex-shrink: 0;
+  background: none;
+  border: none;
+  border-right: 1px solid #eee;
+  font-size: 1.1rem;
+  color: #999;
+  cursor: grab;
+  touch-action: none;
+}
+
+.lt-lift-row-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  text-align: left;
+  background: none;
+  border: none;
+  padding: 12px 14px;
+  min-height: 56px;
+  justify-content: center;
+}
+
+.lt-lift-name {
+  font-weight: 700;
+  font-size: 1.05rem;
+  word-break: break-word;
+}
+
+.lt-lift-last {
+  font-size: 0.85rem;
+  color: #777;
+}
+
+.lt-lift-delete {
+  width: 44px;
+  flex-shrink: 0;
+  background: none;
+  border: none;
+  border-left: 1px solid #eee;
+  color: #c0392b;
+  font-size: 1.3rem;
+}
+
+.lt-dragging {
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.18);
+}
+
+.lt-reorder-placeholder {
+  border: 1px dashed #ccc;
+  border-radius: 10px;
+  background: #f6f4ee;
+}
+
+/* ---------- Detail view header ---------- */
+.lt-detail-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.lt-back {
+  width: 44px;
+  height: 44px;
+  flex-shrink: 0;
+  border-radius: 8px;
+  border: 1px solid #e7e2d8;
+  background: #fff;
+  font-size: 1.2rem;
+}
+
+.lt-lift-name-input {
+  flex: 1;
+  font-size: 1.3rem;
+  font-weight: 700;
+  border: none;
+  border-bottom: 2px solid transparent;
+  padding: 8px 4px;
+  background: none;
+  min-width: 0;
+}
+
+.lt-lift-name-input:focus {
+  border-bottom-color: var(--color, #9ec9eb);
+  outline: none;
+}
+
+/* ---------- Quick log form ---------- */
+.lt-quick-log {
+  background: #fff;
+  border: 1px solid #e7e2d8;
+  border-radius: 10px;
+  padding: 14px;
+  margin-bottom: 16px;
+}
+
+.lt-quick-log-fields {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.lt-field {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 0.8rem;
+  color: #666;
+}
+
+.lt-field input {
+  font-size: 1.3rem;
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  min-height: 48px;
+  width: 100%;
+}
+
+.lt-log-btn {
+  width: 100%;
+  background: #2c7be5;
+}
+
+.lt-log-feedback {
+  margin: 10px 0 0;
+  font-size: 0.95rem;
+  color: #2c7be5;
+  text-align: center;
+}
+
+.lt-log-feedback.lt-pr {
+  color: #d68910;
+  font-weight: 700;
+}
+
+/* ---------- Tabs ---------- */
+.lt-tabs {
+  display: flex;
+  border-bottom: 1px solid #e7e2d8;
+  margin-bottom: 12px;
+}
+
+.lt-tab {
+  flex: 1;
+  background: none;
+  border: none;
+  padding: 12px 8px;
+  font-size: 1rem;
+  font-weight: 700;
+  color: #999;
+  border-bottom: 2px solid transparent;
+  min-height: 44px;
+}
+
+.lt-tab[aria-selected="true"] {
+  color: var(--black, #111);
+  border-bottom-color: var(--black, #111);
+}
+
+/* ---------- History tab ---------- */
+.lt-history-group {
+  margin-bottom: 14px;
+}
+
+.lt-history-date {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.85rem;
+  color: #777;
+  padding: 0 4px 6px;
+}
+
+.lt-history-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.lt-history-row {
+  background: #fff;
+  border: 1px solid #eee;
+  border-radius: 8px;
+}
+
+.lt-history-main {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: none;
+  border: none;
+  padding: 12px 14px;
+  min-height: 48px;
+  font-size: 1rem;
+  text-align: left;
+}
+
+.lt-history-e1rm {
+  color: #777;
+  font-size: 0.9rem;
+}
+
+.lt-edit-set-form {
+  padding: 12px 14px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.lt-edit-set-form label {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 0.8rem;
+  color: #666;
+  flex: 1 1 100px;
+}
+
+.lt-edit-set-form input {
+  font-size: 1rem;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+}
+
+.lt-edit-actions {
+  display: flex;
+  gap: 8px;
+  width: 100%;
+}
+
+.lt-edit-actions button {
+  flex: 1;
+  background: #2c7be5;
+}
+
+.lt-edit-actions [data-edit-cancel] {
+  background: #999;
+}
+
+.lt-edit-actions .lt-delete-set {
+  background: #c0392b;
+}
+
+/* ---------- Details tab ---------- */
+.lt-point-detail {
+  text-align: center;
+  font-size: 0.9rem;
+  color: #555;
+  margin-top: 10px;
+}
+
+/* ---------- Undo toast ---------- */
+.lt-toast {
+  position: fixed;
+  left: 16px;
+  right: 16px;
+  bottom: 16px;
+  background: #222;
+  color: #fff;
+  border-radius: 10px;
+  padding: 12px 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  transform: translateY(120%);
+  opacity: 0;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+  z-index: 2000;
+  max-width: 640px;
+  margin: 0 auto;
+}
+
+.lt-toast-visible {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+.lt-toast-message {
+  font-size: 0.95rem;
+}
+
+.lt-toast-undo {
+  background: #2c7be5;
+  padding: 8px 14px;
+  min-height: 36px;
+  flex-shrink: 0;
+}
+
+@media (min-width: 600px) {
+  .lt-quick-log-fields {
+    max-width: 360px;
+  }
+}
+
+/* ---------- Password gate ---------- */
+.lt-gate {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 80vh;
+}
+
+.lt-gate-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+  max-width: 280px;
+}
+
+.lt-gate-form label {
+  font-size: 0.9rem;
+  color: #666;
+}
+
+.lt-gate-form input {
+  font-size: 1.1rem;
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  min-height: 48px;
+}
+
+.lt-gate-form button {
+  font-size: 1rem;
+  font-weight: 700;
+  padding: 12px 16px;
+  min-height: 44px;
+  border-radius: 8px;
+  border: none;
+  background: var(--black, #111);
+  color: var(--white, #fff);
+  cursor: pointer;
+}
+
+.lt-gate-error {
+  color: #c0392b;
+  font-size: 0.9rem;
+  margin: 0;
+}
