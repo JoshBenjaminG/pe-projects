@@ -42,12 +42,112 @@
 }
 
 /* ---------- Header ---------- */
+.lt-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
 .lt-header h1 {
   font-size: 1.5rem;
   font-weight: 800;
   letter-spacing: 0.01em;
   margin: 8px 0 16px;
   color: var(--lt-text);
+}
+
+.lt-export-btn {
+  font-size: 0.85rem;
+  font-weight: 700;
+  padding: 8px 12px;
+  min-height: 36px;
+  border-radius: 8px;
+  border: 1px solid var(--lt-border);
+  background: var(--lt-surface);
+  color: var(--lt-text);
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.lt-export-btn:active {
+  background: var(--lt-surface-alt);
+}
+
+/* ---------- Export panel ---------- */
+.lt-export-panel {
+  border: 1px solid var(--lt-border);
+  border-radius: 12px;
+  background: var(--lt-surface);
+  padding: 14px;
+  margin-bottom: 20px;
+}
+
+.lt-export-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.lt-export-header h2 {
+  font-size: 1rem;
+  font-weight: 700;
+  margin: 0;
+  color: var(--lt-text);
+}
+
+.lt-export-close {
+  width: 32px;
+  height: 32px;
+  flex-shrink: 0;
+  border-radius: 8px;
+  border: 1px solid var(--lt-border);
+  background: none;
+  color: var(--lt-text-muted);
+  font-size: 1rem;
+}
+
+.lt-export-textarea {
+  width: 100%;
+  min-height: 220px;
+  font-family: ui-monospace, 'SF Mono', Consolas, monospace;
+  font-size: 0.85rem;
+  line-height: 1.4;
+  padding: 10px;
+  border: 1px solid var(--lt-border);
+  border-radius: 8px;
+  background: var(--lt-surface-alt);
+  color: var(--lt-text);
+  resize: vertical;
+}
+
+.lt-export-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.lt-export-copy {
+  font-size: 0.95rem;
+  font-weight: 700;
+  padding: 10px 14px;
+  min-height: 40px;
+  border-radius: 8px;
+  border: none;
+  background: var(--lt-accent);
+  color: #fff;
+  cursor: pointer;
+}
+
+.lt-export-copy:active {
+  background: var(--lt-accent-strong);
+}
+
+.lt-export-status {
+  font-size: 0.85rem;
+  color: var(--lt-text-muted);
+  align-self: center;
 }
 
 /* ---------- Composite section ---------- */

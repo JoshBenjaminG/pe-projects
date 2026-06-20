@@ -5,18 +5,33 @@ import {
   restoreLift,
   reorderLifts,
   listActiveSetsForLifts,
+  listRecentSetsForLifts,
 } from '../api.js';
 import { dailyMaxE1RM, computeComposite } from '../math.js';
 import { renderCompositeChart } from '../charts.js';
 import { enableDragReorder } from '../dragReorder.js';
 import { showUndoToast } from '../toast.js';
 import { goToLift } from '../state.js';
+import { buildExportText, exportWindowStart } from '../export.js';
 
 export async function renderListView(root) {
   root.innerHTML = `
     <header class="lt-header">
       <h1>Lift Tracker</h1>
+      <button type="button" class="lt-export-btn" data-export-btn>Export progress</button>
     </header>
+
+    <section class="lt-export-panel" data-export-panel hidden>
+      <div class="lt-export-header">
+        <h2>Last 30 days</h2>
+        <button type="button" class="lt-export-close" data-export-close aria-label="Close export panel">&times;</button>
+      </div>
+      <textarea class="lt-export-textarea" data-export-textarea readonly></textarea>
+      <div class="lt-export-actions">
+        <button type="button" class="lt-export-copy" data-export-copy>Copy to clipboard</button>
+        <span class="lt-export-status" data-export-status hidden></span>
+      </div>
+    </section>
 
     <section class="lt-composite" data-composite-section>
       <button type="button" class="lt-composite-toggle" data-composite-toggle aria-expanded="true">
@@ -48,6 +63,60 @@ export async function renderListView(root) {
     compositeToggle.setAttribute('aria-expanded', String(!expanded));
     compositeBody.hidden = expanded;
     chevron.innerHTML = expanded ? '&#9660;' : '&#9650;';
+  });
+
+  const exportBtn = root.querySelector('[data-export-btn]');
+  const exportPanel = root.querySelector('[data-export-panel]');
+  const exportTextarea = root.querySelector('[data-export-textarea]');
+  const exportCopyBtn = root.querySelector('[data-export-copy]');
+  const exportCloseBtn = root.querySelector('[data-export-close]');
+  const exportStatus = root.querySelector('[data-export-status]');
+
+  exportBtn.addEventListener('click', async () => {
+    exportBtn.disabled = true;
+    try {
+      const liftIds = currentLifts.map((l) => l.id);
+      const since = exportWindowStart().toISOString();
+      const recentSets = await listRecentSetsForLifts(liftIds, since);
+      const setsByLift = new Map(currentLifts.map((l) => [l.id, []]));
+      for (const s of recentSets) {
+        const bucket = setsByLift.get(s.lift_id);
+        if (bucket) bucket.push(s);
+      }
+      exportTextarea.value = buildExportText(currentLifts, setsByLift);
+      exportPanel.hidden = false;
+      exportStatus.hidden = true;
+      exportTextarea.focus();
+      exportTextarea.select();
+    } finally {
+      exportBtn.disabled = false;
+    }
+  });
+
+  exportCloseBtn.addEventListener('click', () => {
+    exportPanel.hidden = true;
+  });
+
+  exportCopyBtn.addEventListener('click', async () => {
+    exportTextarea.select();
+    let copied = false;
+    if (navigator.clipboard?.writeText) {
+      try {
+        await navigator.clipboard.writeText(exportTextarea.value);
+        copied = true;
+      } catch {
+        copied = false;
+      }
+    }
+    if (!copied) {
+      try {
+        copied = document.execCommand('copy');
+      } catch {
+        copied = false;
+      }
+    }
+    exportStatus.hidden = false;
+    exportStatus.textContent = copied ? 'Copied!' : 'Select all (Cmd/Ctrl+A) and copy manually.';
   });
 
   const addForm = root.querySelector('[data-add-lift-form]');

@@ -91,6 +91,24 @@ export async function listActiveSetsForLifts(liftIds) {
   return data;
 }
 
+/**
+ * Active (non-deleted) sets across several lifts, restricted to a date
+ * window — used by the export feature so the query stays bounded no matter
+ * how much total history has accumulated, instead of pulling everything.
+ */
+export async function listRecentSetsForLifts(liftIds, sinceISO) {
+  if (!liftIds || liftIds.length === 0) return [];
+  const { data, error } = await supabase
+    .from('sets')
+    .select('*')
+    .in('lift_id', liftIds)
+    .is('deleted_at', null)
+    .gte('performed_at', sinceISO)
+    .order('performed_at', { ascending: true });
+  if (error) throw error;
+  return data;
+}
+
 export async function createSet(liftId, weight, reps, performedAt) {
   const { data, error } = await supabase
     .from('sets')

@@ -96,6 +96,12 @@ export async function renderDetailView(root, liftId) {
     activeSets = await listSetsForLift(liftId);
   }
 
+  function prefillWeightFromLastSet() {
+    if (activeSets.length === 0) return;
+    const lastSet = activeSets[activeSets.length - 1]; // ascending order; last = most recent
+    weightInput.value = lastSet.weight;
+  }
+
   logForm.addEventListener('submit', async (e) => {
     e.preventDefault();
     const weight = Number(weightInput.value);
@@ -108,9 +114,8 @@ export async function renderDetailView(root, liftId) {
     const now = new Date();
 
     await createSet(liftId, weight, reps, now.toISOString());
-    weightInput.value = '';
     repsInput.value = '';
-    weightInput.focus();
+    repsInput.focus();
 
     await loadSets();
     renderHistoryTab();
@@ -270,5 +275,6 @@ export async function renderDetailView(root, liftId) {
   }
 
   await loadSets();
+  prefillWeightFromLastSet();
   renderHistoryTab();
 }
