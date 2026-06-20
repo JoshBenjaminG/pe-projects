@@ -18,18 +18,19 @@ export async function renderListView(root) {
   root.innerHTML = `
     <header class="lt-header">
       <h1>Lift Tracker</h1>
-      <button type="button" class="lt-export-btn" data-export-btn>Export progress</button>
     </header>
 
-    <section class="lt-export-panel" data-export-panel hidden>
-      <div class="lt-export-header">
-        <h2>Last 30 days</h2>
-        <button type="button" class="lt-export-close" data-export-close aria-label="Close export panel">&times;</button>
-      </div>
-      <textarea class="lt-export-textarea" data-export-textarea readonly></textarea>
-      <div class="lt-export-actions">
-        <button type="button" class="lt-export-copy" data-export-copy>Copy to clipboard</button>
-        <span class="lt-export-status" data-export-status hidden></span>
+    <section class="lt-export-section" data-export-section>
+      <button type="button" class="lt-export-toggle" data-export-toggle aria-expanded="false">
+        <span>Export progress (last 30 days)</span>
+        <span class="lt-chevron" data-export-chevron>&#9660;</span>
+      </button>
+      <div class="lt-export-body" data-export-body hidden>
+        <textarea class="lt-export-textarea" data-export-textarea readonly></textarea>
+        <div class="lt-export-actions">
+          <button type="button" class="lt-export-copy" data-export-copy>Copy to clipboard</button>
+          <span class="lt-export-status" data-export-status hidden></span>
+        </div>
       </div>
     </section>
 
@@ -65,15 +66,23 @@ export async function renderListView(root) {
     chevron.innerHTML = expanded ? '&#9660;' : '&#9650;';
   });
 
-  const exportBtn = root.querySelector('[data-export-btn]');
-  const exportPanel = root.querySelector('[data-export-panel]');
+  const exportToggle = root.querySelector('[data-export-toggle]');
+  const exportBody = root.querySelector('[data-export-body]');
+  const exportChevron = root.querySelector('[data-export-chevron]');
   const exportTextarea = root.querySelector('[data-export-textarea]');
   const exportCopyBtn = root.querySelector('[data-export-copy]');
-  const exportCloseBtn = root.querySelector('[data-export-close]');
   const exportStatus = root.querySelector('[data-export-status]');
 
-  exportBtn.addEventListener('click', async () => {
-    exportBtn.disabled = true;
+  exportToggle.addEventListener('click', async () => {
+    const wasExpanded = exportToggle.getAttribute('aria-expanded') === 'true';
+    const nowExpanded = !wasExpanded;
+    exportToggle.setAttribute('aria-expanded', String(nowExpanded));
+    exportBody.hidden = !nowExpanded;
+    exportChevron.innerHTML = nowExpanded ? '&#9650;' : '&#9660;';
+
+    if (!nowExpanded) return; // just collapsed — nothing else to do
+
+    exportToggle.disabled = true;
     try {
       const liftIds = currentLifts.map((l) => l.id);
       const since = exportWindowStart().toISOString();
@@ -84,17 +93,10 @@ export async function renderListView(root) {
         if (bucket) bucket.push(s);
       }
       exportTextarea.value = buildExportText(currentLifts, setsByLift);
-      exportPanel.hidden = false;
       exportStatus.hidden = true;
-      exportTextarea.focus();
-      exportTextarea.select();
     } finally {
-      exportBtn.disabled = false;
+      exportToggle.disabled = false;
     }
-  });
-
-  exportCloseBtn.addEventListener('click', () => {
-    exportPanel.hidden = true;
   });
 
   exportCopyBtn.addEventListener('click', async () => {
