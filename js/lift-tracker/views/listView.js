@@ -11,7 +11,7 @@ import { dailyMaxE1RM, computeComposite } from '../math.js';
 import { renderCompositeChart } from '../charts.js';
 import { enableDragReorder } from '../dragReorder.js';
 import { showUndoToast } from '../toast.js';
-import { goToLift } from '../state.js';
+import { goToLift, goToHelp } from '../state.js';
 import { buildExportText, exportWindowStart } from '../export.js';
 import { weeklyKillstreak } from '../killstreak.js';
 
@@ -19,6 +19,7 @@ export async function renderListView(root) {
   root.innerHTML = `
     <header class="lt-header">
       <h1>Lift Tracker</h1>
+      <button type="button" class="lt-help-btn" data-help-btn aria-label="Help">?</button>
     </header>
 
     <section class="lt-killstreak" data-killstreak-section>
@@ -62,6 +63,9 @@ export async function renderListView(root) {
     <ul class="lt-lift-list" data-lift-list></ul>
     <p class="lt-empty" data-list-empty hidden>No lifts yet — add your first one above.</p>
   `;
+
+  const helpBtn = root.querySelector('[data-help-btn]');
+  helpBtn.addEventListener('click', goToHelp);
 
   const compositeSection = root.querySelector('[data-composite-section]');
   const compositeToggle = root.querySelector('[data-composite-toggle]');

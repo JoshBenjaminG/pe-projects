@@ -7,6 +7,9 @@ export function parseRoute() {
   if (hash.startsWith('lift/')) {
     return { name: 'detail', liftId: hash.slice('lift/'.length) };
   }
+  if (hash === 'help') {
+    return { name: 'help' };
+  }
   return { name: 'list' };
 }
 
@@ -16,4 +19,8 @@ export function goToList() {
 
 export function goToLift(liftId) {
   window.location.hash = `#/lift/${liftId}`;
+}
+
+export function goToHelp() {
+  window.location.hash = '#/help';
 }

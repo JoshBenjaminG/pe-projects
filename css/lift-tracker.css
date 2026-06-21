@@ -42,12 +42,35 @@
 }
 
 /* ---------- Header ---------- */
+.lt-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
 .lt-header h1 {
   font-size: 1.5rem;
   font-weight: 800;
   letter-spacing: 0.01em;
   margin: 8px 0 16px;
   color: var(--lt-text);
+}
+
+.lt-help-btn {
+  width: 36px;
+  height: 36px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  border: 1px solid var(--lt-border);
+  background: var(--lt-surface);
+  color: var(--lt-text);
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.lt-help-btn:active {
+  background: var(--lt-surface-alt);
 }
 
 /* ---------- Weekly killstreak ---------- */
@@ -645,4 +668,37 @@
   .lt-toast {
     max-width: 800px;
   }
+}
+
+/* ---------- Help page ---------- */
+.lt-help-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.lt-help-header h1 {
+  font-size: 1.3rem;
+  font-weight: 700;
+  margin: 0;
+  color: var(--lt-text);
+}
+
+.lt-help-section {
+  margin-bottom: 18px;
+}
+
+.lt-help-section h2 {
+  font-size: 1rem;
+  font-weight: 700;
+  margin: 0 0 6px;
+  color: var(--lt-gold);
+}
+
+.lt-help-section p {
+  font-size: 0.95rem;
+  line-height: 1.5;
+  color: var(--lt-text-muted);
+  margin: 0;
 }
