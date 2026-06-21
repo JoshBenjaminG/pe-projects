@@ -13,12 +13,21 @@ import { enableDragReorder } from '../dragReorder.js';
 import { showUndoToast } from '../toast.js';
 import { goToLift } from '../state.js';
 import { buildExportText, exportWindowStart } from '../export.js';
+import { weeklyKillstreak } from '../killstreak.js';
 
 export async function renderListView(root) {
   root.innerHTML = `
     <header class="lt-header">
       <h1>Lift Tracker</h1>
     </header>
+
+    <section class="lt-killstreak" data-killstreak-section>
+      <span class="lt-killstreak-icon" data-killstreak-icon>&#127919;</span>
+      <span class="lt-killstreak-info">
+        <span class="lt-killstreak-label" data-killstreak-label>No killstreak yet</span>
+        <span class="lt-killstreak-sub" data-killstreak-sub>Log a workout to start your streak this week</span>
+      </span>
+    </section>
 
     <section class="lt-export-section" data-export-section>
       <button type="button" class="lt-export-toggle" data-export-toggle aria-expanded="false">
@@ -65,6 +74,19 @@ export async function renderListView(root) {
     compositeBody.hidden = expanded;
     chevron.innerHTML = expanded ? '&#9660;' : '&#9650;';
   });
+
+  const killstreakIcon = root.querySelector('[data-killstreak-icon]');
+  const killstreakLabel = root.querySelector('[data-killstreak-label]');
+  const killstreakSub = root.querySelector('[data-killstreak-sub]');
+
+  function renderKillstreak(sets) {
+    const { days, tier } = weeklyKillstreak(sets);
+    killstreakIcon.textContent = tier ? tier.icon : '\u{1F3AF}';
+    killstreakLabel.textContent = tier ? tier.label : 'No killstreak yet';
+    killstreakSub.textContent = tier
+      ? `${days} workout ${days === 1 ? 'day' : 'days'} this week`
+      : 'Log a workout to start your streak this week';
+  }
 
   const exportToggle = root.querySelector('[data-export-toggle]');
   const exportBody = root.querySelector('[data-export-body]');
@@ -162,10 +184,12 @@ export async function renderListView(root) {
     if (currentLifts.length === 0) {
       listEl.innerHTML = '';
       compositeSection.hidden = true;
+      renderKillstreak([]);
       return;
     }
 
     const sets = await listActiveSetsForLifts(currentLifts.map((l) => l.id));
+    renderKillstreak(sets);
     const setsByLift = new Map(currentLifts.map((l) => [l.id, []]));
     for (const s of sets) {
       const bucket = setsByLift.get(s.lift_id);
