@@ -23,6 +23,13 @@ async function render() {
     } else {
       await renderListView(root);
     }
+
+    // Each branch above swaps in a whole new "page" of content, but since
+    // this is all one physical document (hash routing, no real navigation),
+    // the browser doesn't reset scroll on its own. Without this, opening a
+    // lift while scrolled down on the list view leaves you scrolled down on
+    // the detail view too, hiding the lift name and quick-log form.
+    window.scrollTo(0, 0);
   } catch (err) {
     console.error('[lift-tracker]', err);
     root.innerHTML = `<p class="lt-error">Something went wrong loading the lift tracker. Open the console for details.</p>`;
