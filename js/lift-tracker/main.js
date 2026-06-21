@@ -39,12 +39,29 @@ async function render() {
 window.addEventListener('hashchange', render);
 
 // Re-render on sign-in/sign-out so the auth gate and the app swap
-// automatically without a full page reload. Supabase also fires this same
-// listener on a plain token refresh -- which it triggers automatically
-// whenever the tab regains focus (e.g. the phone screen turning back on) --
-// so we only react to actual sign-in/sign-out events. Otherwise, waking the
-// phone while viewing a lift would bounce you back to the list page.
+// automatically without a full page reload.
+//
+// Two separate gotchas to guard against here, both of which send you back
+// to the list page if left unchecked:
+//
+// 1. Supabase fires this listener on a plain token refresh too -- which it
+//    triggers automatically whenever the tab regains focus (e.g. the phone
+//    screen turning back on) -- not just on a real sign-in/sign-out. So we
+//    only act on actual SIGNED_IN/SIGNED_OUT events.
+// 2. If the phone was asleep long enough that the browser fully discarded
+//    and reloaded the page, Supabase's *first* callback after that reload
+//    reports the session it restored from storage -- and that first call
+//    can itself come through as a SIGNED_IN event, even though nothing
+//    about the route should change. The initial render() call below
+//    already shows the right view for whatever route is in the URL, so we
+//    skip navigation on that first callback and only treat later ones as
+//    real sign-in/sign-out actions.
+let authListenerFired = false;
 supabase.auth.onAuthStateChange((event) => {
+  const isFirstCallback = !authListenerFired;
+  authListenerFired = true;
+  if (isFirstCallback) return;
+
   if (event === 'SIGNED_IN' || event === 'SIGNED_OUT') {
     goToList();
     render();
