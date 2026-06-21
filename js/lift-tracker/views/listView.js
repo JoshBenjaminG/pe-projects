@@ -12,6 +12,7 @@ import { renderCompositeChart } from '../charts.js';
 import { enableDragReorder } from '../dragReorder.js';
 import { showUndoToast } from '../toast.js';
 import { goToLift, goToHelp } from '../state.js';
+import { supabase } from '../supabaseClient.js';
 import { buildExportText, exportWindowStart } from '../export.js';
 import { weeklyKillstreak } from '../killstreak.js';
 
@@ -19,7 +20,10 @@ export async function renderListView(root) {
   root.innerHTML = `
     <header class="lt-header">
       <h1>Lift Tracker</h1>
-      <button type="button" class="lt-help-btn" data-help-btn aria-label="Help">?</button>
+      <div class="lt-header-actions">
+        <button type="button" class="lt-logout-btn" data-logout-btn>Log out</button>
+        <button type="button" class="lt-help-btn" data-help-btn aria-label="Help">?</button>
+      </div>
     </header>
 
     <section class="lt-killstreak" data-killstreak-section>
@@ -66,6 +70,9 @@ export async function renderListView(root) {
 
   const helpBtn = root.querySelector('[data-help-btn]');
   helpBtn.addEventListener('click', goToHelp);
+
+  const logoutBtn = root.querySelector('[data-logout-btn]');
+  logoutBtn.addEventListener('click', () => supabase.auth.signOut());
 
   const compositeSection = root.querySelector('[data-composite-section]');
   const compositeToggle = root.querySelector('[data-composite-toggle]');

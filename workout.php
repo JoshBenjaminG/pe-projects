@@ -4,13 +4,13 @@
  *
  * This file ONLY serves markup — it never touches the database. All data
  * access happens client-side via the Supabase JS client (see
- * js/lift-tracker/), per the project spec.
+ * js/lift-tracker/).
  *
- * Gated behind a session password check — see lift-tracker-auth.php. This
- * must run before any HTML is emitted, since it may send its own page and
- * exit().
+ * No PHP-level password gate anymore — access is per-account via Supabase
+ * Auth (see js/lift-tracker/views/authView.js) and enforced by the
+ * database's Row Level Security policies, not by this page. The page shell
+ * itself is just an empty container with no data in it either way.
  */
-require __DIR__ . '/lift-tracker-auth.php';
 ?>
 <!doctype html>
 <html lang="en">

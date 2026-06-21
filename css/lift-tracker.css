@@ -57,6 +57,28 @@
   color: var(--lt-text);
 }
 
+.lt-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.lt-logout-btn {
+  font-size: 0.8rem;
+  font-weight: 700;
+  padding: 8px 12px;
+  min-height: 36px;
+  border-radius: 8px;
+  border: 1px solid var(--lt-border);
+  background: var(--lt-surface);
+  color: var(--lt-text-muted);
+}
+
+.lt-logout-btn:active {
+  background: var(--lt-surface-alt);
+}
+
 .lt-help-btn {
   width: 36px;
   height: 36px;
@@ -657,6 +679,24 @@
   color: var(--lt-accent);
   font-size: 0.9rem;
   margin: 0;
+}
+
+.lt-gate-title {
+  font-size: 1.3rem;
+  font-weight: 800;
+  margin: 0 0 4px;
+  color: var(--lt-text);
+  text-align: center;
+}
+
+.lt-gate-toggle {
+  background: none;
+  border: none;
+  color: var(--lt-text-muted);
+  font-size: 0.85rem;
+  text-decoration: underline;
+  cursor: pointer;
+  padding: 4px 0;
 }
 
 /* ---------- Desktop ---------- */
