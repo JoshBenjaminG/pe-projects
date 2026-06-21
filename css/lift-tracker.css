@@ -683,6 +683,13 @@
   resize: vertical;
 }
 
+/* The site's global ::placeholder rule (css/modules/contact-me.css) sets a
+   near-black placeholder color everywhere, which is unreadable against
+   this textarea's dark background — override it with a translucent white. */
+.lt-feedback-textarea::placeholder {
+  color: rgba(255, 255, 255, 0.6);
+}
+
 .lt-feedback-actions {
   display: flex;
   justify-content: flex-end;
@@ -720,7 +727,14 @@
   }
 }
 
-/* ---------- Password gate ---------- */
+/* ---------- Auth gate (sign in / sign up) ----------
+   Deliberately a plain white/black card, independent of the dark/red
+   theme used by the rest of the app. The site's global form/input rules
+   (css/modules/contact-me.css) apply a reddish background and extra
+   padding to every <form> and its children on the whole site — every
+   color and spacing property below exists specifically to override that,
+   not just to set a preference, so don't strip "redundant"-looking
+   declarations without checking against that file. */
 .lt-gate {
   display: flex;
   align-items: center;
@@ -734,21 +748,33 @@
   gap: 12px;
   width: 100%;
   max-width: 280px;
+  background: #ffffff;
+  border: 1px solid #d9d9d9;
+  border-radius: 12px;
+  padding: 24px;
+  margin: 0;
+}
+
+.lt-gate-form * {
+  margin: 0;
+  padding: 0;
 }
 
 .lt-gate-form label {
   font-size: 0.9rem;
-  color: var(--lt-text-muted);
+  font-weight: 600;
+  color: #1a1a1a;
 }
 
 .lt-gate-form input {
   font-size: 1.1rem;
   padding: 12px;
-  border: 1px solid var(--lt-border);
+  border: 1px solid #1a1a1a;
   border-radius: 8px;
   min-height: 48px;
-  background: var(--lt-surface);
-  color: var(--lt-text);
+  background: #ffffff;
+  color: #111111;
+  width: 100%;
 }
 
 .lt-gate-form button {
@@ -758,33 +784,40 @@
   min-height: 44px;
   border-radius: 8px;
   border: none;
-  background: var(--lt-accent);
-  color: #fff;
+  background: #111111;
+  color: #ffffff;
   cursor: pointer;
 }
 
+.lt-gate-form button:active {
+  background: #333333;
+}
+
 .lt-gate-error {
-  color: var(--lt-accent);
+  color: #b3261e;
   font-size: 0.9rem;
-  margin: 0;
 }
 
 .lt-gate-title {
   font-size: 1.3rem;
   font-weight: 800;
-  margin: 0 0 4px;
-  color: var(--lt-text);
+  color: #111111;
   text-align: center;
 }
 
-.lt-gate-toggle {
+.lt-gate-form .lt-gate-toggle {
   background: none;
   border: none;
-  color: var(--lt-text-muted);
+  color: #555555;
   font-size: 0.85rem;
+  font-weight: 400;
   text-decoration: underline;
   cursor: pointer;
   padding: 4px 0;
+}
+
+.lt-gate-form .lt-gate-toggle:active {
+  color: #111111;
 }
 
 /* ---------- Desktop ---------- */
