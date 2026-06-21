@@ -13,6 +13,7 @@ import { enableDragReorder } from '../dragReorder.js';
 import { showUndoToast } from '../toast.js';
 import { goToLift, goToHelp } from '../state.js';
 import { supabase } from '../supabaseClient.js';
+import { openFeedbackModal } from './feedbackModal.js';
 import { buildExportText, exportWindowStart } from '../export.js';
 import { weeklyKillstreak } from '../killstreak.js';
 
@@ -21,6 +22,7 @@ export async function renderListView(root) {
     <header class="lt-header">
       <h1>Lift Tracker</h1>
       <div class="lt-header-actions">
+        <button type="button" class="lt-feedback-btn" data-feedback-btn>Feedback</button>
         <button type="button" class="lt-logout-btn" data-logout-btn>Log out</button>
         <button type="button" class="lt-help-btn" data-help-btn aria-label="Help">?</button>
       </div>
@@ -70,6 +72,9 @@ export async function renderListView(root) {
 
   const helpBtn = root.querySelector('[data-help-btn]');
   helpBtn.addEventListener('click', goToHelp);
+
+  const feedbackBtn = root.querySelector('[data-feedback-btn]');
+  feedbackBtn.addEventListener('click', () => openFeedbackModal());
 
   const logoutBtn = root.querySelector('[data-logout-btn]');
   logoutBtn.addEventListener('click', () => supabase.auth.signOut());
