@@ -237,6 +237,25 @@
   color: var(--lt-text);
 }
 
+/* Replaces the plain <h2> as a clickable collapse/expand toggle for the
+   card body — mirrors .lt-composite-toggle's look (title + chevron) but
+   sized to share the header row with the separate "go to full page" arrow
+   button instead of spanning the whole width. */
+.lt-weight-toggle {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 36px;
+  padding: 0;
+  background: none;
+  border: none;
+  font-size: 1.1rem;
+  font-weight: 800;
+  text-align: left;
+  color: var(--lt-text);
+}
+
 .lt-weight-expand {
   width: 36px;
   height: 36px;
@@ -278,6 +297,14 @@
   flex-direction: column;
   gap: 10px;
   min-width: 0;
+}
+
+/* Collapsed state: just Current + Change, no chart alongside — lay them
+   out side by side instead of stacked, since there's a full row of width
+   to use and only two stats to show. */
+.lt-weight-stats-collapsed {
+  flex-direction: row;
+  gap: 28px;
 }
 
 .lt-weight-stat {

@@ -21,7 +21,7 @@ const SECTIONS = [
       lift, with volume and estimated 1-rep max. Tap "Copy to clipboard" to
       grab it — useful for pasting into Claude or anywhere else you want
       feedback on your progress. Need older data? Use "Export full history"
-      further down instead.`,
+      right below instead.`,
   },
   {
     title: 'Composite progress',
@@ -70,11 +70,12 @@ const SECTIONS = [
   },
 ];
 
-// The "Export progress" section gets a live 60-day export panel inserted
-// right after its description, in place — same position it would occupy if
-// it were just another static SECTIONS entry. This used to live on the main
-// list view; it moved here so the list view has room for the weight tracker
-// card instead.
+// The "Export progress" section gets both export panels inserted right
+// after its description, in place — same position it would occupy if it
+// were just another static SECTIONS entry. The 60-day panel used to live on
+// the main list view; the full-history panel used to sit at the very bottom
+// of this page, after every other unrelated section. Both now live together
+// here, since they're the same feature at two different time windows.
 const WINDOWED_EXPORT_MARKUP = `
   <section class="lt-export-section" data-export-section>
     <button type="button" class="lt-export-toggle" data-export-toggle aria-expanded="false">
@@ -86,6 +87,23 @@ const WINDOWED_EXPORT_MARKUP = `
       <div class="lt-export-actions">
         <button type="button" class="lt-export-copy" data-export-copy>Copy to clipboard</button>
         <span class="lt-export-status" data-export-status hidden></span>
+      </div>
+    </div>
+  </section>
+
+  <section class="lt-export-section" data-full-export-section>
+    <button type="button" class="lt-export-toggle" data-full-export-toggle aria-expanded="false">
+      <span>Export full history</span>
+      <span class="lt-chevron" data-full-export-chevron>&#9660;</span>
+    </button>
+    <div class="lt-export-body" data-full-export-body hidden>
+      <p class="lt-help-export-note">Every set you've ever logged, with
+        no date cutoff — for when the 60-day export above isn't enough
+        history.</p>
+      <textarea class="lt-export-textarea" data-full-export-textarea readonly></textarea>
+      <div class="lt-export-actions">
+        <button type="button" class="lt-export-copy" data-full-export-copy>Copy to clipboard</button>
+        <span class="lt-export-status" data-full-export-status hidden></span>
       </div>
     </div>
   </section>
@@ -108,23 +126,6 @@ export async function renderHelpView(root) {
           ${s.title === 'Export progress' ? WINDOWED_EXPORT_MARKUP : ''}
         `
       ).join('')}
-
-      <section class="lt-export-section" data-full-export-section>
-        <button type="button" class="lt-export-toggle" data-full-export-toggle aria-expanded="false">
-          <span>Export full history</span>
-          <span class="lt-chevron" data-full-export-chevron>&#9660;</span>
-        </button>
-        <div class="lt-export-body" data-full-export-body hidden>
-          <p class="lt-help-export-note">Every set you've ever logged, with
-            no date cutoff — for when the 60-day export above isn't enough
-            history.</p>
-          <textarea class="lt-export-textarea" data-full-export-textarea readonly></textarea>
-          <div class="lt-export-actions">
-            <button type="button" class="lt-export-copy" data-full-export-copy>Copy to clipboard</button>
-            <span class="lt-export-status" data-full-export-status hidden></span>
-          </div>
-        </div>
-      </section>
     </div>
   `;
 

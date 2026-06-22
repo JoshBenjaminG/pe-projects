@@ -39,15 +39,19 @@ function formatLongDate(dateKey) {
 }
 
 /**
- * Renders the compact card shown on the main list view: Start / Current /
- * Change plus a small all-time chart. Always visible in this compact form —
- * there's no inline expand/collapse here, since "expanded" means navigating
- * to the full weight view via the arrow button (onExpand).
+ * Renders the compact card shown on the main list view. Starts collapsed —
+ * showing just Current + Change — and expands in place (via the chevron
+ * toggle) to show Start / Current / Change plus the all-time chart.
+ * Separately, the arrow button (onExpand) navigates to the full weight
+ * view for logging/editing/deleting entries.
  */
 export async function renderWeightSummaryCard(container, { onExpand } = {}) {
   container.innerHTML = `
     <div class="lt-weight-card-header">
-      <h2>Weight</h2>
+      <button type="button" class="lt-weight-toggle" data-weight-toggle aria-expanded="false">
+        <span>Weight</span>
+        <span class="lt-chevron" data-weight-chevron>&#9660;</span>
+      </button>
       <button type="button" class="lt-weight-expand" data-weight-expand aria-label="Open weight tracker">&#8250;</button>
     </div>
     <div class="lt-weight-card-body" data-weight-card-body></div>
@@ -57,24 +61,25 @@ export async function renderWeightSummaryCard(container, { onExpand } = {}) {
     if (onExpand) onExpand();
   });
 
+  const toggle = container.querySelector('[data-weight-toggle]');
+  const chevron = container.querySelector('[data-weight-chevron]');
   const body = container.querySelector('[data-weight-card-body]');
+
   const entries = await listWeightEntries();
   const series = dailyWeightSeries(entries);
   const summary = weightSummary(series);
 
   if (!summary) {
+    toggle.disabled = true;
     body.innerHTML = `<p class="lt-weight-empty">No weight entries yet — tap the arrow above to log one.</p>`;
     return;
   }
 
   const arrow = summary.change < 0 ? '↘' : summary.change > 0 ? '↗' : '→';
-  body.innerHTML = `
-    <div class="lt-weight-row">
-      <div class="lt-weight-stats">
-        <div class="lt-weight-stat">
-          <span class="lt-weight-stat-label">Start</span>
-          <span class="lt-weight-stat-value">${formatWeight(summary.start)} lbs</span>
-        </div>
+
+  function renderCollapsed() {
+    body.innerHTML = `
+      <div class="lt-weight-stats lt-weight-stats-collapsed">
         <div class="lt-weight-stat">
           <span class="lt-weight-stat-label">Current (${formatShortDate(summary.currentDate)})</span>
           <span class="lt-weight-stat-value">${formatWeight(summary.current)} lbs</span>
@@ -84,10 +89,50 @@ export async function renderWeightSummaryCard(container, { onExpand } = {}) {
           <span class="lt-weight-stat-value">${arrow} ${formatWeight(Math.abs(summary.change))} lbs</span>
         </div>
       </div>
-      <div class="lt-chart-wrap lt-weight-chart-wrap"><canvas data-weight-canvas></canvas></div>
-    </div>
-  `;
-  renderWeightChart(body.querySelector('[data-weight-canvas]'), series);
+    `;
+  }
+
+  function renderExpanded() {
+    body.innerHTML = `
+      <div class="lt-weight-row">
+        <div class="lt-weight-stats">
+          <div class="lt-weight-stat">
+            <span class="lt-weight-stat-label">Start</span>
+            <span class="lt-weight-stat-value">${formatWeight(summary.start)} lbs</span>
+          </div>
+          <div class="lt-weight-stat">
+            <span class="lt-weight-stat-label">Current (${formatShortDate(summary.currentDate)})</span>
+            <span class="lt-weight-stat-value">${formatWeight(summary.current)} lbs</span>
+          </div>
+          <div class="lt-weight-stat">
+            <span class="lt-weight-stat-label">Change</span>
+            <span class="lt-weight-stat-value">${arrow} ${formatWeight(Math.abs(summary.change))} lbs</span>
+          </div>
+        </div>
+        <div class="lt-chart-wrap lt-weight-chart-wrap"><canvas data-weight-canvas></canvas></div>
+      </div>
+    `;
+    // Mini chart on this card: drop the year from x-axis labels/tooltips
+    // (e.g. "6/22" not "2026-06-22") since it's a compact "glance" view —
+    // the full weight page's chart keeps the year for clarity over a
+    // longer history.
+    const shortLabelSeries = series.map((p) => ({ ...p, date: formatShortDate(p.date) }));
+    renderWeightChart(body.querySelector('[data-weight-canvas]'), shortLabelSeries);
+  }
+
+  renderCollapsed();
+
+  toggle.addEventListener('click', () => {
+    const expanded = toggle.getAttribute('aria-expanded') === 'true';
+    toggle.setAttribute('aria-expanded', String(!expanded));
+    chevron.innerHTML = expanded ? '&#9660;' : '&#9650;';
+    if (expanded) {
+      destroyWeightChart();
+      renderCollapsed();
+    } else {
+      renderExpanded();
+    }
+  });
 }
 
 /** Full expanded view: add/edit/delete entries, all-time chart, history list. */
