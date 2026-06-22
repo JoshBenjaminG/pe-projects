@@ -273,6 +273,9 @@ export async function renderListView(root) {
         e.stopPropagation();
         const id = btn.dataset.deleteLift;
         const lift = currentLifts.find((l) => l.id === id);
+        if (!window.confirm(`Delete "${lift.name}"? You'll have a few seconds to undo it after.`)) {
+          return;
+        }
         await softDeleteLift(id);
         await load();
         showUndoToast(`Deleted "${lift.name}"`, {
