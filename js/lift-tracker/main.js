@@ -38,34 +38,35 @@ async function render() {
 
 window.addEventListener('hashchange', render);
 
-// Re-render on sign-in/sign-out so the auth gate and the app swap
-// automatically without a full page reload.
+// Re-render when the signed-in account actually changes, so the auth gate
+// and the app swap automatically without a full page reload.
 //
-// Two separate gotchas to guard against here, both of which send you back
-// to the list page if left unchecked:
+// This listener fires far more often than just real sign-ins/sign-outs --
+// Supabase also calls it on routine token refreshes, on the page's initial
+// load (reporting whatever session it restored from storage), and to sync
+// state across browser tabs (e.g. switching to another tab and back). In
+// several of those cases it reports an event that looks identical to a
+// fresh sign-in (SIGNED_IN), so filtering by event name isn't reliable --
+// we'd either miss real sign-ins or react to ones that aren't real.
 //
-// 1. Supabase fires this listener on a plain token refresh too -- which it
-//    triggers automatically whenever the tab regains focus (e.g. the phone
-//    screen turning back on) -- not just on a real sign-in/sign-out. So we
-//    only act on actual SIGNED_IN/SIGNED_OUT events.
-// 2. If the phone was asleep long enough that the browser fully discarded
-//    and reloaded the page, Supabase's *first* callback after that reload
-//    reports the session it restored from storage -- and that first call
-//    can itself come through as a SIGNED_IN event, even though nothing
-//    about the route should change. The initial render() call below
-//    already shows the right view for whatever route is in the URL, so we
-//    skip navigation on that first callback and only treat later ones as
-//    real sign-in/sign-out actions.
+// Instead, track which user (if any) was last signed in, and only treat it
+// as a real sign-in/sign-out -- and navigate to the list page -- when that
+// actually changes. Anything else (refresh, reload restoring the same
+// session, tab-focus sync) leaves you exactly where you were.
+let lastUserId = null;
 let authListenerFired = false;
-supabase.auth.onAuthStateChange((event) => {
+supabase.auth.onAuthStateChange((event, session) => {
+  const currentUserId = session?.user?.id ?? null;
   const isFirstCallback = !authListenerFired;
   authListenerFired = true;
-  if (isFirstCallback) return;
 
-  if (event === 'SIGNED_IN' || event === 'SIGNED_OUT') {
-    goToList();
-    render();
-  }
+  const userChanged = currentUserId !== lastUserId;
+  lastUserId = currentUserId;
+
+  if (isFirstCallback || !userChanged) return;
+
+  goToList();
+  render();
 });
 
 render();
