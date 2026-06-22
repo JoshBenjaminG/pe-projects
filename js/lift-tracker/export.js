@@ -2,7 +2,7 @@
 // from the DOM/network (like math.js) so it can be unit tested on its own.
 import { calcE1RM, sessionVolume, toDateKey } from './math.js';
 
-export const EXPORT_WINDOW_DAYS = 30;
+export const EXPORT_WINDOW_DAYS = 60;
 
 /** Start of the export window, as a Date. `now` is injectable for tests. */
 export function exportWindowStart(now = new Date()) {
@@ -17,10 +17,13 @@ export function exportWindowStart(now = new Date()) {
  * @param {{id:string, name:string}[]} lifts - in display order
  * @param {Map<string, Array>} setsByLift - lift id -> recent sets (any order)
  * @param {Date} now - injected for testability; defaults to current time
+ * @param {string} windowLabel - shown in the header line, e.g. "last 60
+ *   days" or "all-time" -- purely cosmetic, doesn't affect which sets are
+ *   included (that's controlled by what's already in setsByLift).
  */
-export function buildExportText(lifts, setsByLift, now = new Date()) {
+export function buildExportText(lifts, setsByLift, now = new Date(), windowLabel = `last ${EXPORT_WINDOW_DAYS} days`) {
   const todayLabel = toDateKey(now.toISOString());
-  const lines = [`Lift Tracker — last ${EXPORT_WINDOW_DAYS} days (as of ${todayLabel})`, ''];
+  const lines = [`Lift Tracker — ${windowLabel} (as of ${todayLabel})`, ''];
 
   const activeLifts = lifts.filter((lift) => (setsByLift.get(lift.id) || []).length > 0);
 

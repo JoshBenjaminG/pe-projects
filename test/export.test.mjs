@@ -12,13 +12,13 @@ test('exportWindowStart: subtracts EXPORT_WINDOW_DAYS days', () => {
   const now = new Date('2026-06-19T12:00:00Z');
   const start = exportWindowStart(now);
   const diffDays = (now - start) / (1000 * 60 * 60 * 24);
-  assert.equal(EXPORT_WINDOW_DAYS, 30);
-  assert.equal(diffDays, 30);
+  assert.equal(EXPORT_WINDOW_DAYS, 60);
+  assert.equal(diffDays, 60);
 });
 
 test('buildExportText: no lifts -> empty-period message', () => {
   const text = buildExportText([], new Map(), new Date('2026-06-19T12:00:00Z'));
-  assert.equal(text, 'Lift Tracker — last 30 days (as of 2026-06-19)\n\nNo sets logged in this period.');
+  assert.equal(text, 'Lift Tracker — last 60 days (as of 2026-06-19)\n\nNo sets logged in this period.');
 });
 
 test('buildExportText: lifts present but none have sets -> empty-period message', () => {
@@ -37,7 +37,7 @@ test('buildExportText: single lift, single set — exact math check', () => {
   // e1RM = 100 * (1 + 5/30) = 116.666... -> rounds to 117
   // volume = 100*5 = 500
   const expected = [
-    'Lift Tracker — last 30 days (as of 2026-06-19)',
+    'Lift Tracker — last 60 days (as of 2026-06-19)',
     '',
     'Bench',
     '  2026-06-10: 100 lb x 5 (e1RM 117)',
@@ -83,6 +83,15 @@ test('buildExportText: multiple omitted lifts use plural wording', () => {
   ]);
   const text = buildExportText(lifts, setsByLift, new Date('2026-06-19T12:00:00Z'));
   assert.ok(text.endsWith('(2 lifts with no sets in this period omitted)'));
+});
+
+test('buildExportText: windowLabel overrides the default "last N days" header', () => {
+  const lifts = [{ id: 'a', name: 'Bench' }];
+  const setsByLift = new Map([
+    ['a', [{ weight: 100, reps: 5, performed_at: '2026-06-10T12:00:00Z' }]],
+  ]);
+  const text = buildExportText(lifts, setsByLift, new Date('2026-06-19T12:00:00Z'), 'all-time');
+  assert.ok(text.startsWith('Lift Tracker — all-time (as of 2026-06-19)'));
 });
 
 console.log(`\n${passed} tests passed`);

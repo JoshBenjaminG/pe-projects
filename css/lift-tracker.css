@@ -863,3 +863,18 @@
   color: var(--lt-text-muted);
   margin: 0;
 }
+
+/* The "Export full history" block reuses the .lt-export-* classes from the
+   main list view's quick export (see above) so the two look consistent --
+   this just adds the spacing/note-text bits specific to its place on the
+   Help page. */
+[data-full-export-section] {
+  margin-top: 24px;
+}
+
+.lt-help-export-note {
+  font-size: 0.85rem;
+  line-height: 1.4;
+  color: var(--lt-text-muted);
+  margin: 0 0 10px;
+}

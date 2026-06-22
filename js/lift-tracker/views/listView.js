@@ -38,7 +38,7 @@ export async function renderListView(root) {
 
     <section class="lt-export-section" data-export-section>
       <button type="button" class="lt-export-toggle" data-export-toggle aria-expanded="false">
-        <span>Export progress (last 30 days)</span>
+        <span>Export progress (last 60 days)</span>
         <span class="lt-chevron" data-export-chevron>&#9660;</span>
       </button>
       <div class="lt-export-body" data-export-body hidden>

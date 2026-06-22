@@ -2,6 +2,8 @@
 // back button — same single-PHP-page hash-routing pattern as the other
 // views (see state.js), just with nothing to fetch.
 import { goToList } from '../state.js';
+import { listLifts, listActiveSetsForLifts } from '../api.js';
+import { buildExportText } from '../export.js';
 
 const SECTIONS = [
   {
@@ -14,11 +16,12 @@ const SECTIONS = [
   },
   {
     title: 'Export progress',
-    body: `Tap "Export progress (last 30 days)" to expand a plain-text
-      summary of every set you've logged in the last 30 days, grouped by
-      lift, with volume and estimated 1-rep max. Tap "Copy to clipboard"
-      to grab it — useful for pasting into Claude or anywhere else you
-      want feedback on your progress.`,
+    body: `Tap "Export progress (last 60 days)" on the main screen to expand
+      a plain-text summary of every set you've logged in the last 60 days,
+      grouped by lift, with volume and estimated 1-rep max. Tap "Copy to
+      clipboard" to grab it — useful for pasting into Claude or anywhere
+      else you want feedback on your progress. Need older data? Use "Export
+      full history" below instead, on this Help page.`,
   },
   {
     title: 'Composite progress',
@@ -83,8 +86,80 @@ export async function renderHelpView(root) {
           </section>
         `
       ).join('')}
+
+      <section class="lt-export-section" data-full-export-section>
+        <button type="button" class="lt-export-toggle" data-full-export-toggle aria-expanded="false">
+          <span>Export full history</span>
+          <span class="lt-chevron" data-full-export-chevron>&#9660;</span>
+        </button>
+        <div class="lt-export-body" data-full-export-body hidden>
+          <p class="lt-help-export-note">Every set you've ever logged, with
+            no date cutoff — for when the regular 60-day export on the main
+            screen isn't enough history.</p>
+          <textarea class="lt-export-textarea" data-full-export-textarea readonly></textarea>
+          <div class="lt-export-actions">
+            <button type="button" class="lt-export-copy" data-full-export-copy>Copy to clipboard</button>
+            <span class="lt-export-status" data-full-export-status hidden></span>
+          </div>
+        </div>
+      </section>
     </div>
   `;
 
   root.querySelector('[data-back]').addEventListener('click', goToList);
+
+  const fullExportToggle = root.querySelector('[data-full-export-toggle]');
+  const fullExportBody = root.querySelector('[data-full-export-body]');
+  const fullExportChevron = root.querySelector('[data-full-export-chevron]');
+  const fullExportTextarea = root.querySelector('[data-full-export-textarea]');
+  const fullExportCopyBtn = root.querySelector('[data-full-export-copy]');
+  const fullExportStatus = root.querySelector('[data-full-export-status]');
+
+  fullExportToggle.addEventListener('click', async () => {
+    const wasExpanded = fullExportToggle.getAttribute('aria-expanded') === 'true';
+    const nowExpanded = !wasExpanded;
+    fullExportToggle.setAttribute('aria-expanded', String(nowExpanded));
+    fullExportBody.hidden = !nowExpanded;
+    fullExportChevron.innerHTML = nowExpanded ? '&#9650;' : '&#9660;';
+
+    if (!nowExpanded) return; // just collapsed — nothing else to fetch
+
+    fullExportToggle.disabled = true;
+    try {
+      const lifts = await listLifts();
+      const liftIds = lifts.map((l) => l.id);
+      const allSets = await listActiveSetsForLifts(liftIds);
+      const setsByLift = new Map(lifts.map((l) => [l.id, []]));
+      for (const s of allSets) {
+        const bucket = setsByLift.get(s.lift_id);
+        if (bucket) bucket.push(s);
+      }
+      fullExportTextarea.value = buildExportText(lifts, setsByLift, new Date(), 'all-time');
+      fullExportStatus.hidden = true;
+    } finally {
+      fullExportToggle.disabled = false;
+    }
+  });
+
+  fullExportCopyBtn.addEventListener('click', async () => {
+    fullExportTextarea.select();
+    let copied = false;
+    if (navigator.clipboard?.writeText) {
+      try {
+        await navigator.clipboard.writeText(fullExportTextarea.value);
+        copied = true;
+      } catch {
+        copied = false;
+      }
+    }
+    if (!copied) {
+      try {
+        copied = document.execCommand('copy');
+      } catch {
+        copied = false;
+      }
+    }
+    fullExportStatus.hidden = false;
+    fullExportStatus.textContent = copied ? 'Copied!' : 'Select all (Cmd/Ctrl+A) and copy manually.';
+  });
 }
