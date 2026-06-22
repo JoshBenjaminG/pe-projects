@@ -3,6 +3,7 @@ import { parseRoute, goToList } from './state.js';
 import { renderListView } from './views/listView.js';
 import { renderDetailView } from './views/detailView.js';
 import { renderHelpView } from './views/helpView.js';
+import { renderWeightView } from './views/weightView.js';
 import { renderAuthView } from './views/authView.js';
 
 const root = document.getElementById('lift-tracker-app');
@@ -20,6 +21,8 @@ async function render() {
       await renderDetailView(root, route.liftId);
     } else if (route.name === 'help') {
       await renderHelpView(root);
+    } else if (route.name === 'weight') {
+      await renderWeightView(root);
     } else {
       await renderListView(root);
     }

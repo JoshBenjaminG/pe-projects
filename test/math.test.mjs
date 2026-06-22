@@ -7,6 +7,8 @@ import {
   isNewPR,
   sessionVolume,
   formatPct,
+  dailyWeightSeries,
+  weightSummary,
 } from '../js/lift-tracker/math.js';
 
 let passed = 0;
@@ -148,5 +150,55 @@ test('sessionVolume: sums weight*reps across sets', () => {
 test('formatPct: 0 -> "0%"', () => assert.equal(formatPct(0), '0%'));
 test('formatPct: 15 -> "+15%"', () => assert.equal(formatPct(15), '+15%'));
 test('formatPct: -5 -> "−5%" (minus sign, not hyphen)', () => assert.equal(formatPct(-5), '−5%'));
+
+// --- dailyWeightSeries ---
+test('dailyWeightSeries: one point per date, sorted ascending', () => {
+  const entries = [
+    { id: 'a', weight: 180, logged_at: '2026-06-14T08:00:00Z', created_at: '2026-06-14T08:00:00Z' },
+    { id: 'b', weight: 163.6, logged_at: '2026-06-22T08:00:00Z', created_at: '2026-06-22T08:00:00Z' },
+  ];
+  const series = dailyWeightSeries(entries);
+  assert.equal(series.length, 2);
+  assert.equal(series[0].date, '2026-06-14');
+  assert.equal(series[0].weight, 180);
+  assert.equal(series[1].date, '2026-06-22');
+  assert.equal(series[1].weight, 163.6);
+});
+test('dailyWeightSeries: same-day correction -- most recently CREATED entry wins, not the highest/lowest weight', () => {
+  const entries = [
+    { id: 'a', weight: 200, logged_at: '2026-06-14T08:00:00Z', created_at: '2026-06-14T08:00:00Z' }, // typo, entered first
+    { id: 'b', weight: 180, logged_at: '2026-06-14T09:00:00Z', created_at: '2026-06-14T09:00:00Z' }, // correction, entered after
+  ];
+  const series = dailyWeightSeries(entries);
+  assert.equal(series.length, 1);
+  assert.equal(series[0].weight, 180);
+  assert.equal(series[0].entryId, 'b');
+});
+test('dailyWeightSeries: empty input -> empty output', () => {
+  assert.deepEqual(dailyWeightSeries([]), []);
+});
+
+// --- weightSummary ---
+test('weightSummary: start/current/change from a multi-point series', () => {
+  const series = [
+    { date: '2026-06-14', weight: 180 },
+    { date: '2026-06-18', weight: 162 },
+    { date: '2026-06-22', weight: 163.6 },
+  ];
+  const summary = weightSummary(series);
+  assert.equal(summary.start, 180);
+  assert.equal(summary.current, 163.6);
+  assert.equal(summary.currentDate, '2026-06-22');
+  assert.ok(Math.abs(summary.change - (163.6 - 180)) < 1e-9);
+});
+test('weightSummary: single point -> change is 0', () => {
+  const summary = weightSummary([{ date: '2026-06-22', weight: 163.6 }]);
+  assert.equal(summary.start, 163.6);
+  assert.equal(summary.current, 163.6);
+  assert.equal(summary.change, 0);
+});
+test('weightSummary: empty series -> null', () => {
+  assert.equal(weightSummary([]), null);
+});
 
 console.log(`\n${passed} tests passed`);

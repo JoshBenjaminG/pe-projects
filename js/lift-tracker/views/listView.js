@@ -5,17 +5,16 @@ import {
   restoreLift,
   reorderLifts,
   listActiveSetsForLifts,
-  listRecentSetsForLifts,
 } from '../api.js';
 import { dailyMaxE1RM, computeComposite } from '../math.js';
 import { renderCompositeChart } from '../charts.js';
 import { enableDragReorder } from '../dragReorder.js';
 import { showUndoToast } from '../toast.js';
-import { goToLift, goToHelp } from '../state.js';
+import { goToLift, goToHelp, goToWeight } from '../state.js';
 import { supabase } from '../supabaseClient.js';
 import { openFeedbackModal } from './feedbackModal.js';
-import { buildExportText, exportWindowStart } from '../export.js';
 import { weeklyKillstreak } from '../killstreak.js';
+import { renderWeightSummaryCard } from './weightView.js';
 
 export async function renderListView(root) {
   root.innerHTML = `
@@ -36,19 +35,7 @@ export async function renderListView(root) {
       </span>
     </section>
 
-    <section class="lt-export-section" data-export-section>
-      <button type="button" class="lt-export-toggle" data-export-toggle aria-expanded="false">
-        <span>Export progress (last 60 days)</span>
-        <span class="lt-chevron" data-export-chevron>&#9660;</span>
-      </button>
-      <div class="lt-export-body" data-export-body hidden>
-        <textarea class="lt-export-textarea" data-export-textarea readonly></textarea>
-        <div class="lt-export-actions">
-          <button type="button" class="lt-export-copy" data-export-copy>Copy to clipboard</button>
-          <span class="lt-export-status" data-export-status hidden></span>
-        </div>
-      </div>
-    </section>
+    <section class="lt-weight-card" data-weight-card></section>
 
     <section class="lt-composite" data-composite-section>
       <button type="button" class="lt-composite-toggle" data-composite-toggle aria-expanded="true">
@@ -104,60 +91,8 @@ export async function renderListView(root) {
       : 'Log a workout to start your streak this week';
   }
 
-  const exportToggle = root.querySelector('[data-export-toggle]');
-  const exportBody = root.querySelector('[data-export-body]');
-  const exportChevron = root.querySelector('[data-export-chevron]');
-  const exportTextarea = root.querySelector('[data-export-textarea]');
-  const exportCopyBtn = root.querySelector('[data-export-copy]');
-  const exportStatus = root.querySelector('[data-export-status]');
-
-  exportToggle.addEventListener('click', async () => {
-    const wasExpanded = exportToggle.getAttribute('aria-expanded') === 'true';
-    const nowExpanded = !wasExpanded;
-    exportToggle.setAttribute('aria-expanded', String(nowExpanded));
-    exportBody.hidden = !nowExpanded;
-    exportChevron.innerHTML = nowExpanded ? '&#9650;' : '&#9660;';
-
-    if (!nowExpanded) return; // just collapsed — nothing else to do
-
-    exportToggle.disabled = true;
-    try {
-      const liftIds = currentLifts.map((l) => l.id);
-      const since = exportWindowStart().toISOString();
-      const recentSets = await listRecentSetsForLifts(liftIds, since);
-      const setsByLift = new Map(currentLifts.map((l) => [l.id, []]));
-      for (const s of recentSets) {
-        const bucket = setsByLift.get(s.lift_id);
-        if (bucket) bucket.push(s);
-      }
-      exportTextarea.value = buildExportText(currentLifts, setsByLift);
-      exportStatus.hidden = true;
-    } finally {
-      exportToggle.disabled = false;
-    }
-  });
-
-  exportCopyBtn.addEventListener('click', async () => {
-    exportTextarea.select();
-    let copied = false;
-    if (navigator.clipboard?.writeText) {
-      try {
-        await navigator.clipboard.writeText(exportTextarea.value);
-        copied = true;
-      } catch {
-        copied = false;
-      }
-    }
-    if (!copied) {
-      try {
-        copied = document.execCommand('copy');
-      } catch {
-        copied = false;
-      }
-    }
-    exportStatus.hidden = false;
-    exportStatus.textContent = copied ? 'Copied!' : 'Select all (Cmd/Ctrl+A) and copy manually.';
-  });
+  const weightCard = root.querySelector('[data-weight-card]');
+  renderWeightSummaryCard(weightCard, { onExpand: goToWeight });
 
   const addForm = root.querySelector('[data-add-lift-form]');
   const listEl = root.querySelector('[data-lift-list]');

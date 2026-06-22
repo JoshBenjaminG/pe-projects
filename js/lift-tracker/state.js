@@ -10,6 +10,9 @@ export function parseRoute() {
   if (hash === 'help') {
     return { name: 'help' };
   }
+  if (hash === 'weight') {
+    return { name: 'weight' };
+  }
   return { name: 'list' };
 }
 
@@ -23,4 +26,8 @@ export function goToLift(liftId) {
 
 export function goToHelp() {
   window.location.hash = '#/help';
+}
+
+export function goToWeight() {
+  window.location.hash = '#/weight';
 }

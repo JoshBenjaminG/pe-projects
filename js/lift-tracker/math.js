@@ -122,3 +122,50 @@ export function formatPct(pct) {
   if (rounded === 0) return '0%';
   return rounded > 0 ? `+${rounded}%` : `−${Math.abs(rounded)}%`;
 }
+
+/**
+ * Collapses a flat list of body-weight entries (any order) into one point
+ * per calendar date. If multiple entries land on the same date (e.g. a
+ * same-day correction), the most recently CREATED entry for that date wins
+ * — unlike dailyMaxE1RM, this isn't "the best value", it's "the latest
+ * known-correct value" for that day. Returned ascending by date.
+ *
+ * @param {{weight:number|string, logged_at:string, created_at?:string, id?:string}[]} entries
+ */
+export function dailyWeightSeries(entries) {
+  const byDate = new Map();
+  for (const e of entries) {
+    const dateKey = toDateKey(e.logged_at);
+    const existing = byDate.get(dateKey);
+    if (!existing || new Date(e.created_at || 0) >= new Date(existing.createdAt || 0)) {
+      byDate.set(dateKey, {
+        date: dateKey,
+        weight: Number(e.weight),
+        entryId: e.id,
+        createdAt: e.created_at,
+      });
+    }
+  }
+  return Array.from(byDate.values())
+    .sort((a, b) => a.date.localeCompare(b.date))
+    .map(({ date, weight, entryId }) => ({ date, weight, entryId }));
+}
+
+/**
+ * Summarizes a weight series (ascending by date, as returned by
+ * dailyWeightSeries) into the start value, current value, and the signed
+ * change between them. Returns null if there's no data yet.
+ *
+ * @param {{date:string, weight:number}[]} series
+ */
+export function weightSummary(series) {
+  if (series.length === 0) return null;
+  const start = series[0];
+  const current = series[series.length - 1];
+  return {
+    start: start.weight,
+    current: current.weight,
+    currentDate: current.date,
+    change: current.weight - start.weight,
+  };
+}

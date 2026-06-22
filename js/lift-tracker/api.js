@@ -142,3 +142,49 @@ export async function restoreSet(id) {
   const { error } = await supabase.from('sets').update({ deleted_at: null }).eq('id', id);
   if (error) throw error;
 }
+
+// ---------- Body weight ----------
+
+export async function listWeightEntries() {
+  const { data, error } = await supabase
+    .from('body_weight')
+    .select('*')
+    .is('deleted_at', null)
+    .order('logged_at', { ascending: true });
+  if (error) throw error;
+  return data;
+}
+
+export async function createWeightEntry(weight, loggedAt) {
+  const { data, error } = await supabase
+    .from('body_weight')
+    .insert({ weight, logged_at: loggedAt || new Date().toISOString() })
+    .select()
+    .single();
+  if (error) throw error;
+  return data;
+}
+
+export async function updateWeightEntry(id, fields) {
+  const { data, error } = await supabase
+    .from('body_weight')
+    .update(fields)
+    .eq('id', id)
+    .select()
+    .single();
+  if (error) throw error;
+  return data;
+}
+
+export async function softDeleteWeightEntry(id) {
+  const { error } = await supabase
+    .from('body_weight')
+    .update({ deleted_at: new Date().toISOString() })
+    .eq('id', id);
+  if (error) throw error;
+}
+
+export async function restoreWeightEntry(id) {
+  const { error } = await supabase.from('body_weight').update({ deleted_at: null }).eq('id', id);
+  if (error) throw error;
+}

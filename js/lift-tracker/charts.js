@@ -11,6 +11,7 @@
 
 let compositeChart = null;
 let liftChart = null;
+let weightChart = null;
 
 const POINT_HIT_RADIUS = 14; // generous tap target for mobile
 
@@ -128,5 +129,66 @@ export function destroyLiftChart() {
   if (liftChart) {
     liftChart.destroy();
     liftChart = null;
+  }
+}
+
+// Weight chart reuses the app's red accent (same as the composite chart)
+// rather than the gold used for per-lift e1RM charts, since it lives
+// alongside the composite chart conceptually (an overall trend, not a
+// single lift's PR history).
+export function renderWeightChart(canvas, points, { onPointClick } = {}) {
+  if (weightChart) {
+    weightChart.destroy();
+    weightChart = null;
+  }
+
+  const labels = points.map((p) => p.date);
+  const data = points.map((p) => Math.round(p.weight * 10) / 10);
+
+  weightChart = new Chart(canvas, {
+    type: 'line',
+    data: {
+      labels,
+      datasets: [
+        {
+          label: 'Weight',
+          data,
+          borderColor: COLOR_ACCENT,
+          backgroundColor: COLOR_ACCENT_SOFT,
+          fill: true,
+          tension: 0.25,
+          pointRadius: 3,
+          pointBackgroundColor: COLOR_ACCENT,
+          pointHitRadius: POINT_HIT_RADIUS,
+        },
+      ],
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      interaction: { mode: 'nearest', intersect: true },
+      scales: {
+        x: {
+          ticks: { color: COLOR_TEXT_MUTED },
+          grid: { color: COLOR_GRID },
+        },
+        y: {
+          ticks: { color: COLOR_TEXT_MUTED },
+          grid: { color: COLOR_GRID },
+        },
+      },
+      plugins: { legend: { display: false } },
+      onClick: (evt, elements) => {
+        if (elements.length && onPointClick) onPointClick(points[elements[0].index]);
+      },
+    },
+  });
+  return weightChart;
+}
+
+export function destroyWeightChart() {
+  if (weightChart) {
+    weightChart.destroy();
+    weightChart = null;
   }
 }
