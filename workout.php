@@ -21,6 +21,7 @@
   <meta name="description" content="Personal lift tracker and strength progress dashboard.">
   <meta name="robots" content="noindex, nofollow">
   <link rel="icon" href="/images/favicon3.ico" type="image/x-icon">
+  <link rel="apple-touch-icon" href="/images/lifttracker.png">
 
   <link rel="stylesheet" href="css/style.css">
   <link rel="stylesheet" href="css/lift-tracker.css">
