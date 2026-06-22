@@ -307,6 +307,42 @@
   gap: 28px;
 }
 
+/* Collapsed card: title, the two stats above, and the "open full page"
+   button all share one row so the numbers never wrap below the "Weight"
+   label. Everything shrinks a bit to fit comfortably on one line on a
+   phone-width screen. */
+.lt-weight-card-row-collapsed {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.lt-weight-card-row-collapsed .lt-weight-toggle {
+  flex: 0 0 auto;
+  font-size: 0.95rem;
+  min-height: 0;
+}
+
+.lt-weight-card-row-collapsed .lt-weight-stats-collapsed {
+  flex: 0 1 auto;
+  gap: 16px;
+  min-width: 0;
+}
+
+.lt-weight-card-row-collapsed .lt-weight-stat-label {
+  font-size: 0.7rem;
+  white-space: nowrap;
+}
+
+.lt-weight-card-row-collapsed .lt-weight-stat-value {
+  font-size: 0.95rem;
+  white-space: nowrap;
+}
+
+.lt-weight-card-row-collapsed .lt-weight-expand {
+  margin-left: auto;
+}
+
 .lt-weight-stat {
   display: flex;
   flex-direction: column;
