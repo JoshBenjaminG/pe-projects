@@ -599,6 +599,12 @@
 
 .lt-field {
   flex: 1;
+  /* Without this, a flex item won't shrink below its content's intrinsic
+     width. A native date input's mm/dd/yyyy segments + calendar icon are
+     wider than a plain number input's minimum content, so without
+     min-width: 0 the Date column would claim extra space from the
+     50/50 split and the Weight column would end up visibly narrower. */
+  min-width: 0;
   display: flex;
   flex-direction: column;
   gap: 4px;
