@@ -1,15 +1,12 @@
 import {
   listLifts,
   createLift,
-  softDeleteLift,
-  restoreLift,
   reorderLifts,
   listActiveSetsForLifts,
 } from '../api.js';
 import { dailyMaxE1RM, computeComposite } from '../math.js';
 import { renderCompositeChart } from '../charts.js';
 import { enableDragReorder } from '../dragReorder.js';
-import { showUndoToast } from '../toast.js';
 import { goToLift, goToHelp, goToWeight } from '../state.js';
 import { supabase } from '../supabaseClient.js';
 import { openFeedbackModal } from './feedbackModal.js';
@@ -181,12 +178,11 @@ export async function renderListView(root) {
         const lastLabel = last ? `${Math.round(last.e1rm)} lb e1RM` : 'No sets yet';
         return `
           <li class="lt-lift-row" data-reorder-item="${lift.id}" data-lift-id="${lift.id}">
-            <button type="button" class="lt-drag-handle" aria-label="Reorder ${escapeAttr(lift.name)}">&#8942;&#8942;</button>
             <button type="button" class="lt-lift-row-main" data-open-lift="${lift.id}">
               <span class="lt-lift-name" data-name-slot></span>
               <span class="lt-lift-last">${lastLabel}</span>
             </button>
-            <button type="button" class="lt-lift-delete" data-delete-lift="${lift.id}" aria-label="Delete ${escapeAttr(lift.name)}">&times;</button>
+            <button type="button" class="lt-drag-handle" aria-label="Reorder ${escapeAttr(lift.name)}">&#8942;&#8942;</button>
           </li>
         `;
       })
@@ -201,25 +197,6 @@ export async function renderListView(root) {
 
     listEl.querySelectorAll('[data-open-lift]').forEach((btn) => {
       btn.addEventListener('click', () => goToLift(btn.dataset.openLift));
-    });
-
-    listEl.querySelectorAll('[data-delete-lift]').forEach((btn) => {
-      btn.addEventListener('click', async (e) => {
-        e.stopPropagation();
-        const id = btn.dataset.deleteLift;
-        const lift = currentLifts.find((l) => l.id === id);
-        if (!window.confirm(`Delete "${lift.name}"? You'll have a few seconds to undo it after.`)) {
-          return;
-        }
-        await softDeleteLift(id);
-        await load();
-        showUndoToast(`Deleted "${lift.name}"`, {
-          onUndo: async () => {
-            await restoreLift(id);
-            await load();
-          },
-        });
-      });
     });
   }
 

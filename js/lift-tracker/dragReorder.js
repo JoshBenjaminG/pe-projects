@@ -10,11 +10,21 @@
 // The handle has no good way to tell a deliberate hold-then-drag apart from
 // a finger that happens to land on the handle while swiping to scroll the
 // page -- both are a vertical pointer movement starting in the same place.
-// Without the hold, that accidental touch instantly grabbed the row instead
-// of letting the scroll continue. A short delay (with a small movement
-// cancel-threshold) lets a quick scroll-through gesture cancel out and fall
-// through to the browser's normal scrolling, while a real hold arms the
-// drag. Mouse/pen don't have this ambiguity, so they skip the delay.
+// A short delay (with a small movement cancel-threshold) gives a real hold
+// time to arm the drag; a finger that moves before that abandons the
+// gesture instead.
+//
+// The handle has touch-action: none (see lift-tracker.css), which blocks
+// the browser's native scrolling for the whole touch gesture that starts
+// there -- not just the moment a drag is actually armed. Earlier versions
+// tried to paper over that by replicating scrolling manually in JS once a
+// touch on the handle turned out to be a swipe rather than a hold. That
+// fought with the browser's own gesture handling every frame (flicker,
+// smear, scrolling at the wrong speed) even after adding pointer capture
+// and batching the scroll writes per animation frame. Scrolling from the
+// dots simply isn't supported now: a touch that starts there either holds
+// still long enough to arm a drag, or gets abandoned -- to scroll the page,
+// use any other part of the row.
 const TOUCH_ARM_DELAY_MS = 180;
 const ARM_CANCEL_THRESHOLD_PX = 10;
 
@@ -30,21 +40,10 @@ export function enableDragReorder(container, { onReorder } = {}) {
   let pendingStartY = 0;
 
   // The handle + pointer id we've captured for the current touch gesture
-  // (see onPointerDown). Held for the gesture's full lifetime -- whether it
-  // turns into a scroll or a drag -- and released only once the touch
-  // actually ends.
+  // (see onPointerDown). Held for the gesture's full lifetime -- pending,
+  // armed, or abandoned -- and released only once the touch actually ends.
   let capturedHandle = null;
   let capturedPointerId = null;
-
-  // Once a touch on the handle turns out to be a scroll rather than a
-  // hold-to-drag, we take over scrolling ourselves: touch-action: none on
-  // the handle (see lift-tracker.css) blocks the browser's own scrolling
-  // for any touch starting there, so without this the page would feel
-  // stuck the moment a swipe began on the dots.
-  let manualScrolling = false;
-  let lastTouchY = 0;
-  let scrollRaf = null;
-  let pendingScrollDelta = 0;
 
   function getItems() {
     return Array.from(container.querySelectorAll('[data-reorder-item]'));
@@ -63,16 +62,9 @@ export function enableDragReorder(container, { onReorder } = {}) {
       return;
     }
 
-    // Claim this pointer for the rest of the gesture. Without this, even
-    // with touch-action: none on the handle, the browser could end up
-    // running its own scroll/momentum handling for the same touch at the
-    // same time as our manual scrollTop updates below -- the two would
-    // fight every frame, which is what produced the flicker/smear (each
-    // side yanking the page to a different position, repeatedly).
-    // setPointerCapture tells the browser this element owns the pointer,
-    // so it doesn't also try to interpret it natively. Held through to the
-    // end of the gesture (released in onPendingUp or onPointerUp below),
-    // not just the pending phase, so an armed drag is protected too.
+    // Claim this pointer for the rest of the gesture, so the browser
+    // doesn't also try to interpret it natively in parallel with our own
+    // handling below.
     if (handle.setPointerCapture) {
       try {
         handle.setPointerCapture(e.pointerId);
@@ -86,8 +78,6 @@ export function enableDragReorder(container, { onReorder } = {}) {
     pendingItem = item;
     pendingStartX = e.clientX;
     pendingStartY = e.clientY;
-    manualScrolling = false;
-    lastTouchY = e.clientY;
     document.addEventListener('pointermove', onPendingMove);
     document.addEventListener('pointerup', onPendingUp);
     armTimer = setTimeout(() => {
@@ -116,60 +106,26 @@ export function enableDragReorder(container, { onReorder } = {}) {
     clearTimeout(armTimer);
     armTimer = null;
     pendingItem = null;
-    manualScrolling = false;
-    if (scrollRaf !== null) {
-      cancelAnimationFrame(scrollRaf);
-      scrollRaf = null;
-    }
-    pendingScrollDelta = 0;
     document.removeEventListener('pointermove', onPendingMove);
     document.removeEventListener('pointerup', onPendingUp);
   }
 
-  function flushScroll() {
-    scrollRaf = null;
-    const scroller = document.scrollingElement || document.documentElement;
-    const maxScroll = Math.max(scroller.scrollHeight - window.innerHeight, 0);
-    const next = scroller.scrollTop + pendingScrollDelta;
-    scroller.scrollTop = Math.min(Math.max(next, 0), maxScroll);
-    pendingScrollDelta = 0;
-  }
-
   function onPendingMove(e) {
     if (!pendingItem) return;
+    const dx = e.clientX - pendingStartX;
+    const dy = e.clientY - pendingStartY;
+    if (Math.hypot(dx, dy) <= ARM_CANCEL_THRESHOLD_PX) return;
 
-    if (!manualScrolling) {
-      const dx = e.clientX - pendingStartX;
-      const dy = e.clientY - pendingStartY;
-      if (Math.hypot(dx, dy) <= ARM_CANCEL_THRESHOLD_PX) return;
-
-      // Moved before the hold completed -- treat as a scroll attempt, not
-      // a drag. Cancel the pending arm for good and switch into manual
-      // scroll mode for the rest of this touch.
-      clearTimeout(armTimer);
-      armTimer = null;
-      manualScrolling = true;
-      lastTouchY = e.clientY;
-    }
-
-    e.preventDefault();
-    // Batch the scrollTop write into a single rAF per frame rather than
-    // applying it straight from the pointermove handler. Touch devices can
-    // fire several pointermove events per frame; writing scrollTop on each
-    // one (forcing a layout read-back each time) is what produced the
-    // stuttery, smeared-looking scroll on top of the double-scroll-source
-    // issue fixed by pointer capture above.
-    pendingScrollDelta += lastTouchY - e.clientY;
-    lastTouchY = e.clientY;
-    if (scrollRaf === null) {
-      scrollRaf = requestAnimationFrame(flushScroll);
-    }
+    // Moved before the hold completed. The handle already blocks native
+    // scrolling for this whole touch either way, so there's no scroll to
+    // fall through to -- just abandon the gesture instead of trying to
+    // drive scrolling ourselves (see the file header comment for why).
+    clearPending();
+    releaseCapture();
   }
 
   function onPendingUp() {
-    // Released before the hold completed -- just a tap or the end of a
-    // manual scroll, not a drag. The touch is over, so let go of the
-    // pointer capture taken in onPointerDown.
+    // Released before the hold completed -- just a tap, not a drag.
     clearPending();
     releaseCapture();
   }

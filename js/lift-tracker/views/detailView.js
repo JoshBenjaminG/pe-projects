@@ -1,6 +1,8 @@
 import {
   getLift,
   renameLift,
+  softDeleteLift,
+  restoreLift,
   listSetsForLift,
   createSet,
   updateSet,
@@ -10,7 +12,7 @@ import {
 import { calcE1RM, dailyMaxE1RM, isNewPR, sessionVolume, toDateKey } from '../math.js';
 import { renderLiftChart, destroyLiftChart } from '../charts.js';
 import { showUndoToast } from '../toast.js';
-import { goToList } from '../state.js';
+import { goToList, refreshView } from '../state.js';
 
 export async function renderDetailView(root, liftId) {
   const lift = await getLift(liftId);
@@ -23,6 +25,7 @@ export async function renderDetailView(root, liftId) {
     <header class="lt-detail-header">
       <button type="button" class="lt-back" data-back aria-label="Back to all lifts">&larr;</button>
       <input type="text" class="lt-lift-name-input" data-name-input maxlength="60" autocomplete="off" />
+      <button type="button" class="lt-detail-delete" data-delete-lift aria-label="Delete lift">&times;</button>
     </header>
 
     <form class="lt-quick-log" data-log-form>
@@ -66,6 +69,20 @@ export async function renderDetailView(root, liftId) {
     }
     lastSavedName = value;
     await renameLift(liftId, value);
+  });
+
+  root.querySelector('[data-delete-lift]').addEventListener('click', async () => {
+    if (!window.confirm(`Delete "${lastSavedName}"? You'll have a few seconds to undo it after.`)) {
+      return;
+    }
+    await softDeleteLift(liftId);
+    goToList();
+    showUndoToast(`Deleted "${lastSavedName}"`, {
+      onUndo: async () => {
+        await restoreLift(liftId);
+        refreshView();
+      },
+    });
   });
 
   // ---- Tabs ----

@@ -31,3 +31,13 @@ export function goToHelp() {
 export function goToWeight() {
   window.location.hash = '#/weight';
 }
+
+// Forces whatever view is currently mounted to re-fetch and re-render,
+// without changing the route. Used after an undo that happens on a
+// different page than the one the original action was taken on (e.g.
+// deleting a lift from its detail page navigates back to the list before
+// the undo toast's timer expires -- if Undo is tapped there, the list
+// needs to pick up the restored lift even though the hash never changed).
+export function refreshView() {
+  window.dispatchEvent(new Event('hashchange'));
+}

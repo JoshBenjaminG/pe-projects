@@ -493,18 +493,17 @@
   flex-shrink: 0;
   background: none;
   border: none;
-  border-right: 1px solid var(--lt-border);
+  border-left: 1px solid var(--lt-border);
   font-size: 1.1rem;
   color: var(--lt-text-muted);
   cursor: grab;
-  /* touch-action: none is back -- removing it let a real drag start
-     reliably trigger the browser's own native scroll instead (the touch
-     would get silently handed off to native panning the moment it moved,
-     cancelling our pointer sequence, which is why dragging stopped
-     working on real devices). With it restored, the browser never takes
-     over a touch that starts on the handle; dragReorder.js now replicates
-     scrolling manually in JS for the case where the touch turns out to be
-     a scroll attempt rather than a drag. */
+  /* touch-action: none blocks the browser's native scrolling for any
+     touch that starts on the handle, for the whole gesture (not just
+     while a drag is in progress). dragReorder.js no longer tries to
+     replicate scrolling manually for touches that turn out not to be a
+     hold-to-drag -- that approach fought with the browser's own gesture
+     handling and produced a flicker/smear glitch. Scrolling from the dots
+     isn't supported; use any other part of the row. */
   touch-action: none;
   user-select: none;
   -webkit-user-select: none;
@@ -538,16 +537,6 @@
 .lt-lift-last {
   font-size: 0.85rem;
   color: var(--lt-text-muted);
-}
-
-.lt-lift-delete {
-  width: 44px;
-  flex-shrink: 0;
-  background: none;
-  border: none;
-  border-left: 1px solid var(--lt-border);
-  color: var(--lt-accent);
-  font-size: 1.3rem;
 }
 
 .lt-dragging {
@@ -594,6 +583,17 @@
 .lt-lift-name-input:focus {
   border-bottom-color: var(--lt-accent);
   outline: none;
+}
+
+.lt-detail-delete {
+  width: 44px;
+  height: 44px;
+  flex-shrink: 0;
+  border-radius: 8px;
+  border: 1px solid var(--lt-border);
+  background: var(--lt-surface);
+  color: var(--lt-accent);
+  font-size: 1.3rem;
 }
 
 /* ---------- Quick log form ---------- */
