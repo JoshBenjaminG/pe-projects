@@ -16,6 +16,17 @@ const SECTIONS = [
       Chopper Gunner. It resets on its own every Sunday — nothing to do.`,
   },
   {
+    title: 'Burst mode',
+    body: `Tap the "Burst" button near the top of the list to switch every
+      lift row into a quick-log form right there on the list, with weight
+      and reps fields and a "Log" button. Useful for supersets or circuits,
+      where you're moving between several lifts and don't want to open
+      each one's page to log a set. The weight field prefills with your
+      last weight for that lift, and the "Log" button shows a PR note and
+      that lift's volume for the day after each set. Tap the button again
+      (now labeled "Normal") to switch back to the regular list.`,
+  },
+  {
     title: 'Export progress',
     body: `Tap "Export progress (last 60 days)" below to expand a plain-text
       summary of every set you've logged in the last 60 days, grouped by
@@ -38,13 +49,14 @@ const SECTIONS = [
   },
   {
     title: 'Reordering lifts',
-    body: `Press and drag the handle on the left side of a lift row to
-      move it up or down the list.`,
+    body: `Press and hold the dots on the right side of a lift row, then
+      drag to move it up or down the list.`,
   },
   {
     title: 'Deleting a lift',
-    body: `Tap the × on the right side of a lift row. You'll have a few
-      seconds to tap "Undo" before it's gone for good.`,
+    body: `Open the lift's page and tap the × next to its name at the
+      top. You'll have a few seconds to tap "Undo" before it's gone for
+      good.`,
   },
   {
     title: 'Logging a set',

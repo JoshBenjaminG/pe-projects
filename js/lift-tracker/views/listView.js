@@ -25,15 +25,17 @@ export async function renderListView(root) {
       </div>
     </header>
 
-    <button type="button" class="lt-mode-toggle" data-mode-toggle aria-pressed="false">Burst</button>
+    <div class="lt-toolbar">
+      <button type="button" class="lt-mode-toggle" data-mode-toggle aria-pressed="false">Burst</button>
 
-    <section class="lt-killstreak" data-killstreak-section>
-      <span class="lt-killstreak-icon" data-killstreak-icon>&#127919;</span>
-      <span class="lt-killstreak-info">
-        <span class="lt-killstreak-label" data-killstreak-label>No killstreak yet</span>
-        <span class="lt-killstreak-sub" data-killstreak-sub>Log a workout to start your streak this week</span>
-      </span>
-    </section>
+      <section class="lt-killstreak" data-killstreak-section>
+        <span class="lt-killstreak-icon" data-killstreak-icon>&#127919;</span>
+        <span class="lt-killstreak-info">
+          <span class="lt-killstreak-label" data-killstreak-label>No killstreak yet</span>
+          <span class="lt-killstreak-sub" data-killstreak-sub>Log a workout to start your streak this week</span>
+        </span>
+      </section>
+    </div>
 
     <section class="lt-weight-card" data-weight-card></section>
 
@@ -210,11 +212,13 @@ export async function renderListView(root) {
         if (burstMode) {
           return `
             <li class="lt-lift-row lt-lift-row-burst" data-reorder-item="${lift.id}" data-lift-id="${lift.id}">
-              <div class="lt-lift-row-main lt-lift-row-burst-main">
-                <span class="lt-lift-name" data-name-slot></span>
-                <span class="lt-lift-last" data-last-slot>${lastSetLabel(lift.id)}</span>
+              <div class="lt-lift-row-burst-top">
+                <div class="lt-lift-row-main lt-lift-row-burst-main">
+                  <span class="lt-lift-name" data-name-slot></span>
+                  <span class="lt-lift-last" data-last-slot>${lastSetLabel(lift.id)}</span>
+                </div>
+                <button type="button" class="lt-drag-handle" aria-label="Reorder ${escapeAttr(lift.name)}">&#8942;&#8942;</button>
               </div>
-              <button type="button" class="lt-drag-handle" aria-label="Reorder ${escapeAttr(lift.name)}">&#8942;&#8942;</button>
               <form class="lt-burst-log" data-burst-log-form="${lift.id}">
                 <input type="number" inputmode="decimal" step="0.5" min="0" name="weight" placeholder="lb" required value="${lastWeightFor(lift.id)}" data-burst-weight />
                 <input type="number" inputmode="numeric" step="1" min="1" name="reps" placeholder="reps" required data-burst-reps />
