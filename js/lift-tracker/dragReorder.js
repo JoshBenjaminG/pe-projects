@@ -98,7 +98,16 @@ export function enableDragReorder(container, { onReorder } = {}) {
     }
 
     e.preventDefault();
-    window.scrollBy(0, lastTouchY - e.clientY);
+    // Plain window.scrollBy can overshoot the top/bottom of the page during
+    // a fast swipe -- with no native rubber-band resistance behind a JS-
+    // driven scroll, repeatedly asking to go past the boundary made the
+    // browser's own overscroll/bounce animation kick in and produce a
+    // jarring blank-space flash. Computing and clamping the target position
+    // ourselves keeps it pinned at the real top/bottom instead.
+    const scroller = document.scrollingElement || document.documentElement;
+    const maxScroll = Math.max(scroller.scrollHeight - window.innerHeight, 0);
+    const next = scroller.scrollTop + (lastTouchY - e.clientY);
+    scroller.scrollTop = Math.min(Math.max(next, 0), maxScroll);
     lastTouchY = e.clientY;
   }
 
