@@ -29,6 +29,13 @@ export function enableDragReorder(container, { onReorder } = {}) {
   let pendingStartX = 0;
   let pendingStartY = 0;
 
+  // The handle + pointer id we've captured for the current touch gesture
+  // (see onPointerDown). Held for the gesture's full lifetime -- whether it
+  // turns into a scroll or a drag -- and released only once the touch
+  // actually ends.
+  let capturedHandle = null;
+  let capturedPointerId = null;
+
   // Once a touch on the handle turns out to be a scroll rather than a
   // hold-to-drag, we take over scrolling ourselves: touch-action: none on
   // the handle (see lift-tracker.css) blocks the browser's own scrolling
@@ -36,6 +43,8 @@ export function enableDragReorder(container, { onReorder } = {}) {
   // stuck the moment a swipe began on the dots.
   let manualScrolling = false;
   let lastTouchY = 0;
+  let scrollRaf = null;
+  let pendingScrollDelta = 0;
 
   function getItems() {
     return Array.from(container.querySelectorAll('[data-reorder-item]'));
@@ -52,6 +61,26 @@ export function enableDragReorder(container, { onReorder } = {}) {
       e.preventDefault();
       armDrag(item, e.clientY);
       return;
+    }
+
+    // Claim this pointer for the rest of the gesture. Without this, even
+    // with touch-action: none on the handle, the browser could end up
+    // running its own scroll/momentum handling for the same touch at the
+    // same time as our manual scrollTop updates below -- the two would
+    // fight every frame, which is what produced the flicker/smear (each
+    // side yanking the page to a different position, repeatedly).
+    // setPointerCapture tells the browser this element owns the pointer,
+    // so it doesn't also try to interpret it natively. Held through to the
+    // end of the gesture (released in onPendingUp or onPointerUp below),
+    // not just the pending phase, so an armed drag is protected too.
+    if (handle.setPointerCapture) {
+      try {
+        handle.setPointerCapture(e.pointerId);
+        capturedHandle = handle;
+        capturedPointerId = e.pointerId;
+      } catch {
+        // Ignore -- capture is a reliability improvement, not required.
+      }
     }
 
     pendingItem = item;
@@ -71,13 +100,39 @@ export function enableDragReorder(container, { onReorder } = {}) {
     }, TOUCH_ARM_DELAY_MS);
   }
 
+  function releaseCapture() {
+    if (capturedHandle && capturedPointerId !== null && capturedHandle.releasePointerCapture) {
+      try {
+        capturedHandle.releasePointerCapture(capturedPointerId);
+      } catch {
+        // Already released (e.g. by the browser on pointerup) -- fine.
+      }
+    }
+    capturedHandle = null;
+    capturedPointerId = null;
+  }
+
   function clearPending() {
     clearTimeout(armTimer);
     armTimer = null;
     pendingItem = null;
     manualScrolling = false;
+    if (scrollRaf !== null) {
+      cancelAnimationFrame(scrollRaf);
+      scrollRaf = null;
+    }
+    pendingScrollDelta = 0;
     document.removeEventListener('pointermove', onPendingMove);
     document.removeEventListener('pointerup', onPendingUp);
+  }
+
+  function flushScroll() {
+    scrollRaf = null;
+    const scroller = document.scrollingElement || document.documentElement;
+    const maxScroll = Math.max(scroller.scrollHeight - window.innerHeight, 0);
+    const next = scroller.scrollTop + pendingScrollDelta;
+    scroller.scrollTop = Math.min(Math.max(next, 0), maxScroll);
+    pendingScrollDelta = 0;
   }
 
   function onPendingMove(e) {
@@ -98,23 +153,25 @@ export function enableDragReorder(container, { onReorder } = {}) {
     }
 
     e.preventDefault();
-    // Plain window.scrollBy can overshoot the top/bottom of the page during
-    // a fast swipe -- with no native rubber-band resistance behind a JS-
-    // driven scroll, repeatedly asking to go past the boundary made the
-    // browser's own overscroll/bounce animation kick in and produce a
-    // jarring blank-space flash. Computing and clamping the target position
-    // ourselves keeps it pinned at the real top/bottom instead.
-    const scroller = document.scrollingElement || document.documentElement;
-    const maxScroll = Math.max(scroller.scrollHeight - window.innerHeight, 0);
-    const next = scroller.scrollTop + (lastTouchY - e.clientY);
-    scroller.scrollTop = Math.min(Math.max(next, 0), maxScroll);
+    // Batch the scrollTop write into a single rAF per frame rather than
+    // applying it straight from the pointermove handler. Touch devices can
+    // fire several pointermove events per frame; writing scrollTop on each
+    // one (forcing a layout read-back each time) is what produced the
+    // stuttery, smeared-looking scroll on top of the double-scroll-source
+    // issue fixed by pointer capture above.
+    pendingScrollDelta += lastTouchY - e.clientY;
     lastTouchY = e.clientY;
+    if (scrollRaf === null) {
+      scrollRaf = requestAnimationFrame(flushScroll);
+    }
   }
 
   function onPendingUp() {
     // Released before the hold completed -- just a tap or the end of a
-    // manual scroll, not a drag.
+    // manual scroll, not a drag. The touch is over, so let go of the
+    // pointer capture taken in onPointerDown.
     clearPending();
+    releaseCapture();
   }
 
   function armDrag(item, clientY) {
@@ -178,6 +235,7 @@ export function enableDragReorder(container, { onReorder } = {}) {
 
     document.removeEventListener('pointermove', onPointerMove);
     document.removeEventListener('pointerup', onPointerUp);
+    releaseCapture();
 
     const newOrder = getItems().map((item) => item.dataset.reorderItem);
     dragging = null;
