@@ -29,6 +29,14 @@ export function enableDragReorder(container, { onReorder } = {}) {
   let pendingStartX = 0;
   let pendingStartY = 0;
 
+  // Once a touch on the handle turns out to be a scroll rather than a
+  // hold-to-drag, we take over scrolling ourselves: touch-action: none on
+  // the handle (see lift-tracker.css) blocks the browser's own scrolling
+  // for any touch starting there, so without this the page would feel
+  // stuck the moment a swipe began on the dots.
+  let manualScrolling = false;
+  let lastTouchY = 0;
+
   function getItems() {
     return Array.from(container.querySelectorAll('[data-reorder-item]'));
   }
@@ -49,11 +57,17 @@ export function enableDragReorder(container, { onReorder } = {}) {
     pendingItem = item;
     pendingStartX = e.clientX;
     pendingStartY = e.clientY;
+    manualScrolling = false;
+    lastTouchY = e.clientY;
     document.addEventListener('pointermove', onPendingMove);
     document.addEventListener('pointerup', onPendingUp);
     armTimer = setTimeout(() => {
+      clearTimeout(armTimer);
+      armTimer = null;
+      const item2 = pendingItem;
+      const y = pendingStartY;
       clearPending();
-      armDrag(item, pendingStartY);
+      armDrag(item2, y);
     }, TOUCH_ARM_DELAY_MS);
   }
 
@@ -61,23 +75,36 @@ export function enableDragReorder(container, { onReorder } = {}) {
     clearTimeout(armTimer);
     armTimer = null;
     pendingItem = null;
+    manualScrolling = false;
     document.removeEventListener('pointermove', onPendingMove);
     document.removeEventListener('pointerup', onPendingUp);
   }
 
   function onPendingMove(e) {
     if (!pendingItem) return;
-    const dx = e.clientX - pendingStartX;
-    const dy = e.clientY - pendingStartY;
-    if (Math.hypot(dx, dy) > ARM_CANCEL_THRESHOLD_PX) {
+
+    if (!manualScrolling) {
+      const dx = e.clientX - pendingStartX;
+      const dy = e.clientY - pendingStartY;
+      if (Math.hypot(dx, dy) <= ARM_CANCEL_THRESHOLD_PX) return;
+
       // Moved before the hold completed -- treat as a scroll attempt, not
-      // a drag. Never called preventDefault, so the page scrolls normally.
-      clearPending();
+      // a drag. Cancel the pending arm for good and switch into manual
+      // scroll mode for the rest of this touch.
+      clearTimeout(armTimer);
+      armTimer = null;
+      manualScrolling = true;
+      lastTouchY = e.clientY;
     }
+
+    e.preventDefault();
+    window.scrollBy(0, lastTouchY - e.clientY);
+    lastTouchY = e.clientY;
   }
 
   function onPendingUp() {
-    // Released before the hold completed -- just a tap, not a drag.
+    // Released before the hold completed -- just a tap or the end of a
+    // manual scroll, not a drag.
     clearPending();
   }
 

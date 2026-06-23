@@ -497,12 +497,15 @@
   font-size: 1.1rem;
   color: var(--lt-text-muted);
   cursor: grab;
-  /* No touch-action: none here on purpose -- that would block native
-     scrolling the instant a touch starts on the handle, regardless of
-     what the JS press-and-hold logic later decides. Scroll-vs-drag is
-     fully handled in dragReorder.js instead: preventDefault is only
-     called once a drag is actually armed, so an untouched scroll swipe
-     starting on the handle is never intercepted. */
+  /* touch-action: none is back -- removing it let a real drag start
+     reliably trigger the browser's own native scroll instead (the touch
+     would get silently handed off to native panning the moment it moved,
+     cancelling our pointer sequence, which is why dragging stopped
+     working on real devices). With it restored, the browser never takes
+     over a touch that starts on the handle; dragReorder.js now replicates
+     scrolling manually in JS for the case where the touch turns out to be
+     a scroll attempt rather than a drag. */
+  touch-action: none;
   user-select: none;
   -webkit-user-select: none;
   -webkit-touch-callout: none;
