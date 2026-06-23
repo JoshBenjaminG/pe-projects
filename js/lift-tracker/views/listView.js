@@ -100,8 +100,32 @@ export async function renderListView(root) {
   const listEl = root.querySelector('[data-lift-list]');
   const listEmptyEl = root.querySelector('[data-list-empty]');
 
+  const BURST_MODE_STORAGE_KEY = 'lt-burst-mode';
+
+  function readStoredBurstMode() {
+    // Safari private browsing (and similar locked-down modes) can throw
+    // on localStorage access -- fall back to Normal mode rather than
+    // breaking the page over a preference.
+    try {
+      return window.localStorage.getItem(BURST_MODE_STORAGE_KEY) === 'true';
+    } catch {
+      return false;
+    }
+  }
+
+  function writeStoredBurstMode(value) {
+    try {
+      window.localStorage.setItem(BURST_MODE_STORAGE_KEY, String(value));
+    } catch {
+      // Ignore -- the toggle still works for the rest of this session,
+      // it just won't be remembered next time.
+    }
+  }
+
   let currentLifts = [];
-  let burstMode = false;
+  // Persisted across reloads/closing the page -- whichever mode you left
+  // the list in is the mode it opens back up in next time.
+  let burstMode = readStoredBurstMode();
   // Sets per lift, kept around (not just dailySeries) so burst-mode quick
   // logging can compute PR/volume feedback and prefill weight without an
   // extra round trip per row.
@@ -109,11 +133,18 @@ export async function renderListView(root) {
   let lastLiftsData = [];
 
   const modeToggleBtn = root.querySelector('[data-mode-toggle]');
-  modeToggleBtn.addEventListener('click', () => {
-    burstMode = !burstMode;
+
+  function applyModeToggleUI() {
     modeToggleBtn.textContent = burstMode ? 'Normal' : 'Burst';
     modeToggleBtn.setAttribute('aria-pressed', String(burstMode));
     modeToggleBtn.classList.toggle('lt-mode-toggle-active', burstMode);
+  }
+  applyModeToggleUI();
+
+  modeToggleBtn.addEventListener('click', () => {
+    burstMode = !burstMode;
+    writeStoredBurstMode(burstMode);
+    applyModeToggleUI();
     // Re-render from cached data -- no need to re-fetch just to switch how
     // each row behaves.
     renderLiftRows(lastLiftsData);

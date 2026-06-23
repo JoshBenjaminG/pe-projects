@@ -112,17 +112,22 @@
 
 .lt-toolbar {
   display: flex;
-  align-items: center;
+  /* stretch (not center) so the toggle button always matches whatever
+     height the killstreak box ends up at, instead of a fixed min-height
+     guess that drifted out of sync with it. */
+  align-items: stretch;
   gap: 10px;
   margin: 12px 0 16px;
 }
 
 .lt-mode-toggle {
   flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   font-size: 0.8rem;
   font-weight: 700;
-  padding: 8px 12px;
-  min-height: 36px;
+  padding: 8px 14px;
   border-radius: 8px;
   border: 1px solid var(--lt-border);
   background: var(--lt-surface);
@@ -724,19 +729,22 @@
   margin-bottom: 16px;
 }
 
+/* Grid rather than flex: a native date input's intrinsic width is
+   computed very differently across browsers -- iOS Safari in particular
+   gives its date control an internal minimum width that flexbox's
+   content-based flex-basis still honors even with min-width: 0 on the
+   flex item, so the two columns ended up touching with unequal widths
+   on iOS even though desktop looked fine. Grid's 1fr/1fr tracks split
+   the available width evenly regardless of either input's preferred
+   content width, which holds consistently across browsers. */
 .lt-quick-log-fields {
-  display: flex;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
   gap: 10px;
   margin-bottom: 10px;
 }
 
 .lt-field {
-  flex: 1;
-  /* Without this, a flex item won't shrink below its content's intrinsic
-     width. A native date input's mm/dd/yyyy segments + calendar icon are
-     wider than a plain number input's minimum content, so without
-     min-width: 0 the Date column would claim extra space from the
-     50/50 split and the Weight column would end up visibly narrower. */
   min-width: 0;
   display: flex;
   flex-direction: column;
@@ -752,6 +760,7 @@
   border-radius: 8px;
   min-height: 48px;
   width: 100%;
+  min-width: 0;
   background: var(--lt-surface-alt);
   color: var(--lt-text);
 }
