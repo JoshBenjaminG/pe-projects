@@ -11,6 +11,13 @@ export function exportWindowStart(now = new Date()) {
   return start;
 }
 
+/** Trims to at most one decimal place, dropping a trailing ".0" -- same
+ * rounding convention as the weight card/history (see weightView.js). */
+function formatWeightLb(n) {
+  const rounded = Math.round(n * 10) / 10;
+  return rounded % 1 === 0 ? String(rounded) : rounded.toFixed(1);
+}
+
 /**
  * Builds the plain-text progress summary for the export panel.
  *
@@ -20,8 +27,19 @@ export function exportWindowStart(now = new Date()) {
  * @param {string} windowLabel - shown in the header line, e.g. "last 60
  *   days" or "all-time" -- purely cosmetic, doesn't affect which sets are
  *   included (that's controlled by what's already in setsByLift).
+ * @param {{date:string, weight:number}[]} weightSeries - one entry per day
+ *   (already deduped/sorted ascending, e.g. via math.js's dailyWeightSeries),
+ *   already filtered to whatever window applies -- omitted entirely from the
+ *   output when empty, so callers with no weight data don't need a special
+ *   case.
  */
-export function buildExportText(lifts, setsByLift, now = new Date(), windowLabel = `last ${EXPORT_WINDOW_DAYS} days`) {
+export function buildExportText(
+  lifts,
+  setsByLift,
+  now = new Date(),
+  windowLabel = `last ${EXPORT_WINDOW_DAYS} days`,
+  weightSeries = []
+) {
   const todayLabel = toDateKey(now.toISOString());
   const lines = [`Lift Tracker — ${windowLabel} (as of ${todayLabel})`, ''];
 
@@ -29,29 +47,45 @@ export function buildExportText(lifts, setsByLift, now = new Date(), windowLabel
 
   if (activeLifts.length === 0) {
     lines.push('No sets logged in this period.');
-    return lines.join('\n');
-  }
-
-  for (const lift of activeLifts) {
-    const sets = (setsByLift.get(lift.id) || [])
-      .slice()
-      .sort((a, b) => new Date(a.performed_at) - new Date(b.performed_at));
-
-    const vol = sessionVolume(sets);
-    const bestE1RM = Math.max(...sets.map((s) => calcE1RM(Number(s.weight), Number(s.reps))));
-
-    lines.push(lift.name);
-    for (const s of sets) {
-      const e1rm = Math.round(calcE1RM(Number(s.weight), Number(s.reps)));
-      lines.push(`  ${toDateKey(s.performed_at)}: ${s.weight} lb x ${s.reps} (e1RM ${e1rm})`);
-    }
-    lines.push(`  Sets: ${sets.length} | Volume: ${Math.round(vol)} lb | Best e1RM: ${Math.round(bestE1RM)}`);
     lines.push('');
+  } else {
+    for (const lift of activeLifts) {
+      const sets = (setsByLift.get(lift.id) || [])
+        .slice()
+        .sort((a, b) => new Date(a.performed_at) - new Date(b.performed_at));
+
+      const vol = sessionVolume(sets);
+      const bestE1RM = Math.max(...sets.map((s) => calcE1RM(Number(s.weight), Number(s.reps))));
+
+      lines.push(lift.name);
+      for (const s of sets) {
+        const e1rm = Math.round(calcE1RM(Number(s.weight), Number(s.reps)));
+        lines.push(`  ${toDateKey(s.performed_at)}: ${s.weight} lb x ${s.reps} (e1RM ${e1rm})`);
+      }
+      lines.push(`  Sets: ${sets.length} | Volume: ${Math.round(vol)} lb | Best e1RM: ${Math.round(bestE1RM)}`);
+      lines.push('');
+    }
+
+    const skipped = lifts.length - activeLifts.length;
+    if (skipped > 0) {
+      lines.push(`(${skipped} lift${skipped === 1 ? '' : 's'} with no sets in this period omitted)`);
+      lines.push('');
+    }
   }
 
-  const skipped = lifts.length - activeLifts.length;
-  if (skipped > 0) {
-    lines.push(`(${skipped} lift${skipped === 1 ? '' : 's'} with no sets in this period omitted)`);
+  if (weightSeries.length > 0) {
+    lines.push('Body weight');
+    for (const entry of weightSeries) {
+      lines.push(`  ${entry.date}: ${formatWeightLb(entry.weight)} lb`);
+    }
+    const start = weightSeries[0].weight;
+    const current = weightSeries[weightSeries.length - 1].weight;
+    const change = current - start;
+    const sign = change > 0 ? '+' : '';
+    lines.push(
+      `  Start: ${formatWeightLb(start)} lb | Current: ${formatWeightLb(current)} lb | Change: ${sign}${formatWeightLb(change)} lb`
+    );
+    lines.push('');
   }
 
   return lines.join('\n').trimEnd();

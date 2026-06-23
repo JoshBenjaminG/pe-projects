@@ -2,8 +2,9 @@
 // back button — same single-PHP-page hash-routing pattern as the other
 // views (see state.js), just with nothing to fetch.
 import { goToList } from '../state.js';
-import { listLifts, listActiveSetsForLifts, listRecentSetsForLifts } from '../api.js';
+import { listLifts, listActiveSetsForLifts, listRecentSetsForLifts, listWeightEntries } from '../api.js';
 import { buildExportText, exportWindowStart } from '../export.js';
+import { dailyWeightSeries } from '../math.js';
 
 const SECTIONS = [
   {
@@ -18,10 +19,11 @@ const SECTIONS = [
     title: 'Export progress',
     body: `Tap "Export progress (last 60 days)" below to expand a plain-text
       summary of every set you've logged in the last 60 days, grouped by
-      lift, with volume and estimated 1-rep max. Tap "Copy to clipboard" to
-      grab it — useful for pasting into Claude or anywhere else you want
-      feedback on your progress. Need older data? Use "Export full history"
-      right below instead.`,
+      lift, with volume and estimated 1-rep max, plus your body weight
+      history over the same window. Tap "Copy to clipboard" to grab it —
+      useful for pasting into Claude or anywhere else you want feedback on
+      your progress. Need older data? Use "Export full history" right below
+      instead.`,
   },
   {
     title: 'Composite progress',
@@ -158,7 +160,10 @@ export async function renderHelpView(root) {
         const bucket = setsByLift.get(s.lift_id);
         if (bucket) bucket.push(s);
       }
-      exportTextarea.value = buildExportText(lifts, setsByLift);
+      const weightEntries = await listWeightEntries();
+      const recentWeightEntries = weightEntries.filter((e) => new Date(e.logged_at) >= new Date(since));
+      const weightSeries = dailyWeightSeries(recentWeightEntries);
+      exportTextarea.value = buildExportText(lifts, setsByLift, new Date(), undefined, weightSeries);
       exportStatus.hidden = true;
     } finally {
       exportToggle.disabled = false;
@@ -213,7 +218,9 @@ export async function renderHelpView(root) {
         const bucket = setsByLift.get(s.lift_id);
         if (bucket) bucket.push(s);
       }
-      fullExportTextarea.value = buildExportText(lifts, setsByLift, new Date(), 'all-time');
+      const weightEntries = await listWeightEntries();
+      const weightSeries = dailyWeightSeries(weightEntries);
+      fullExportTextarea.value = buildExportText(lifts, setsByLift, new Date(), 'all-time', weightSeries);
       fullExportStatus.hidden = true;
     } finally {
       fullExportToggle.disabled = false;

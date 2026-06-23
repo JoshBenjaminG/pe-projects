@@ -94,4 +94,81 @@ test('buildExportText: windowLabel overrides the default "last N days" header', 
   assert.ok(text.startsWith('Lift Tracker — all-time (as of 2026-06-19)'));
 });
 
+test('buildExportText: no weightSeries passed -> no "Body weight" section at all', () => {
+  const lifts = [{ id: 'a', name: 'Bench' }];
+  const setsByLift = new Map([
+    ['a', [{ weight: 100, reps: 5, performed_at: '2026-06-10T12:00:00Z' }]],
+  ]);
+  const text = buildExportText(lifts, setsByLift, new Date('2026-06-19T12:00:00Z'));
+  assert.ok(!text.includes('Body weight'));
+});
+
+test('buildExportText: empty weightSeries array -> no "Body weight" section', () => {
+  const lifts = [{ id: 'a', name: 'Bench' }];
+  const setsByLift = new Map([
+    ['a', [{ weight: 100, reps: 5, performed_at: '2026-06-10T12:00:00Z' }]],
+  ]);
+  const text = buildExportText(lifts, setsByLift, new Date('2026-06-19T12:00:00Z'), undefined, []);
+  assert.ok(!text.includes('Body weight'));
+});
+
+test('buildExportText: weightSeries appends a "Body weight" section after the lift blocks', () => {
+  const lifts = [{ id: 'a', name: 'Bench' }];
+  const setsByLift = new Map([
+    ['a', [{ weight: 100, reps: 5, performed_at: '2026-06-10T12:00:00Z' }]],
+  ]);
+  const weightSeries = [
+    { date: '2026-05-01', weight: 180 },
+    { date: '2026-06-01', weight: 175.5 },
+  ];
+  const text = buildExportText(lifts, setsByLift, new Date('2026-06-19T12:00:00Z'), undefined, weightSeries);
+  const expected = [
+    'Lift Tracker — last 60 days (as of 2026-06-19)',
+    '',
+    'Bench',
+    '  2026-06-10: 100 lb x 5 (e1RM 117)',
+    '  Sets: 1 | Volume: 500 lb | Best e1RM: 117',
+    '',
+    'Body weight',
+    '  2026-05-01: 180 lb',
+    '  2026-06-01: 175.5 lb',
+    '  Start: 180 lb | Current: 175.5 lb | Change: -4.5 lb',
+  ].join('\n');
+  assert.equal(text, expected);
+});
+
+test('buildExportText: weight gain shows a "+" sign on the change line', () => {
+  const lifts = [];
+  const setsByLift = new Map();
+  const weightSeries = [
+    { date: '2026-05-01', weight: 170 },
+    { date: '2026-06-01', weight: 172.25 },
+  ];
+  const text = buildExportText(lifts, setsByLift, new Date('2026-06-19T12:00:00Z'), undefined, weightSeries);
+  assert.ok(text.endsWith('Start: 170 lb | Current: 172.3 lb | Change: +2.3 lb'));
+});
+
+test('buildExportText: single weight entry -> change is exactly 0, no sign', () => {
+  const weightSeries = [{ date: '2026-06-01', weight: 175 }];
+  const text = buildExportText([], new Map(), new Date('2026-06-19T12:00:00Z'), undefined, weightSeries);
+  assert.ok(text.endsWith('Start: 175 lb | Current: 175 lb | Change: 0 lb'));
+});
+
+test('buildExportText: no active lifts but weight data present -> both the empty-period note and the weight section appear', () => {
+  const lifts = [{ id: 'a', name: 'Bench' }];
+  const setsByLift = new Map([['a', []]]);
+  const weightSeries = [{ date: '2026-06-01', weight: 175 }];
+  const text = buildExportText(lifts, setsByLift, new Date('2026-06-19T12:00:00Z'), undefined, weightSeries);
+  const expected = [
+    'Lift Tracker — last 60 days (as of 2026-06-19)',
+    '',
+    'No sets logged in this period.',
+    '',
+    'Body weight',
+    '  2026-06-01: 175 lb',
+    '  Start: 175 lb | Current: 175 lb | Change: 0 lb',
+  ].join('\n');
+  assert.equal(text, expected);
+});
+
 console.log(`\n${passed} tests passed`);
