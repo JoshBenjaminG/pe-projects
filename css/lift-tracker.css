@@ -110,6 +110,28 @@
   background: var(--lt-surface-alt);
 }
 
+.lt-mode-toggle {
+  display: block;
+  margin: 12px 0 16px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  padding: 8px 14px;
+  min-height: 36px;
+  border-radius: 8px;
+  border: 1px solid var(--lt-border);
+  background: var(--lt-surface);
+  color: var(--lt-text-muted);
+}
+
+.lt-mode-toggle-active {
+  border-color: var(--lt-accent);
+  color: var(--lt-accent);
+}
+
+.lt-mode-toggle:active {
+  background: var(--lt-surface-alt);
+}
+
 /* ---------- Weekly killstreak ---------- */
 .lt-killstreak {
   display: flex;
@@ -537,6 +559,65 @@
 .lt-lift-last {
   font-size: 0.85rem;
   color: var(--lt-text-muted);
+}
+
+.lt-lift-row-burst {
+  flex-wrap: wrap;
+}
+
+.lt-lift-row-burst-main {
+  cursor: default;
+}
+
+.lt-burst-log {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+  width: 100%;
+  padding: 0 12px 12px;
+}
+
+.lt-burst-log input {
+  width: 64px;
+  min-width: 0;
+  font-size: 0.95rem;
+  padding: 10px 10px;
+  border: 1px solid var(--lt-border);
+  border-radius: 8px;
+  background: var(--lt-surface-alt);
+  color: var(--lt-text);
+}
+
+.lt-burst-log input::placeholder {
+  color: var(--lt-text-muted);
+}
+
+.lt-burst-log-btn {
+  font-size: 0.9rem;
+  font-weight: 700;
+  padding: 10px 14px;
+  min-height: 40px;
+  border-radius: 8px;
+  border: none;
+  background: var(--lt-accent);
+  color: #fff;
+  cursor: pointer;
+}
+
+.lt-burst-log-btn:active {
+  background: var(--lt-accent-strong);
+}
+
+.lt-burst-feedback {
+  font-size: 0.8rem;
+  color: var(--lt-text-muted);
+  flex-basis: 100%;
+}
+
+.lt-burst-feedback.lt-pr {
+  color: var(--lt-accent);
+  font-weight: 700;
 }
 
 .lt-dragging {

@@ -1,10 +1,11 @@
 import {
   listLifts,
   createLift,
+  createSet,
   reorderLifts,
   listActiveSetsForLifts,
 } from '../api.js';
-import { dailyMaxE1RM, computeComposite } from '../math.js';
+import { dailyMaxE1RM, computeComposite, calcE1RM, isNewPR, sessionVolume, toDateKey } from '../math.js';
 import { renderCompositeChart } from '../charts.js';
 import { enableDragReorder } from '../dragReorder.js';
 import { goToLift, goToHelp, goToWeight } from '../state.js';
@@ -23,6 +24,8 @@ export async function renderListView(root) {
         <button type="button" class="lt-help-btn" data-help-btn aria-label="Help">?</button>
       </div>
     </header>
+
+    <button type="button" class="lt-mode-toggle" data-mode-toggle aria-pressed="false">Burst</button>
 
     <section class="lt-killstreak" data-killstreak-section>
       <span class="lt-killstreak-icon" data-killstreak-icon>&#127919;</span>
@@ -96,6 +99,23 @@ export async function renderListView(root) {
   const listEmptyEl = root.querySelector('[data-list-empty]');
 
   let currentLifts = [];
+  let burstMode = false;
+  // Sets per lift, kept around (not just dailySeries) so burst-mode quick
+  // logging can compute PR/volume feedback and prefill weight without an
+  // extra round trip per row.
+  let setsByLift = new Map();
+  let lastLiftsData = [];
+
+  const modeToggleBtn = root.querySelector('[data-mode-toggle]');
+  modeToggleBtn.addEventListener('click', () => {
+    burstMode = !burstMode;
+    modeToggleBtn.textContent = burstMode ? 'Normal' : 'Burst';
+    modeToggleBtn.setAttribute('aria-pressed', String(burstMode));
+    modeToggleBtn.classList.toggle('lt-mode-toggle-active', burstMode);
+    // Re-render from cached data -- no need to re-fetch just to switch how
+    // each row behaves.
+    renderLiftRows(lastLiftsData);
+  });
 
   addForm.addEventListener('submit', async (e) => {
     e.preventDefault();
@@ -133,12 +153,14 @@ export async function renderListView(root) {
       listEl.innerHTML = '';
       compositeSection.hidden = true;
       renderKillstreak([]);
+      setsByLift = new Map();
+      lastLiftsData = [];
       return;
     }
 
     const sets = await listActiveSetsForLifts(currentLifts.map((l) => l.id));
     renderKillstreak(sets);
-    const setsByLift = new Map(currentLifts.map((l) => [l.id, []]));
+    setsByLift = new Map(currentLifts.map((l) => [l.id, []]));
     for (const s of sets) {
       const bucket = setsByLift.get(s.lift_id);
       if (bucket) bucket.push(s);
@@ -168,19 +190,45 @@ export async function renderListView(root) {
     renderCompositeChart(canvas, points);
   }
 
+  function lastSetLabel(liftId) {
+    const series = dailyMaxE1RM(setsByLift.get(liftId) || []);
+    const last = series[series.length - 1];
+    return last ? `${Math.round(last.e1rm)} lb e1RM` : 'No sets yet';
+  }
+
+  function lastWeightFor(liftId) {
+    const sets = setsByLift.get(liftId) || [];
+    if (sets.length === 0) return '';
+    return sets[sets.length - 1].weight;
+  }
+
   function renderLiftRows(liftsData) {
-    const seriesByLift = new Map(liftsData.map((l) => [l.liftId, l.dailySeries]));
+    lastLiftsData = liftsData;
 
     listEl.innerHTML = currentLifts
       .map((lift) => {
-        const series = seriesByLift.get(lift.id) || [];
-        const last = series[series.length - 1];
-        const lastLabel = last ? `${Math.round(last.e1rm)} lb e1RM` : 'No sets yet';
+        if (burstMode) {
+          return `
+            <li class="lt-lift-row lt-lift-row-burst" data-reorder-item="${lift.id}" data-lift-id="${lift.id}">
+              <div class="lt-lift-row-main lt-lift-row-burst-main">
+                <span class="lt-lift-name" data-name-slot></span>
+                <span class="lt-lift-last" data-last-slot>${lastSetLabel(lift.id)}</span>
+              </div>
+              <button type="button" class="lt-drag-handle" aria-label="Reorder ${escapeAttr(lift.name)}">&#8942;&#8942;</button>
+              <form class="lt-burst-log" data-burst-log-form="${lift.id}">
+                <input type="number" inputmode="decimal" step="0.5" min="0" name="weight" placeholder="lb" required value="${lastWeightFor(lift.id)}" data-burst-weight />
+                <input type="number" inputmode="numeric" step="1" min="1" name="reps" placeholder="reps" required data-burst-reps />
+                <button type="submit" class="lt-burst-log-btn">Log</button>
+                <span class="lt-burst-feedback" data-burst-feedback hidden></span>
+              </form>
+            </li>
+          `;
+        }
         return `
           <li class="lt-lift-row" data-reorder-item="${lift.id}" data-lift-id="${lift.id}">
             <button type="button" class="lt-lift-row-main" data-open-lift="${lift.id}">
               <span class="lt-lift-name" data-name-slot></span>
-              <span class="lt-lift-last">${lastLabel}</span>
+              <span class="lt-lift-last">${lastSetLabel(lift.id)}</span>
             </button>
             <button type="button" class="lt-drag-handle" aria-label="Reorder ${escapeAttr(lift.name)}">&#8942;&#8942;</button>
           </li>
@@ -195,8 +243,58 @@ export async function renderListView(root) {
       if (nameSlot) nameSlot.textContent = lift.name;
     }
 
-    listEl.querySelectorAll('[data-open-lift]').forEach((btn) => {
-      btn.addEventListener('click', () => goToLift(btn.dataset.openLift));
+    if (burstMode) {
+      wireBurstForms();
+    } else {
+      listEl.querySelectorAll('[data-open-lift]').forEach((btn) => {
+        btn.addEventListener('click', () => goToLift(btn.dataset.openLift));
+      });
+    }
+  }
+
+  function wireBurstForms() {
+    listEl.querySelectorAll('[data-burst-log-form]').forEach((form) => {
+      const liftId = form.dataset.burstLogForm;
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const weightInput = form.querySelector('[data-burst-weight]');
+        const repsInput = form.querySelector('[data-burst-reps]');
+        const feedback = form.querySelector('[data-burst-feedback]');
+        const weight = Number(weightInput.value);
+        const reps = Number(repsInput.value);
+        if (!(weight >= 0) || !Number.isFinite(weight) || !(reps > 0) || !Number.isInteger(reps)) {
+          return;
+        }
+
+        const priorSets = setsByLift.get(liftId) || [];
+        const newE1RM = calcE1RM(weight, reps);
+        const isPR = isNewPR(newE1RM, priorSets);
+        const now = new Date();
+        const performedAt = now.toISOString();
+
+        const newSet = await createSet(liftId, weight, reps, performedAt);
+
+        // Patch local cache + DOM in place rather than reloading the whole
+        // list -- keeps focus and rhythm intact for rapid-fire logging.
+        const updatedSets = [...priorSets, newSet];
+        setsByLift.set(liftId, updatedSets);
+
+        repsInput.value = '';
+        repsInput.focus();
+
+        const liveRow = listEl.querySelector(`[data-lift-id="${liftId}"]`);
+        const lastSlot = liveRow?.querySelector('[data-last-slot]');
+        if (lastSlot) lastSlot.textContent = lastSetLabel(liftId);
+
+        const todayKey = toDateKey(performedAt);
+        const todaysVolume = sessionVolume(
+          updatedSets.filter((s) => toDateKey(s.performed_at) === todayKey)
+        );
+
+        feedback.hidden = false;
+        feedback.classList.toggle('lt-pr', isPR);
+        feedback.textContent = isPR ? `PR! ${Math.round(todaysVolume)} lb today` : `Logged · ${Math.round(todaysVolume)} lb today`;
+      });
     });
   }
 
