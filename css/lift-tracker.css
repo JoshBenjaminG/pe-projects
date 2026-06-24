@@ -32,6 +32,17 @@
 }
 
 .lt-app {
+  /* body is `display: flex; flex-direction: column`, and .lt-app has
+     `margin: 0 auto` for centering. Per the flexbox spec, auto margins
+     on the cross axis (width, in a column-direction flex container)
+     suppress stretch alignment -- so without an explicit width, .lt-app
+     shrinks to fit whichever content happens to be visible instead of
+     filling the row. Different tab content has a different natural
+     (shrink-to-fit) width, so switching between the Weight and Waist
+     tabs visibly resized the whole page on desktop. An explicit
+     `width: 100%` (still capped by max-width below) makes the width
+     depend only on the viewport, not on which tab's content is shown. */
+  width: 100%;
   max-width: 640px;
   margin: 0 auto;
   padding: 16px 16px 96px;
