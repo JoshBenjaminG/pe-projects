@@ -16,6 +16,17 @@
   --lt-gold: #f2b134;
 }
 
+/* The site's global meyer-reset.css sets `section { display: block; }`
+   for old-browser HTML5 support. As an author-stylesheet rule it beats the
+   browser's native `[hidden] { display: none }` UA rule outright (origin
+   beats specificity in the cascade), so every `<section ... hidden>` tab
+   panel in this app -- both Weight/Waist here and History/Details on the
+   lift detail page -- would otherwise render even while "hidden". This
+   restores the expected behavior, scoped to this app only. */
+.lt-app [hidden] {
+  display: none;
+}
+
 .lt-body {
   background: var(--lt-bg);
 }
