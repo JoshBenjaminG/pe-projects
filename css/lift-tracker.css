@@ -1153,16 +1153,10 @@ html::-webkit-scrollbar,
   color: #111111;
 }
 
-/* ---------- Desktop ---------- */
-@media (min-width: 768px) {
-  .lt-app {
-    max-width: 800px;
-  }
-
-  .lt-toast {
-    max-width: 800px;
-  }
-}
+/* ---------- Desktop ----------
+   A June 19 restyle commit widened this to 800px; reverted back to the
+   original flat 640px max-width (same as mobile) per user feedback that
+   the wider column looked off on desktop. */
 
 /* ---------- Help page ---------- */
 .lt-help-header {
