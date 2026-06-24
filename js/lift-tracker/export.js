@@ -12,8 +12,10 @@ export function exportWindowStart(now = new Date()) {
 }
 
 /** Trims to at most one decimal place, dropping a trailing ".0" -- same
- * rounding convention as the weight card/history (see weightView.js). */
-function formatWeightLb(n) {
+ * rounding convention as the weight/waist card/history (see weightView.js).
+ * Shared by both the weight and waist sections below -- the unit (lb/in) is
+ * appended separately by each caller. */
+function formatMeasurement(n) {
   const rounded = Math.round(n * 10) / 10;
   return rounded % 1 === 0 ? String(rounded) : rounded.toFixed(1);
 }
@@ -32,13 +34,17 @@ function formatWeightLb(n) {
  *   already filtered to whatever window applies -- omitted entirely from the
  *   output when empty, so callers with no weight data don't need a special
  *   case.
+ * @param {{date:string, waist:number}[]} waistSeries - same shape/rules as
+ *   weightSeries above (e.g. via math.js's dailyWaistSeries), just for waist
+ *   circumference -- also omitted entirely when empty.
  */
 export function buildExportText(
   lifts,
   setsByLift,
   now = new Date(),
   windowLabel = `last ${EXPORT_WINDOW_DAYS} days`,
-  weightSeries = []
+  weightSeries = [],
+  waistSeries = []
 ) {
   const todayLabel = toDateKey(now.toISOString());
   const lines = [`Lift Tracker — ${windowLabel} (as of ${todayLabel})`, ''];
@@ -76,14 +82,29 @@ export function buildExportText(
   if (weightSeries.length > 0) {
     lines.push('Body weight');
     for (const entry of weightSeries) {
-      lines.push(`  ${entry.date}: ${formatWeightLb(entry.weight)} lb`);
+      lines.push(`  ${entry.date}: ${formatMeasurement(entry.weight)} lb`);
     }
     const start = weightSeries[0].weight;
     const current = weightSeries[weightSeries.length - 1].weight;
     const change = current - start;
     const sign = change > 0 ? '+' : '';
     lines.push(
-      `  Start: ${formatWeightLb(start)} lb | Current: ${formatWeightLb(current)} lb | Change: ${sign}${formatWeightLb(change)} lb`
+      `  Start: ${formatMeasurement(start)} lb | Current: ${formatMeasurement(current)} lb | Change: ${sign}${formatMeasurement(change)} lb`
+    );
+    lines.push('');
+  }
+
+  if (waistSeries.length > 0) {
+    lines.push('Waist');
+    for (const entry of waistSeries) {
+      lines.push(`  ${entry.date}: ${formatMeasurement(entry.waist)} in`);
+    }
+    const start = waistSeries[0].waist;
+    const current = waistSeries[waistSeries.length - 1].waist;
+    const change = current - start;
+    const sign = change > 0 ? '+' : '';
+    lines.push(
+      `  Start: ${formatMeasurement(start)} in | Current: ${formatMeasurement(current)} in | Change: ${sign}${formatMeasurement(change)} in`
     );
     lines.push('');
   }

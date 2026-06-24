@@ -28,11 +28,22 @@
 const TOUCH_ARM_DELAY_MS = 180;
 const ARM_CANCEL_THRESHOLD_PX = 10;
 
+// While dragging, holding the pointer within this many pixels of the top or
+// bottom edge of the viewport auto-scrolls the page, same as most drag-to-
+// reorder UIs (the touch-action: none on the handle blocks the browser's
+// own edge-scroll for the whole gesture, so without this a row dragged
+// toward either edge just gets stuck there). Speed ramps from 0 up to
+// AUTO_SCROLL_MAX_SPEED_PX the closer the pointer gets to the edge.
+const AUTO_SCROLL_EDGE_PX = 80;
+const AUTO_SCROLL_MAX_SPEED_PX = 16;
+
 export function enableDragReorder(container, { onReorder } = {}) {
   let dragging = null;
   let placeholder = null;
   let startY = 0;
   let startTop = 0;
+  let currentClientY = 0;
+  let autoScrollRAF = null;
 
   let armTimer = null;
   let pendingItem = null;
@@ -133,6 +144,7 @@ export function enableDragReorder(container, { onReorder } = {}) {
   function armDrag(item, clientY) {
     dragging = item;
     startY = clientY;
+    currentClientY = clientY;
     const rect = item.getBoundingClientRect();
     startTop = rect.top;
 
@@ -152,12 +164,12 @@ export function enableDragReorder(container, { onReorder } = {}) {
     document.addEventListener('pointerup', onPointerUp);
   }
 
-  function onPointerMove(e) {
-    if (!dragging) return;
-    e.preventDefault();
-    const delta = e.clientY - startY;
-    dragging.style.top = `${startTop + delta}px`;
-
+  // Moves the placeholder to wherever the dragged item's current position
+  // (in viewport coordinates) puts it among the other rows. Called both on
+  // every pointermove and on every auto-scroll tick, since auto-scrolling
+  // changes the other rows' viewport positions without any pointermove
+  // event firing.
+  function updatePlaceholder() {
     const items = getItems().filter((i) => i !== dragging);
     const dragRect = dragging.getBoundingClientRect();
     const dragMid = dragRect.top + dragRect.height / 2;
@@ -179,8 +191,71 @@ export function enableDragReorder(container, { onReorder } = {}) {
     }
   }
 
+  // How fast (px/frame) and which direction to auto-scroll given how close
+  // the pointer is to the top/bottom edge of the viewport. 0 means "not in
+  // either edge zone" -- no auto-scroll needed.
+  function autoScrollSpeed() {
+    const distanceFromTop = currentClientY;
+    const distanceFromBottom = window.innerHeight - currentClientY;
+
+    if (distanceFromTop < AUTO_SCROLL_EDGE_PX) {
+      const factor = 1 - distanceFromTop / AUTO_SCROLL_EDGE_PX;
+      return -AUTO_SCROLL_MAX_SPEED_PX * factor;
+    }
+    if (distanceFromBottom < AUTO_SCROLL_EDGE_PX) {
+      const factor = 1 - distanceFromBottom / AUTO_SCROLL_EDGE_PX;
+      return AUTO_SCROLL_MAX_SPEED_PX * factor;
+    }
+    return 0;
+  }
+
+  function autoScrollTick() {
+    if (!dragging) {
+      autoScrollRAF = null;
+      return;
+    }
+    const speed = autoScrollSpeed();
+    if (speed === 0) {
+      autoScrollRAF = null;
+      return;
+    }
+    window.scrollBy(0, speed);
+    updatePlaceholder();
+    autoScrollRAF = requestAnimationFrame(autoScrollTick);
+  }
+
+  // Starts the auto-scroll loop if the pointer is currently in an edge zone
+  // and the loop isn't already running. Safe to call on every pointermove --
+  // it's a no-op once a loop is already in flight, and autoScrollTick stops
+  // itself (and lets a later call restart it) once the pointer leaves the
+  // edge zone.
+  function maybeStartAutoScroll() {
+    if (autoScrollRAF !== null) return;
+    if (autoScrollSpeed() === 0) return;
+    autoScrollRAF = requestAnimationFrame(autoScrollTick);
+  }
+
+  function stopAutoScroll() {
+    if (autoScrollRAF !== null) {
+      cancelAnimationFrame(autoScrollRAF);
+      autoScrollRAF = null;
+    }
+  }
+
+  function onPointerMove(e) {
+    if (!dragging) return;
+    e.preventDefault();
+    currentClientY = e.clientY;
+    const delta = e.clientY - startY;
+    dragging.style.top = `${startTop + delta}px`;
+
+    updatePlaceholder();
+    maybeStartAutoScroll();
+  }
+
   function onPointerUp() {
     if (!dragging) return;
+    stopAutoScroll();
     placeholder.replaceWith(dragging);
     dragging.classList.remove('lt-dragging');
     dragging.style.position = '';

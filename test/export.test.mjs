@@ -171,4 +171,92 @@ test('buildExportText: no active lifts but weight data present -> both the empty
   assert.equal(text, expected);
 });
 
+test('buildExportText: no waistSeries passed -> no "Waist" section at all', () => {
+  const lifts = [{ id: 'a', name: 'Bench' }];
+  const setsByLift = new Map([
+    ['a', [{ weight: 100, reps: 5, performed_at: '2026-06-10T12:00:00Z' }]],
+  ]);
+  const text = buildExportText(lifts, setsByLift, new Date('2026-06-19T12:00:00Z'));
+  assert.ok(!text.includes('Waist'));
+});
+
+test('buildExportText: empty waistSeries array -> no "Waist" section', () => {
+  const lifts = [{ id: 'a', name: 'Bench' }];
+  const setsByLift = new Map([
+    ['a', [{ weight: 100, reps: 5, performed_at: '2026-06-10T12:00:00Z' }]],
+  ]);
+  const text = buildExportText(lifts, setsByLift, new Date('2026-06-19T12:00:00Z'), undefined, [], []);
+  assert.ok(!text.includes('Waist'));
+});
+
+test('buildExportText: waistSeries appends a "Waist" section after the Body weight section', () => {
+  const lifts = [{ id: 'a', name: 'Bench' }];
+  const setsByLift = new Map([
+    ['a', [{ weight: 100, reps: 5, performed_at: '2026-06-10T12:00:00Z' }]],
+  ]);
+  const weightSeries = [
+    { date: '2026-05-01', weight: 180 },
+    { date: '2026-06-01', weight: 175.5 },
+  ];
+  const waistSeries = [
+    { date: '2026-05-01', waist: 36 },
+    { date: '2026-06-01', waist: 34.5 },
+  ];
+  const text = buildExportText(lifts, setsByLift, new Date('2026-06-19T12:00:00Z'), undefined, weightSeries, waistSeries);
+  const expected = [
+    'Lift Tracker — last 60 days (as of 2026-06-19)',
+    '',
+    'Bench',
+    '  2026-06-10: 100 lb x 5 (e1RM 117)',
+    '  Sets: 1 | Volume: 500 lb | Best e1RM: 117',
+    '',
+    'Body weight',
+    '  2026-05-01: 180 lb',
+    '  2026-06-01: 175.5 lb',
+    '  Start: 180 lb | Current: 175.5 lb | Change: -4.5 lb',
+    '',
+    'Waist',
+    '  2026-05-01: 36 in',
+    '  2026-06-01: 34.5 in',
+    '  Start: 36 in | Current: 34.5 in | Change: -1.5 in',
+  ].join('\n');
+  assert.equal(text, expected);
+});
+
+test('buildExportText: waistSeries works with no weightSeries -> "Waist" section directly after lift blocks', () => {
+  const lifts = [{ id: 'a', name: 'Bench' }];
+  const setsByLift = new Map([
+    ['a', [{ weight: 100, reps: 5, performed_at: '2026-06-10T12:00:00Z' }]],
+  ]);
+  const waistSeries = [{ date: '2026-06-01', waist: 35 }];
+  const text = buildExportText(lifts, setsByLift, new Date('2026-06-19T12:00:00Z'), undefined, [], waistSeries);
+  const expected = [
+    'Lift Tracker — last 60 days (as of 2026-06-19)',
+    '',
+    'Bench',
+    '  2026-06-10: 100 lb x 5 (e1RM 117)',
+    '  Sets: 1 | Volume: 500 lb | Best e1RM: 117',
+    '',
+    'Waist',
+    '  2026-06-01: 35 in',
+    '  Start: 35 in | Current: 35 in | Change: 0 in',
+  ].join('\n');
+  assert.equal(text, expected);
+});
+
+test('buildExportText: waist gain shows a "+" sign on the change line', () => {
+  const waistSeries = [
+    { date: '2026-05-01', waist: 32 },
+    { date: '2026-06-01', waist: 33.25 },
+  ];
+  const text = buildExportText([], new Map(), new Date('2026-06-19T12:00:00Z'), undefined, [], waistSeries);
+  assert.ok(text.endsWith('Start: 32 in | Current: 33.3 in | Change: +1.3 in'));
+});
+
+test('buildExportText: single waist entry -> change is exactly 0, no sign', () => {
+  const waistSeries = [{ date: '2026-06-01', waist: 35 }];
+  const text = buildExportText([], new Map(), new Date('2026-06-19T12:00:00Z'), undefined, [], waistSeries);
+  assert.ok(text.endsWith('Start: 35 in | Current: 35 in | Change: 0 in'));
+});
+
 console.log(`\n${passed} tests passed`);

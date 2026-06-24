@@ -2,9 +2,9 @@
 // back button — same single-PHP-page hash-routing pattern as the other
 // views (see state.js), just with nothing to fetch.
 import { goToList } from '../state.js';
-import { listLifts, listActiveSetsForLifts, listRecentSetsForLifts, listWeightEntries } from '../api.js';
+import { listLifts, listActiveSetsForLifts, listRecentSetsForLifts, listWeightEntries, listWaistEntries } from '../api.js';
 import { buildExportText, exportWindowStart } from '../export.js';
-import { dailyWeightSeries } from '../math.js';
+import { dailyWeightSeries, dailyWaistSeries } from '../math.js';
 
 const SECTIONS = [
   {
@@ -175,7 +175,10 @@ export async function renderHelpView(root) {
       const weightEntries = await listWeightEntries();
       const recentWeightEntries = weightEntries.filter((e) => new Date(e.logged_at) >= new Date(since));
       const weightSeries = dailyWeightSeries(recentWeightEntries);
-      exportTextarea.value = buildExportText(lifts, setsByLift, new Date(), undefined, weightSeries);
+      const waistEntries = await listWaistEntries();
+      const recentWaistEntries = waistEntries.filter((e) => new Date(e.logged_at) >= new Date(since));
+      const waistSeries = dailyWaistSeries(recentWaistEntries);
+      exportTextarea.value = buildExportText(lifts, setsByLift, new Date(), undefined, weightSeries, waistSeries);
       exportStatus.hidden = true;
     } finally {
       exportToggle.disabled = false;
@@ -232,7 +235,9 @@ export async function renderHelpView(root) {
       }
       const weightEntries = await listWeightEntries();
       const weightSeries = dailyWeightSeries(weightEntries);
-      fullExportTextarea.value = buildExportText(lifts, setsByLift, new Date(), 'all-time', weightSeries);
+      const waistEntries = await listWaistEntries();
+      const waistSeries = dailyWaistSeries(waistEntries);
+      fullExportTextarea.value = buildExportText(lifts, setsByLift, new Date(), 'all-time', weightSeries, waistSeries);
       fullExportStatus.hidden = true;
     } finally {
       fullExportToggle.disabled = false;
