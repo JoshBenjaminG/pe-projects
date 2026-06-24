@@ -27,6 +27,19 @@
   display: none;
 }
 
+/* Hide the page scrollbar visually (the page still scrolls normally via
+   wheel, trackpad, touch, or keyboard) -- requested as a default look for
+   this page. Scoped to html/body, but only while this stylesheet is
+   loaded, which is just this page. */
+html,
+.lt-body {
+  scrollbar-width: none; /* Firefox */
+}
+html::-webkit-scrollbar,
+.lt-body::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Edge */
+}
+
 .lt-body {
   background: var(--lt-bg);
 }
