@@ -26,6 +26,9 @@ import { dailyWeightSeries, dailyWaistSeries, weightSummary, toDateKey } from '.
 import { renderWeightChart, destroyWeightChart, renderWaistChart, destroyWaistChart } from '../charts.js';
 import { showUndoToast } from '../toast.js';
 import { goToList } from '../state.js';
+import { readBoolPref, writeBoolPref } from '../prefs.js';
+
+const WEIGHT_CARD_EXPANDED_PREF_KEY = 'lt-weight-card-expanded';
 
 /** Trims to at most one decimal place, dropping a trailing ".0". Shared by
  * both weight (lb) and waist (in) display -- same rounding rule, the unit
@@ -52,10 +55,11 @@ function formatLongDate(dateKey) {
 }
 
 /**
- * Renders the compact card shown on the main list view. Starts collapsed —
- * showing just Current + Change — and expands in place (via the chevron
- * toggle) to show Start / Current / Change. No chart here -- this is a
- * glance card; charts live on the full weight page's tabs instead.
+ * Renders the compact card shown on the main list view. Defaults to
+ * collapsed (showing just Current + Change) the first time, then remembers
+ * whichever state the chevron toggle was last left in (via a cookie) across
+ * sessions. Expanded shows Start / Current / Change. No chart here -- this
+ * is a glance card; charts live on the full weight page's tabs instead.
  * Separately, the arrow button (onExpand) navigates to the full weight
  * view for logging/editing/deleting entries.
  */
@@ -79,7 +83,11 @@ export async function renderWeightSummaryCard(container, { onExpand } = {}) {
   }
 
   const arrow = summary.change < 0 ? '↘' : summary.change > 0 ? '↗' : '→';
-  let expanded = false;
+  // Defaults to collapsed if nothing's been saved yet (matching the
+  // previous fixed behavior) -- whichever state the user leaves it in is
+  // the state it opens back up in next time, same idea as the composite
+  // progress toggle on the list view.
+  let expanded = readBoolPref(WEIGHT_CARD_EXPANDED_PREF_KEY, false);
 
   // Collapsed and expanded states use different layouts (one tight single
   // row vs. a header row plus a stats row below), so the whole card markup
@@ -138,6 +146,7 @@ export async function renderWeightSummaryCard(container, { onExpand } = {}) {
     });
     container.querySelector('[data-weight-toggle]').addEventListener('click', () => {
       expanded = !expanded;
+      writeBoolPref(WEIGHT_CARD_EXPANDED_PREF_KEY, expanded);
       draw();
     });
   }

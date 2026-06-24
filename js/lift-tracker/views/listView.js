@@ -13,6 +13,9 @@ import { supabase } from '../supabaseClient.js';
 import { openFeedbackModal } from './feedbackModal.js';
 import { weeklyKillstreak } from '../killstreak.js';
 import { renderWeightSummaryCard } from './weightView.js';
+import { readBoolPref, writeBoolPref } from '../prefs.js';
+
+const COMPOSITE_EXPANDED_PREF_KEY = 'lt-composite-expanded';
 
 export async function renderListView(root) {
   root.innerHTML = `
@@ -73,11 +76,20 @@ export async function renderListView(root) {
   const compositeBody = root.querySelector('[data-composite-body]');
   const chevron = root.querySelector('[data-chevron]');
 
+  // Defaults to expanded (matching the markup above) if nothing's been
+  // saved yet -- whichever state the user leaves it in is the state it
+  // opens back up in next time, same idea as the burst-mode toggle above.
+  function applyCompositeToggleUI(expanded) {
+    compositeToggle.setAttribute('aria-expanded', String(expanded));
+    compositeBody.hidden = !expanded;
+    chevron.innerHTML = expanded ? '&#9650;' : '&#9660;';
+  }
+  applyCompositeToggleUI(readBoolPref(COMPOSITE_EXPANDED_PREF_KEY, true));
+
   compositeToggle.addEventListener('click', () => {
     const expanded = compositeToggle.getAttribute('aria-expanded') === 'true';
-    compositeToggle.setAttribute('aria-expanded', String(!expanded));
-    compositeBody.hidden = expanded;
-    chevron.innerHTML = expanded ? '&#9660;' : '&#9650;';
+    applyCompositeToggleUI(!expanded);
+    writeBoolPref(COMPOSITE_EXPANDED_PREF_KEY, !expanded);
   });
 
   const killstreakIcon = root.querySelector('[data-killstreak-icon]');
