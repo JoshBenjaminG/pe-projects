@@ -317,15 +317,6 @@
   color: var(--lt-text-muted);
 }
 
-/* Stats column on the left, mini chart on the right -- side by side, like
-   the composite/lift charts but in miniature, since this is a "glance"
-   card rather than the full expanded view. */
-.lt-weight-row {
-  display: flex;
-  gap: 14px;
-  align-items: center;
-}
-
 .lt-weight-stats {
   flex: 1;
   display: flex;
@@ -393,12 +384,6 @@
   font-size: 1.2rem;
   font-weight: 800;
   color: var(--lt-text);
-}
-
-.lt-weight-chart-wrap {
-  flex: 1.3;
-  height: 140px;
-  min-width: 0;
 }
 
 .lt-weight-view-title {

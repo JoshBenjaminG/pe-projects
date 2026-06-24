@@ -169,3 +169,30 @@ export function weightSummary(series) {
     change: current.weight - start.weight,
   };
 }
+
+/**
+ * Same idea as dailyWeightSeries, but for waist_measurements entries
+ * (their own independent table -- see api.js). One point per date; if
+ * multiple entries land on the same date, the most recently CREATED one
+ * wins, same tie-break rule as dailyWeightSeries.
+ *
+ * @param {{waist_circumference:number|string, logged_at:string, created_at?:string, id?:string}[]} entries
+ */
+export function dailyWaistSeries(entries) {
+  const byDate = new Map();
+  for (const e of entries) {
+    const dateKey = toDateKey(e.logged_at);
+    const existing = byDate.get(dateKey);
+    if (!existing || new Date(e.created_at || 0) >= new Date(existing.createdAt || 0)) {
+      byDate.set(dateKey, {
+        date: dateKey,
+        waist: Number(e.waist_circumference),
+        entryId: e.id,
+        createdAt: e.created_at,
+      });
+    }
+  }
+  return Array.from(byDate.values())
+    .sort((a, b) => a.date.localeCompare(b.date))
+    .map(({ date, waist, entryId }) => ({ date, waist, entryId }));
+}

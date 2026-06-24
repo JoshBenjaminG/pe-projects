@@ -12,6 +12,7 @@
 let compositeChart = null;
 let liftChart = null;
 let weightChart = null;
+let waistChart = null;
 
 const POINT_HIT_RADIUS = 14; // generous tap target for mobile
 
@@ -190,5 +191,65 @@ export function destroyWeightChart() {
   if (weightChart) {
     weightChart.destroy();
     weightChart = null;
+  }
+}
+
+// Waist chart uses the gold accent (same as the per-lift e1RM chart) so it
+// reads as visually distinct from the weight chart's red when flipping
+// between the Weight and Waist tabs on the weight page.
+export function renderWaistChart(canvas, points, { onPointClick } = {}) {
+  if (waistChart) {
+    waistChart.destroy();
+    waistChart = null;
+  }
+
+  const labels = points.map((p) => p.date);
+  const data = points.map((p) => Math.round(p.waist * 10) / 10);
+
+  waistChart = new Chart(canvas, {
+    type: 'line',
+    data: {
+      labels,
+      datasets: [
+        {
+          label: 'Waist',
+          data,
+          borderColor: COLOR_GOLD,
+          backgroundColor: COLOR_GOLD_SOFT,
+          fill: true,
+          tension: 0.25,
+          pointRadius: 3,
+          pointBackgroundColor: COLOR_GOLD,
+          pointHitRadius: POINT_HIT_RADIUS,
+        },
+      ],
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      interaction: { mode: 'nearest', intersect: true },
+      scales: {
+        x: {
+          ticks: { color: COLOR_TEXT_MUTED },
+          grid: { color: COLOR_GRID },
+        },
+        y: {
+          ticks: { color: COLOR_TEXT_MUTED },
+          grid: { color: COLOR_GRID },
+        },
+      },
+      plugins: { legend: { display: false } },
+      onClick: (evt, elements) => {
+        if (elements.length && onPointClick) onPointClick(points[elements[0].index]);
+      },
+    },
+  });
+  return waistChart;
+}
+
+export function destroyWaistChart() {
+  if (waistChart) {
+    waistChart.destroy();
+    waistChart = null;
   }
 }

@@ -188,3 +188,52 @@ export async function restoreWeightEntry(id) {
   const { error } = await supabase.from('body_weight').update({ deleted_at: null }).eq('id', id);
   if (error) throw error;
 }
+
+// ---------- Waist circumference ----------
+// Independent of body weight -- its own table, its own soft-delete, same
+// shape/RLS pattern as body_weight above. Logging one never requires the
+// other.
+
+export async function listWaistEntries() {
+  const { data, error } = await supabase
+    .from('waist_measurements')
+    .select('*')
+    .is('deleted_at', null)
+    .order('logged_at', { ascending: true });
+  if (error) throw error;
+  return data;
+}
+
+export async function createWaistEntry(waistCircumference, loggedAt) {
+  const { data, error } = await supabase
+    .from('waist_measurements')
+    .insert({ waist_circumference: waistCircumference, logged_at: loggedAt || new Date().toISOString() })
+    .select()
+    .single();
+  if (error) throw error;
+  return data;
+}
+
+export async function updateWaistEntry(id, fields) {
+  const { data, error } = await supabase
+    .from('waist_measurements')
+    .update(fields)
+    .eq('id', id)
+    .select()
+    .single();
+  if (error) throw error;
+  return data;
+}
+
+export async function softDeleteWaistEntry(id) {
+  const { error } = await supabase
+    .from('waist_measurements')
+    .update({ deleted_at: new Date().toISOString() })
+    .eq('id', id);
+  if (error) throw error;
+}
+
+export async function restoreWaistEntry(id) {
+  const { error } = await supabase.from('waist_measurements').update({ deleted_at: null }).eq('id', id);
+  if (error) throw error;
+}

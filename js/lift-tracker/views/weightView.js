@@ -4,19 +4,32 @@
 // the same patterns used for lifts/sets (soft delete + undo toast, inline
 // edit-in-place in a history list) but for a single weight+date pair instead
 // of weight+reps.
+//
+// Weight and waist circumference are deliberately independent: separate
+// tables (body_weight / waist_measurements, see api.js), separate log
+// forms, separate history lists and charts on the Weight/Waist tabs below.
+// Logging one never requires the other, and a tab never shows a value for
+// a date where that specific measurement wasn't actually logged.
 import {
   listWeightEntries,
   createWeightEntry,
   updateWeightEntry,
   softDeleteWeightEntry,
   restoreWeightEntry,
+  listWaistEntries,
+  createWaistEntry,
+  updateWaistEntry,
+  softDeleteWaistEntry,
+  restoreWaistEntry,
 } from '../api.js';
-import { dailyWeightSeries, weightSummary, toDateKey } from '../math.js';
-import { renderWeightChart, destroyWeightChart } from '../charts.js';
+import { dailyWeightSeries, dailyWaistSeries, weightSummary, toDateKey } from '../math.js';
+import { renderWeightChart, destroyWeightChart, renderWaistChart, destroyWaistChart } from '../charts.js';
 import { showUndoToast } from '../toast.js';
 import { goToList } from '../state.js';
 
-/** Trims to at most one decimal place, dropping a trailing ".0". */
+/** Trims to at most one decimal place, dropping a trailing ".0". Shared by
+ * both weight (lb) and waist (in) display -- same rounding rule, the unit
+ * label is added separately at each call site. */
 function formatWeight(n) {
   const rounded = Math.round(n * 10) / 10;
   return rounded % 1 === 0 ? String(rounded) : rounded.toFixed(1);
@@ -41,7 +54,8 @@ function formatLongDate(dateKey) {
 /**
  * Renders the compact card shown on the main list view. Starts collapsed —
  * showing just Current + Change — and expands in place (via the chevron
- * toggle) to show Start / Current / Change plus the all-time chart.
+ * toggle) to show Start / Current / Change. No chart here -- this is a
+ * glance card; charts live on the full weight page's tabs instead.
  * Separately, the arrow button (onExpand) navigates to the full weight
  * view for logging/editing/deleting entries.
  */
@@ -68,9 +82,8 @@ export async function renderWeightSummaryCard(container, { onExpand } = {}) {
   let expanded = false;
 
   // Collapsed and expanded states use different layouts (one tight single
-  // row vs. a header row plus a full-width body row for the chart), so the
-  // whole card markup is rebuilt on toggle rather than just swapping a body
-  // div's contents in place.
+  // row vs. a header row plus a stats row below), so the whole card markup
+  // is rebuilt on toggle rather than just swapping a body div's contents.
   function draw() {
     if (!expanded) {
       container.innerHTML = `
@@ -102,31 +115,22 @@ export async function renderWeightSummaryCard(container, { onExpand } = {}) {
           <button type="button" class="lt-weight-expand" data-weight-expand aria-label="Open weight tracker">&#8250;</button>
         </div>
         <div class="lt-weight-card-body">
-          <div class="lt-weight-row">
-            <div class="lt-weight-stats">
-              <div class="lt-weight-stat">
-                <span class="lt-weight-stat-label">Start</span>
-                <span class="lt-weight-stat-value">${formatWeight(summary.start)} lbs</span>
-              </div>
-              <div class="lt-weight-stat">
-                <span class="lt-weight-stat-label">Current (${formatShortDate(summary.currentDate)})</span>
-                <span class="lt-weight-stat-value">${formatWeight(summary.current)} lbs</span>
-              </div>
-              <div class="lt-weight-stat">
-                <span class="lt-weight-stat-label">Change</span>
-                <span class="lt-weight-stat-value">${arrow} ${formatWeight(Math.abs(summary.change))} lbs</span>
-              </div>
+          <div class="lt-weight-stats">
+            <div class="lt-weight-stat">
+              <span class="lt-weight-stat-label">Start</span>
+              <span class="lt-weight-stat-value">${formatWeight(summary.start)} lbs</span>
             </div>
-            <div class="lt-chart-wrap lt-weight-chart-wrap"><canvas data-weight-canvas></canvas></div>
+            <div class="lt-weight-stat">
+              <span class="lt-weight-stat-label">Current (${formatShortDate(summary.currentDate)})</span>
+              <span class="lt-weight-stat-value">${formatWeight(summary.current)} lbs</span>
+            </div>
+            <div class="lt-weight-stat">
+              <span class="lt-weight-stat-label">Change</span>
+              <span class="lt-weight-stat-value">${arrow} ${formatWeight(Math.abs(summary.change))} lbs</span>
+            </div>
           </div>
         </div>
       `;
-      // Mini chart on this card: drop the year from x-axis labels/tooltips
-      // (e.g. "6/22" not "2026-06-22") since it's a compact "glance" view —
-      // the full weight page's chart keeps the year for clarity over a
-      // longer history.
-      const shortLabelSeries = series.map((p) => ({ ...p, date: formatShortDate(p.date) }));
-      renderWeightChart(container.querySelector('[data-weight-canvas]'), shortLabelSeries);
     }
 
     container.querySelector('[data-weight-expand]').addEventListener('click', () => {
@@ -134,7 +138,6 @@ export async function renderWeightSummaryCard(container, { onExpand } = {}) {
     });
     container.querySelector('[data-weight-toggle]').addEventListener('click', () => {
       expanded = !expanded;
-      if (!expanded) destroyWeightChart();
       draw();
     });
   }
@@ -142,7 +145,12 @@ export async function renderWeightSummaryCard(container, { onExpand } = {}) {
   draw();
 }
 
-/** Full expanded view: add/edit/delete entries, all-time chart, history list. */
+/**
+ * Full expanded view: a Weight tab and a Waist tab, each fully
+ * self-contained -- its own log form, its own chart, its own history list
+ * with its own inline edit/delete. They don't share a form or a table, so
+ * neither measurement ever requires or implies the other.
+ */
 export async function renderWeightView(root) {
   root.innerHTML = `
     <header class="lt-detail-header">
@@ -150,69 +158,128 @@ export async function renderWeightView(root) {
       <h1 class="lt-weight-view-title">Weight</h1>
     </header>
 
-    <form class="lt-quick-log" data-weight-form>
-      <div class="lt-quick-log-fields">
-        <label class="lt-field">
-          <span>Date</span>
-          <input type="date" name="date" required data-date-input />
-        </label>
-        <label class="lt-field">
-          <span>Weight (lb)</span>
-          <input type="number" inputmode="decimal" step="0.1" min="0" name="weight" required data-weight-input />
-        </label>
-      </div>
-      <button type="submit" class="lt-log-btn">Log weight</button>
-    </form>
-
-    <div class="lt-chart-wrap" data-weight-chart-section>
-      <canvas data-weight-canvas></canvas>
+    <div class="lt-tabs" role="tablist">
+      <button type="button" class="lt-tab" data-tab="weight" role="tab" aria-selected="true">Weight</button>
+      <button type="button" class="lt-tab" data-tab="waist" role="tab" aria-selected="false">Waist</button>
     </div>
-    <p class="lt-empty" data-weight-empty hidden>No weight entries yet — add your first one above.</p>
 
-    <ul class="lt-history-list" data-weight-history></ul>
+    <section data-tab-panel="weight">
+      <form class="lt-quick-log" data-weight-form>
+        <div class="lt-quick-log-fields">
+          <label class="lt-field">
+            <span>Date</span>
+            <input type="date" name="date" required data-weight-date-input />
+          </label>
+          <label class="lt-field">
+            <span>Weight (lb)</span>
+            <input type="number" inputmode="decimal" step="0.1" min="0" name="weight" required data-weight-input />
+          </label>
+        </div>
+        <button type="submit" class="lt-log-btn">Log weight</button>
+      </form>
+
+      <div class="lt-chart-wrap" data-weight-chart-section>
+        <canvas data-weight-canvas></canvas>
+      </div>
+      <p class="lt-empty" data-weight-empty hidden>No weight entries yet — add your first one above.</p>
+
+      <ul class="lt-history-list" data-weight-history></ul>
+    </section>
+
+    <section data-tab-panel="waist" hidden>
+      <form class="lt-quick-log" data-waist-form>
+        <div class="lt-quick-log-fields">
+          <label class="lt-field">
+            <span>Date</span>
+            <input type="date" name="date" required data-waist-date-input />
+          </label>
+          <label class="lt-field">
+            <span>Waist (in)</span>
+            <input type="number" inputmode="decimal" step="0.1" min="0" name="waist" required data-waist-input />
+          </label>
+        </div>
+        <button type="submit" class="lt-log-btn">Log waist</button>
+      </form>
+
+      <div class="lt-chart-wrap" data-waist-chart-section>
+        <canvas data-waist-canvas></canvas>
+      </div>
+      <p class="lt-empty" data-waist-empty hidden>No waist measurements yet — add your first one above.</p>
+
+      <ul class="lt-history-list" data-waist-history></ul>
+    </section>
   `;
 
   root.querySelector('[data-back]').addEventListener('click', goToList);
 
-  const form = root.querySelector('[data-weight-form]');
-  const dateInput = root.querySelector('[data-date-input]');
+  // ---- Tabs ----
+  const tabs = Array.from(root.querySelectorAll('[data-tab]'));
+  const panels = {
+    weight: root.querySelector('[data-tab-panel="weight"]'),
+    waist: root.querySelector('[data-tab-panel="waist"]'),
+  };
+  let activeTab = 'weight';
+
+  tabs.forEach((tab) => {
+    tab.addEventListener('click', () => {
+      if (tab.dataset.tab === activeTab) return;
+      activeTab = tab.dataset.tab;
+      tabs.forEach((t) => t.setAttribute('aria-selected', String(t === tab)));
+      Object.entries(panels).forEach(([key, panel]) => {
+        panel.hidden = key !== activeTab;
+      });
+      // Chart.js needs its canvas to actually be visible (non-zero size)
+      // at creation time or it sizes itself wrong -- so each tab's chart
+      // is (re-)rendered here, the moment that tab becomes visible, same
+      // lazy-render-on-switch approach as the lift detail page's Details
+      // tab.
+      if (activeTab === 'weight') renderWeightChartIfVisible();
+      else renderWaistChartIfVisible();
+    });
+  });
+
+  // ============================================================
+  // Weight tab
+  // ============================================================
+  const weightForm = root.querySelector('[data-weight-form]');
+  const weightDateInput = root.querySelector('[data-weight-date-input]');
   const weightInput = root.querySelector('[data-weight-input]');
-  const chartSection = root.querySelector('[data-weight-chart-section]');
-  const canvas = root.querySelector('[data-weight-canvas]');
-  const emptyEl = root.querySelector('[data-weight-empty]');
-  const historyEl = root.querySelector('[data-weight-history]');
+  const weightChartSection = root.querySelector('[data-weight-chart-section]');
+  const weightCanvas = root.querySelector('[data-weight-canvas]');
+  const weightEmptyEl = root.querySelector('[data-weight-empty]');
+  const weightHistoryEl = root.querySelector('[data-weight-history]');
 
   // Defaults to today; the user can edit it to backfill a past weigh-in.
-  dateInput.value = toDateKey(new Date().toISOString());
+  weightDateInput.value = toDateKey(new Date().toISOString());
 
-  let entries = [];
+  let weightEntries = [];
 
-  async function load() {
-    entries = await listWeightEntries();
-    renderChart();
-    renderHistory();
+  async function loadWeight() {
+    weightEntries = await listWeightEntries();
+    renderWeightHistory();
+    renderWeightChartIfVisible();
   }
 
-  function renderChart() {
-    const series = dailyWeightSeries(entries);
+  function renderWeightChartIfVisible() {
+    const series = dailyWeightSeries(weightEntries);
     if (series.length === 0) {
-      chartSection.hidden = true;
-      emptyEl.hidden = false;
+      weightChartSection.hidden = true;
+      weightEmptyEl.hidden = false;
       destroyWeightChart();
       return;
     }
-    chartSection.hidden = false;
-    emptyEl.hidden = true;
-    renderWeightChart(canvas, series);
+    weightChartSection.hidden = false;
+    weightEmptyEl.hidden = true;
+    if (!panels.weight.hidden) renderWeightChart(weightCanvas, series);
   }
 
-  function renderHistory() {
-    if (entries.length === 0) {
-      historyEl.innerHTML = '';
+  function renderWeightHistory() {
+    if (weightEntries.length === 0) {
+      weightHistoryEl.innerHTML = '';
       return;
     }
-    const sorted = entries.slice().sort((a, b) => new Date(b.logged_at) - new Date(a.logged_at));
-    historyEl.innerHTML = sorted
+    const sorted = weightEntries.slice().sort((a, b) => new Date(b.logged_at) - new Date(a.logged_at));
+    weightHistoryEl.innerHTML = sorted
       .map(
         (e) => `
           <li class="lt-history-row" data-entry-id="${e.id}">
@@ -225,18 +292,14 @@ export async function renderWeightView(root) {
       )
       .join('');
 
-    historyEl.querySelectorAll('[data-edit-trigger]').forEach((el) => {
-      el.addEventListener('click', () => openEntryEditor(el.dataset.editTrigger));
+    weightHistoryEl.querySelectorAll('[data-edit-trigger]').forEach((el) => {
+      el.addEventListener('click', () => openWeightEntryEditor(el.dataset.editTrigger));
     });
   }
 
-  function findHistoryRow(entryId) {
-    return historyEl.querySelector(`[data-entry-id="${entryId}"]`);
-  }
-
-  function openEntryEditor(entryId) {
-    const row = findHistoryRow(entryId);
-    const entry = entries.find((e) => e.id === entryId);
+  function openWeightEntryEditor(entryId) {
+    const row = weightHistoryEl.querySelector(`[data-entry-id="${entryId}"]`);
+    const entry = weightEntries.find((e) => e.id === entryId);
     if (!row || !entry) return;
 
     row.innerHTML = `
@@ -251,18 +314,18 @@ export async function renderWeightView(root) {
       </form>
     `;
 
-    row.querySelector('[data-edit-cancel]').addEventListener('click', renderHistory);
+    row.querySelector('[data-edit-cancel]').addEventListener('click', renderWeightHistory);
 
     row.querySelector('[data-edit-delete]').addEventListener('click', async () => {
       if (!window.confirm("Delete this weight entry? You'll have a few seconds to undo it after.")) {
         return;
       }
       await softDeleteWeightEntry(entryId);
-      await load();
+      await loadWeight();
       showUndoToast('Weight entry deleted', {
         onUndo: async () => {
           await restoreWeightEntry(entryId);
-          await load();
+          await loadWeight();
         },
       });
     });
@@ -279,14 +342,14 @@ export async function renderWeightView(root) {
       existing.setFullYear(y, m - 1, d);
 
       await updateWeightEntry(entryId, { weight, logged_at: existing.toISOString() });
-      await load();
+      await loadWeight();
     });
   }
 
-  form.addEventListener('submit', async (e) => {
+  weightForm.addEventListener('submit', async (e) => {
     e.preventDefault();
     const weight = Number(weightInput.value);
-    const dateVal = dateInput.value;
+    const dateVal = weightDateInput.value;
     if (!(weight >= 0) || !Number.isFinite(weight) || !dateVal) return;
 
     const [y, m, d] = dateVal.split('-').map(Number);
@@ -296,10 +359,135 @@ export async function renderWeightView(root) {
     await createWeightEntry(weight, loggedAt.toISOString());
     weightInput.value = '';
     weightInput.focus();
-    dateInput.value = toDateKey(new Date().toISOString());
+    weightDateInput.value = toDateKey(new Date().toISOString());
 
-    await load();
+    await loadWeight();
   });
 
-  await load();
+  // ============================================================
+  // Waist tab
+  // ============================================================
+  const waistForm = root.querySelector('[data-waist-form]');
+  const waistDateInput = root.querySelector('[data-waist-date-input]');
+  const waistInput = root.querySelector('[data-waist-input]');
+  const waistChartSection = root.querySelector('[data-waist-chart-section]');
+  const waistCanvas = root.querySelector('[data-waist-canvas]');
+  const waistEmptyEl = root.querySelector('[data-waist-empty]');
+  const waistHistoryEl = root.querySelector('[data-waist-history]');
+
+  waistDateInput.value = toDateKey(new Date().toISOString());
+
+  let waistEntries = [];
+
+  async function loadWaist() {
+    waistEntries = await listWaistEntries();
+    renderWaistHistory();
+    renderWaistChartIfVisible();
+  }
+
+  function renderWaistChartIfVisible() {
+    const series = dailyWaistSeries(waistEntries);
+    if (series.length === 0) {
+      waistChartSection.hidden = true;
+      waistEmptyEl.hidden = false;
+      destroyWaistChart();
+      return;
+    }
+    waistChartSection.hidden = false;
+    waistEmptyEl.hidden = true;
+    if (!panels.waist.hidden) renderWaistChart(waistCanvas, series);
+  }
+
+  function renderWaistHistory() {
+    if (waistEntries.length === 0) {
+      waistHistoryEl.innerHTML = '';
+      return;
+    }
+    const sorted = waistEntries.slice().sort((a, b) => new Date(b.logged_at) - new Date(a.logged_at));
+    waistHistoryEl.innerHTML = sorted
+      .map(
+        (e) => `
+          <li class="lt-history-row" data-entry-id="${e.id}">
+            <button type="button" class="lt-history-main" data-edit-trigger="${e.id}">
+              <span class="lt-history-weight">${formatWeight(Number(e.waist_circumference))} in</span>
+              <span class="lt-history-e1rm">${formatLongDate(toDateKey(e.logged_at))}</span>
+            </button>
+          </li>
+        `
+      )
+      .join('');
+
+    waistHistoryEl.querySelectorAll('[data-edit-trigger]').forEach((el) => {
+      el.addEventListener('click', () => openWaistEntryEditor(el.dataset.editTrigger));
+    });
+  }
+
+  function openWaistEntryEditor(entryId) {
+    const row = waistHistoryEl.querySelector(`[data-entry-id="${entryId}"]`);
+    const entry = waistEntries.find((e) => e.id === entryId);
+    if (!row || !entry) return;
+
+    row.innerHTML = `
+      <form class="lt-edit-set-form" data-edit-form>
+        <label>Waist <input type="number" step="0.1" min="0" value="${entry.waist_circumference}" data-edit-waist /></label>
+        <label>Date <input type="date" value="${toDateKey(entry.logged_at)}" data-edit-date /></label>
+        <div class="lt-edit-actions">
+          <button type="submit">Save</button>
+          <button type="button" data-edit-cancel>Cancel</button>
+          <button type="button" class="lt-delete-set" data-edit-delete>Delete</button>
+        </div>
+      </form>
+    `;
+
+    row.querySelector('[data-edit-cancel]').addEventListener('click', renderWaistHistory);
+
+    row.querySelector('[data-edit-delete]').addEventListener('click', async () => {
+      if (!window.confirm("Delete this waist measurement? You'll have a few seconds to undo it after.")) {
+        return;
+      }
+      await softDeleteWaistEntry(entryId);
+      await loadWaist();
+      showUndoToast('Waist measurement deleted', {
+        onUndo: async () => {
+          await restoreWaistEntry(entryId);
+          await loadWaist();
+        },
+      });
+    });
+
+    row.querySelector('[data-edit-form]').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const waistCircumference = Number(row.querySelector('[data-edit-waist]').value);
+      const dateVal = row.querySelector('[data-edit-date]').value;
+      if (!(waistCircumference >= 0) || !dateVal) return;
+
+      // Keep original time-of-day; only the calendar date changes.
+      const existing = new Date(entry.logged_at);
+      const [y, m, d] = dateVal.split('-').map(Number);
+      existing.setFullYear(y, m - 1, d);
+
+      await updateWaistEntry(entryId, { waist_circumference: waistCircumference, logged_at: existing.toISOString() });
+      await loadWaist();
+    });
+  }
+
+  waistForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const waistCircumference = Number(waistInput.value);
+    const dateVal = waistDateInput.value;
+    if (!(waistCircumference >= 0) || !Number.isFinite(waistCircumference) || !dateVal) return;
+
+    const [y, m, d] = dateVal.split('-').map(Number);
+    const loggedAt = new Date();
+    loggedAt.setFullYear(y, m - 1, d);
+
+    await createWaistEntry(waistCircumference, loggedAt.toISOString());
+    waistInput.value = '';
+    waistInput.focus();
+    waistDateInput.value = toDateKey(new Date().toISOString());
+
+    await loadWaist();
+  });
+
+  await Promise.all([loadWeight(), loadWaist()]);
 }

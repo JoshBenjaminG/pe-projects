@@ -9,6 +9,7 @@ import {
   formatPct,
   dailyWeightSeries,
   weightSummary,
+  dailyWaistSeries,
 } from '../js/lift-tracker/math.js';
 
 let passed = 0;
@@ -199,6 +200,33 @@ test('weightSummary: single point -> change is 0', () => {
 });
 test('weightSummary: empty series -> null', () => {
   assert.equal(weightSummary([]), null);
+});
+
+// --- dailyWaistSeries ---
+test('dailyWaistSeries: one point per date, sorted ascending', () => {
+  const entries = [
+    { id: 'a', waist_circumference: 34.5, logged_at: '2026-06-14T08:00:00Z', created_at: '2026-06-14T08:00:00Z' },
+    { id: 'b', waist_circumference: 33.8, logged_at: '2026-06-22T08:00:00Z', created_at: '2026-06-22T08:00:00Z' },
+  ];
+  const series = dailyWaistSeries(entries);
+  assert.equal(series.length, 2);
+  assert.equal(series[0].date, '2026-06-14');
+  assert.equal(series[0].waist, 34.5);
+  assert.equal(series[1].date, '2026-06-22');
+  assert.equal(series[1].waist, 33.8);
+});
+test('dailyWaistSeries: same-day correction -- most recently CREATED entry wins', () => {
+  const entries = [
+    { id: 'a', waist_circumference: 36, logged_at: '2026-06-14T08:00:00Z', created_at: '2026-06-14T08:00:00Z' },
+    { id: 'b', waist_circumference: 34.5, logged_at: '2026-06-14T09:00:00Z', created_at: '2026-06-14T09:00:00Z' },
+  ];
+  const series = dailyWaistSeries(entries);
+  assert.equal(series.length, 1);
+  assert.equal(series[0].waist, 34.5);
+  assert.equal(series[0].entryId, 'b');
+});
+test('dailyWaistSeries: empty input -> empty output', () => {
+  assert.deepEqual(dailyWaistSeries([]), []);
 });
 
 console.log(`\n${passed} tests passed`);
