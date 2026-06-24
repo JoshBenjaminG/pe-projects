@@ -56,7 +56,10 @@ html::-webkit-scrollbar,
      `width: 100%` (still capped by max-width below) makes the width
      depend only on the viewport, not on which tab's content is shown. */
   width: 100%;
-  max-width: 640px;
+  /* Fixed at the same width on every screen size, so desktop renders
+     identically to mobile instead of stretching wider just because
+     there's more screen space available. */
+  max-width: 356px;
   margin: 0 auto;
   padding: 16px 16px 96px;
   font-family: 'Roboto', sans-serif;
