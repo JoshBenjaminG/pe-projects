@@ -621,7 +621,10 @@
   min-width: 0;
   flex-shrink: 0;
   margin: 0;
-  font-size: 0.95rem;
+  /* iOS Safari auto-zooms the page on focus for any input with a
+     computed font-size under 16px -- this was 0.95rem (15.2px),
+     just under that line. 1rem keeps it from triggering the zoom. */
+  font-size: 1rem;
   padding: 10px 10px;
   border: 1px solid var(--lt-border);
   border-radius: 8px;
