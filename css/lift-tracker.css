@@ -52,14 +52,16 @@ html::-webkit-scrollbar,
      shrinks to fit whichever content happens to be visible instead of
      filling the row. Different tab content has a different natural
      (shrink-to-fit) width, so switching between the Weight and Waist
-     tabs visibly resized the whole page on desktop. An explicit
-     `width: 100%` (still capped by max-width below) makes the width
-     depend only on the viewport, not on which tab's content is shown. */
-  width: 100%;
-  /* Fixed at the same width on every screen size, so desktop renders
-     identically to mobile instead of stretching wider just because
-     there's more screen space available. */
-  max-width: 356px;
+     tabs visibly resized the whole page on desktop. An explicit width
+     (set below, as a percentage) makes the width depend only on the
+     viewport, not on which tab's content is shown.
+
+     92% leaves small, consistent gaps on either side on phones (e.g.
+     ~389px of content on a 425px-wide screen) instead of the wide
+     margins a fixed px width would leave on a narrow device. max-width
+     caps it at 460px so it doesn't keep growing on desktop. */
+  width: 92%;
+  max-width: 460px;
   margin: 0 auto;
   padding: 16px 16px 96px;
   font-family: 'Roboto', sans-serif;
