@@ -93,24 +93,22 @@ export async function renderWeightSummaryCard(container, { onExpand } = {}) {
   // row vs. a header row plus a stats row below), so the whole card markup
   // is rebuilt on toggle rather than just swapping a body div's contents.
   function draw() {
+    container.classList.toggle('lt-stats-row-expanded', expanded);
     if (!expanded) {
+      // Shares a row with the composite card, so just the bare current
+      // weight shows here -- Start/Change still live in the expanded view
+      // below and on the full weight page.
+      // No separate "open full page" arrow here -- at half the row's
+      // width there isn't room for toggle + value + a second button, so
+      // tapping this row only expands inline; the arrow comes back once
+      // expanded below.
       container.innerHTML = `
         <div class="lt-weight-card-row-collapsed">
           <button type="button" class="lt-weight-toggle" data-weight-toggle aria-expanded="false">
             <span>Weight</span>
             <span class="lt-chevron" data-weight-chevron>&#9660;</span>
           </button>
-          <div class="lt-weight-stats lt-weight-stats-collapsed">
-            <div class="lt-weight-stat">
-              <span class="lt-weight-stat-label">Current (${formatShortDate(summary.currentDate)})</span>
-              <span class="lt-weight-stat-value">${formatWeight(summary.current)} lbs</span>
-            </div>
-            <div class="lt-weight-stat">
-              <span class="lt-weight-stat-label">Change</span>
-              <span class="lt-weight-stat-value">${arrow} ${formatWeight(Math.abs(summary.change))} lbs</span>
-            </div>
-          </div>
-          <button type="button" class="lt-weight-expand" data-weight-expand aria-label="Open weight tracker">&#8250;</button>
+          <span class="lt-weight-stat-value lt-weight-collapsed-value">${formatWeight(summary.current)} lbs</span>
         </div>
       `;
     } else {
@@ -144,7 +142,9 @@ export async function renderWeightSummaryCard(container, { onExpand } = {}) {
       `;
     }
 
-    container.querySelector('[data-weight-expand]').addEventListener('click', () => {
+    // Only present in the expanded markup now (see comment above) --
+    // optional chaining since the collapsed row no longer has one.
+    container.querySelector('[data-weight-expand]')?.addEventListener('click', () => {
       if (onExpand) onExpand();
     });
     container.querySelector('[data-weight-toggle]').addEventListener('click', () => {

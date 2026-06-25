@@ -108,7 +108,7 @@ export async function renderHistoryView(root) {
       <button type="button" class="lt-back" data-back aria-label="Back to all lifts">&larr;</button>
       <h1 class="lt-weight-view-title">History</h1>
     </header>
-    <div data-history-content></div>
+    <div class="lt-history-page" data-history-content></div>
   `;
 
   root.querySelector('[data-back]').addEventListener('click', goToList);

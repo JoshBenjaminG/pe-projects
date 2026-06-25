@@ -41,21 +41,23 @@ export async function renderListView(root) {
       </section>
     </div>
 
-    <section class="lt-weight-card" data-weight-card></section>
+    <div class="lt-stats-row" data-stats-row>
+      <section class="lt-weight-card" data-weight-card></section>
 
-    <section class="lt-composite" data-composite-section>
-      <button type="button" class="lt-composite-toggle" data-composite-toggle aria-expanded="true">
-        <span class="lt-composite-toggle-label">
-          <span>Composite progress</span>
-          <span class="lt-composite-summary" data-composite-summary></span>
-        </span>
-        <span class="lt-chevron" data-chevron>&#9650;</span>
-      </button>
-      <div class="lt-composite-body" data-composite-body>
-        <div class="lt-chart-wrap"><canvas data-composite-canvas></canvas></div>
-        <p class="lt-empty" data-composite-empty hidden>Log a few workouts to see your composite progress.</p>
-      </div>
-    </section>
+      <section class="lt-composite" data-composite-section>
+        <button type="button" class="lt-composite-toggle" data-composite-toggle aria-expanded="true">
+          <span class="lt-composite-toggle-label">
+            <span>Composite</span>
+            <span class="lt-composite-summary" data-composite-summary></span>
+          </span>
+          <span class="lt-chevron" data-chevron>&#9650;</span>
+        </button>
+        <div class="lt-composite-body" data-composite-body>
+          <div class="lt-chart-wrap"><canvas data-composite-canvas></canvas></div>
+          <p class="lt-empty" data-composite-empty hidden>Log a few workouts to see your composite progress.</p>
+        </div>
+      </section>
+    </div>
 
     <section class="lt-history-card" data-history-card></section>
 
@@ -90,6 +92,10 @@ export async function renderListView(root) {
     compositeToggle.setAttribute('aria-expanded', String(expanded));
     compositeBody.hidden = !expanded;
     chevron.innerHTML = expanded ? '&#9650;' : '&#9660;';
+    // Collapsed, this card shares a row with the weight card to save
+    // vertical space; expanded, it needs the full row to itself for the
+    // chart, so the sibling wraps below automatically (see .lt-stats-row).
+    compositeSection.classList.toggle('lt-stats-row-expanded', expanded);
   }
   applyCompositeToggleUI(readBoolPref(COMPOSITE_EXPANDED_PREF_KEY, true));
 

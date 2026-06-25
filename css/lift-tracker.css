@@ -290,11 +290,35 @@ html::-webkit-scrollbar,
   align-self: center;
 }
 
+/* ---------- Stats row (weight + composite side by side) ---------- */
+/* Collapsed, the weight card and composite card sit side by side to save
+   vertical space, each taking half the row. Either one can be expanded
+   independently; when it is, it switches to flex-basis 100% and the wrap
+   pushes its still-collapsed sibling onto its own line below, without any
+   JS coordination between the two -- each component only ever toggles a
+   class on its own container. */
+.lt-stats-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.lt-stats-row > .lt-weight-card,
+.lt-stats-row > .lt-composite {
+  flex: 1 1 0%;
+  min-width: 0;
+  margin-bottom: 0;
+}
+
+.lt-stats-row > .lt-stats-row-expanded {
+  flex: 1 1 100%;
+}
+
 /* ---------- Weight tracker card ---------- */
 .lt-weight-card {
   border: 1px solid var(--lt-border);
   border-radius: 12px;
-  margin-bottom: 20px;
   background: var(--lt-surface);
   padding: 14px 16px;
 }
@@ -429,8 +453,16 @@ html::-webkit-scrollbar,
 
 .lt-weight-card-row-collapsed .lt-weight-toggle {
   flex: 0 0 auto;
-  font-size: 0.95rem;
+  gap: 4px;
+  font-size: 0.9rem;
   min-height: 0;
+}
+
+.lt-weight-collapsed-value {
+  flex-shrink: 0;
+  font-size: 0.9rem;
+  font-weight: 800;
+  white-space: nowrap;
 }
 
 .lt-weight-card-row-collapsed .lt-weight-stats-collapsed {
@@ -449,8 +481,8 @@ html::-webkit-scrollbar,
   white-space: nowrap;
 }
 
-.lt-weight-card-row-collapsed .lt-weight-expand {
-  margin-left: auto;
+.lt-weight-card-row-collapsed {
+  justify-content: space-between;
 }
 
 /* Expanded state with the chart now showing below: lay Start/Current/Change
@@ -503,7 +535,6 @@ html::-webkit-scrollbar,
 .lt-composite {
   border: 1px solid var(--lt-border);
   border-radius: 12px;
-  margin-bottom: 20px;
   background: var(--lt-surface);
   overflow: hidden;
 }
@@ -513,10 +544,11 @@ html::-webkit-scrollbar,
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 14px 16px;
+  gap: 8px;
+  padding: 14px 12px;
   background: none;
   border: none;
-  font-size: 1rem;
+  font-size: 0.95rem;
   font-weight: 700;
   text-align: left;
   min-height: 48px;
@@ -526,7 +558,7 @@ html::-webkit-scrollbar,
 .lt-composite-toggle-label {
   display: flex;
   align-items: baseline;
-  gap: 8px;
+  gap: 6px;
   min-width: 0;
 }
 
@@ -944,6 +976,22 @@ html::-webkit-scrollbar,
   font-weight: 700;
   color: var(--lt-text);
   padding: 0 4px 6px;
+}
+
+/* The full cross-lift history page (not the per-lift History tab, which
+   shares the base .lt-history-date rule above at its smaller size) wants
+   each day's header to read clearly as a section break between days, since
+   a single day can now contain several different lifts stacked under it. */
+.lt-history-page .lt-history-date {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--lt-text);
+  padding: 0 4px 8px;
+}
+
+.lt-history-page .lt-history-volume {
+  font-size: 1.05rem;
+  font-weight: 700;
 }
 
 .lt-history-list {
