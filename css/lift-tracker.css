@@ -479,6 +479,21 @@ html::-webkit-scrollbar,
   color: var(--lt-text);
 }
 
+.lt-composite-toggle-label {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  min-width: 0;
+}
+
+/* Latest composite % so there's something to see in this header even while
+   collapsed, instead of only finding out once you expand the chart. */
+.lt-composite-summary {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--lt-text-muted);
+}
+
 .lt-chevron {
   font-size: 0.75rem;
   color: var(--lt-text-muted);

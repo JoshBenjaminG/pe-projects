@@ -5,7 +5,7 @@ import {
   reorderLifts,
   listActiveSetsForLifts,
 } from '../api.js';
-import { dailyMaxE1RM, computeComposite, calcE1RM, isNewPR, sessionVolume, toDateKey } from '../math.js';
+import { dailyMaxE1RM, computeComposite, calcE1RM, isNewPR, sessionVolume, toDateKey, formatPct } from '../math.js';
 import { renderCompositeChart } from '../charts.js';
 import { enableDragReorder } from '../dragReorder.js';
 import { goToLift, goToHelp, goToWeight } from '../state.js';
@@ -44,7 +44,10 @@ export async function renderListView(root) {
 
     <section class="lt-composite" data-composite-section>
       <button type="button" class="lt-composite-toggle" data-composite-toggle aria-expanded="true">
-        <span>Composite progress</span>
+        <span class="lt-composite-toggle-label">
+          <span>Composite progress</span>
+          <span class="lt-composite-summary" data-composite-summary></span>
+        </span>
         <span class="lt-chevron" data-chevron>&#9650;</span>
       </button>
       <div class="lt-composite-body" data-composite-body>
@@ -75,6 +78,7 @@ export async function renderListView(root) {
   const compositeToggle = root.querySelector('[data-composite-toggle]');
   const compositeBody = root.querySelector('[data-composite-body]');
   const chevron = root.querySelector('[data-chevron]');
+  const compositeSummary = root.querySelector('[data-composite-summary]');
 
   // Defaults to expanded (matching the markup above) if nothing's been
   // saved yet -- whichever state the user leaves it in is the state it
@@ -228,10 +232,12 @@ export async function renderListView(root) {
     if (points.length === 0) {
       canvas.hidden = true;
       emptyEl.hidden = false;
+      compositeSummary.textContent = '';
       return;
     }
     canvas.hidden = false;
     emptyEl.hidden = true;
+    compositeSummary.textContent = formatPct(points[points.length - 1].pct);
     renderCompositeChart(canvas, points);
   }
 
