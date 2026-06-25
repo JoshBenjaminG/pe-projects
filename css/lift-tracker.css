@@ -414,7 +414,6 @@ html::-webkit-scrollbar,
    but with a third item and a bit of breathing room before the chart. */
 .lt-weight-stats-row {
   flex-direction: row;
-  justify-content: space-between;
   gap: 12px;
   margin-bottom: 14px;
 }
