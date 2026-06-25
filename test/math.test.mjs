@@ -10,6 +10,8 @@ import {
   dailyWeightSeries,
   weightSummary,
   dailyWaistSeries,
+  groupSetsByDate,
+  countWorkoutDays,
 } from '../js/lift-tracker/math.js';
 
 let passed = 0;
@@ -227,6 +229,37 @@ test('dailyWaistSeries: same-day correction -- most recently CREATED entry wins'
 });
 test('dailyWaistSeries: empty input -> empty output', () => {
   assert.deepEqual(dailyWaistSeries([]), []);
+});
+
+// --- groupSetsByDate ---
+test('groupSetsByDate: groups multiple lifts/sets by date, most-recent first', () => {
+  const sets = [
+    { id: 'a', lift_id: 'l1', weight: 100, reps: 5, performed_at: '2026-06-20T10:00:00Z' },
+    { id: 'b', lift_id: 'l2', weight: 50, reps: 8, performed_at: '2026-06-20T10:05:00Z' },
+    { id: 'c', lift_id: 'l1', weight: 105, reps: 5, performed_at: '2026-06-22T10:00:00Z' },
+  ];
+  const groups = groupSetsByDate(sets);
+  assert.equal(groups.length, 2);
+  assert.equal(groups[0][0], '2026-06-22');
+  assert.equal(groups[0][1].length, 1);
+  assert.equal(groups[1][0], '2026-06-20');
+  assert.equal(groups[1][1].length, 2);
+});
+test('groupSetsByDate: empty input -> empty output', () => {
+  assert.deepEqual(groupSetsByDate([]), []);
+});
+
+// --- countWorkoutDays ---
+test('countWorkoutDays: counts distinct dates, ignoring multiple sets/lifts per day', () => {
+  const sets = [
+    { performed_at: '2026-06-20T10:00:00Z' },
+    { performed_at: '2026-06-20T11:00:00Z' },
+    { performed_at: '2026-06-22T10:00:00Z' },
+  ];
+  assert.equal(countWorkoutDays(sets), 2);
+});
+test('countWorkoutDays: empty input -> 0', () => {
+  assert.equal(countWorkoutDays([]), 0);
 });
 
 console.log(`\n${passed} tests passed`);

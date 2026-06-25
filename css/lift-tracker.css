@@ -299,6 +299,50 @@ html::-webkit-scrollbar,
   padding: 14px 16px;
 }
 
+.lt-history-card {
+  border: 1px solid var(--lt-border);
+  border-radius: 12px;
+  margin-bottom: 20px;
+  background: var(--lt-surface);
+  padding: 14px 16px;
+}
+
+.lt-history-card-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.lt-history-card-label {
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: var(--lt-text);
+}
+
+.lt-history-card-summary {
+  flex: 1;
+  min-width: 0;
+  font-size: 0.85rem;
+  color: var(--lt-text-muted);
+  text-align: right;
+}
+
+.lt-history-expand {
+  width: 36px;
+  height: 36px;
+  flex-shrink: 0;
+  border-radius: 8px;
+  border: 1px solid var(--lt-border);
+  background: none;
+  color: var(--lt-text-muted);
+  font-size: 1.3rem;
+  line-height: 1;
+}
+
+.lt-history-expand:active {
+  background: var(--lt-surface-alt);
+}
+
 .lt-weight-card-header {
   display: flex;
   justify-content: space-between;
@@ -888,6 +932,17 @@ html::-webkit-scrollbar,
   justify-content: space-between;
   font-size: 0.85rem;
   color: var(--lt-text-muted);
+  padding: 0 4px 6px;
+}
+
+.lt-history-day-lift {
+  margin-bottom: 10px;
+}
+
+.lt-history-day-lift-name {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--lt-text);
   padding: 0 4px 6px;
 }
 

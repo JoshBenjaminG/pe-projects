@@ -124,6 +124,35 @@ export function formatPct(pct) {
 }
 
 /**
+ * Groups a flat list of sets (any mix of lifts) by calendar date, for the
+ * cross-lift workout history view -- unlike the per-lift History tab
+ * (which only ever deals with one lift's sets), this view shows every set
+ * logged on a given day regardless of which lift it belongs to, so the
+ * grouping has to happen before lift-by-lift presentation.
+ *
+ * Returns [dateKey, sets[]] pairs sorted most-recent-first. Caller is
+ * responsible for attaching anything beyond what's already on a raw `sets`
+ * row (e.g. a lift name) before calling this, if needed for display --
+ * grouping by date doesn't care what else is on each set.
+ */
+export function groupSetsByDate(sets) {
+  const groups = new Map();
+  for (const s of sets) {
+    const key = toDateKey(s.performed_at);
+    if (!groups.has(key)) groups.set(key, []);
+    groups.get(key).push(s);
+  }
+  return Array.from(groups.entries()).sort((a, b) => b[0].localeCompare(a[0]));
+}
+
+/** Count of distinct calendar dates with at least one set logged, across
+ * any lift -- used for the homepage History card's collapsed summary (e.g.
+ * "47 days logged") so there's something to see without opening the page. */
+export function countWorkoutDays(sets) {
+  return new Set(sets.map((s) => toDateKey(s.performed_at))).size;
+}
+
+/**
  * Collapses a flat list of body-weight entries (any order) into one point
  * per calendar date. If multiple entries land on the same date (e.g. a
  * same-day correction), the most recently CREATED entry for that date wins

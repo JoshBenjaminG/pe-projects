@@ -8,11 +8,12 @@ import {
 import { dailyMaxE1RM, computeComposite, calcE1RM, isNewPR, sessionVolume, toDateKey, formatPct } from '../math.js';
 import { renderCompositeChart } from '../charts.js';
 import { enableDragReorder } from '../dragReorder.js';
-import { goToLift, goToHelp, goToWeight } from '../state.js';
+import { goToLift, goToHelp, goToWeight, goToHistory } from '../state.js';
 import { supabase } from '../supabaseClient.js';
 import { openFeedbackModal } from './feedbackModal.js';
 import { weeklyKillstreak } from '../killstreak.js';
 import { renderWeightSummaryCard } from './weightView.js';
+import { renderHistorySummaryCard } from './historyView.js';
 import { readBoolPref, writeBoolPref } from '../prefs.js';
 
 const COMPOSITE_EXPANDED_PREF_KEY = 'lt-composite-expanded';
@@ -55,6 +56,8 @@ export async function renderListView(root) {
         <p class="lt-empty" data-composite-empty hidden>Log a few workouts to see your composite progress.</p>
       </div>
     </section>
+
+    <section class="lt-history-card" data-history-card></section>
 
     <form class="lt-add-lift" data-add-lift-form>
       <input type="text" name="name" placeholder="New lift name" required maxlength="60" autocomplete="off" />
@@ -111,6 +114,9 @@ export async function renderListView(root) {
 
   const weightCard = root.querySelector('[data-weight-card]');
   renderWeightSummaryCard(weightCard, { onExpand: goToWeight });
+
+  const historyCard = root.querySelector('[data-history-card]');
+  renderHistorySummaryCard(historyCard, { onExpand: goToHistory });
 
   const addForm = root.querySelector('[data-add-lift-form]');
   const listEl = root.querySelector('[data-lift-list]');

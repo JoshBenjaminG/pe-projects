@@ -13,6 +13,9 @@ export function parseRoute() {
   if (hash === 'weight') {
     return { name: 'weight' };
   }
+  if (hash === 'history') {
+    return { name: 'history' };
+  }
   return { name: 'list' };
 }
 
@@ -30,6 +33,10 @@ export function goToHelp() {
 
 export function goToWeight() {
   window.location.hash = '#/weight';
+}
+
+export function goToHistory() {
+  window.location.hash = '#/history';
 }
 
 // Forces whatever view is currently mounted to re-fetch and re-render,

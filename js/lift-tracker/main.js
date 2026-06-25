@@ -4,6 +4,7 @@ import { renderListView } from './views/listView.js';
 import { renderDetailView } from './views/detailView.js';
 import { renderHelpView } from './views/helpView.js';
 import { renderWeightView } from './views/weightView.js';
+import { renderHistoryView } from './views/historyView.js';
 import { renderAuthView } from './views/authView.js';
 
 const root = document.getElementById('lift-tracker-app');
@@ -23,6 +24,8 @@ async function render() {
       await renderHelpView(root);
     } else if (route.name === 'weight') {
       await renderWeightView(root);
+    } else if (route.name === 'history') {
+      await renderHistoryView(root);
     } else {
       await renderListView(root);
     }
