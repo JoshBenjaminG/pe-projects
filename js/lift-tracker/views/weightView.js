@@ -137,6 +137,9 @@ export async function renderWeightSummaryCard(container, { onExpand } = {}) {
               <span class="lt-weight-stat-value">${arrow} ${formatWeight(Math.abs(summary.change))} lbs</span>
             </div>
           </div>
+          <div class="lt-chart-wrap">
+            <canvas data-home-weight-canvas></canvas>
+          </div>
         </div>
       `;
     }
@@ -149,6 +152,17 @@ export async function renderWeightSummaryCard(container, { onExpand } = {}) {
       writeBoolPref(WEIGHT_CARD_EXPANDED_PREF_KEY, expanded);
       draw();
     });
+
+    // The chart only exists in the expanded markup above -- render it into
+    // the freshly-created canvas now that it's actually in the DOM (Chart.js
+    // needs a real, visible canvas to size itself against), and tear down
+    // any previous instance otherwise so it's not left attached to a canvas
+    // that just got thrown away by the collapsed markup.
+    if (expanded) {
+      renderWeightChart(container.querySelector('[data-home-weight-canvas]'), series);
+    } else {
+      destroyWeightChart();
+    }
   }
 
   draw();
