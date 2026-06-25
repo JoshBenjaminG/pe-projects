@@ -142,6 +142,14 @@ export async function renderListView(root) {
   // tapping the active pill again clears it back to null rather than
   // requiring a separate "All" pill, since with only one filter active at
   // a time the active pill itself is the obvious thing to tap to undo it.
+  // Declared up front (not just hoisted as a function) because the very
+  // next line calls readStoredActiveWorkoutId() immediately -- that function
+  // is hoisted fine, but it closes over this const, and reading a const
+  // before its own declaration line executes throws (temporal dead zone),
+  // which a naive try/catch around localStorage access will silently turn
+  // into "always returns null".
+  const ACTIVE_WORKOUT_STORAGE_KEY = 'lt-active-workout';
+
   let workouts = [];
   // Persisted across reloads/closing the app, same as burst mode below --
   // whichever workout filter you left active is the one you land back on.
@@ -193,8 +201,6 @@ export async function renderListView(root) {
       });
     });
   }
-
-  const ACTIVE_WORKOUT_STORAGE_KEY = 'lt-active-workout';
 
   function readStoredActiveWorkoutId() {
     // Same Safari-private-browsing safety net as burst mode below -- a
