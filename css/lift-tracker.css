@@ -515,6 +515,11 @@ html::-webkit-scrollbar,
   margin-bottom: 16px;
   background: none;
   border: none;
+  /* The site's global `form { padding: 25px 15px; }` (contact-me.css)
+     applies here too -- left unreset, it insets the name field + Add Lift
+     button 15px in from each edge, making this row visibly narrower than
+     every card/row around it instead of lining up with them. */
+  padding: 0;
 }
 
 .lt-add-lift:invalid {
