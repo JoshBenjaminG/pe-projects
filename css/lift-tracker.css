@@ -409,6 +409,30 @@ html::-webkit-scrollbar,
   margin-left: auto;
 }
 
+/* Expanded state with the chart now showing below: lay Start/Current/Change
+   out in one row instead of stacked, same idea as the collapsed row above
+   but with a third item and a bit of breathing room before the chart. */
+.lt-weight-stats-row {
+  flex-direction: row;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.lt-weight-stats-row .lt-weight-stat {
+  min-width: 0;
+}
+
+.lt-weight-stats-row .lt-weight-stat-label {
+  font-size: 0.72rem;
+  white-space: nowrap;
+}
+
+.lt-weight-stats-row .lt-weight-stat-value {
+  font-size: 1rem;
+  white-space: nowrap;
+}
+
 .lt-weight-stat {
   display: flex;
   flex-direction: column;

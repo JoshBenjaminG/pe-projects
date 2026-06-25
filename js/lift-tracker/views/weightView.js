@@ -123,7 +123,7 @@ export async function renderWeightSummaryCard(container, { onExpand } = {}) {
           <button type="button" class="lt-weight-expand" data-weight-expand aria-label="Open weight tracker">&#8250;</button>
         </div>
         <div class="lt-weight-card-body">
-          <div class="lt-weight-stats">
+          <div class="lt-weight-stats lt-weight-stats-row">
             <div class="lt-weight-stat">
               <span class="lt-weight-stat-label">Start</span>
               <span class="lt-weight-stat-value">${formatWeight(summary.start)} lbs</span>
