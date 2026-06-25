@@ -1418,6 +1418,13 @@ html::-webkit-scrollbar,
   color: var(--lt-accent);
 }
 
+/* Same red-highlight treatment as .lt-mode-toggle-active (Burst/Normal
+   toggle) -- the border lives on the wrap, not the button, since the
+   pill+edit-button pair share one pill-shaped outline. */
+.lt-workout-pill-wrap-active {
+  border-color: var(--lt-accent);
+}
+
 .lt-workout-pill-edit {
   border: none;
   border-left: 1px solid var(--lt-border);
@@ -1430,14 +1437,6 @@ html::-webkit-scrollbar,
 .lt-workout-pill-edit:active,
 .lt-workout-pill:active {
   background: var(--lt-surface-alt);
-}
-
-/* Reordering is hidden, not merely disabled, while a workout filter
-   narrows the list -- a filtered subset's drag-and-drop order can't map
-   cleanly back onto every lift's sort_order (see renderLiftRows in
-   listView.js), so there's nothing sensible for the handle to do here. */
-.lt-lift-list-filtered .lt-drag-handle {
-  display: none;
 }
 
 /* ---------- Workout create/edit page ---------- */

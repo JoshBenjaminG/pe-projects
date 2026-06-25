@@ -155,16 +155,17 @@ export async function renderListView(root) {
 
   function renderWorkoutPills() {
     workoutPillsEl.innerHTML = workouts
-      .map(
-        (w) => `
-          <div class="lt-workout-pill-wrap">
-            <button type="button" class="lt-workout-pill" data-workout-pill="${w.id}" aria-pressed="${w.id === activeWorkoutId}">
+      .map((w) => {
+        const isActive = w.id === activeWorkoutId;
+        return `
+          <div class="lt-workout-pill-wrap${isActive ? ' lt-workout-pill-wrap-active' : ''}">
+            <button type="button" class="lt-workout-pill" data-workout-pill="${w.id}" aria-pressed="${isActive}">
               <span data-workout-pill-name></span>
             </button>
             <button type="button" class="lt-workout-pill-edit" data-workout-edit="${w.id}" aria-label="Edit workout">&#9998;</button>
           </div>
-        `
-      )
+        `;
+      })
       .join('');
 
     // Names are free text from the user -- set via textContent, never innerHTML.
@@ -261,8 +262,21 @@ export async function renderListView(root) {
   // enableDragReorder reads the DOM fresh on every drag via delegation.
   enableDragReorder(listEl, {
     onReorder: async (newIds) => {
-      await reorderLifts(newIds);
-      currentLifts = newIds
+      // While a workout filter is active, newIds is only the reordered
+      // *visible* subset (the rest of the list isn't even in the DOM to
+      // drag). Splice that subset's new relative order back into the full
+      // list -- walk the existing full order and, at each spot a visible
+      // lift used to sit, pull the next id off the reordered queue instead;
+      // hidden lifts are left untouched at their existing positions. That
+      // keeps every lift's sort_order globally consistent either way.
+      const visibleQueue = [...newIds];
+      const visibleSet = new Set(newIds);
+      const fullOrder = currentLifts.map((l) =>
+        visibleSet.has(l.id) ? visibleQueue.shift() : l.id
+      );
+
+      await reorderLifts(fullOrder);
+      currentLifts = fullOrder
         .map((id) => currentLifts.find((l) => l.id === id))
         .filter(Boolean);
     },
@@ -342,11 +356,6 @@ export async function renderListView(root) {
     listEmptyEl.textContent = activeWorkoutId
       ? 'No lifts in this workout yet.'
       : 'No lifts yet — add your first one above.';
-    // Reordering only makes sense against the full list -- a filtered
-    // subset's drag-and-drop order can't map cleanly back onto every
-    // lift's sort_order, so the handles are hidden (see .lt-lift-list-
-    // filtered) whenever a workout filter narrows what's shown.
-    listEl.classList.toggle('lt-lift-list-filtered', Boolean(activeWorkoutId));
 
     listEl.innerHTML = rows
       .map((lift) => {
