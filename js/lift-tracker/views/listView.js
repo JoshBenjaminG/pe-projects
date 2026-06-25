@@ -143,7 +143,9 @@ export async function renderListView(root) {
   // requiring a separate "All" pill, since with only one filter active at
   // a time the active pill itself is the obvious thing to tap to undo it.
   let workouts = [];
-  let activeWorkoutId = null;
+  // Persisted across reloads/closing the app, same as burst mode below --
+  // whichever workout filter you left active is the one you land back on.
+  let activeWorkoutId = readStoredActiveWorkoutId();
 
   function visibleLifts() {
     if (!activeWorkoutId) return currentLifts;
@@ -178,6 +180,7 @@ export async function renderListView(root) {
       btn.addEventListener('click', () => {
         const id = btn.dataset.workoutPill;
         activeWorkoutId = activeWorkoutId === id ? null : id;
+        writeStoredActiveWorkoutId(activeWorkoutId);
         renderWorkoutPills();
         renderLiftRows(lastLiftsData);
       });
@@ -189,6 +192,31 @@ export async function renderListView(root) {
         goToWorkoutEdit(btn.dataset.workoutEdit);
       });
     });
+  }
+
+  const ACTIVE_WORKOUT_STORAGE_KEY = 'lt-active-workout';
+
+  function readStoredActiveWorkoutId() {
+    // Same Safari-private-browsing safety net as burst mode below -- a
+    // missing preference should never break the page.
+    try {
+      return window.localStorage.getItem(ACTIVE_WORKOUT_STORAGE_KEY) || null;
+    } catch {
+      return null;
+    }
+  }
+
+  function writeStoredActiveWorkoutId(id) {
+    try {
+      if (id) {
+        window.localStorage.setItem(ACTIVE_WORKOUT_STORAGE_KEY, id);
+      } else {
+        window.localStorage.removeItem(ACTIVE_WORKOUT_STORAGE_KEY);
+      }
+    } catch {
+      // Ignore -- the filter still works for the rest of this session, it
+      // just won't be remembered next time.
+    }
   }
 
   const BURST_MODE_STORAGE_KEY = 'lt-burst-mode';
@@ -286,6 +314,7 @@ export async function renderListView(root) {
     workouts = await listWorkouts();
     if (activeWorkoutId && !workouts.some((w) => w.id === activeWorkoutId)) {
       activeWorkoutId = null;
+      writeStoredActiveWorkoutId(null);
     }
     renderWorkoutPills();
 
