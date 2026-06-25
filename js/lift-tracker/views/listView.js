@@ -4,11 +4,12 @@ import {
   createSet,
   reorderLifts,
   listActiveSetsForLifts,
+  listWorkouts,
 } from '../api.js';
 import { dailyMaxE1RM, computeComposite, calcE1RM, isNewPR, sessionVolume, toDateKey, formatPct } from '../math.js';
 import { renderCompositeChart } from '../charts.js';
 import { enableDragReorder } from '../dragReorder.js';
-import { goToLift, goToHelp, goToWeight, goToHistory } from '../state.js';
+import { goToLift, goToHelp, goToWeight, goToHistory, goToWorkoutNew, goToWorkoutEdit } from '../state.js';
 import { supabase } from '../supabaseClient.js';
 import { openFeedbackModal } from './feedbackModal.js';
 import { weeklyKillstreak } from '../killstreak.js';
@@ -65,6 +66,11 @@ export async function renderListView(root) {
       <input type="text" name="name" placeholder="New lift name" required maxlength="60" autocomplete="off" />
       <button type="submit">+ Add Lift</button>
     </form>
+
+    <div class="lt-workout-bar" data-workout-bar>
+      <button type="button" class="lt-create-workout-btn" data-create-workout-btn>+ Create Workout</button>
+      <div class="lt-workout-pills" data-workout-pills></div>
+    </div>
 
     <ul class="lt-lift-list" data-lift-list></ul>
     <p class="lt-empty" data-list-empty hidden>No lifts yet — add your first one above.</p>
@@ -127,6 +133,62 @@ export async function renderListView(root) {
   const addForm = root.querySelector('[data-add-lift-form]');
   const listEl = root.querySelector('[data-lift-list]');
   const listEmptyEl = root.querySelector('[data-list-empty]');
+
+  root.querySelector('[data-create-workout-btn]').addEventListener('click', goToWorkoutNew);
+
+  const workoutPillsEl = root.querySelector('[data-workout-pills]');
+  // Which saved workout (if any) currently filters the lift list down to
+  // just its member lifts. null means unfiltered (show everything) --
+  // tapping the active pill again clears it back to null rather than
+  // requiring a separate "All" pill, since with only one filter active at
+  // a time the active pill itself is the obvious thing to tap to undo it.
+  let workouts = [];
+  let activeWorkoutId = null;
+
+  function visibleLifts() {
+    if (!activeWorkoutId) return currentLifts;
+    const workout = workouts.find((w) => w.id === activeWorkoutId);
+    if (!workout) return currentLifts;
+    const memberIds = new Set(workout.liftIds);
+    return currentLifts.filter((l) => memberIds.has(l.id));
+  }
+
+  function renderWorkoutPills() {
+    workoutPillsEl.innerHTML = workouts
+      .map(
+        (w) => `
+          <div class="lt-workout-pill-wrap">
+            <button type="button" class="lt-workout-pill" data-workout-pill="${w.id}" aria-pressed="${w.id === activeWorkoutId}">
+              <span data-workout-pill-name></span>
+            </button>
+            <button type="button" class="lt-workout-pill-edit" data-workout-edit="${w.id}" aria-label="Edit workout">&#9998;</button>
+          </div>
+        `
+      )
+      .join('');
+
+    // Names are free text from the user -- set via textContent, never innerHTML.
+    for (const w of workouts) {
+      const nameSlot = workoutPillsEl.querySelector(`[data-workout-pill="${w.id}"] [data-workout-pill-name]`);
+      if (nameSlot) nameSlot.textContent = w.name;
+    }
+
+    workoutPillsEl.querySelectorAll('[data-workout-pill]').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const id = btn.dataset.workoutPill;
+        activeWorkoutId = activeWorkoutId === id ? null : id;
+        renderWorkoutPills();
+        renderLiftRows(lastLiftsData);
+      });
+    });
+
+    workoutPillsEl.querySelectorAll('[data-workout-edit]').forEach((btn) => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        goToWorkoutEdit(btn.dataset.workoutEdit);
+      });
+    });
+  }
 
   const BURST_MODE_STORAGE_KEY = 'lt-burst-mode';
 
@@ -207,11 +269,18 @@ export async function renderListView(root) {
   });
 
   async function load() {
+    workouts = await listWorkouts();
+    if (activeWorkoutId && !workouts.some((w) => w.id === activeWorkoutId)) {
+      activeWorkoutId = null;
+    }
+    renderWorkoutPills();
+
     currentLifts = await listLifts();
-    listEmptyEl.hidden = currentLifts.length > 0;
 
     if (currentLifts.length === 0) {
       listEl.innerHTML = '';
+      listEmptyEl.hidden = false;
+      listEmptyEl.textContent = 'No lifts yet — add your first one above.';
       compositeSection.hidden = true;
       renderKillstreak([]);
       setsByLift = new Map();
@@ -268,7 +337,18 @@ export async function renderListView(root) {
   function renderLiftRows(liftsData) {
     lastLiftsData = liftsData;
 
-    listEl.innerHTML = currentLifts
+    const rows = visibleLifts();
+    listEmptyEl.hidden = rows.length > 0;
+    listEmptyEl.textContent = activeWorkoutId
+      ? 'No lifts in this workout yet.'
+      : 'No lifts yet — add your first one above.';
+    // Reordering only makes sense against the full list -- a filtered
+    // subset's drag-and-drop order can't map cleanly back onto every
+    // lift's sort_order, so the handles are hidden (see .lt-lift-list-
+    // filtered) whenever a workout filter narrows what's shown.
+    listEl.classList.toggle('lt-lift-list-filtered', Boolean(activeWorkoutId));
+
+    listEl.innerHTML = rows
       .map((lift) => {
         if (burstMode) {
           return `

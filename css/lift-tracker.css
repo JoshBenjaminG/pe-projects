@@ -1357,3 +1357,136 @@ html::-webkit-scrollbar,
   color: var(--lt-text-muted);
   margin: 0 0 10px;
 }
+
+/* ---------- Workout filter bar (homepage) ---------- */
+.lt-workout-bar {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.lt-create-workout-btn {
+  align-self: flex-start;
+  font-size: 0.9rem;
+  font-weight: 700;
+  padding: 10px 14px;
+  border-radius: 8px;
+  border: 1px solid var(--lt-border);
+  background: var(--lt-surface);
+  color: var(--lt-text);
+}
+
+.lt-create-workout-btn:active {
+  background: var(--lt-surface-alt);
+}
+
+.lt-workout-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.lt-workout-pill-wrap {
+  display: flex;
+  align-items: stretch;
+  border-radius: 999px;
+  overflow: hidden;
+  border: 1px solid var(--lt-border);
+  background: var(--lt-surface);
+}
+
+.lt-workout-pill {
+  border: none;
+  background: none;
+  color: var(--lt-text-muted);
+  font-size: 0.85rem;
+  font-weight: 700;
+  padding: 8px 12px;
+  white-space: nowrap;
+}
+
+.lt-workout-pill[aria-pressed="true"] {
+  color: var(--lt-accent);
+}
+
+.lt-workout-pill-edit {
+  border: none;
+  border-left: 1px solid var(--lt-border);
+  background: none;
+  color: var(--lt-text-muted);
+  font-size: 0.8rem;
+  padding: 8px 10px;
+}
+
+.lt-workout-pill-edit:active,
+.lt-workout-pill:active {
+  background: var(--lt-surface-alt);
+}
+
+/* Reordering is hidden, not merely disabled, while a workout filter
+   narrows the list -- a filtered subset's drag-and-drop order can't map
+   cleanly back onto every lift's sort_order (see renderLiftRows in
+   listView.js), so there's nothing sensible for the handle to do here. */
+.lt-lift-list-filtered .lt-drag-handle {
+  display: none;
+}
+
+/* ---------- Workout create/edit page ---------- */
+.lt-workout-instructions {
+  font-size: 0.9rem;
+  color: var(--lt-text-muted);
+  margin: 0 0 12px;
+}
+
+.lt-workout-lift-list {
+  margin-bottom: 16px;
+}
+
+.lt-lift-row-static {
+  cursor: default;
+}
+
+.lt-workout-divider {
+  display: flex;
+  align-items: flex-end;
+  background: none;
+  border: none;
+}
+
+.lt-workout-divider-label {
+  display: block;
+  width: 100%;
+  text-align: center;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--lt-gold);
+  padding-bottom: 6px;
+  border-bottom: 3px solid var(--lt-gold);
+}
+
+.lt-save-workout-btn {
+  width: 100%;
+  font-size: 1rem;
+  font-weight: 700;
+  padding: 14px;
+  border-radius: 10px;
+  border: none;
+  background: var(--lt-accent);
+  color: #fff;
+}
+
+.lt-save-workout-btn:active {
+  background: var(--lt-accent-strong);
+}
+
+.lt-save-workout-btn:disabled {
+  opacity: 0.6;
+}
+
+.lt-workout-save-feedback {
+  font-size: 0.85rem;
+  color: var(--lt-accent);
+  margin: 8px 0 0;
+  text-align: center;
+}

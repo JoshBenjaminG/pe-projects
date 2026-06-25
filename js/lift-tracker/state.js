@@ -7,6 +7,13 @@ export function parseRoute() {
   if (hash.startsWith('lift/')) {
     return { name: 'detail', liftId: hash.slice('lift/'.length) };
   }
+  if (hash === 'workout/new') {
+    return { name: 'workout-new' };
+  }
+  const workoutEditMatch = hash.match(/^workout\/([^/]+)\/edit$/);
+  if (workoutEditMatch) {
+    return { name: 'workout-edit', workoutId: workoutEditMatch[1] };
+  }
   if (hash === 'help') {
     return { name: 'help' };
   }
@@ -25,6 +32,14 @@ export function goToList() {
 
 export function goToLift(liftId) {
   window.location.hash = `#/lift/${liftId}`;
+}
+
+export function goToWorkoutNew() {
+  window.location.hash = '#/workout/new';
+}
+
+export function goToWorkoutEdit(workoutId) {
+  window.location.hash = `#/workout/${workoutId}/edit`;
 }
 
 export function goToHelp() {

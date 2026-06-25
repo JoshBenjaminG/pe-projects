@@ -48,6 +48,18 @@ const SECTIONS = [
       and tap "+ Add Lift".`,
   },
   {
+    title: 'Workouts',
+    body: `A workout is a saved filter over your lift list, for when you
+      only want to see the lifts for "Push day" or "Leg day" instead of
+      everything. Tap "+ Create Workout" below the Add Lift form, name it,
+      then drag the lifts you want into it above the yellow line and tap
+      "Save workout" -- everything else stays below the line and out of
+      the workout. The workout then shows up as a button in the row below
+      Add Lift; tap it to filter the list down to just those lifts, and
+      tap it again to clear the filter. Tap the pencil next to a workout's
+      button to rename it, change which lifts are in it, or delete it.`,
+  },
+  {
     title: 'Reordering lifts',
     body: `Press and hold the dots on the right side of a lift row, then
       drag to move it up or down the list.`,

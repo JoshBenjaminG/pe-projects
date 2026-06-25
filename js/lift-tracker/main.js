@@ -5,6 +5,7 @@ import { renderDetailView } from './views/detailView.js';
 import { renderHelpView } from './views/helpView.js';
 import { renderWeightView } from './views/weightView.js';
 import { renderHistoryView } from './views/historyView.js';
+import { renderWorkoutFormView } from './views/workoutFormView.js';
 import { renderAuthView } from './views/authView.js';
 
 const root = document.getElementById('lift-tracker-app');
@@ -26,6 +27,10 @@ async function render() {
       await renderWeightView(root);
     } else if (route.name === 'history') {
       await renderHistoryView(root);
+    } else if (route.name === 'workout-new') {
+      await renderWorkoutFormView(root, { mode: 'create' });
+    } else if (route.name === 'workout-edit') {
+      await renderWorkoutFormView(root, { mode: 'edit', workoutId: route.workoutId });
     } else {
       await renderListView(root);
     }
