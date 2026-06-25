@@ -857,6 +857,14 @@ html::-webkit-scrollbar,
   outline: none;
 }
 
+/* The site's global ::placeholder rule (css/modules/contact-me.css) sets a
+   near-black placeholder color everywhere, which is unreadable against
+   this dark background -- override it with a translucent white, same fix
+   as .lt-feedback-textarea below. */
+.lt-lift-name-input::placeholder {
+  color: rgba(255, 255, 255, 0.6);
+}
+
 .lt-detail-delete {
   width: 44px;
   height: 44px;
