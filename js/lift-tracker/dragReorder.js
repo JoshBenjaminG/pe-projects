@@ -284,8 +284,17 @@ export function enableDragReorder(container, { onReorder, axis = 'y' } = {}) {
     currentClientY = e.clientY;
 
     if (axis === 'x') {
-      const delta = e.clientX - startX;
-      dragging.style.left = `${startLeft + delta}px`;
+      // Pills can wrap onto a second line, so this needs to be a real 2D
+      // drag -- updating only `left` left the dragged pill pinned to its
+      // starting row forever, which meant it could never visually cross
+      // into a different wrapped row no matter how far up/down the
+      // pointer moved (and updatePlaceholder's same-row/different-row
+      // check never saw anything but "same row" as a result, since it
+      // reads the dragged item's own current rect).
+      const deltaX = e.clientX - startX;
+      const deltaY = e.clientY - startY;
+      dragging.style.left = `${startLeft + deltaX}px`;
+      dragging.style.top = `${startTop + deltaY}px`;
     } else {
       const delta = e.clientY - startY;
       dragging.style.top = `${startTop + delta}px`;
