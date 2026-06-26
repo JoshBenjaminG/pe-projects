@@ -440,8 +440,11 @@ export async function renderListView(root) {
             <li class="lt-lift-row lt-lift-row-fast" data-reorder-item="${lift.id}" data-lift-id="${lift.id}">
               <div class="lt-lift-row-fast-top">
                 <button type="button" class="lt-lift-row-main lt-lift-row-fast-main" data-open-lift="${lift.id}">
-                  <span class="lt-lift-name" data-name-slot></span>
-                  <span class="lt-lift-last" data-last-slot>${lastSetLabel(lift.id)}</span>
+                  <span class="lt-lift-row-text">
+                    <span class="lt-lift-name" data-name-slot></span>
+                    <span class="lt-lift-last" data-last-slot>${lastSetLabel(lift.id)}</span>
+                  </span>
+                  <span class="lt-lift-row-chevron" aria-hidden="true">&#8250;</span>
                 </button>
                 <button type="button" class="lt-drag-handle" aria-label="Reorder ${escapeAttr(lift.name)}">&#8942;&#8942;</button>
               </div>
@@ -457,8 +460,11 @@ export async function renderListView(root) {
         return `
           <li class="lt-lift-row" data-reorder-item="${lift.id}" data-lift-id="${lift.id}">
             <button type="button" class="lt-lift-row-main" data-open-lift="${lift.id}">
-              <span class="lt-lift-name" data-name-slot></span>
-              <span class="lt-lift-last">${lastSetLabel(lift.id)}</span>
+              <span class="lt-lift-row-text">
+                <span class="lt-lift-name" data-name-slot></span>
+                <span class="lt-lift-last">${lastSetLabel(lift.id)}</span>
+              </span>
+              <span class="lt-lift-row-chevron" aria-hidden="true">&#8250;</span>
             </button>
             <button type="button" class="lt-drag-handle" aria-label="Reorder ${escapeAttr(lift.name)}">&#8942;&#8942;</button>
           </li>

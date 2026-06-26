@@ -708,18 +708,26 @@ html::-webkit-scrollbar,
 .lt-lift-row-main {
   flex: 1;
   display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 2px;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
   text-align: left;
   background: none;
   border: none;
   padding: 12px 14px;
   min-height: 56px;
-  justify-content: center;
   user-select: none;
   -webkit-user-select: none;
   -webkit-touch-callout: none;
+}
+
+.lt-lift-row-text {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  min-width: 0;
 }
 
 .lt-lift-name {
@@ -731,6 +739,16 @@ html::-webkit-scrollbar,
 
 .lt-lift-last {
   font-size: 0.85rem;
+  color: var(--lt-text-muted);
+}
+
+/* Tap affordance so it reads as "open for history/details" rather than
+   plain static text -- otherwise nothing about a row visually hints
+   that it's tappable. */
+.lt-lift-row-chevron {
+  flex-shrink: 0;
+  font-size: 1.3rem;
+  line-height: 1;
   color: var(--lt-text-muted);
 }
 
