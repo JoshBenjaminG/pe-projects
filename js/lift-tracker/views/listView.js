@@ -55,6 +55,7 @@ export async function renderListView(root) {
           <span class="lt-chevron" data-chevron>&#9650;</span>
         </button>
         <div class="lt-composite-body" data-composite-body>
+          <p class="lt-composite-blurb">Your average strength gain across all lifts, relative to where each one started.</p>
           <div class="lt-chart-wrap"><canvas data-composite-canvas></canvas></div>
           <p class="lt-empty" data-composite-empty hidden>Log a few workouts to see your composite progress.</p>
         </div>

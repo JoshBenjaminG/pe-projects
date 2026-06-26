@@ -588,6 +588,12 @@ html::-webkit-scrollbar,
   padding: 4px 12px 16px;
 }
 
+.lt-composite-blurb {
+  margin: 0 0 8px;
+  font-size: 0.8rem;
+  color: var(--lt-text-muted);
+}
+
 .lt-chart-wrap {
   position: relative;
   height: 200px;
