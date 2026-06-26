@@ -18,15 +18,19 @@
 	<h2 class="attention-voice img-section-heading"><?=$heading?></h2>
 <?php } ?>
 
-<picture<?php if ($variant) { ?> class="<?=$variant?>"<?php } ?>>
+<picture-row>
 
-	<img src="<?=$img?>" alt="">
+	<picture<?php if ($variant) { ?> class="<?=$variant?>"<?php } ?>>
 
-</picture>
+		<img src="<?=$img?>" alt="">
 
-<?php if ($caption) { ?>
-	<?=$caption?>	
-<?php } ?>
+	</picture>
+
+	<?php if ($caption) { ?>
+		<?=$caption?>	
+	<?php } ?>
+
+</picture-row>
 
 <generic-text>
 		<?=$description?>

@@ -1,14 +1,29 @@
-case-study-grid picture {
+/* picture+caption are wrapped together in picture-row so the caption
+   always sits directly next to the image's actual rendered width,
+   instead of being anchored to a fixed-width grid column that leaves a
+   gap when the image (e.g. img-portrait) is narrower than the column. */
+case-study-grid picture-row,
+case-study-grid > generic-text {
+	grid-column: 1 / -1;
+}
+
+picture-row {
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+	margin-bottom: 20px;
+}
+
+picture-row picture {
+	box-shadow: 1px 1px 8px rgba(0, 0, 0, 0.4);
+	max-width: 800px;
 	margin-bottom: 0px;
 }
 
-case-study-grid picture {
-	box-shadow: 1px 1px 8px rgba(0, 0, 0, 0.4);
-}
-
-case-study-grid picture {
-	max-width: 800px;
-	margin-bottom: 20px;
+.caption {
+	margin: 0px;
+	font-style: italic;
+	opacity: 0.7;
 }
 
 generic-text p {
@@ -19,17 +34,21 @@ generic-text h2 {
 
 }
 
-.caption {
- 	margin: 20px 0px;
-}
-
 @media(min-width: 1000px) {
-	.caption {
-		opacity: 0.7;
-		font-style: italic;
-		margin-top: 0px;
-		font-size: 1rem;
+	picture-row {
+		flex-direction: row;
+		align-items: flex-start;
+		gap: 20px;
+		width: fit-content;
+		max-width: 100%;
 	}
+
+	.caption {
+		font-size: 1rem;
+		flex: 0 1 280px;
+		min-width: 180px;
+	}
+
 	generic-text p {
 		margin: 30px 0px;
 		line-height: 1.5;
@@ -37,15 +56,10 @@ generic-text h2 {
 
 	/* Narrower cap for tall phone-shaped UI screenshots so they don't
 	   tower over the page at the default 800px case-study image width. */
-	case-study-grid picture.img-portrait {
+	picture-row picture.img-portrait {
 		max-width: 360px;
 	}
 
-	/* picture/caption/description are now flat grid siblings (not nested)
-	   so mobile stacks them as picture -> caption -> description. On the
-	   2-column desktop layout, force an optional section heading to span
-	   both columns so the auto-placed picture/caption pair still lands
-	   correctly on the row beneath it. */
 	case-study-grid h2.img-section-heading {
 		grid-column: 1 / -1;
 	}
