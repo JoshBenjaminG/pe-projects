@@ -23,13 +23,13 @@
                     "module": "image",
                     "img": "images/lift-tracker/feature-notes.png",
                     "caption": "<p class='caption'>Working notes from a single session of using the app and writing down what was annoying, confusing, or missing.</p>",
-                    "description": "<p>Most of Lift Tracker's roadmap doesn't start as a polished spec. It starts as raw notes taken straight from using the app myself: friction points, half-formed ideas, and questions about what to build next. Keeping the input this loose matters, because the next step is feeding it directly into an AI coding session rather than translating it into a formal ticket first.</p>"
+                    "description": "<p>Most of Lift Tracker's roadmap didn't start as a polished spec. It started as raw notes taken straight from using the app myself: friction points, half-formed ideas, and questions about what to build next. Keeping the input this loose mattered, because the next step was feeding it directly into an AI coding session rather than translating it into a formal ticket first.</p>"
                 },
                 {
                     "module": "image",
                     "img": "images/lift-tracker/feedback-cycle.png",
-                    "caption": "<p class='caption'>From a one-line complaint to a shipped feature (and its own UI) in the same session.</p>",
-                    "description": "<p>This diagram traces one actual feedback cycle end to end: a plain-language note about wanting an easier way to see workout history led to a working feature, complete with its own UI, in the same sitting. There was no backlog, no sprint planning, and no separate design pass.</p><p>The gap between \"this is annoying\" and \"this is fixed\" was minutes, not weeks.</p>"
+                    "caption": "<p class='caption'>User feedback was immediately broken into component parts, with each request systematically addressed in minutes. From a one-line complaint to a shipped feature (and its own UI) in the same session.</p>",
+                    "description": "<p>This diagram traces one actual feedback cycle end to end: a user's text message about wanting an easier way to see workout history led to a working feature, complete with its own UI, in the same sitting. There was no backlog, no sprint planning, and no separate design pass.</p><p>The gap between \"this is annoying\" and \"this is fixed\" was minutes, not weeks.</p>"
                 },
                 {
                     "module": "image",
