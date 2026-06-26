@@ -6,7 +6,7 @@
         "thumbnail": "images/lift-tracker/logo.png",
         "url": "https://josheg.com/workout.php",
         "hasCaseStudy": true,
-        "hasRepo" : true,
+        "hasRepo" : false,
         "hasDemo": true,
         "youtube": false,
         "youtubeurl": false,
