@@ -1,12 +1,12 @@
-generic-text picture {
+case-study-grid picture {
 	margin-bottom: 0px;
 }
 
-generic-text picture {
+case-study-grid picture {
 	box-shadow: 1px 1px 8px rgba(0, 0, 0, 0.4);
 }
 
-generic-text picture {
+case-study-grid picture {
 	max-width: 800px;
 	margin-bottom: 20px;
 }
@@ -37,7 +37,16 @@ generic-text h2 {
 
 	/* Narrower cap for tall phone-shaped UI screenshots so they don't
 	   tower over the page at the default 800px case-study image width. */
-	generic-text picture.img-portrait {
+	case-study-grid picture.img-portrait {
 		max-width: 360px;
+	}
+
+	/* picture/caption/description are now flat grid siblings (not nested)
+	   so mobile stacks them as picture -> caption -> description. On the
+	   2-column desktop layout, force an optional section heading to span
+	   both columns so the auto-placed picture/caption pair still lands
+	   correctly on the row beneath it. */
+	case-study-grid h2.img-section-heading {
+		grid-column: 1 / -1;
 	}
 }
