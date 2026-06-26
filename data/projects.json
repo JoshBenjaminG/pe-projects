@@ -4,7 +4,7 @@
         "technologies": "PHP, Vanilla JS, Supabase",
         "description": "A workout tracker built and shipped through rapid, AI-assisted iteration: well over 100 features and fixes shipped along the way, with several sometimes landing in a single day.",
         "thumbnail": "images/lift-tracker/logo.png",
-        "url": "https://josheg.com/workout.php",
+        "url": "https://josheg.com/workout.php?demo=1",
         "hasCaseStudy": true,
         "hasRepo" : false,
         "hasDemo": true,
