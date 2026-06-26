@@ -37,10 +37,19 @@ const ARM_CANCEL_THRESHOLD_PX = 10;
 const AUTO_SCROLL_EDGE_PX = 80;
 const AUTO_SCROLL_MAX_SPEED_PX = 16;
 
-export function enableDragReorder(container, { onReorder } = {}) {
+export function enableDragReorder(container, { onReorder, axis = 'y' } = {}) {
+  // axis: 'y' (default) is the original vertical list behavior (lift rows).
+  // 'x' is for a horizontally flex-wrapping row (workout pills) -- items
+  // move left/right instead of up/down, and the insertion point is found
+  // in reading order (same row: left-to-right, different row: top-to-
+  // bottom) so it still behaves sensibly if the row wraps onto a second
+  // line on narrow screens. Auto-scroll only makes sense for axis 'y' --
+  // a wrapped pill row doesn't scroll the page on its own.
   let dragging = null;
   let placeholder = null;
+  let startX = 0;
   let startY = 0;
+  let startLeft = 0;
   let startTop = 0;
   let currentClientY = 0;
   let autoScrollRAF = null;
@@ -69,7 +78,7 @@ export function enableDragReorder(container, { onReorder } = {}) {
     if (e.pointerType !== 'touch') {
       // Mouse/pen: arm immediately, same as before.
       e.preventDefault();
-      armDrag(item, e.clientY);
+      armDrag(item, e.clientX, e.clientY);
       return;
     }
 
@@ -95,9 +104,10 @@ export function enableDragReorder(container, { onReorder } = {}) {
       clearTimeout(armTimer);
       armTimer = null;
       const item2 = pendingItem;
+      const x = pendingStartX;
       const y = pendingStartY;
       clearPending();
-      armDrag(item2, y);
+      armDrag(item2, x, y);
     }, TOUCH_ARM_DELAY_MS);
   }
 
@@ -141,16 +151,22 @@ export function enableDragReorder(container, { onReorder } = {}) {
     releaseCapture();
   }
 
-  function armDrag(item, clientY) {
+  function armDrag(item, clientX, clientY) {
     dragging = item;
+    startX = clientX;
     startY = clientY;
     currentClientY = clientY;
     const rect = item.getBoundingClientRect();
     startTop = rect.top;
+    startLeft = rect.left;
 
-    placeholder = document.createElement('li');
+    // Matches the dragged item's own tag (<li> for the vertical lift list,
+    // <div> for the horizontally-wrapping workout pills row) so it sizes
+    // and lays out the same way the real item would.
+    placeholder = document.createElement(item.tagName);
     placeholder.className = 'lt-reorder-placeholder';
     placeholder.style.height = `${item.offsetHeight}px`;
+    placeholder.style.width = `${item.offsetWidth}px`;
     item.after(placeholder);
 
     item.classList.add('lt-dragging');
@@ -172,15 +188,35 @@ export function enableDragReorder(container, { onReorder } = {}) {
   function updatePlaceholder() {
     const items = getItems().filter((i) => i !== dragging);
     const dragRect = dragging.getBoundingClientRect();
-    const dragMid = dragRect.top + dragRect.height / 2;
-
     let target = null;
-    for (const item of items) {
-      const rect = item.getBoundingClientRect();
-      const mid = rect.top + rect.height / 2;
-      if (dragMid < mid) {
-        target = item;
-        break;
+
+    if (axis === 'x') {
+      const dragMidX = dragRect.left + dragRect.width / 2;
+      const dragMidY = dragRect.top + dragRect.height / 2;
+      for (const item of items) {
+        const rect = item.getBoundingClientRect();
+        const midX = rect.left + rect.width / 2;
+        const midY = rect.top + rect.height / 2;
+        // An item on the same wrapped row as the dragged one is compared
+        // by horizontal position; an item on a different row is simply
+        // "before" or "after" by row -- same reading order a person would
+        // use to scan a wrapped row of pills.
+        const sameRow = Math.abs(midY - dragMidY) < rect.height / 2;
+        const isBefore = sameRow ? dragMidX < midX : dragMidY < midY;
+        if (isBefore) {
+          target = item;
+          break;
+        }
+      }
+    } else {
+      const dragMid = dragRect.top + dragRect.height / 2;
+      for (const item of items) {
+        const rect = item.getBoundingClientRect();
+        const mid = rect.top + rect.height / 2;
+        if (dragMid < mid) {
+          target = item;
+          break;
+        }
       }
     }
 
@@ -246,11 +282,17 @@ export function enableDragReorder(container, { onReorder } = {}) {
     if (!dragging) return;
     e.preventDefault();
     currentClientY = e.clientY;
-    const delta = e.clientY - startY;
-    dragging.style.top = `${startTop + delta}px`;
+
+    if (axis === 'x') {
+      const delta = e.clientX - startX;
+      dragging.style.left = `${startLeft + delta}px`;
+    } else {
+      const delta = e.clientY - startY;
+      dragging.style.top = `${startTop + delta}px`;
+    }
 
     updatePlaceholder();
-    maybeStartAutoScroll();
+    if (axis === 'y') maybeStartAutoScroll();
   }
 
   function onPointerUp() {

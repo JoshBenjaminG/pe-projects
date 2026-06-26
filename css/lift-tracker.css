@@ -77,6 +77,15 @@ html::-webkit-scrollbar,
   font-size: 1rem;
 }
 
+/* Compact override of .lt-empty -- this one sits inline under the workout
+   bar rather than standing in for a whole missing section, so it shouldn't
+   take the same centered, heavily-padded treatment. */
+.lt-workout-empty-hint {
+  text-align: left;
+  padding: 4px 2px 12px;
+  font-size: 0.85rem;
+}
+
 .lt-error {
   color: var(--lt-accent);
 }
@@ -1423,6 +1432,16 @@ html::-webkit-scrollbar,
    pill+edit-button pair share one pill-shaped outline. */
 .lt-workout-pill-wrap-active {
   border-color: var(--lt-accent);
+}
+
+/* Compact override of the base .lt-drag-handle (which is sized for the
+   44px-wide lift rows) -- a pill is much smaller, so the handle needs to
+   shrink to match instead of dominating the pill's width. */
+.lt-drag-handle-pill {
+  width: 22px;
+  border-left: 1px solid var(--lt-border);
+  font-size: 0.85rem;
+  padding: 0;
 }
 
 .lt-workout-pill-edit {

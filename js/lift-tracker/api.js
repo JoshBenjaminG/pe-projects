@@ -159,6 +159,20 @@ export async function listWorkouts() {
   return data.map((w) => ({ ...w, liftIds: (w.workout_lifts || []).map((wl) => wl.lift_id) }));
 }
 
+/**
+ * Persists a new top-to-bottom (or in this case left-to-right) order for
+ * the workout filter pills -- same shape as reorderLifts above, just a
+ * different table.
+ */
+export async function reorderWorkouts(orderedIds) {
+  const updates = orderedIds.map((id, index) =>
+    supabase.from('workouts').update({ sort_order: index }).eq('id', id)
+  );
+  const results = await Promise.all(updates);
+  const failed = results.find((r) => r.error);
+  if (failed) throw failed.error;
+}
+
 export async function getWorkout(id) {
   const { data, error } = await supabase
     .from('workouts')

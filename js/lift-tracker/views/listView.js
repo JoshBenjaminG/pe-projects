@@ -5,6 +5,7 @@ import {
   reorderLifts,
   listActiveSetsForLifts,
   listWorkouts,
+  reorderWorkouts,
 } from '../api.js';
 import { dailyMaxE1RM, computeComposite, calcE1RM, isNewPR, sessionVolume, toDateKey, formatPct } from '../math.js';
 import { renderCompositeChart } from '../charts.js';
@@ -71,6 +72,9 @@ export async function renderListView(root) {
       <button type="button" class="lt-create-workout-btn" data-create-workout-btn>+ Create Workout</button>
       <div class="lt-workout-pills" data-workout-pills></div>
     </div>
+    <p class="lt-empty lt-workout-empty-hint" data-workout-empty-hint hidden>
+      Group your lifts into a workout (like "Push Day") to filter the list down to just those.
+    </p>
 
     <ul class="lt-lift-list" data-lift-list></ul>
     <p class="lt-empty" data-list-empty hidden>No lifts yet — add your first one above.</p>
@@ -137,6 +141,7 @@ export async function renderListView(root) {
   root.querySelector('[data-create-workout-btn]').addEventListener('click', goToWorkoutNew);
 
   const workoutPillsEl = root.querySelector('[data-workout-pills]');
+  const workoutEmptyHintEl = root.querySelector('[data-workout-empty-hint]');
   // Which saved workout (if any) currently filters the lift list down to
   // just its member lifts. null means unfiltered (show everything) --
   // tapping the active pill again clears it back to null rather than
@@ -164,14 +169,20 @@ export async function renderListView(root) {
   }
 
   function renderWorkoutPills() {
+    // Nudge new users toward grouping lifts into a workout, but only until
+    // they've made their first one -- once any workout exists, the pills
+    // row speaks for itself.
+    workoutEmptyHintEl.hidden = workouts.length > 0;
+
     workoutPillsEl.innerHTML = workouts
       .map((w) => {
         const isActive = w.id === activeWorkoutId;
         return `
-          <div class="lt-workout-pill-wrap${isActive ? ' lt-workout-pill-wrap-active' : ''}">
+          <div class="lt-workout-pill-wrap${isActive ? ' lt-workout-pill-wrap-active' : ''}" data-reorder-item="${w.id}">
             <button type="button" class="lt-workout-pill" data-workout-pill="${w.id}" aria-pressed="${isActive}">
               <span data-workout-pill-name></span>
             </button>
+            <button type="button" class="lt-drag-handle lt-drag-handle-pill" aria-label="Reorder workout">&#8942;</button>
             <button type="button" class="lt-workout-pill-edit" data-workout-edit="${w.id}" aria-label="Edit workout">&#9998;</button>
           </div>
         `;
@@ -316,6 +327,20 @@ export async function renderListView(root) {
     },
   });
 
+  // Workout pills are always fully in the DOM regardless of any active
+  // filter (unlike the lift list above), so newIds here is already the
+  // complete order -- no subset-merging needed. The DOM itself is already
+  // physically reordered by dragReorder.js at this point; only the
+  // in-memory `workouts` array needs to catch up so the next
+  // renderWorkoutPills() call doesn't revert it.
+  enableDragReorder(workoutPillsEl, {
+    axis: 'x',
+    onReorder: async (newIds) => {
+      await reorderWorkouts(newIds);
+      workouts = newIds.map((id) => workouts.find((w) => w.id === id)).filter(Boolean);
+    },
+  });
+
   async function load() {
     workouts = await listWorkouts();
     if (activeWorkoutId && !workouts.some((w) => w.id === activeWorkoutId)) {
@@ -389,7 +414,7 @@ export async function renderListView(root) {
     const rows = visibleLifts();
     listEmptyEl.hidden = rows.length > 0;
     listEmptyEl.textContent = activeWorkoutId
-      ? 'No lifts in this workout yet.'
+      ? 'No lifts in this workout yet — tap the pencil above to add some.'
       : 'No lifts yet — add your first one above.';
 
     listEl.innerHTML = rows
