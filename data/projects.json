@@ -34,12 +34,14 @@
                 {
                     "module": "image",
                     "img": "images/lift-tracker/list-view.png",
+                    "variant": "img-portrait",
                     "caption": "<p class='caption'>The current list view: lifts grouped into workouts, drag-to-reorder, and a Fast-mode toggle for rapid-fire logging.</p>",
                     "description": "<p>That cycle, repeated dozens of times, is how Lift Tracker actually got built. Drag-to-reorder, the Fast-mode quick-log rows, workout grouping and pill filters, and the composite progress score above the lift list all started as small, specific complaints rather than upfront design decisions.</p>"
                 },
                 {
                     "module": "image",
                     "img": "images/lift-tracker/weight-view.png",
+                    "variant": "img-portrait",
                     "caption": "<p class='caption'>Weight and composite strength tracking, expanded -- one of many features that started as a one-line ask.</p>",
                     "description": "<p>As of writing, this workflow has shipped well over 100 individual features and fixes -- weight and waist tracking, per-user accounts, a day-grouped workout history, gamified weekly streaks, full-history export, and dozens of smaller polish passes -- often several in a single day. The point isn't that AI wrote the code unsupervised; it's that the loop from \"I noticed this\" to \"this is live\" got short enough that almost nothing is too small to fix.</p>"
                 },

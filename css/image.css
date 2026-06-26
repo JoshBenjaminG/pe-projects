@@ -34,4 +34,10 @@ generic-text h2 {
 		margin: 30px 0px;
 		line-height: 1.5;
 	}
+
+	/* Narrower cap for tall phone-shaped UI screenshots so they don't
+	   tower over the page at the default 800px case-study image width. */
+	generic-text picture.img-portrait {
+		max-width: 360px;
+	}
 }

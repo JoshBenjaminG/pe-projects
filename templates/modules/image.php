@@ -6,6 +6,7 @@
 	$caption = $section["caption"] ?? "<p class='calm-voice'>Images sometimes need captions!</p>";
 	$description = $section["description"] ?? "<p class='calm-voice'>Images sometimes need descriptions!</p>";
 	$second_img = $section["second_img"] ?? "";
+	$variant = $section["variant"] ?? "";
 
 ?>
 
@@ -21,7 +22,7 @@
 	<?php } ?>
 	
 	
-		<picture>
+		<picture<?php if ($variant) { ?> class="<?=$variant?>"<?php } ?>>
 			
 			<img src="<?=$img?>" alt="">
 			
