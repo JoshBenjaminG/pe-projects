@@ -1,7 +1,7 @@
 // Tiny helpers for persisting simple boolean UI preferences (expand/collapse
 // state, etc.) via cookies, so they're remembered across browser sessions.
 // Mirrors the safe try/catch fallback used for localStorage elsewhere (see
-// the burst-mode toggle in listView.js) -- a preference failing to persist
+// the fast-mode toggle in listView.js) -- a preference failing to persist
 // should never break the page, it should just not be remembered next time.
 
 const COOKIE_MAX_AGE_DAYS = 365;

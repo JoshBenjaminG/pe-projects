@@ -16,8 +16,8 @@ const SECTIONS = [
       Chopper Gunner. It resets on its own every Sunday — nothing to do.`,
   },
   {
-    title: 'Burst mode',
-    body: `Tap the "Burst" button near the top of the list to switch every
+    title: 'Fast mode',
+    body: `Tap the "Fast" button near the top of the list to switch every
       lift row into a quick-log form right there on the list, with weight
       and reps fields and a "Log" button. Useful for supersets or circuits,
       where you're moving between several lifts and don't want to open

@@ -32,7 +32,7 @@ export async function renderListView(root) {
     </header>
 
     <div class="lt-toolbar">
-      <button type="button" class="lt-mode-toggle" data-mode-toggle aria-pressed="false">Burst</button>
+      <button type="button" class="lt-mode-toggle" data-mode-toggle aria-pressed="false">Fast</button>
 
       <section class="lt-killstreak" data-killstreak-section>
         <span class="lt-killstreak-icon" data-killstreak-icon>&#127919;</span>
@@ -98,7 +98,7 @@ export async function renderListView(root) {
 
   // Defaults to expanded (matching the markup above) if nothing's been
   // saved yet -- whichever state the user leaves it in is the state it
-  // opens back up in next time, same idea as the burst-mode toggle above.
+  // opens back up in next time, same idea as the fast-mode toggle above.
   function applyCompositeToggleUI(expanded) {
     compositeToggle.setAttribute('aria-expanded', String(expanded));
     compositeBody.hidden = !expanded;
@@ -157,7 +157,7 @@ export async function renderListView(root) {
   const ACTIVE_WORKOUT_STORAGE_KEY = 'lt-active-workout';
 
   let workouts = [];
-  // Persisted across reloads/closing the app, same as burst mode below --
+  // Persisted across reloads/closing the app, same as fast mode below --
   // whichever workout filter you left active is the one you land back on.
   let activeWorkoutId = readStoredActiveWorkoutId();
 
@@ -215,7 +215,7 @@ export async function renderListView(root) {
   }
 
   function readStoredActiveWorkoutId() {
-    // Same Safari-private-browsing safety net as burst mode below -- a
+    // Same Safari-private-browsing safety net as fast mode below -- a
     // missing preference should never break the page.
     try {
       return window.localStorage.getItem(ACTIVE_WORKOUT_STORAGE_KEY) || null;
@@ -237,22 +237,37 @@ export async function renderListView(root) {
     }
   }
 
-  const BURST_MODE_STORAGE_KEY = 'lt-burst-mode';
+  const FAST_MODE_STORAGE_KEY = 'lt-fast-mode';
+  // This mode used to be called "Burst" -- kept only so a one-time read
+  // can carry over anyone's existing on/off preference under the old key
+  // name, instead of silently resetting everyone back to Normal mode.
+  const LEGACY_BURST_MODE_STORAGE_KEY = 'lt-burst-mode';
 
-  function readStoredBurstMode() {
+  function readStoredFastMode() {
     // Safari private browsing (and similar locked-down modes) can throw
     // on localStorage access -- fall back to Normal mode rather than
     // breaking the page over a preference.
     try {
-      return window.localStorage.getItem(BURST_MODE_STORAGE_KEY) === 'true';
+      const current = window.localStorage.getItem(FAST_MODE_STORAGE_KEY);
+      if (current !== null) return current === 'true';
+
+      // One-time migration from the old key name.
+      const legacy = window.localStorage.getItem(LEGACY_BURST_MODE_STORAGE_KEY);
+      if (legacy !== null) {
+        window.localStorage.setItem(FAST_MODE_STORAGE_KEY, legacy);
+        window.localStorage.removeItem(LEGACY_BURST_MODE_STORAGE_KEY);
+        return legacy === 'true';
+      }
+
+      return false;
     } catch {
       return false;
     }
   }
 
-  function writeStoredBurstMode(value) {
+  function writeStoredFastMode(value) {
     try {
-      window.localStorage.setItem(BURST_MODE_STORAGE_KEY, String(value));
+      window.localStorage.setItem(FAST_MODE_STORAGE_KEY, String(value));
     } catch {
       // Ignore -- the toggle still works for the rest of this session,
       // it just won't be remembered next time.
@@ -262,8 +277,8 @@ export async function renderListView(root) {
   let currentLifts = [];
   // Persisted across reloads/closing the page -- whichever mode you left
   // the list in is the mode it opens back up in next time.
-  let burstMode = readStoredBurstMode();
-  // Sets per lift, kept around (not just dailySeries) so burst-mode quick
+  let fastMode = readStoredFastMode();
+  // Sets per lift, kept around (not just dailySeries) so fast-mode quick
   // logging can compute PR/volume feedback and prefill weight without an
   // extra round trip per row.
   let setsByLift = new Map();
@@ -272,15 +287,15 @@ export async function renderListView(root) {
   const modeToggleBtn = root.querySelector('[data-mode-toggle]');
 
   function applyModeToggleUI() {
-    modeToggleBtn.textContent = burstMode ? 'Normal' : 'Burst';
-    modeToggleBtn.setAttribute('aria-pressed', String(burstMode));
-    modeToggleBtn.classList.toggle('lt-mode-toggle-active', burstMode);
+    modeToggleBtn.textContent = fastMode ? 'Normal' : 'Fast';
+    modeToggleBtn.setAttribute('aria-pressed', String(fastMode));
+    modeToggleBtn.classList.toggle('lt-mode-toggle-active', fastMode);
   }
   applyModeToggleUI();
 
   modeToggleBtn.addEventListener('click', () => {
-    burstMode = !burstMode;
-    writeStoredBurstMode(burstMode);
+    fastMode = !fastMode;
+    writeStoredFastMode(fastMode);
     applyModeToggleUI();
     // Re-render from cached data -- no need to re-fetch just to switch how
     // each row behaves.
@@ -420,21 +435,21 @@ export async function renderListView(root) {
 
     listEl.innerHTML = rows
       .map((lift) => {
-        if (burstMode) {
+        if (fastMode) {
           return `
-            <li class="lt-lift-row lt-lift-row-burst" data-reorder-item="${lift.id}" data-lift-id="${lift.id}">
-              <div class="lt-lift-row-burst-top">
-                <div class="lt-lift-row-main lt-lift-row-burst-main">
+            <li class="lt-lift-row lt-lift-row-fast" data-reorder-item="${lift.id}" data-lift-id="${lift.id}">
+              <div class="lt-lift-row-fast-top">
+                <button type="button" class="lt-lift-row-main lt-lift-row-fast-main" data-open-lift="${lift.id}">
                   <span class="lt-lift-name" data-name-slot></span>
                   <span class="lt-lift-last" data-last-slot>${lastSetLabel(lift.id)}</span>
-                </div>
+                </button>
                 <button type="button" class="lt-drag-handle" aria-label="Reorder ${escapeAttr(lift.name)}">&#8942;&#8942;</button>
               </div>
-              <form class="lt-burst-log" data-burst-log-form="${lift.id}">
-                <input type="number" inputmode="decimal" step="0.5" min="0" name="weight" placeholder="lb" required value="${lastWeightFor(lift.id)}" data-burst-weight />
-                <input type="number" inputmode="numeric" step="1" min="1" name="reps" placeholder="reps" required data-burst-reps />
-                <button type="submit" class="lt-burst-log-btn">Log</button>
-                <span class="lt-burst-feedback" data-burst-feedback hidden></span>
+              <form class="lt-fast-log" data-fast-log-form="${lift.id}">
+                <input type="number" inputmode="decimal" step="0.5" min="0" name="weight" placeholder="lb" required value="${lastWeightFor(lift.id)}" data-fast-weight />
+                <input type="number" inputmode="numeric" step="1" min="1" name="reps" placeholder="reps" required data-fast-reps />
+                <button type="submit" class="lt-fast-log-btn">Log</button>
+                <span class="lt-fast-feedback" data-fast-feedback hidden></span>
               </form>
             </li>
           `;
@@ -458,23 +473,23 @@ export async function renderListView(root) {
       if (nameSlot) nameSlot.textContent = lift.name;
     }
 
-    if (burstMode) {
-      wireBurstForms();
-    } else {
-      listEl.querySelectorAll('[data-open-lift]').forEach((btn) => {
-        btn.addEventListener('click', () => goToLift(btn.dataset.openLift));
-      });
+    listEl.querySelectorAll('[data-open-lift]').forEach((btn) => {
+      btn.addEventListener('click', () => goToLift(btn.dataset.openLift));
+    });
+
+    if (fastMode) {
+      wireFastForms();
     }
   }
 
-  function wireBurstForms() {
-    listEl.querySelectorAll('[data-burst-log-form]').forEach((form) => {
-      const liftId = form.dataset.burstLogForm;
+  function wireFastForms() {
+    listEl.querySelectorAll('[data-fast-log-form]').forEach((form) => {
+      const liftId = form.dataset.fastLogForm;
       form.addEventListener('submit', async (e) => {
         e.preventDefault();
-        const weightInput = form.querySelector('[data-burst-weight]');
-        const repsInput = form.querySelector('[data-burst-reps]');
-        const feedback = form.querySelector('[data-burst-feedback]');
+        const weightInput = form.querySelector('[data-fast-weight]');
+        const repsInput = form.querySelector('[data-fast-reps]');
+        const feedback = form.querySelector('[data-fast-feedback]');
         const weight = Number(weightInput.value);
         const reps = Number(repsInput.value);
         if (!(weight >= 0) || !Number.isFinite(weight) || !(reps > 0) || !Number.isInteger(reps)) {

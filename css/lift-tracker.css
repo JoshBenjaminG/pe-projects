@@ -740,23 +740,25 @@ html::-webkit-scrollbar,
    wrapping made the form's own min-content width compete with the rest
    of the row for space, which could push the whole row (and the page,
    since nothing above it clips overflow) wider than intended. */
-.lt-lift-row-burst {
+.lt-lift-row-fast {
   flex-direction: column;
   align-items: stretch;
 }
 
-.lt-lift-row-burst-top {
+.lt-lift-row-fast-top {
   display: flex;
   align-items: stretch;
   width: 100%;
   min-width: 0;
 }
 
-.lt-lift-row-burst-main {
-  cursor: default;
+/* Now tappable to open the lift's history, same as in Normal mode -- no
+   longer a plain div, so this used to be cursor:default. */
+.lt-lift-row-fast-main {
+  cursor: pointer;
 }
 
-.lt-burst-log {
+.lt-fast-log {
   display: flex;
   align-items: center;
   gap: 6px;
@@ -776,7 +778,7 @@ html::-webkit-scrollbar,
   border-bottom: none;
 }
 
-.lt-burst-log input {
+.lt-fast-log input {
   width: 64px;
   min-width: 0;
   flex-shrink: 0;
@@ -792,11 +794,11 @@ html::-webkit-scrollbar,
   color: var(--lt-text);
 }
 
-.lt-burst-log input::placeholder {
+.lt-fast-log input::placeholder {
   color: var(--lt-text-muted);
 }
 
-.lt-burst-log-btn {
+.lt-fast-log-btn {
   margin: 0;
   font-size: 0.9rem;
   font-weight: 700;
@@ -809,11 +811,11 @@ html::-webkit-scrollbar,
   cursor: pointer;
 }
 
-.lt-burst-log-btn:active {
+.lt-fast-log-btn:active {
   background: var(--lt-accent-strong);
 }
 
-.lt-burst-feedback {
+.lt-fast-feedback {
   margin: 0;
   padding: 0;
   font-size: 0.8rem;
@@ -821,7 +823,7 @@ html::-webkit-scrollbar,
   flex-basis: 100%;
 }
 
-.lt-burst-feedback.lt-pr {
+.lt-fast-feedback.lt-pr {
   color: var(--lt-accent);
   font-weight: 700;
 }
@@ -1433,7 +1435,7 @@ html::-webkit-scrollbar,
   color: var(--lt-accent);
 }
 
-/* Same red-highlight treatment as .lt-mode-toggle-active (Burst/Normal
+/* Same red-highlight treatment as .lt-mode-toggle-active (Fast/Normal
    toggle) -- the border lives on the wrap, not the button, since the
    pill+edit-button pair share one pill-shaped outline. */
 .lt-workout-pill-wrap-active {
