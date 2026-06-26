@@ -21,11 +21,18 @@ import { readBoolPref, writeBoolPref } from '../prefs.js';
 const COMPOSITE_EXPANDED_PREF_KEY = 'lt-composite-expanded';
 
 export async function renderListView(root) {
+  // Guest (anonymous demo) sessions don't get the feedback button --
+  // there's no real account behind them to follow up with, and we don't
+  // want throwaway demo sessions sending feedback email as if they were a
+  // real user.
+  const { data: { session } } = await supabase.auth.getSession();
+  const isGuest = Boolean(session?.user?.is_anonymous);
+
   root.innerHTML = `
     <header class="lt-header">
       <h1>Lift Tracker</h1>
       <div class="lt-header-actions">
-        <button type="button" class="lt-feedback-btn" data-feedback-btn>Feedback</button>
+        ${isGuest ? '' : '<button type="button" class="lt-feedback-btn" data-feedback-btn>Feedback</button>'}
         <button type="button" class="lt-logout-btn" data-logout-btn>Log out</button>
         <button type="button" class="lt-help-btn" data-help-btn aria-label="Help">?</button>
       </div>
@@ -85,7 +92,9 @@ export async function renderListView(root) {
   helpBtn.addEventListener('click', goToHelp);
 
   const feedbackBtn = root.querySelector('[data-feedback-btn]');
-  feedbackBtn.addEventListener('click', () => openFeedbackModal());
+  if (feedbackBtn) {
+    feedbackBtn.addEventListener('click', () => openFeedbackModal());
+  }
 
   const logoutBtn = root.querySelector('[data-logout-btn]');
   logoutBtn.addEventListener('click', () => supabase.auth.signOut());
