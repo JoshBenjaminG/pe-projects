@@ -17,7 +17,7 @@
                 {
                     "module": "project-links",
                     "github": "https://github.com/JoshBenjaminG/pe-projects/tree/master/js/lift-tracker",
-                    "site_link": "https://josheg.com/workout.php"
+                    "site_link": "https://josheg.com/workout.php?demo=1"
                 },
                 {
                     "module": "image",
@@ -48,7 +48,7 @@
                 {
                     "module": "project-links",
                     "github": "https://github.com/JoshBenjaminG/pe-projects/tree/master/js/lift-tracker",
-                    "site_link": "https://josheg.com/workout.php"
+                    "site_link": "https://josheg.com/workout.php?demo=1"
                 }
             ]
         }

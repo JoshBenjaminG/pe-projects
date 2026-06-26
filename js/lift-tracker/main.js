@@ -7,6 +7,7 @@ import { renderWeightView } from './views/weightView.js';
 import { renderHistoryView } from './views/historyView.js';
 import { renderWorkoutFormView } from './views/workoutFormView.js';
 import { renderAuthView } from './views/authView.js';
+import { isDemoLink, startGuestSession } from './demo.js';
 
 const root = document.getElementById('lift-tracker-app');
 
@@ -14,8 +15,21 @@ async function render() {
   try {
     const { data: { session } } = await supabase.auth.getSession();
     if (!session) {
-      await renderAuthView(root);
-      return;
+      if (isDemoLink()) {
+        try {
+          await startGuestSession();
+        } catch (err) {
+          // Most likely cause: anonymous sign-ins aren't enabled on the
+          // Supabase project. Fall back to the normal gate rather than
+          // showing the generic error screen for what's just a demo link.
+          console.error('[lift-tracker] guest demo sign-in failed', err);
+          await renderAuthView(root);
+          return;
+        }
+      } else {
+        await renderAuthView(root);
+        return;
+      }
     }
 
     const route = parseRoute();
