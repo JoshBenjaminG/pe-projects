@@ -110,17 +110,36 @@ export async function renderListView(root) {
   const hamburgerBtn = root.querySelector('[data-hamburger-btn]');
   const headerActions = root.querySelector('[data-header-actions]');
 
+  // Matches the CSS: 0.08s max stagger delay + 0.16s transition = 0.24s
+  // for the slowest item to finish collapsing.
+  const HEADER_MENU_COLLAPSE_MS = 240;
+  let collapseTimeoutId = null;
+
   function closeHeaderMenu(persist = true) {
-    headerActions.hidden = true;
+    if (collapseTimeoutId) {
+      clearTimeout(collapseTimeoutId);
+      collapseTimeoutId = null;
+    }
+    // Removing the open class lets the fan-in (reverse of the fan-out)
+    // transition play; `hidden` is only set once that's finished, so the
+    // animation isn't cut off by an instant display:none.
     headerActions.classList.remove('lt-header-actions-open');
     hamburgerBtn.setAttribute('aria-expanded', 'false');
     if (persist) writeBoolPref(HEADER_MENU_OPEN_PREF_KEY, false);
+    collapseTimeoutId = setTimeout(() => {
+      headerActions.hidden = true;
+      collapseTimeoutId = null;
+    }, HEADER_MENU_COLLAPSE_MS);
   }
 
   // `instant` skips the fan-out transition -- used when restoring the
   // menu's saved state on render, where it should just already be open
   // rather than visibly animating in on page load.
   function openHeaderMenu({ persist = true, instant = false } = {}) {
+    if (collapseTimeoutId) {
+      clearTimeout(collapseTimeoutId);
+      collapseTimeoutId = null;
+    }
     headerActions.hidden = false;
     if (instant) {
       headerActions.classList.add('lt-header-actions-open');
