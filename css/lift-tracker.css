@@ -114,6 +114,84 @@
   --lt-gold: #f2b134;
 }
 
+:root[data-lt-theme="apple"] {
+  --lt-bg: #f7f5fb;
+  --lt-surface: #ffffff;
+  --lt-surface-alt: #ece8f7;
+  --lt-border: #e2ddf0;
+  --lt-text: #1f2a44;
+  --lt-text-muted: #8b8fa3;
+  --lt-accent: #6d4fd1;
+  --lt-accent-strong: #5638b0;
+  --lt-accent-soft: rgba(109, 79, 209, 0.14);
+  --lt-gold: #1ba89a;
+}
+
+:root[data-lt-theme="candy"] {
+  --lt-bg: #f7e7ec;
+  --lt-surface: #2b1622;
+  --lt-surface-alt: #3a1f2c;
+  --lt-border: #4a2735;
+  --lt-text: #f5e3ea;
+  --lt-text-muted: #a98a93;
+  --lt-accent: #e0568a;
+  --lt-accent-strong: #c2406f;
+  --lt-accent-soft: rgba(224, 86, 138, 0.18);
+  --lt-gold: #f2b134;
+}
+
+:root[data-lt-theme="dim"] {
+  --lt-bg: #23262e;
+  --lt-surface: #2b2e38;
+  --lt-surface-alt: #323540;
+  --lt-border: #3c3f4a;
+  --lt-text: #eceef2;
+  --lt-text-muted: #8b8f99;
+  --lt-accent: #ef8169;
+  --lt-accent-strong: #d9684f;
+  --lt-accent-soft: rgba(239, 129, 105, 0.16);
+  --lt-gold: #f2b134;
+}
+
+:root[data-lt-theme="evolution"] {
+  --lt-bg: #181c2e;
+  --lt-surface: #1f2438;
+  --lt-surface-alt: #262c44;
+  --lt-border: #323a56;
+  --lt-text: #eef0fa;
+  --lt-text-muted: #8890b0;
+  --lt-accent: #d6498f;
+  --lt-accent-strong: #b03575;
+  --lt-accent-soft: rgba(214, 73, 143, 0.16);
+  --lt-gold: #4fb8e8;
+}
+
+:root[data-lt-theme="gwen"] {
+  --lt-bg: #ece9f7;
+  --lt-surface: #ffffff;
+  --lt-surface-alt: #f3f1fb;
+  --lt-border: #ddd8f0;
+  --lt-text: #3a3360;
+  --lt-text-muted: #8b84a8;
+  --lt-accent: #9b8fd6;
+  --lt-accent-strong: #7d6cc4;
+  --lt-accent-soft: rgba(155, 143, 214, 0.16);
+  --lt-gold: #e0566a;
+}
+
+:root[data-lt-theme="questionable"] {
+  --lt-bg: #16202c;
+  --lt-surface: #1d2a38;
+  --lt-surface-alt: #243444;
+  --lt-border: #314252;
+  --lt-text: #e8eef2;
+  --lt-text-muted: #7e93a3;
+  --lt-accent: #2bb89a;
+  --lt-accent-strong: #1f9580;
+  --lt-accent-soft: rgba(43, 184, 154, 0.16);
+  --lt-gold: #d4e157;
+}
+
 /* The site's global meyer-reset.css sets `section { display: block; }`
    for old-browser HTML5 support. As an author-stylesheet rule it beats the
    browser's native `[hidden] { display: none }` UA rule outright (origin
