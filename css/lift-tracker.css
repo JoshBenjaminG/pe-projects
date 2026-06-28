@@ -289,30 +289,32 @@ html::-webkit-scrollbar,
    that's deliberate. A first pass that fit by ~9px on estimated text
    widths still wrapped on a real iPhone 14 Pro, because actual San
    Francisco bold-text metrics (and the hamburger/help buttons' borders)
-   run wider than a quick estimate accounts for. This version targets
-   ~30px of real slack instead of an exact fit, so small per-device font
-   rendering differences don't reopen this same bug. */
+   run wider than a quick estimate accounts for. The numbers below have
+   confirmed real margin on-device (verified the 28px/0.68rem version
+   actually fits), so this gives the buttons back a bit of size while
+   still sitting well short of the full default (36px/0.8rem) that
+   originally overflowed at this width. */
 @media (max-width: 430px) {
   .lt-header {
-    gap: 8px;
+    gap: 10px;
   }
 
   .lt-header-menu,
   .lt-header-actions {
-    gap: 4px;
+    gap: 5px;
   }
 
   .lt-hamburger-btn,
   .lt-help-btn {
-    width: 28px;
-    height: 28px;
+    width: 32px;
+    height: 32px;
   }
 
   .lt-logout-btn,
   .lt-feedback-btn {
-    font-size: 0.68rem;
-    padding: 4px 6px;
-    min-height: 28px;
+    font-size: 0.72rem;
+    padding: 5px 8px;
+    min-height: 32px;
   }
 }
 
