@@ -46,6 +46,13 @@
                     "description": "<p>As of writing, this workflow has shipped well over 100 individual features and fixes: weight and waist tracking, per-user accounts, a day-grouped workout history, gamified weekly streaks, full-history export, and dozens of smaller polish passes, with several sometimes shipping in a single day.</p><p>The point isn't that AI wrote the code unsupervised. It's that the loop from \"I noticed this\" to \"this is live\" got short enough that almost nothing is too small to fix.</p>"
                 },
                 {
+                    "module": "image",
+                    "img": "images/lift-tracker/lighthouse-scores.png",
+                    "variant": "img-portrait",
+                    "caption": "<p class='caption'>A Lighthouse audit of the live app after a focused performance pass: 91 Performance, 90 Accessibility, 96 Best Practices, and (briefly) 100 SEO.</p>",
+                    "description": "<p>Performance got the same treatment as everything else here: notice something slow, fix it, ship it. A Lighthouse audit on the live app turned up four distinct bottlenecks stacked on top of each other -- a charting library loaded synchronously before anything could paint, seventeen separate unbundled JavaScript files being discovered and fetched one at a time, no caching policy on any of those assets, and a perfect-but-pointless SEO ceiling caused by the app's own privacy setting.</p><p>Each got its own fix, not a blanket one: deferring the chart library and dropping an unused Google Fonts request cleared the render-blocking problem; bundling and minifying the JavaScript with esbuild cut it from roughly 147KB spread across seventeen requests down to a single ~66KB request; scoped, versioned cache headers meant returning visitors stopped re-downloading assets they already had. The SEO score shown here was captured with the app's noindex flag briefly lifted to confirm the ceiling really was just that flag -- it's back in place by default, since this is a personal tool and not something meant to show up in search results.</p>"
+                },
+                {
                     "module": "project-links",
                     "github": "https://github.com/JoshBenjaminG/pe-projects/tree/master/js/lift-tracker",
                     "site_link": "https://josheg.com/workout.php?demo=1"

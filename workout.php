@@ -19,6 +19,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Lift Tracker — Joshua G</title>
   <meta name="description" content="Personal lift tracker and strength progress dashboard.">
+  <meta name="robots" content="noindex, nofollow">
   <link rel="icon" href="/images/favicon3.ico" type="image/x-icon">
   <link rel="apple-touch-icon" href="/images/lifttracker.png">
 
