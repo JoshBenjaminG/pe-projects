@@ -283,24 +283,36 @@ html::-webkit-scrollbar,
    title further -- buys back enough width to keep everything on one
    line when the menu is open. Same 430px reasoning as the h1 breakpoint
    above -- 391px excluded the 393px-wide iPhone Pro models, which is
-   exactly the device this fix is for. */
+   exactly the device this fix is for.
+
+   These values run noticeably tighter than they need to on paper --
+   that's deliberate. A first pass that fit by ~9px on estimated text
+   widths still wrapped on a real iPhone 14 Pro, because actual San
+   Francisco bold-text metrics (and the hamburger/help buttons' borders)
+   run wider than a quick estimate accounts for. This version targets
+   ~30px of real slack instead of an exact fit, so small per-device font
+   rendering differences don't reopen this same bug. */
 @media (max-width: 430px) {
+  .lt-header {
+    gap: 8px;
+  }
+
   .lt-header-menu,
   .lt-header-actions {
-    gap: 6px;
+    gap: 4px;
   }
 
   .lt-hamburger-btn,
   .lt-help-btn {
-    width: 30px;
-    height: 30px;
+    width: 28px;
+    height: 28px;
   }
 
   .lt-logout-btn,
   .lt-feedback-btn {
-    font-size: 0.7rem;
-    padding: 6px 8px;
-    min-height: 30px;
+    font-size: 0.68rem;
+    padding: 4px 6px;
+    min-height: 28px;
   }
 }
 
