@@ -525,6 +525,83 @@ html::-webkit-scrollbar,
   flex-shrink: 0;
 }
 
+/* ---------- Achievements (Call of Duty-themed badges) ---------- */
+.lt-killstreak-achievements-heading {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--lt-text);
+  margin: 24px 0 4px;
+}
+
+.lt-achievement-track {
+  margin-bottom: 18px;
+}
+
+.lt-achievement-track-heading {
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--lt-text-muted);
+  margin: 0 0 8px;
+}
+
+.lt-achievement-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.lt-achievement-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border: 1px solid var(--lt-border);
+  border-radius: 12px;
+  padding: 10px 14px;
+}
+
+/* Unlocked badges get the gold treatment that already marks the current
+   killstreak tier above, so "earned" reads consistently across the page. */
+.lt-achievement-card-unlocked {
+  background: var(--lt-surface);
+  border-color: var(--lt-gold);
+}
+
+/* Locked badges stay visible (so the full roadmap is browsable) but
+   dimmed, so unlocked ones still draw the eye first. */
+.lt-achievement-card-locked {
+  background: var(--lt-surface);
+  opacity: 0.55;
+}
+
+.lt-achievement-card-icon {
+  font-size: 1.4rem;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.lt-achievement-card-info {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  min-width: 0;
+}
+
+.lt-achievement-card-name {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--lt-text);
+}
+
+.lt-achievement-card-desc {
+  font-size: 0.8rem;
+  color: var(--lt-text-muted);
+}
+
 /* ---------- Export section (collapsible, like composite) ---------- */
 .lt-export-section {
   border: 1px solid var(--lt-border);
