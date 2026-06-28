@@ -166,11 +166,13 @@ export function achievementStats(sets) {
 // Achievement catalog, Call of Duty-themed. Four tracks:
 //
 // - "rank" -- military rank ladder gated on lifetime total workout days.
-//   This is the predictable backbone: thresholds are spaced to unlock
-//   quickly at first and progressively further apart later, so the last
-//   core rank (General) lands around the 6-month mark for someone
-//   averaging ~3 workout days/week. Prestige and Prestige Master sit
-//   beyond that on purpose, as bonus content for long-term users.
+//   Thresholds are front-loaded on purpose: new users should see a quick
+//   run of unlocks (themes included) instead of a long dry spell, so all
+//   14 tiers are reachable within roughly the first one to two months for
+//   someone training a few times a week, with the back half (Major
+//   onward) just stretched enough to still feel earned. Once the catalog
+//   here feels too easy to exhaust, add more named theme blocks + ranks
+//   above Prestige Master rather than re-spacing the existing ladder.
 //   Each rank also carries a `theme` -- earning that rank unlocks the
 //   matching `:root[data-lt-theme="..."]` color theme from
 //   lift-tracker.css for the rest of the app (see views/killstreakView.js,
@@ -191,19 +193,19 @@ export function achievementStats(sets) {
 export const ACHIEVEMENTS = [
   // --- Rank: lifetime total workout days ---
   { id: 'rank-private', name: 'Private', track: 'rank', description: 'Log 1 workout day.', theme: { id: 'default', label: 'Lift Tracker' }, isUnlocked: (s) => s.totalDays >= 1 },
-  { id: 'rank-pfc', name: 'Private First Class', track: 'rank', description: 'Log 3 workout days.', theme: { id: 'agile', label: 'Agile' }, isUnlocked: (s) => s.totalDays >= 3 },
-  { id: 'rank-corporal', name: 'Corporal', track: 'rank', description: 'Log 6 workout days.', theme: { id: 'agriculture', label: 'Agriculture' }, isUnlocked: (s) => s.totalDays >= 6 },
-  { id: 'rank-sergeant', name: 'Sergeant', track: 'rank', description: 'Log 10 workout days.', theme: { id: 'army', label: 'Army' }, isUnlocked: (s) => s.totalDays >= 10 },
-  { id: 'rank-staff-sergeant', name: 'Staff Sergeant', track: 'rank', description: 'Log 15 workout days.', theme: { id: 'bluelift', label: 'Blue Lift' }, isUnlocked: (s) => s.totalDays >= 15 },
-  { id: 'rank-master-sergeant', name: 'Master Sergeant', track: 'rank', description: 'Log 21 workout days.', theme: { id: 'brown', label: 'Brown' }, isUnlocked: (s) => s.totalDays >= 21 },
-  { id: 'rank-warrant-officer', name: 'Warrant Officer', track: 'rank', description: 'Log 28 workout days.', theme: { id: 'neon', label: 'Neon' }, isUnlocked: (s) => s.totalDays >= 28 },
-  { id: 'rank-lieutenant', name: 'Lieutenant', track: 'rank', description: 'Log 36 workout days.', theme: { id: 'white', label: 'White' }, isUnlocked: (s) => s.totalDays >= 36 },
-  { id: 'rank-captain', name: 'Captain', track: 'rank', description: 'Log 45 workout days.', theme: { id: 'apple', label: 'Apple' }, isUnlocked: (s) => s.totalDays >= 45 },
-  { id: 'rank-major', name: 'Major', track: 'rank', description: 'Log 55 workout days.', theme: { id: 'candy', label: 'Candy' }, isUnlocked: (s) => s.totalDays >= 55 },
-  { id: 'rank-colonel', name: 'Colonel', track: 'rank', description: 'Log 67 workout days.', theme: { id: 'dim', label: 'Dim' }, isUnlocked: (s) => s.totalDays >= 67 },
-  { id: 'rank-general', name: 'General', track: 'rank', description: 'Log 80 workout days.', theme: { id: 'evolution', label: 'Evolution' }, isUnlocked: (s) => s.totalDays >= 80 },
-  { id: 'rank-prestige', name: 'Prestige', track: 'rank', description: 'Log 100 workout days.', theme: { id: 'gwen', label: 'Gwen' }, isUnlocked: (s) => s.totalDays >= 100 },
-  { id: 'rank-prestige-master', name: 'Prestige Master', track: 'rank', description: 'Log 150 workout days.', theme: { id: 'questionable', label: 'Questionable' }, isUnlocked: (s) => s.totalDays >= 150 },
+  { id: 'rank-pfc', name: 'Private First Class', track: 'rank', description: 'Log 2 workout days.', theme: { id: 'agile', label: 'Agile' }, isUnlocked: (s) => s.totalDays >= 2 },
+  { id: 'rank-corporal', name: 'Corporal', track: 'rank', description: 'Log 3 workout days.', theme: { id: 'agriculture', label: 'Agriculture' }, isUnlocked: (s) => s.totalDays >= 3 },
+  { id: 'rank-sergeant', name: 'Sergeant', track: 'rank', description: 'Log 5 workout days.', theme: { id: 'army', label: 'Army' }, isUnlocked: (s) => s.totalDays >= 5 },
+  { id: 'rank-staff-sergeant', name: 'Staff Sergeant', track: 'rank', description: 'Log 7 workout days.', theme: { id: 'bluelift', label: 'Blue Lift' }, isUnlocked: (s) => s.totalDays >= 7 },
+  { id: 'rank-master-sergeant', name: 'Master Sergeant', track: 'rank', description: 'Log 9 workout days.', theme: { id: 'brown', label: 'Brown' }, isUnlocked: (s) => s.totalDays >= 9 },
+  { id: 'rank-warrant-officer', name: 'Warrant Officer', track: 'rank', description: 'Log 11 workout days.', theme: { id: 'neon', label: 'Neon' }, isUnlocked: (s) => s.totalDays >= 11 },
+  { id: 'rank-lieutenant', name: 'Lieutenant', track: 'rank', description: 'Log 13 workout days.', theme: { id: 'white', label: 'White' }, isUnlocked: (s) => s.totalDays >= 13 },
+  { id: 'rank-captain', name: 'Captain', track: 'rank', description: 'Log 15 workout days.', theme: { id: 'apple', label: 'Apple' }, isUnlocked: (s) => s.totalDays >= 15 },
+  { id: 'rank-major', name: 'Major', track: 'rank', description: 'Log 18 workout days.', theme: { id: 'candy', label: 'Candy' }, isUnlocked: (s) => s.totalDays >= 18 },
+  { id: 'rank-colonel', name: 'Colonel', track: 'rank', description: 'Log 22 workout days.', theme: { id: 'dim', label: 'Dim' }, isUnlocked: (s) => s.totalDays >= 22 },
+  { id: 'rank-general', name: 'General', track: 'rank', description: 'Log 27 workout days.', theme: { id: 'evolution', label: 'Evolution' }, isUnlocked: (s) => s.totalDays >= 27 },
+  { id: 'rank-prestige', name: 'Prestige', track: 'rank', description: 'Log 33 workout days.', theme: { id: 'gwen', label: 'Gwen' }, isUnlocked: (s) => s.totalDays >= 33 },
+  { id: 'rank-prestige-master', name: 'Prestige Master', track: 'rank', description: 'Log 40 workout days.', theme: { id: 'questionable', label: 'Questionable' }, isUnlocked: (s) => s.totalDays >= 40 },
 
   // --- Mastery: lifetime count of each weekly tier earned ---
   { id: 'mastery-uav-1', name: 'UAV Specialist', track: 'mastery', description: 'Earn the UAV tier 3 times.', isUnlocked: (s) => s.tierCounts.uav >= 3 },
@@ -224,9 +226,9 @@ export const ACHIEVEMENTS = [
   { id: 'streak-8', name: 'Juggernaut', track: 'streak', description: '8 consecutive weeks with at least a UAV.', isUnlocked: (s) => s.longestStreak >= 8 },
 
   // --- Capstone: combine a hard achievement from two different tracks ---
-  { id: 'capstone-tactical-nuke', name: 'Tactical Nuke', track: 'capstone', description: 'Reach General (80 days) and earn Gunship (Chopper Gunner x5).', isUnlocked: (s) => s.totalDays >= 80 && s.tierCounts.chopper >= 5 },
+  { id: 'capstone-tactical-nuke', name: 'Tactical Nuke', track: 'capstone', description: 'Reach General (27 days) and earn Gunship (Chopper Gunner x5).', isUnlocked: (s) => s.totalDays >= 27 && s.tierCounts.chopper >= 5 },
   { id: 'capstone-moab', name: 'MOAB', track: 'capstone', description: 'Reach Juggernaut (8-week streak) and Harrier Veteran (x15).', isUnlocked: (s) => s.longestStreak >= 8 && s.tierCounts.harrier >= 15 },
-  { id: 'capstone-dark-matter', name: 'Dark Matter', track: 'capstone', description: 'Reach Prestige Master (150 days) and earn Gunship (x5).', isUnlocked: (s) => s.totalDays >= 150 && s.tierCounts.chopper >= 5 },
+  { id: 'capstone-dark-matter', name: 'Dark Matter', track: 'capstone', description: 'Reach Prestige Master (40 days) and earn Gunship (x5).', isUnlocked: (s) => s.totalDays >= 40 && s.tierCounts.chopper >= 5 },
 ];
 
 /**

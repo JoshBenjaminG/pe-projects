@@ -234,19 +234,19 @@ function findAchievement(id) {
 
 const RANK_THRESHOLDS = {
   'rank-private': 1,
-  'rank-pfc': 3,
-  'rank-corporal': 6,
-  'rank-sergeant': 10,
-  'rank-staff-sergeant': 15,
-  'rank-master-sergeant': 21,
-  'rank-warrant-officer': 28,
-  'rank-lieutenant': 36,
-  'rank-captain': 45,
-  'rank-major': 55,
-  'rank-colonel': 67,
-  'rank-general': 80,
-  'rank-prestige': 100,
-  'rank-prestige-master': 150,
+  'rank-pfc': 2,
+  'rank-corporal': 3,
+  'rank-sergeant': 5,
+  'rank-staff-sergeant': 7,
+  'rank-master-sergeant': 9,
+  'rank-warrant-officer': 11,
+  'rank-lieutenant': 13,
+  'rank-captain': 15,
+  'rank-major': 18,
+  'rank-colonel': 22,
+  'rank-general': 27,
+  'rank-prestige': 33,
+  'rank-prestige-master': 40,
 };
 
 for (const [id, threshold] of Object.entries(RANK_THRESHOLDS)) {
@@ -307,15 +307,15 @@ for (const [id, threshold] of Object.entries(STREAK_THRESHOLDS)) {
   });
 }
 
-test('achievement capstone-tactical-nuke: requires BOTH 80 days AND 5x chopper, not either alone', () => {
+test('achievement capstone-tactical-nuke: requires BOTH 27 days AND 5x chopper, not either alone', () => {
   const a = findAchievement('capstone-tactical-nuke');
-  if (a.isUnlocked(makeStats({ totalDays: 80, tierCounts: { chopper: 4 } })) !== false) {
+  if (a.isUnlocked(makeStats({ totalDays: 27, tierCounts: { chopper: 4 } })) !== false) {
     throw new Error('expected locked with days met but chopper short');
   }
-  if (a.isUnlocked(makeStats({ totalDays: 79, tierCounts: { chopper: 5 } })) !== false) {
+  if (a.isUnlocked(makeStats({ totalDays: 26, tierCounts: { chopper: 5 } })) !== false) {
     throw new Error('expected locked with chopper met but days short');
   }
-  if (a.isUnlocked(makeStats({ totalDays: 80, tierCounts: { chopper: 5 } })) !== true) {
+  if (a.isUnlocked(makeStats({ totalDays: 27, tierCounts: { chopper: 5 } })) !== true) {
     throw new Error('expected unlocked when both conditions met');
   }
 });
@@ -333,15 +333,15 @@ test('achievement capstone-moab: requires BOTH an 8-week streak AND 15x harrier'
   }
 });
 
-test('achievement capstone-dark-matter: requires BOTH 150 days AND 5x chopper', () => {
+test('achievement capstone-dark-matter: requires BOTH 40 days AND 5x chopper', () => {
   const a = findAchievement('capstone-dark-matter');
-  if (a.isUnlocked(makeStats({ totalDays: 150, tierCounts: { chopper: 4 } })) !== false) {
+  if (a.isUnlocked(makeStats({ totalDays: 40, tierCounts: { chopper: 4 } })) !== false) {
     throw new Error('expected locked with days met but chopper short');
   }
-  if (a.isUnlocked(makeStats({ totalDays: 149, tierCounts: { chopper: 5 } })) !== false) {
+  if (a.isUnlocked(makeStats({ totalDays: 39, tierCounts: { chopper: 5 } })) !== false) {
     throw new Error('expected locked with chopper met but days short');
   }
-  if (a.isUnlocked(makeStats({ totalDays: 150, tierCounts: { chopper: 5 } })) !== true) {
+  if (a.isUnlocked(makeStats({ totalDays: 40, tierCounts: { chopper: 5 } })) !== true) {
     throw new Error('expected unlocked when both conditions met');
   }
 });
