@@ -351,6 +351,14 @@ html::-webkit-scrollbar,
   font-size: 0.8rem;
   font-weight: 700;
   padding: 8px 14px;
+  /* Fixed width (not just padding) so the button stays the same size
+     whether it reads "Fast" or "Normal" -- without this, the wider word
+     pushed the button wider, which (since .lt-killstreak is flex: 1)
+     shrank the killstreak box and visibly shifted it sideways every time
+     the mode was toggled. 84px comfortably fits "Normal" in this bold
+     0.8rem font with room to spare for "Fast" to sit centered inside it. */
+  width: 84px;
+  white-space: nowrap;
   border-radius: 8px;
   border: 1px solid var(--lt-border);
   background: var(--lt-surface);
