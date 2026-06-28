@@ -96,6 +96,12 @@ html::-webkit-scrollbar,
   align-items: center;
   justify-content: space-between;
   gap: 12px;
+  /* Fallback for when the menu is open and there genuinely isn't room
+     for the title + all the action buttons on one line: let the menu
+     drop to its own row below instead of squeezing the title (see
+     white-space:nowrap on h1 below -- without flex-wrap here, that
+     squeeze had nowhere to go but text-wrapping the title itself). */
+  flex-wrap: wrap;
 }
 
 .lt-header h1 {
@@ -104,6 +110,12 @@ html::-webkit-scrollbar,
   letter-spacing: 0.01em;
   margin: 8px 0 8px;
   color: var(--lt-text);
+  /* Never let "Lift Tracker" shrink or wrap onto two lines -- on mobile,
+     opening the hamburger menu was eating into the title's space and
+     flexbox would shrink it down to its narrowest word instead of
+     overflowing, breaking it across two lines. */
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 
 .lt-header-menu {
