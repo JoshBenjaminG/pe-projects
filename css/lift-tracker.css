@@ -16,6 +16,104 @@
   --lt-gold: #f2b134;
 }
 
+/* ---------- Theme variants ----------
+   Color palettes pulled from mockup references, not wired to any selector
+   UI yet -- set data-lt-theme="<name>" on the <html> element to preview
+   one (e.g. document.documentElement.dataset.ltTheme = "agile"). Same
+   10-variable contract as :root above, so every existing component rule
+   picks these up automatically once a theme attribute is set. */
+
+:root[data-lt-theme="agile"] {
+  --lt-bg: #faf3f6;
+  --lt-surface: #ffffff;
+  --lt-surface-alt: #f8f9fb;
+  --lt-border: #e1e6f0;
+  --lt-text: #0d2a5c;
+  --lt-text-muted: #7785a3;
+  --lt-accent: #0558d6;
+  --lt-accent-strong: #043fa3;
+  --lt-accent-soft: rgba(5, 88, 214, 0.14);
+  --lt-gold: #ac80e5;
+}
+
+:root[data-lt-theme="agriculture"] {
+  --lt-bg: #fdf3e7;
+  --lt-surface: #fbf8f1;
+  --lt-surface-alt: #f3eee0;
+  --lt-border: #e3dcc9;
+  --lt-text: #1f3a2d;
+  --lt-text-muted: #74806f;
+  --lt-accent: #2d4a3d;
+  --lt-accent-strong: #1f352b;
+  --lt-accent-soft: rgba(45, 74, 61, 0.14);
+  --lt-gold: #d9a441;
+}
+
+:root[data-lt-theme="army"] {
+  --lt-bg: #fce7e3;
+  --lt-surface: #fbe9d3;
+  --lt-surface-alt: #26352a;
+  --lt-border: #3a4a3a;
+  --lt-text: #1c2a1f;
+  --lt-text-muted: #8a7d68;
+  --lt-accent: #c75c3a;
+  --lt-accent-strong: #a8472a;
+  --lt-accent-soft: rgba(199, 92, 58, 0.16);
+  --lt-gold: #e0b863;
+}
+
+:root[data-lt-theme="bluelift"] {
+  --lt-bg: #051123;
+  --lt-surface: #0c1a31;
+  --lt-surface-alt: #11203a;
+  --lt-border: #1c2c4a;
+  --lt-text: #eaf2fb;
+  --lt-text-muted: #7d93b8;
+  --lt-accent: #2dd4ff;
+  --lt-accent-strong: #0ea5e9;
+  --lt-accent-soft: rgba(45, 212, 255, 0.16);
+  --lt-gold: #f2b134;
+}
+
+:root[data-lt-theme="brown"] {
+  --lt-bg: #201e1a;
+  --lt-surface: #2a2622;
+  --lt-surface-alt: #312c27;
+  --lt-border: #3a332a;
+  --lt-text: #f0e6d8;
+  --lt-text-muted: #a89a86;
+  --lt-accent: #e08a3c;
+  --lt-accent-strong: #c06f28;
+  --lt-accent-soft: rgba(224, 138, 60, 0.16);
+  --lt-gold: #f2b134;
+}
+
+:root[data-lt-theme="neon"] {
+  --lt-bg: #1d0f24;
+  --lt-surface: #2c1735;
+  --lt-surface-alt: #34193a;
+  --lt-border: #422047;
+  --lt-text: #f5eaf7;
+  --lt-text-muted: #b08fc0;
+  --lt-accent: #e0249c;
+  --lt-accent-strong: #b81a7d;
+  --lt-accent-soft: rgba(224, 36, 156, 0.16);
+  --lt-gold: #ff7a59;
+}
+
+:root[data-lt-theme="white"] {
+  --lt-bg: #f7f9f5;
+  --lt-surface: #ffffff;
+  --lt-surface-alt: #eef1ea;
+  --lt-border: #e4e7e2;
+  --lt-text: #303844;
+  --lt-text-muted: #8a8f94;
+  --lt-accent: #4f7a50;
+  --lt-accent-strong: #3e6440;
+  --lt-accent-soft: rgba(79, 122, 80, 0.14);
+  --lt-gold: #f2b134;
+}
+
 /* The site's global meyer-reset.css sets `section { display: block; }`
    for old-browser HTML5 support. As an author-stylesheet rule it beats the
    browser's native `[hidden] { display: none }` UA rule outright (origin
