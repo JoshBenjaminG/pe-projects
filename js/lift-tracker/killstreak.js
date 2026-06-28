@@ -67,3 +67,38 @@ export function weeklyKillstreak(sets, now = new Date()) {
   const days = workoutDaysThisWeek(sets, now);
   return { days, tier: killstreakForDays(days) };
 }
+
+/**
+ * Lifetime tally of how many distinct Sun-Sat weeks earned each tier,
+ * across a user's full set history (not just the current week). Each
+ * week counts toward its single highest tier only -- a 3-workout-day week
+ * counts as one Harrier Strike, not also a UAV and a Predator Missile --
+ * matching how the weekly badge itself only ever shows the top tier
+ * earned, never every tier passed through on the way there.
+ *
+ * Returns a plain object keyed by tier `key` (see KILLSTREAK_TIERS), e.g.
+ * `{ uav: 3, predator: 1, harrier: 0, chopper: 2 }`, always including
+ * every tier even at 0 so callers don't need an existence check per tier.
+ *
+ * @param {{performed_at:string}[]} sets
+ */
+export function killstreakHistory(sets) {
+  const dayKeysByWeek = new Map(); // week-start epoch ms -> Set of date keys
+
+  for (const s of sets) {
+    const start = weekStart(new Date(s.performed_at));
+    const weekKey = start.getTime();
+    if (!dayKeysByWeek.has(weekKey)) dayKeysByWeek.set(weekKey, new Set());
+    dayKeysByWeek.get(weekKey).add(toDateKey(s.performed_at));
+  }
+
+  const counts = {};
+  for (const tier of KILLSTREAK_TIERS) counts[tier.key] = 0;
+
+  for (const dayKeys of dayKeysByWeek.values()) {
+    const tier = killstreakForDays(dayKeys.size);
+    if (tier) counts[tier.key] += 1;
+  }
+
+  return counts;
+}

@@ -26,6 +26,9 @@ export function parseRoute() {
   if (hash === 'history') {
     return { name: 'history' };
   }
+  if (hash === 'killstreak') {
+    return { name: 'killstreak' };
+  }
   return { name: 'list' };
 }
 
@@ -59,6 +62,10 @@ export function goToComposite() {
 
 export function goToHistory() {
   window.location.hash = '#/history';
+}
+
+export function goToKillstreak() {
+  window.location.hash = '#/killstreak';
 }
 
 // Forces whatever view is currently mounted to re-fetch and re-render,

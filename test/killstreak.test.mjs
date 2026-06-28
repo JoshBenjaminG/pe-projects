@@ -1,4 +1,4 @@
-import { weekStart, workoutDaysThisWeek, killstreakForDays, weeklyKillstreak } from '../js/lift-tracker/killstreak.js';
+import { weekStart, workoutDaysThisWeek, killstreakForDays, weeklyKillstreak, killstreakHistory } from '../js/lift-tracker/killstreak.js';
 
 let passed = 0;
 function test(name, fn) {
@@ -110,6 +110,58 @@ test('weeklyKillstreak: combines day count and tier', () => {
   const result = weeklyKillstreak(sets, THURSDAY);
   if (result.days !== 3) throw new Error(`expected 3 days got ${result.days}`);
   if (result.tier?.key !== 'harrier') throw new Error(`expected harrier got ${result.tier?.key}`);
+});
+
+test('killstreakHistory: empty history is all zeros', () => {
+  const counts = killstreakHistory([]);
+  if (counts.uav !== 0 || counts.predator !== 0 || counts.harrier !== 0 || counts.chopper !== 0) {
+    throw new Error(`expected all zeros got ${JSON.stringify(counts)}`);
+  }
+});
+
+test('killstreakHistory: a week counts toward its single highest tier only', () => {
+  // Same Sun-Sat week (June 14-20 2026) as THURSDAY's week, 3 distinct
+  // workout days -- should tally one Harrier Strike, not also a UAV and
+  // a Predator Missile along the way.
+  const sets = [
+    { performed_at: iso(2026, 6, 15, 9) },
+    { performed_at: iso(2026, 6, 16, 9) },
+    { performed_at: iso(2026, 6, 17, 9) },
+  ];
+  const counts = killstreakHistory(sets);
+  if (counts.harrier !== 1) throw new Error(`expected 1 harrier got ${counts.harrier}`);
+  if (counts.uav !== 0) throw new Error(`expected 0 uav got ${counts.uav}`);
+  if (counts.predator !== 0) throw new Error(`expected 0 predator got ${counts.predator}`);
+});
+
+test('killstreakHistory: tallies separately across multiple distinct weeks', () => {
+  const sets = [
+    // Week of June 14 2026: 1 workout day -> UAV
+    { performed_at: iso(2026, 6, 15, 9) },
+    // Week of June 21 2026: 4 workout days -> Chopper Gunner
+    { performed_at: iso(2026, 6, 22, 9) },
+    { performed_at: iso(2026, 6, 23, 9) },
+    { performed_at: iso(2026, 6, 24, 9) },
+    { performed_at: iso(2026, 6, 25, 9) },
+    // Week of June 28 2026: 2 workout days -> Predator Missile
+    { performed_at: iso(2026, 6, 29, 9) },
+    { performed_at: iso(2026, 6, 30, 9) },
+  ];
+  const counts = killstreakHistory(sets);
+  if (counts.uav !== 1) throw new Error(`expected 1 uav got ${counts.uav}`);
+  if (counts.predator !== 1) throw new Error(`expected 1 predator got ${counts.predator}`);
+  if (counts.chopper !== 1) throw new Error(`expected 1 chopper got ${counts.chopper}`);
+  if (counts.harrier !== 0) throw new Error(`expected 0 harrier got ${counts.harrier}`);
+});
+
+test('killstreakHistory: multiple sets on the same day in a week still count as one day toward that week\'s tier', () => {
+  const sets = [
+    { performed_at: iso(2026, 6, 15, 9) },
+    { performed_at: iso(2026, 6, 15, 18) }, // same day as above
+  ];
+  const counts = killstreakHistory(sets);
+  if (counts.uav !== 1) throw new Error(`expected 1 uav got ${counts.uav}`);
+  if (counts.predator !== 0) throw new Error(`expected 0 predator got ${counts.predator}`);
 });
 
 console.log(`\n${passed} tests passed`);

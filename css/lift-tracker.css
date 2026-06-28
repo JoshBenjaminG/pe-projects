@@ -393,6 +393,10 @@ html::-webkit-scrollbar,
 }
 
 /* ---------- Weekly killstreak ---------- */
+/* Now a <button> (links to the dedicated killstreak page, see
+   killstreakView.js) instead of a plain <section> -- text-align/font/
+   cursor resets undo the browser's default button styling so it still
+   looks like the same plain card it always has. */
 .lt-killstreak {
   display: flex;
   align-items: center;
@@ -403,6 +407,13 @@ html::-webkit-scrollbar,
   border-radius: 12px;
   background: var(--lt-surface);
   padding: 8px 12px;
+  text-align: left;
+  font-family: inherit;
+  cursor: pointer;
+}
+
+.lt-killstreak:active {
+  background: var(--lt-surface-alt);
 }
 
 .lt-killstreak-icon {
@@ -433,6 +444,85 @@ html::-webkit-scrollbar,
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+/* ---------- Killstreak detail page ---------- */
+/* The big "current status" card at the top -- same look as the homepage
+   banner (reuses .lt-killstreak-info/.lt-killstreak-label/.lt-killstreak-sub)
+   but bigger, since it has a whole page to itself instead of competing
+   with the mode toggle and History button for space. */
+.lt-killstreak-current {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  border: 1px solid var(--lt-border);
+  border-radius: 12px;
+  background: var(--lt-surface);
+  padding: 16px;
+  margin-bottom: 20px;
+}
+
+.lt-killstreak-current-icon {
+  font-size: 2.2rem;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.lt-killstreak-tier-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.lt-killstreak-tier-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border: 1px solid var(--lt-border);
+  border-radius: 12px;
+  background: var(--lt-surface);
+  padding: 10px 14px;
+}
+
+/* The tier matching this week's already-earned badge, so it's easy to
+   spot where you currently stand in the list at a glance. */
+.lt-killstreak-tier-row-current {
+  border-color: var(--lt-gold);
+}
+
+.lt-killstreak-tier-icon {
+  font-size: 1.6rem;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.lt-killstreak-tier-info {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  min-width: 0;
+  flex: 1;
+}
+
+.lt-killstreak-tier-name {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--lt-text);
+}
+
+.lt-killstreak-tier-req {
+  font-size: 0.8rem;
+  color: var(--lt-text-muted);
+}
+
+.lt-killstreak-tier-count {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--lt-text-muted);
+  flex-shrink: 0;
 }
 
 /* ---------- Export section (collapsible, like composite) ---------- */

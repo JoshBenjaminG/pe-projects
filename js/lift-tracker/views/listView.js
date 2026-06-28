@@ -10,7 +10,7 @@ import {
 import { dailyMaxE1RM, computeComposite, calcE1RM, isNewPR, sessionVolume, toDateKey, formatPct } from '../math.js';
 import { renderCompositeChart } from '../charts.js';
 import { enableDragReorder } from '../dragReorder.js';
-import { goToLift, goToHelp, goToWeight, goToComposite, goToHistory, goToWorkoutNew, goToWorkoutEdit } from '../state.js';
+import { goToLift, goToHelp, goToWeight, goToComposite, goToHistory, goToKillstreak, goToWorkoutNew, goToWorkoutEdit } from '../state.js';
 import { supabase } from '../supabaseClient.js';
 import { openFeedbackModal } from './feedbackModal.js';
 import { weeklyKillstreak } from '../killstreak.js';
@@ -48,13 +48,13 @@ export async function renderListView(root) {
     <div class="lt-toolbar">
       <button type="button" class="lt-mode-toggle" data-mode-toggle aria-pressed="false">Fast</button>
 
-      <section class="lt-killstreak" data-killstreak-section>
+      <button type="button" class="lt-killstreak" data-killstreak-btn aria-label="View killstreak details">
         <span class="lt-killstreak-icon" data-killstreak-icon>&#127919;</span>
         <span class="lt-killstreak-info">
-          <span class="lt-killstreak-label" data-killstreak-label>No killstreak yet</span>
-          <span class="lt-killstreak-sub" data-killstreak-sub>Log a workout to start your streak this week</span>
+          <span class="lt-killstreak-label" data-killstreak-label>No Killstreak</span>
+          <span class="lt-killstreak-sub" data-killstreak-sub>0 Day streak</span>
         </span>
-      </section>
+      </button>
 
       <button type="button" class="lt-history-btn" data-history-btn>History</button>
     </div>
@@ -218,14 +218,20 @@ export async function renderListView(root) {
   const killstreakIcon = root.querySelector('[data-killstreak-icon]');
   const killstreakLabel = root.querySelector('[data-killstreak-label]');
   const killstreakSub = root.querySelector('[data-killstreak-sub]');
+  root.querySelector('[data-killstreak-btn]').addEventListener('click', goToKillstreak);
 
   function renderKillstreak(sets) {
+    // Short, fixed-pattern wording ("UAV Killstreak" / "3 Day streak")
+    // instead of the old full-sentence copy -- the box is too narrow for
+    // a sentence at any tier name length, and it was getting clipped with
+    // an ellipsis regardless of which tier (or no tier) was showing. The
+    // box is now a button (see the click handler below) that links to a
+    // dedicated killstreak page with the full explanation and lifetime
+    // tier counts, so the banner itself only needs to show current status.
     const { days, tier } = weeklyKillstreak(sets);
     killstreakIcon.textContent = tier ? tier.icon : '\u{1F3AF}';
-    killstreakLabel.textContent = tier ? tier.label : 'No killstreak yet';
-    killstreakSub.textContent = tier
-      ? `${days} workout ${days === 1 ? 'day' : 'days'} this week`
-      : 'Log a workout to start your streak this week';
+    killstreakLabel.textContent = tier ? `${tier.label} Killstreak` : 'No Killstreak';
+    killstreakSub.textContent = `${days} Day streak`;
   }
 
   const weightCard = root.querySelector('[data-weight-card]');

@@ -13,7 +13,9 @@ const SECTIONS = [
       killstreak based on how many different days you've logged a workout
       this week (Sunday through Saturday). 1 day earns a UAV, 2 days a
       Predator Missile, 3 days a Harrier Strike, and 4 or more days a
-      Chopper Gunner. It resets on its own every Sunday — nothing to do.`,
+      Chopper Gunner. It resets on its own every Sunday — nothing to do.
+      Tap the banner to see a full breakdown and how many of each tier
+      you've earned over time.`,
   },
   {
     title: 'Fast mode',
