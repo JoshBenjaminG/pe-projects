@@ -106,11 +106,77 @@ html::-webkit-scrollbar,
   color: var(--lt-text);
 }
 
-.lt-header-actions {
-  display: flex;
-  align-items: center;
-  gap: 8px;
+.lt-header-menu {
+  position: relative;
   flex-shrink: 0;
+}
+
+.lt-hamburger-btn {
+  width: 36px;
+  height: 36px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  border-radius: 8px;
+  border: 1px solid var(--lt-border);
+  background: var(--lt-surface);
+}
+
+.lt-hamburger-btn:active {
+  background: var(--lt-surface-alt);
+}
+
+.lt-hamburger-line {
+  display: block;
+  width: 16px;
+  height: 2px;
+  border-radius: 1px;
+  background: var(--lt-text);
+}
+
+/* Floating panel anchored under the hamburger button, right-aligned so it
+   stays on-screen on the right edge. flex-end (not stretch) keeps each
+   button its own natural width/shape -- notably the round "?" Help
+   button, which stretch would otherwise squash into an oval. */
+.lt-header-actions {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  z-index: 20;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 8px;
+}
+
+/* Collapsed-toward-the-hamburger starting state for the fan-out reveal;
+   each item also drifts in from a slightly rotated, scaled-down pose so
+   opening reads as items fanning out rather than a flat slide/fade. */
+.lt-header-actions > * {
+  opacity: 0;
+  transform: translateY(-6px) scale(0.85) rotate(-6deg);
+  transform-origin: top right;
+  transition: opacity 0.16s ease, transform 0.16s ease;
+}
+
+.lt-header-actions-open > *:nth-child(1) {
+  transition-delay: 0s;
+}
+
+.lt-header-actions-open > *:nth-child(2) {
+  transition-delay: 0.04s;
+}
+
+.lt-header-actions-open > *:nth-child(3) {
+  transition-delay: 0.08s;
+}
+
+.lt-header-actions-open > * {
+  opacity: 1;
+  transform: translateY(0) scale(1) rotate(0deg);
 }
 
 .lt-logout-btn {

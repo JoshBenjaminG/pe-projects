@@ -30,10 +30,17 @@ export async function renderListView(root) {
   root.innerHTML = `
     <header class="lt-header">
       <h1>Lift Tracker</h1>
-      <div class="lt-header-actions">
-        ${isGuest ? '' : '<button type="button" class="lt-feedback-btn" data-feedback-btn>Feedback</button>'}
-        <button type="button" class="lt-logout-btn" data-logout-btn>Log out</button>
-        <button type="button" class="lt-help-btn" data-help-btn aria-label="Help">?</button>
+      <div class="lt-header-menu" data-header-menu>
+        <button type="button" class="lt-hamburger-btn" data-hamburger-btn aria-label="Menu" aria-expanded="false">
+          <span class="lt-hamburger-line"></span>
+          <span class="lt-hamburger-line"></span>
+          <span class="lt-hamburger-line"></span>
+        </button>
+        <div class="lt-header-actions" data-header-actions hidden>
+          ${isGuest ? '' : '<button type="button" class="lt-feedback-btn" data-feedback-btn>Feedback</button>'}
+          <button type="button" class="lt-logout-btn" data-logout-btn>Log out</button>
+          <button type="button" class="lt-help-btn" data-help-btn aria-label="Help">?</button>
+        </div>
       </div>
     </header>
 
@@ -90,6 +97,55 @@ export async function renderListView(root) {
     <ul class="lt-lift-list" data-lift-list></ul>
     <p class="lt-empty" data-list-empty hidden>No lifts yet — add your first one above.</p>
   `;
+
+  // Hamburger menu: Feedback/Help/Log out stay exactly the buttons they
+  // were, just tucked behind a toggle instead of sitting in the header
+  // permanently. Opening fans them out (staggered transition in the CSS);
+  // picking one of them, toggling the hamburger again, or tapping
+  // anywhere outside the menu closes it. The outside-click listener is
+  // added on open and removed on close (rather than left bound forever)
+  // so repeated open/close cycles -- or navigating away from this view
+  // entirely -- don't pile up stray document-level listeners over time.
+  const headerMenu = root.querySelector('[data-header-menu]');
+  const hamburgerBtn = root.querySelector('[data-hamburger-btn]');
+  const headerActions = root.querySelector('[data-header-actions]');
+  let outsideClickHandler = null;
+
+  function closeHeaderMenu() {
+    headerActions.hidden = true;
+    headerActions.classList.remove('lt-header-actions-open');
+    hamburgerBtn.setAttribute('aria-expanded', 'false');
+    if (outsideClickHandler) {
+      document.removeEventListener('click', outsideClickHandler);
+      outsideClickHandler = null;
+    }
+  }
+
+  function openHeaderMenu() {
+    headerActions.hidden = false;
+    // Wait a frame before adding the "open" class so the fan-out
+    // transition actually animates from the collapsed state instead of
+    // the browser coalescing both changes into a single frame.
+    requestAnimationFrame(() => headerActions.classList.add('lt-header-actions-open'));
+    hamburgerBtn.setAttribute('aria-expanded', 'true');
+    outsideClickHandler = (e) => {
+      if (!headerMenu.contains(e.target)) closeHeaderMenu();
+    };
+    document.addEventListener('click', outsideClickHandler);
+  }
+
+  hamburgerBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    if (headerActions.hidden) {
+      openHeaderMenu();
+    } else {
+      closeHeaderMenu();
+    }
+  });
+
+  headerActions.addEventListener('click', (e) => {
+    if (e.target.closest('button')) closeHeaderMenu();
+  });
 
   const helpBtn = root.querySelector('[data-help-btn]');
   helpBtn.addEventListener('click', goToHelp);
