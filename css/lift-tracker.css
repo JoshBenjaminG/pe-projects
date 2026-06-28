@@ -64,6 +64,21 @@ html::-webkit-scrollbar,
   max-width: 460px;
   margin: 0 auto;
   padding: 16px 16px 96px;
+  /* iOS Safari's double-tap-to-zoom gesture fires on any double-tap
+     inside the page, not just on plain content -- a slightly-too-quick
+     second tap on a toggle (weight/composite cards, the hamburger menu,
+     a lift row) reads as a double-tap and zooms the whole page instead
+     of registering as two taps on the control. `manipulation` keeps
+     normal scrolling and pinch-zoom-out (the gesture accessibility
+     actually depends on) but drops double-tap-zoom specifically.
+     Touch-action isn't inherited via the normal CSS cascade, but the
+     browser's gesture handling intersects an element's value with all
+     its ancestors', so setting this once here covers every control
+     inside .lt-app. The drag handle's own `touch-action: none` (for a
+     different reason, see .lt-drag-handle below) still applies on top
+     of this since intersecting with a more restrictive value just keeps
+     the more restrictive one. */
+  touch-action: manipulation;
   /* System font stack instead of a Google Fonts request -- Roboto is
      Android's native system font (so it still shows up there, at zero
      network cost), and every other platform gets its own native UI
