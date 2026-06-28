@@ -123,7 +123,15 @@ html::-webkit-scrollbar,
   flex-shrink: 0;
 }
 
-@media (max-width: 391px) {
+/* 430px (not 393px) on purpose: this used to cut off at 391px, which
+   covers the iPhone SE/12/13/14-base width (~390px) but not the Pro
+   models' 393px viewport -- so it tested fine in desktop devtools at the
+   common "iPhone 12/13 Pro" preset (390px) while still wrapping on a
+   real iPhone 14 Pro. Bundled with the system-font switch elsewhere in
+   this file (Roboto -> San Francisco on iOS), which renders these bold
+   labels a few px wider and ate into what was already a 2px margin. 430px
+   covers every current non-Max/Plus iPhone with real room to spare. */
+@media (max-width: 430px) {
   .lt-header h1 {
     font-size: 1.05rem;
   }
@@ -273,8 +281,10 @@ html::-webkit-scrollbar,
    title was wide enough to overflow onto its own row (see flex-wrap on
    .lt-header above). Shrinking the buttons themselves -- rather than the
    title further -- buys back enough width to keep everything on one
-   line when the menu is open. */
-@media (max-width: 391px) {
+   line when the menu is open. Same 430px reasoning as the h1 breakpoint
+   above -- 391px excluded the 393px-wide iPhone Pro models, which is
+   exactly the device this fix is for. */
+@media (max-width: 430px) {
   .lt-header-menu,
   .lt-header-actions {
     gap: 6px;
