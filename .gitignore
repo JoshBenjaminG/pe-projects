@@ -10,3 +10,4 @@ projects/record-label/wp-content/themes/*
 
 
 music/*.mp3
+node_modules/

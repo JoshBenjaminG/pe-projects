@@ -1,0 +1,12 @@
+# Long cache lifetime for the built bundle, same reasoning as css/.htaccess
+# -- this only covers js/lift-tracker/dist/, not the editable source files
+# one level up. Paired with the ?v= query string on the <script> tag in
+# workout.php: bump that version every time bundle.js is regenerated.
+<IfModule mod_expires.c>
+  ExpiresActive On
+  ExpiresDefault "access plus 1 year"
+</IfModule>
+
+<IfModule mod_headers.c>
+  Header set Cache-Control "public, max-age=31536000, immutable"
+</IfModule>

@@ -1,0 +1,18 @@
+# Scoped to the Lift Tracker stylesheet only -- the rest of the site's
+# assets (e.g. style.css) are untouched. Paired with the ?v= query string
+# on the <link> tag in workout.php: bump that version whenever this file
+# changes, otherwise a long cache lifetime would mean returning visitors
+# don't pick up the new CSS after a deploy (this bit us before, see the
+# Lift Tracker Safari/Heroku stale-cache fix).
+<IfModule mod_expires.c>
+  <FilesMatch "^lift-tracker\.css$">
+    ExpiresActive On
+    ExpiresDefault "access plus 1 year"
+  </FilesMatch>
+</IfModule>
+
+<IfModule mod_headers.c>
+  <FilesMatch "^lift-tracker\.css$">
+    Header set Cache-Control "public, max-age=31536000, immutable"
+  </FilesMatch>
+</IfModule>

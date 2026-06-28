@@ -24,21 +24,28 @@
   <link rel="apple-touch-icon" href="/images/lifttracker.png">
 
   <link rel="stylesheet" href="css/style.css">
-  <link rel="stylesheet" href="css/lift-tracker.css">
+  <link rel="stylesheet" href="css/lift-tracker.css?v=2026-06-28">
 
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
-
-  <!-- Chart.js, global UMD build (charts.js reads window.Chart) -->
-  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+  <!-- Chart.js, global UMD build (charts.js reads window.Chart). `defer` so
+       this doesn't block first paint -- nothing needs a chart until well
+       after the page is visible, and it was previously fetched/executed
+       synchronously before any markup could render. -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js" defer></script>
 </head>
 <body class="lt-body">
   <main id="lift-tracker-app" class="lt-app">
     <p class="lt-loading">Loading…</p>
   </main>
 
-  <!-- Supabase JS client + app logic, ES modules (CDN-loaded supabase-js) -->
-  <script type="module" src="js/lift-tracker/main.js"></script>
+  <!-- Bundled + minified build of js/lift-tracker/*.js (entry: main.js),
+       generated via esbuild -- see js/lift-tracker/dist/README.md. This
+       collapses what used to be ~17 separate module requests (discovered
+       one at a time as the browser parsed each import) into a single
+       request, and ships ~55% fewer bytes. The supabase-js CDN import
+       stays external/unbundled, resolved by the browser same as before.
+       Bump the ?v= below whenever the bundle is regenerated, so the host's
+       long cache lifetime (see js/lift-tracker/dist/.htaccess) doesn't
+       serve a stale build after a deploy. -->
+  <script type="module" src="js/lift-tracker/dist/bundle.js?v=2026-06-28"></script>
 </body>
 </html>
