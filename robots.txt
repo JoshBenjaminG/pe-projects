@@ -1,3 +1,2 @@
 User-agent: *
-Disallow: /workout.php
 Disallow: /lift-tracker-auth.php
