@@ -174,6 +174,7 @@ import{createClient as xa}from"https://cdn.jsdelivr.net/npm/@supabase/supabase-j
           <span class="lt-killstreak-label" data-killstreak-label>No Killstreak</span>
           <span class="lt-killstreak-sub" data-killstreak-sub>0 Day streak</span>
         </span>
+        <span class="lt-killstreak-chevron" aria-hidden="true">&#8250;</span>
       </button>
 
       <button type="button" class="lt-history-btn" data-history-btn>History</button>

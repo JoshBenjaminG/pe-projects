@@ -544,6 +544,17 @@ html::-webkit-scrollbar,
   white-space: nowrap;
 }
 
+/* Same tap affordance as .lt-lift-row-chevron -- signals the whole box
+   is a button (opens the killstreak detail page) rather than a plain
+   status readout. */
+.lt-killstreak-chevron {
+  flex-shrink: 0;
+  margin-left: auto;
+  font-size: 1.3rem;
+  line-height: 1;
+  color: var(--lt-text-muted);
+}
+
 /* ---------- Killstreak detail page ---------- */
 /* The big "current status" card at the top -- same look as the homepage
    banner (reuses .lt-killstreak-info/.lt-killstreak-label/.lt-killstreak-sub)
