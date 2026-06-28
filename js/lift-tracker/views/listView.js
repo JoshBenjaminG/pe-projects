@@ -101,25 +101,19 @@ export async function renderListView(root) {
 
   // Hamburger menu: Feedback/Help/Log out stay exactly the buttons they
   // were, just tucked behind a toggle instead of sitting in the header
-  // permanently. Opening fans them out (staggered transition in the CSS);
-  // picking one of them, toggling the hamburger again, or tapping
-  // anywhere outside the menu closes it. The outside-click listener is
-  // added on open and removed on close (rather than left bound forever)
-  // so repeated open/close cycles -- or navigating away from this view
-  // entirely -- don't pile up stray document-level listeners over time.
-  const headerMenu = root.querySelector('[data-header-menu]');
+  // permanently. Its open/closed state is a real sticky toggle (saved via
+  // cookie below) -- it only closes when the hamburger is tapped again or
+  // one of the menu items is picked. It deliberately does NOT close on
+  // clicks elsewhere on the page (expanding the weight/composite cards,
+  // tapping History, etc.) -- those are unrelated interactions, not a
+  // signal that the user wants the menu put away.
   const hamburgerBtn = root.querySelector('[data-hamburger-btn]');
   const headerActions = root.querySelector('[data-header-actions]');
-  let outsideClickHandler = null;
 
   function closeHeaderMenu(persist = true) {
     headerActions.hidden = true;
     headerActions.classList.remove('lt-header-actions-open');
     hamburgerBtn.setAttribute('aria-expanded', 'false');
-    if (outsideClickHandler) {
-      document.removeEventListener('click', outsideClickHandler);
-      outsideClickHandler = null;
-    }
     if (persist) writeBoolPref(HEADER_MENU_OPEN_PREF_KEY, false);
   }
 
@@ -137,15 +131,10 @@ export async function renderListView(root) {
       requestAnimationFrame(() => headerActions.classList.add('lt-header-actions-open'));
     }
     hamburgerBtn.setAttribute('aria-expanded', 'true');
-    outsideClickHandler = (e) => {
-      if (!headerMenu.contains(e.target)) closeHeaderMenu();
-    };
-    document.addEventListener('click', outsideClickHandler);
     if (persist) writeBoolPref(HEADER_MENU_OPEN_PREF_KEY, true);
   }
 
-  hamburgerBtn.addEventListener('click', (e) => {
-    e.stopPropagation();
+  hamburgerBtn.addEventListener('click', () => {
     if (headerActions.hidden) {
       openHeaderMenu();
     } else {
