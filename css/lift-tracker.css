@@ -118,7 +118,7 @@ html::-webkit-scrollbar,
   flex-shrink: 0;
 }
 
-@media (max-width: 412px) {
+@media (max-width: 391px) {
   .lt-header h1 {
     font-size: 1.05rem;
   }
@@ -262,6 +262,31 @@ html::-webkit-scrollbar,
 
 .lt-help-btn:active {
   background: var(--lt-surface-alt);
+}
+
+/* On narrow phones the open menu (Feedback/Log out/?/hamburger) plus the
+   title was wide enough to overflow onto its own row (see flex-wrap on
+   .lt-header above). Shrinking the buttons themselves -- rather than the
+   title further -- buys back enough width to keep everything on one
+   line when the menu is open. */
+@media (max-width: 391px) {
+  .lt-header-menu,
+  .lt-header-actions {
+    gap: 6px;
+  }
+
+  .lt-hamburger-btn,
+  .lt-help-btn {
+    width: 30px;
+    height: 30px;
+  }
+
+  .lt-logout-btn,
+  .lt-feedback-btn {
+    font-size: 0.7rem;
+    padding: 6px 8px;
+    min-height: 30px;
+  }
 }
 
 .lt-toolbar {
