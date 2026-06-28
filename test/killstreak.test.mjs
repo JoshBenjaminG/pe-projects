@@ -1,4 +1,4 @@
-import { weekStart, workoutDaysThisWeek, killstreakForDays, weeklyKillstreak, killstreakHistory, totalWorkoutDays, longestConsecutiveWeekStreak, ACHIEVEMENTS, achievementProgress } from '../js/lift-tracker/killstreak.js';
+import { weekStart, workoutDaysThisWeek, killstreakForDays, weeklyKillstreak, killstreakHistory, totalWorkoutDays, longestConsecutiveWeekStreak, ACHIEVEMENTS, achievementProgress, newlyUnlockedIds } from '../js/lift-tracker/killstreak.js';
 
 let passed = 0;
 function test(name, fn) {
@@ -364,6 +364,99 @@ test('achievementProgress: returns unlocked booleans (not functions) keyed by st
   if (first.unlocked !== true) throw new Error('expected rank-private unlocked with 1 workout day');
   const next = progress.find((p) => p.id === 'rank-pfc');
   if (next.unlocked !== false) throw new Error('expected rank-pfc locked with only 1 workout day');
+});
+
+// --- Rank themes: every rank carries a theme, lining up with the 13
+// named CSS theme blocks plus the original "Lift Tracker" default ---
+
+test('every rank achievement has a theme with a non-empty id and label', () => {
+  const ranks = ACHIEVEMENTS.filter((a) => a.track === 'rank');
+  for (const r of ranks) {
+    if (!r.theme || typeof r.theme.id !== 'string' || r.theme.id.length === 0) {
+      throw new Error(`rank ${r.id} is missing a theme id`);
+    }
+    if (typeof r.theme.label !== 'string' || r.theme.label.length === 0) {
+      throw new Error(`rank ${r.id} is missing a theme label`);
+    }
+  }
+});
+
+test('rank theme ids are unique across the rank track (no two ranks share a theme)', () => {
+  const ranks = ACHIEVEMENTS.filter((a) => a.track === 'rank');
+  const themeIds = ranks.map((r) => r.theme.id);
+  if (new Set(themeIds).size !== themeIds.length) {
+    throw new Error('duplicate theme id found across rank achievements');
+  }
+});
+
+test('rank-private is the only rank with the "default" theme, named Lift Tracker', () => {
+  const private_ = ACHIEVEMENTS.find((a) => a.id === 'rank-private');
+  if (private_.theme.id !== 'default' || private_.theme.label !== 'Lift Tracker') {
+    throw new Error(`expected rank-private theme {default, Lift Tracker}, got ${JSON.stringify(private_.theme)}`);
+  }
+  const others = ACHIEVEMENTS.filter((a) => a.track === 'rank' && a.id !== 'rank-private');
+  if (others.some((a) => a.theme.id === 'default')) {
+    throw new Error('expected only rank-private to use the default theme');
+  }
+});
+
+test('non-rank achievements (mastery/streak/capstone) carry no theme', () => {
+  const nonRanks = ACHIEVEMENTS.filter((a) => a.track !== 'rank');
+  if (nonRanks.some((a) => a.theme !== undefined)) {
+    throw new Error('expected only rank achievements to define a theme');
+  }
+});
+
+test('achievementProgress: rank entries expose their theme, non-rank entries expose null', () => {
+  const progress = achievementProgress([]);
+  const rankEntry = progress.find((p) => p.id === 'rank-pfc');
+  if (!rankEntry.theme || rankEntry.theme.id !== 'agile') {
+    throw new Error(`expected rank-pfc theme id "agile", got ${JSON.stringify(rankEntry.theme)}`);
+  }
+  const nonRankEntry = progress.find((p) => p.id === 'mastery-uav-1');
+  if (nonRankEntry.theme !== null) {
+    throw new Error(`expected non-rank theme to be null, got ${JSON.stringify(nonRankEntry.theme)}`);
+  }
+});
+
+// --- newlyUnlockedIds ---
+
+test('newlyUnlockedIds: returns unlocked ids not present in seenIds', () => {
+  const progress = [
+    { id: 'a', unlocked: true },
+    { id: 'b', unlocked: false },
+    { id: 'c', unlocked: true },
+  ];
+  const result = newlyUnlockedIds(progress, ['a']);
+  if (result.length !== 1 || result[0] !== 'c') {
+    throw new Error(`expected ["c"], got ${JSON.stringify(result)}`);
+  }
+});
+
+test('newlyUnlockedIds: returns empty array when everything unlocked has already been seen', () => {
+  const progress = [
+    { id: 'a', unlocked: true },
+    { id: 'b', unlocked: true },
+  ];
+  const result = newlyUnlockedIds(progress, ['a', 'b']);
+  if (result.length !== 0) throw new Error(`expected [], got ${JSON.stringify(result)}`);
+});
+
+test('newlyUnlockedIds: never returns a locked id, even if it is absent from seenIds', () => {
+  const progress = [{ id: 'a', unlocked: false }];
+  const result = newlyUnlockedIds(progress, []);
+  if (result.length !== 0) throw new Error(`expected [], got ${JSON.stringify(result)}`);
+});
+
+test('newlyUnlockedIds: empty seenIds treats every unlocked id as new', () => {
+  const progress = [
+    { id: 'a', unlocked: true },
+    { id: 'b', unlocked: true },
+  ];
+  const result = newlyUnlockedIds(progress, []);
+  if (result.length !== 2 || !result.includes('a') || !result.includes('b')) {
+    throw new Error(`expected ["a","b"] in some order, got ${JSON.stringify(result)}`);
+  }
 });
 
 console.log(`\n${passed} tests passed`);

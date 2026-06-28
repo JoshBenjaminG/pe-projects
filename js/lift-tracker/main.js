@@ -10,8 +10,13 @@ import { renderKillstreakView } from './views/killstreakView.js';
 import { renderWorkoutFormView } from './views/workoutFormView.js';
 import { renderAuthView } from './views/authView.js';
 import { isDemoLink, startGuestSession } from './demo.js';
+import { applyStoredTheme } from './theme.js';
 
 const root = document.getElementById('lift-tracker-app');
+
+// Apply whatever theme was last selected (see views/killstreakView.js) as
+// early as possible, before the first render call.
+applyStoredTheme();
 
 async function render() {
   try {

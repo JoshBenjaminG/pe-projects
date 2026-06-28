@@ -171,6 +171,14 @@ export function achievementStats(sets) {
 //   core rank (General) lands around the 6-month mark for someone
 //   averaging ~3 workout days/week. Prestige and Prestige Master sit
 //   beyond that on purpose, as bonus content for long-term users.
+//   Each rank also carries a `theme` -- earning that rank unlocks the
+//   matching `:root[data-lt-theme="..."]` color theme from
+//   lift-tracker.css for the rest of the app (see views/killstreakView.js,
+//   where unlocked rank cards become clickable to apply their theme).
+//   Private (the very first rank) comes with the app's original look,
+//   named "Lift Tracker" here so it has an identity alongside the rest.
+//   There are 13 named theme blocks in the stylesheet plus that default,
+//   lining up exactly with these 14 rank tiers.
 // - "mastery" -- lifetime count of each weekly killstreak tier earned.
 //   Less predictable than the rank track (it depends on workout-pattern
 //   mix, not just elapsed time) so thresholds are kept modest.
@@ -182,20 +190,20 @@ export function achievementStats(sets) {
 //   steady consistency) with one shared finish line.
 export const ACHIEVEMENTS = [
   // --- Rank: lifetime total workout days ---
-  { id: 'rank-private', name: 'Private', track: 'rank', description: 'Log 1 workout day.', isUnlocked: (s) => s.totalDays >= 1 },
-  { id: 'rank-pfc', name: 'Private First Class', track: 'rank', description: 'Log 3 workout days.', isUnlocked: (s) => s.totalDays >= 3 },
-  { id: 'rank-corporal', name: 'Corporal', track: 'rank', description: 'Log 6 workout days.', isUnlocked: (s) => s.totalDays >= 6 },
-  { id: 'rank-sergeant', name: 'Sergeant', track: 'rank', description: 'Log 10 workout days.', isUnlocked: (s) => s.totalDays >= 10 },
-  { id: 'rank-staff-sergeant', name: 'Staff Sergeant', track: 'rank', description: 'Log 15 workout days.', isUnlocked: (s) => s.totalDays >= 15 },
-  { id: 'rank-master-sergeant', name: 'Master Sergeant', track: 'rank', description: 'Log 21 workout days.', isUnlocked: (s) => s.totalDays >= 21 },
-  { id: 'rank-warrant-officer', name: 'Warrant Officer', track: 'rank', description: 'Log 28 workout days.', isUnlocked: (s) => s.totalDays >= 28 },
-  { id: 'rank-lieutenant', name: 'Lieutenant', track: 'rank', description: 'Log 36 workout days.', isUnlocked: (s) => s.totalDays >= 36 },
-  { id: 'rank-captain', name: 'Captain', track: 'rank', description: 'Log 45 workout days.', isUnlocked: (s) => s.totalDays >= 45 },
-  { id: 'rank-major', name: 'Major', track: 'rank', description: 'Log 55 workout days.', isUnlocked: (s) => s.totalDays >= 55 },
-  { id: 'rank-colonel', name: 'Colonel', track: 'rank', description: 'Log 67 workout days.', isUnlocked: (s) => s.totalDays >= 67 },
-  { id: 'rank-general', name: 'General', track: 'rank', description: 'Log 80 workout days.', isUnlocked: (s) => s.totalDays >= 80 },
-  { id: 'rank-prestige', name: 'Prestige', track: 'rank', description: 'Log 100 workout days.', isUnlocked: (s) => s.totalDays >= 100 },
-  { id: 'rank-prestige-master', name: 'Prestige Master', track: 'rank', description: 'Log 150 workout days.', isUnlocked: (s) => s.totalDays >= 150 },
+  { id: 'rank-private', name: 'Private', track: 'rank', description: 'Log 1 workout day.', theme: { id: 'default', label: 'Lift Tracker' }, isUnlocked: (s) => s.totalDays >= 1 },
+  { id: 'rank-pfc', name: 'Private First Class', track: 'rank', description: 'Log 3 workout days.', theme: { id: 'agile', label: 'Agile' }, isUnlocked: (s) => s.totalDays >= 3 },
+  { id: 'rank-corporal', name: 'Corporal', track: 'rank', description: 'Log 6 workout days.', theme: { id: 'agriculture', label: 'Agriculture' }, isUnlocked: (s) => s.totalDays >= 6 },
+  { id: 'rank-sergeant', name: 'Sergeant', track: 'rank', description: 'Log 10 workout days.', theme: { id: 'army', label: 'Army' }, isUnlocked: (s) => s.totalDays >= 10 },
+  { id: 'rank-staff-sergeant', name: 'Staff Sergeant', track: 'rank', description: 'Log 15 workout days.', theme: { id: 'bluelift', label: 'Blue Lift' }, isUnlocked: (s) => s.totalDays >= 15 },
+  { id: 'rank-master-sergeant', name: 'Master Sergeant', track: 'rank', description: 'Log 21 workout days.', theme: { id: 'brown', label: 'Brown' }, isUnlocked: (s) => s.totalDays >= 21 },
+  { id: 'rank-warrant-officer', name: 'Warrant Officer', track: 'rank', description: 'Log 28 workout days.', theme: { id: 'neon', label: 'Neon' }, isUnlocked: (s) => s.totalDays >= 28 },
+  { id: 'rank-lieutenant', name: 'Lieutenant', track: 'rank', description: 'Log 36 workout days.', theme: { id: 'white', label: 'White' }, isUnlocked: (s) => s.totalDays >= 36 },
+  { id: 'rank-captain', name: 'Captain', track: 'rank', description: 'Log 45 workout days.', theme: { id: 'apple', label: 'Apple' }, isUnlocked: (s) => s.totalDays >= 45 },
+  { id: 'rank-major', name: 'Major', track: 'rank', description: 'Log 55 workout days.', theme: { id: 'candy', label: 'Candy' }, isUnlocked: (s) => s.totalDays >= 55 },
+  { id: 'rank-colonel', name: 'Colonel', track: 'rank', description: 'Log 67 workout days.', theme: { id: 'dim', label: 'Dim' }, isUnlocked: (s) => s.totalDays >= 67 },
+  { id: 'rank-general', name: 'General', track: 'rank', description: 'Log 80 workout days.', theme: { id: 'evolution', label: 'Evolution' }, isUnlocked: (s) => s.totalDays >= 80 },
+  { id: 'rank-prestige', name: 'Prestige', track: 'rank', description: 'Log 100 workout days.', theme: { id: 'gwen', label: 'Gwen' }, isUnlocked: (s) => s.totalDays >= 100 },
+  { id: 'rank-prestige-master', name: 'Prestige Master', track: 'rank', description: 'Log 150 workout days.', theme: { id: 'questionable', label: 'Questionable' }, isUnlocked: (s) => s.totalDays >= 150 },
 
   // --- Mastery: lifetime count of each weekly tier earned ---
   { id: 'mastery-uav-1', name: 'UAV Specialist', track: 'mastery', description: 'Earn the UAV tier 3 times.', isUnlocked: (s) => s.tierCounts.uav >= 3 },
@@ -234,6 +242,24 @@ export function achievementProgress(sets) {
     name: a.name,
     track: a.track,
     description: a.description,
+    theme: a.theme ?? null,
     unlocked: a.isUnlocked(stats),
   }));
+}
+
+/**
+ * Given a list of `{ id, unlocked }` items (e.g. the output of
+ * achievementProgress) and a list of ids the caller already knows about
+ * ("seen" -- read from wherever that gets persisted), returns the ids
+ * that are unlocked now but weren't in the seen list. Used to detect
+ * "you just unlocked something new" without this module knowing anything
+ * about cookies, storage, or the DOM -- the caller persists `seenIds`
+ * and passes it back in on the next check.
+ *
+ * @param {{id:string, unlocked:boolean}[]} progress
+ * @param {string[]} seenIds
+ */
+export function newlyUnlockedIds(progress, seenIds) {
+  const seen = new Set(seenIds);
+  return progress.filter((a) => a.unlocked && !seen.has(a.id)).map((a) => a.id);
 }

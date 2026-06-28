@@ -25,3 +25,29 @@ export function writeBoolPref(key, value) {
     // just won't be remembered next time.
   }
 }
+
+// String-valued counterparts to the bool helpers above, used for prefs that
+// aren't a simple on/off (the selected theme id, the JSON-encoded list of
+// achievement ids the user has already seen, etc). Kept separate from
+// readBoolPref/writeBoolPref rather than merged so neither has to guess at
+// the other's value format.
+
+export function readStringPref(key, defaultValue) {
+  try {
+    const match = document.cookie.match(new RegExp(`(?:^|; )${key}=([^;]*)`));
+    if (!match) return defaultValue;
+    return decodeURIComponent(match[1]);
+  } catch {
+    return defaultValue;
+  }
+}
+
+export function writeStringPref(key, value) {
+  try {
+    const maxAge = COOKIE_MAX_AGE_DAYS * 24 * 60 * 60;
+    document.cookie = `${key}=${encodeURIComponent(String(value))}; max-age=${maxAge}; path=/; samesite=lax`;
+  } catch {
+    // Ignore -- still works for the rest of this session, it just won't be
+    // remembered next time.
+  }
+}

@@ -633,6 +633,27 @@ html::-webkit-scrollbar,
   color: var(--lt-text-muted);
 }
 
+/* Small "!" dot shown when a rank (and the theme it unlocks) was earned
+   but not yet seen on the achievements page -- see killstreakView.js. */
+.lt-killstreak-new-badge {
+  flex-shrink: 0;
+  width: 18px;
+  height: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: var(--lt-gold);
+  color: var(--lt-bg);
+  font-size: 0.75rem;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.lt-killstreak-new-badge[hidden] {
+  display: none;
+}
+
 /* ---------- Killstreak detail page ---------- */
 /* The big "current status" card at the top -- same look as the homepage
    banner (reuses .lt-killstreak-info/.lt-killstreak-label/.lt-killstreak-sub)
@@ -787,6 +808,63 @@ html::-webkit-scrollbar,
 .lt-achievement-card-desc {
   font-size: 0.8rem;
   color: var(--lt-text-muted);
+}
+
+/* Rank achievements double as theme unlocks (see killstreak.js /
+   killstreakView.js): the whole card becomes a button so tapping an
+   unlocked rank applies its theme. The <li> keeps the original card
+   padding/border; the button just fills it edge-to-edge with no styling
+   of its own so unlocked and locked rank cards still look like the other
+   achievement cards above. */
+.lt-achievement-card-btn {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0;
+  text-align: left;
+  font-family: inherit;
+  color: inherit;
+  cursor: pointer;
+}
+
+.lt-achievement-card-btn:disabled {
+  cursor: default;
+}
+
+.lt-achievement-card-btn:not(:disabled):active {
+  opacity: 0.8;
+}
+
+.lt-achievement-card-theme {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--lt-gold);
+  margin-top: 2px;
+}
+
+.lt-achievement-card-theme-locked {
+  color: var(--lt-text-muted);
+  font-weight: 400;
+}
+
+/* A rank that was unlocked since the achievements page was last viewed --
+   stronger than the plain gold border every unlocked card gets, so a
+   freshly-earned rank still stands out at a glance. Cleared (back to the
+   normal .lt-achievement-card-unlocked look) the next time this page
+   renders. */
+.lt-achievement-card-new {
+  background: color-mix(in srgb, var(--lt-gold) 18%, var(--lt-surface));
+  border-color: var(--lt-gold);
+  box-shadow: 0 0 0 1px var(--lt-gold);
+}
+
+/* The rank whose theme is currently applied. */
+.lt-achievement-card-active-theme {
+  border-width: 2px;
 }
 
 /* ---------- Export section (collapsible, like composite) ---------- */

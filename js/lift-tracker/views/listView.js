@@ -13,9 +13,10 @@ import { enableDragReorder } from '../dragReorder.js';
 import { goToLift, goToHelp, goToWeight, goToComposite, goToHistory, goToKillstreak, goToWorkoutNew, goToWorkoutEdit } from '../state.js';
 import { supabase } from '../supabaseClient.js';
 import { openFeedbackModal } from './feedbackModal.js';
-import { weeklyKillstreak } from '../killstreak.js';
+import { weeklyKillstreak, achievementProgress, newlyUnlockedIds } from '../killstreak.js';
 import { renderWeightSummaryCard } from './weightView.js';
 import { readBoolPref, writeBoolPref } from '../prefs.js';
+import { readSeenRankIds } from '../seenAchievements.js';
 
 const COMPOSITE_EXPANDED_PREF_KEY = 'lt-composite-expanded';
 const HEADER_MENU_OPEN_PREF_KEY = 'lt-header-menu-open';
@@ -54,6 +55,7 @@ export async function renderListView(root) {
           <span class="lt-killstreak-label" data-killstreak-label>No Killstreak</span>
           <span class="lt-killstreak-sub" data-killstreak-sub>0 Day streak</span>
         </span>
+        <span class="lt-killstreak-new-badge" data-killstreak-new-badge hidden aria-label="New achievement unlocked">!</span>
         <span class="lt-killstreak-chevron" aria-hidden="true">&#8250;</span>
       </button>
 
@@ -219,6 +221,7 @@ export async function renderListView(root) {
   const killstreakIcon = root.querySelector('[data-killstreak-icon]');
   const killstreakLabel = root.querySelector('[data-killstreak-label]');
   const killstreakSub = root.querySelector('[data-killstreak-sub]');
+  const killstreakNewBadge = root.querySelector('[data-killstreak-new-badge]');
   root.querySelector('[data-killstreak-btn]').addEventListener('click', goToKillstreak);
 
   function renderKillstreak(sets) {
@@ -233,6 +236,14 @@ export async function renderListView(root) {
     killstreakIcon.textContent = tier ? tier.icon : '\u{1F3AF}';
     killstreakLabel.textContent = tier ? `${tier.label} Killstreak` : 'No Killstreak';
     killstreakSub.textContent = `${days} Day streak`;
+
+    // Each rank also unlocks a color theme (see killstreak.js /
+    // killstreakView.js) -- show a small "!" here whenever one's been
+    // earned but not yet seen on the achievements page, so it's obvious
+    // there's something new to go look at.
+    const rankProgress = achievementProgress(sets).filter((a) => a.track === 'rank');
+    const hasNewRank = newlyUnlockedIds(rankProgress, readSeenRankIds()).length > 0;
+    killstreakNewBadge.hidden = !hasNewRank;
   }
 
   const weightCard = root.querySelector('[data-weight-card]');
