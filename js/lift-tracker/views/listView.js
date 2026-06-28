@@ -18,6 +18,7 @@ import { renderWeightSummaryCard } from './weightView.js';
 import { readBoolPref, writeBoolPref } from '../prefs.js';
 
 const COMPOSITE_EXPANDED_PREF_KEY = 'lt-composite-expanded';
+const HEADER_MENU_OPEN_PREF_KEY = 'lt-header-menu-open';
 
 export async function renderListView(root) {
   // Guest (anonymous demo) sessions don't get the feedback button --
@@ -111,7 +112,7 @@ export async function renderListView(root) {
   const headerActions = root.querySelector('[data-header-actions]');
   let outsideClickHandler = null;
 
-  function closeHeaderMenu() {
+  function closeHeaderMenu(persist = true) {
     headerActions.hidden = true;
     headerActions.classList.remove('lt-header-actions-open');
     hamburgerBtn.setAttribute('aria-expanded', 'false');
@@ -119,19 +120,28 @@ export async function renderListView(root) {
       document.removeEventListener('click', outsideClickHandler);
       outsideClickHandler = null;
     }
+    if (persist) writeBoolPref(HEADER_MENU_OPEN_PREF_KEY, false);
   }
 
-  function openHeaderMenu() {
+  // `instant` skips the fan-out transition -- used when restoring the
+  // menu's saved state on render, where it should just already be open
+  // rather than visibly animating in on page load.
+  function openHeaderMenu({ persist = true, instant = false } = {}) {
     headerActions.hidden = false;
-    // Wait a frame before adding the "open" class so the fan-out
-    // transition actually animates from the collapsed state instead of
-    // the browser coalescing both changes into a single frame.
-    requestAnimationFrame(() => headerActions.classList.add('lt-header-actions-open'));
+    if (instant) {
+      headerActions.classList.add('lt-header-actions-open');
+    } else {
+      // Wait a frame before adding the "open" class so the fan-out
+      // transition actually animates from the collapsed state instead of
+      // the browser coalescing both changes into a single frame.
+      requestAnimationFrame(() => headerActions.classList.add('lt-header-actions-open'));
+    }
     hamburgerBtn.setAttribute('aria-expanded', 'true');
     outsideClickHandler = (e) => {
       if (!headerMenu.contains(e.target)) closeHeaderMenu();
     };
     document.addEventListener('click', outsideClickHandler);
+    if (persist) writeBoolPref(HEADER_MENU_OPEN_PREF_KEY, true);
   }
 
   hamburgerBtn.addEventListener('click', (e) => {
@@ -146,6 +156,12 @@ export async function renderListView(root) {
   headerActions.addEventListener('click', (e) => {
     if (e.target.closest('button')) closeHeaderMenu();
   });
+
+  // Restore the menu's last open/closed state so it persists across
+  // reloads/navigation, same as the composite/weight card collapse prefs.
+  if (readBoolPref(HEADER_MENU_OPEN_PREF_KEY, false)) {
+    openHeaderMenu({ persist: false, instant: true });
+  }
 
   const helpBtn = root.querySelector('[data-help-btn]');
   helpBtn.addEventListener('click', goToHelp);
