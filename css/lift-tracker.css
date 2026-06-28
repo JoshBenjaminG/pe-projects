@@ -107,7 +107,9 @@ html::-webkit-scrollbar,
 }
 
 .lt-header-menu {
-  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 8px;
   flex-shrink: 0;
 }
 
@@ -137,32 +139,32 @@ html::-webkit-scrollbar,
   background: var(--lt-text);
 }
 
-/* Floating panel anchored under the hamburger button, right-aligned so it
-   stays on-screen on the right edge. flex-end (not stretch) keeps each
-   button its own natural width/shape -- notably the round "?" Help
-   button, which stretch would otherwise squash into an oval. */
+/* Sits in normal flex flow, not floating -- opening this reflows the
+   header row back to exactly how it looked before the hamburger existed
+   (title pushed left, these three buttons filling the line, hamburger
+   pinned at the right edge), rather than dropping a panel down over the
+   page. */
 .lt-header-actions {
-  position: absolute;
-  top: calc(100% + 8px);
-  right: 0;
-  z-index: 20;
   display: flex;
-  flex-direction: column;
-  align-items: flex-end;
+  align-items: center;
   gap: 8px;
 }
 
 /* Collapsed-toward-the-hamburger starting state for the fan-out reveal;
    each item also drifts in from a slightly rotated, scaled-down pose so
-   opening reads as items fanning out rather than a flat slide/fade. */
+   opening reads as items fanning out sideways from the hamburger rather
+   than a flat slide/fade. */
 .lt-header-actions > * {
   opacity: 0;
-  transform: translateY(-6px) scale(0.85) rotate(-6deg);
-  transform-origin: top right;
+  transform: translateX(10px) scale(0.85) rotate(6deg);
+  transform-origin: center right;
   transition: opacity 0.16s ease, transform 0.16s ease;
 }
 
-.lt-header-actions-open > *:nth-child(1) {
+/* Staggered so the item closest to the hamburger (Help, last in source
+   order) settles first and Feedback -- furthest away -- arrives last,
+   reading as a fan opening outward from the hamburger. */
+.lt-header-actions-open > *:nth-child(3) {
   transition-delay: 0s;
 }
 
@@ -170,13 +172,13 @@ html::-webkit-scrollbar,
   transition-delay: 0.04s;
 }
 
-.lt-header-actions-open > *:nth-child(3) {
+.lt-header-actions-open > *:nth-child(1) {
   transition-delay: 0.08s;
 }
 
 .lt-header-actions-open > * {
   opacity: 1;
-  transform: translateY(0) scale(1) rotate(0deg);
+  transform: translateX(0) scale(1) rotate(0deg);
 }
 
 .lt-logout-btn {

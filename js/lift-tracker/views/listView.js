@@ -31,16 +31,16 @@ export async function renderListView(root) {
     <header class="lt-header">
       <h1>Lift Tracker</h1>
       <div class="lt-header-menu" data-header-menu>
-        <button type="button" class="lt-hamburger-btn" data-hamburger-btn aria-label="Menu" aria-expanded="false">
-          <span class="lt-hamburger-line"></span>
-          <span class="lt-hamburger-line"></span>
-          <span class="lt-hamburger-line"></span>
-        </button>
         <div class="lt-header-actions" data-header-actions hidden>
           ${isGuest ? '' : '<button type="button" class="lt-feedback-btn" data-feedback-btn>Feedback</button>'}
           <button type="button" class="lt-logout-btn" data-logout-btn>Log out</button>
           <button type="button" class="lt-help-btn" data-help-btn aria-label="Help">?</button>
         </div>
+        <button type="button" class="lt-hamburger-btn" data-hamburger-btn aria-label="Menu" aria-expanded="false">
+          <span class="lt-hamburger-line"></span>
+          <span class="lt-hamburger-line"></span>
+          <span class="lt-hamburger-line"></span>
+        </button>
       </div>
     </header>
 
