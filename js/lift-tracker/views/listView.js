@@ -15,7 +15,6 @@ import { supabase } from '../supabaseClient.js';
 import { openFeedbackModal } from './feedbackModal.js';
 import { weeklyKillstreak } from '../killstreak.js';
 import { renderWeightSummaryCard } from './weightView.js';
-import { renderHistorySummaryCard } from './historyView.js';
 import { readBoolPref, writeBoolPref } from '../prefs.js';
 
 const COMPOSITE_EXPANDED_PREF_KEY = 'lt-composite-expanded';
@@ -48,6 +47,8 @@ export async function renderListView(root) {
           <span class="lt-killstreak-sub" data-killstreak-sub>Log a workout to start your streak this week</span>
         </span>
       </section>
+
+      <button type="button" class="lt-history-btn" data-history-btn>History</button>
     </div>
 
     <div class="lt-stats-row" data-stats-row>
@@ -69,15 +70,17 @@ export async function renderListView(root) {
       </section>
     </div>
 
-    <section class="lt-history-card" data-history-card></section>
+    <div class="lt-action-row" data-action-row>
+      <button type="button" class="lt-add-lift-toggle-btn" data-add-lift-toggle aria-pressed="false">+ Add Lift</button>
+      <button type="button" class="lt-create-workout-btn" data-create-workout-btn>+ Create Workout</button>
+    </div>
 
-    <form class="lt-add-lift" data-add-lift-form>
+    <form class="lt-add-lift" data-add-lift-form hidden>
       <input type="text" name="name" placeholder="New lift name" required maxlength="60" autocomplete="off" />
-      <button type="submit">+ Add Lift</button>
+      <button type="submit" aria-label="Add lift">+</button>
     </form>
 
     <div class="lt-workout-bar" data-workout-bar>
-      <button type="button" class="lt-create-workout-btn" data-create-workout-btn>+ Create Workout</button>
       <div class="lt-workout-pills" data-workout-pills></div>
     </div>
     <p class="lt-empty lt-workout-empty-hint" data-workout-empty-hint hidden>
@@ -141,10 +144,23 @@ export async function renderListView(root) {
   const weightCard = root.querySelector('[data-weight-card]');
   renderWeightSummaryCard(weightCard, { onExpand: goToWeight });
 
-  const historyCard = root.querySelector('[data-history-card]');
-  renderHistorySummaryCard(historyCard, { onExpand: goToHistory });
+  root.querySelector('[data-history-btn]').addEventListener('click', goToHistory);
 
   const addForm = root.querySelector('[data-add-lift-form]');
+  const addLiftToggleBtn = root.querySelector('[data-add-lift-toggle]');
+  // A toggle, not a one-shot reveal: tapping it again hides the form, and
+  // (per the request this implements) the form otherwise just stays open
+  // across repeated adds -- handy when someone new is entering several
+  // lifts in a row -- since nothing here auto-closes it after a submit.
+  addLiftToggleBtn.addEventListener('click', () => {
+    const opening = addForm.hidden;
+    addForm.hidden = !opening;
+    addLiftToggleBtn.setAttribute('aria-pressed', String(opening));
+    addLiftToggleBtn.classList.toggle('lt-add-lift-toggle-active', opening);
+    if (opening) {
+      addForm.querySelector('input[name="name"]').focus();
+    }
+  });
   const listEl = root.querySelector('[data-lift-list]');
   const listEmptyEl = root.querySelector('[data-list-empty]');
 

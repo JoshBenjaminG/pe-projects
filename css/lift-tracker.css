@@ -192,6 +192,24 @@ html::-webkit-scrollbar,
   background: var(--lt-surface-alt);
 }
 
+.lt-history-btn {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8rem;
+  font-weight: 700;
+  padding: 8px 14px;
+  border-radius: 8px;
+  border: 1px solid var(--lt-border);
+  background: var(--lt-surface);
+  color: var(--lt-text-muted);
+}
+
+.lt-history-btn:active {
+  background: var(--lt-surface-alt);
+}
+
 /* ---------- Weekly killstreak ---------- */
 .lt-killstreak {
   display: flex;
@@ -222,11 +240,17 @@ html::-webkit-scrollbar,
   font-size: 0.9rem;
   font-weight: 800;
   color: var(--lt-gold);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .lt-killstreak-sub {
   font-size: 0.85rem;
   color: var(--lt-text-muted);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 /* ---------- Export section (collapsible, like composite) ---------- */
@@ -640,6 +664,34 @@ html::-webkit-scrollbar,
   border: 1px solid rgba(246, 87, 82, 0.9);
   box-shadow: none;
   outline: none;
+}
+
+.lt-action-row {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.lt-add-lift-toggle-btn,
+.lt-create-workout-btn {
+  flex: 1;
+  font-size: 0.9rem;
+  font-weight: 700;
+  padding: 10px 14px;
+  border-radius: 8px;
+  border: 1px solid var(--lt-border);
+  background: var(--lt-surface);
+  color: var(--lt-text);
+}
+
+.lt-add-lift-toggle-btn:active,
+.lt-create-workout-btn:active {
+  background: var(--lt-surface-alt);
+}
+
+.lt-add-lift-toggle-active {
+  border-color: var(--lt-accent);
+  color: var(--lt-accent);
 }
 
 .lt-add-lift button,
@@ -1407,21 +1459,6 @@ html::-webkit-scrollbar,
   flex-direction: column;
   gap: 10px;
   margin-bottom: 16px;
-}
-
-.lt-create-workout-btn {
-  align-self: flex-start;
-  font-size: 0.9rem;
-  font-weight: 700;
-  padding: 10px 14px;
-  border-radius: 8px;
-  border: 1px solid var(--lt-border);
-  background: var(--lt-surface);
-  color: var(--lt-text);
-}
-
-.lt-create-workout-btn:active {
-  background: var(--lt-surface-alt);
 }
 
 .lt-workout-pills {
