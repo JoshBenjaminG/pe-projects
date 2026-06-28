@@ -24,7 +24,7 @@
   <link rel="apple-touch-icon" href="/images/lifttracker.png">
 
   <link rel="stylesheet" href="css/style.css">
-  <link rel="stylesheet" href="css/lift-tracker.css?v=2026-06-28">
+  <link rel="stylesheet" href="css/lift-tracker.css?v=<?php echo substr(md5_file(__DIR__ . '/css/lift-tracker.css'), 0, 8); ?>">
 
   <!-- Chart.js, global UMD build (charts.js reads window.Chart). `defer` so
        this doesn't block first paint -- nothing needs a chart until well
@@ -43,9 +43,15 @@
        one at a time as the browser parsed each import) into a single
        request, and ships ~55% fewer bytes. The supabase-js CDN import
        stays external/unbundled, resolved by the browser same as before.
-       Bump the ?v= below whenever the bundle is regenerated, so the host's
-       long cache lifetime (see js/lift-tracker/dist/.htaccess) doesn't
-       serve a stale build after a deploy. -->
-  <script type="module" src="js/lift-tracker/dist/bundle.js?v=2026-06-28"></script>
+
+       ?v= is now an md5_file() hash instead of a hand-typed date string --
+       a manually-bumped version is exactly the kind of thing that's easy
+       to forget on a quick follow-up edit (which is what happened: two
+       CSS patches landed after ?v=2026-06-28 was set, and the immutable
+       cache header meant iOS kept serving the pre-fix stylesheet no
+       matter how many times the underlying bug got fixed). Hashing the
+       file content means the URL changes automatically whenever the file
+       does, with no step to remember. -->
+  <script type="module" src="js/lift-tracker/dist/bundle.js?v=<?php echo substr(md5_file(__DIR__ . '/js/lift-tracker/dist/bundle.js'), 0, 8); ?>"></script>
 </body>
 </html>
