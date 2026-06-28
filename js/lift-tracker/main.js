@@ -4,6 +4,7 @@ import { renderListView } from './views/listView.js';
 import { renderDetailView } from './views/detailView.js';
 import { renderHelpView } from './views/helpView.js';
 import { renderWeightView } from './views/weightView.js';
+import { renderCompositeView } from './views/compositeView.js';
 import { renderHistoryView } from './views/historyView.js';
 import { renderWorkoutFormView } from './views/workoutFormView.js';
 import { renderAuthView } from './views/authView.js';
@@ -39,6 +40,8 @@ async function render() {
       await renderHelpView(root);
     } else if (route.name === 'weight') {
       await renderWeightView(root);
+    } else if (route.name === 'composite') {
+      await renderCompositeView(root);
     } else if (route.name === 'history') {
       await renderHistoryView(root);
     } else if (route.name === 'workout-new') {

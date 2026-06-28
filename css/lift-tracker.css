@@ -738,6 +738,18 @@ html::-webkit-scrollbar,
   color: var(--lt-text-muted);
 }
 
+/* Below 380px the composite card's percent summary (e.g. "+15%") sits
+   right next to this chevron and the two start to overlap -- there isn't
+   room for both. Scoped to just these two toggles (via their data
+   attributes) rather than .lt-chevron generally, so the unrelated export
+   chevrons on the Help page are unaffected. */
+@media (max-width: 380px) {
+  [data-chevron],
+  [data-weight-chevron] {
+    display: none;
+  }
+}
+
 .lt-composite-body {
   padding: 4px 12px 16px;
 }

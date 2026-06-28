@@ -20,6 +20,9 @@ export function parseRoute() {
   if (hash === 'weight') {
     return { name: 'weight' };
   }
+  if (hash === 'composite') {
+    return { name: 'composite' };
+  }
   if (hash === 'history') {
     return { name: 'history' };
   }
@@ -48,6 +51,10 @@ export function goToHelp() {
 
 export function goToWeight() {
   window.location.hash = '#/weight';
+}
+
+export function goToComposite() {
+  window.location.hash = '#/composite';
 }
 
 export function goToHistory() {

@@ -148,6 +148,13 @@ export async function renderWeightSummaryCard(container, { onExpand } = {}) {
       if (onExpand) onExpand();
     });
     container.querySelector('[data-weight-toggle]').addEventListener('click', () => {
+      // Below 360px there isn't room to expand inline without the page
+      // layout jumping around -- send those screens straight to the full
+      // weight page instead (same threshold as the composite toggle).
+      if (window.matchMedia('(max-width: 359px)').matches) {
+        if (onExpand) onExpand();
+        return;
+      }
       expanded = !expanded;
       writeBoolPref(WEIGHT_CARD_EXPANDED_PREF_KEY, expanded);
       draw();

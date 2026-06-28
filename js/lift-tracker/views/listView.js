@@ -10,7 +10,7 @@ import {
 import { dailyMaxE1RM, computeComposite, calcE1RM, isNewPR, sessionVolume, toDateKey, formatPct } from '../math.js';
 import { renderCompositeChart } from '../charts.js';
 import { enableDragReorder } from '../dragReorder.js';
-import { goToLift, goToHelp, goToWeight, goToHistory, goToWorkoutNew, goToWorkoutEdit } from '../state.js';
+import { goToLift, goToHelp, goToWeight, goToComposite, goToHistory, goToWorkoutNew, goToWorkoutEdit } from '../state.js';
 import { supabase } from '../supabaseClient.js';
 import { openFeedbackModal } from './feedbackModal.js';
 import { weeklyKillstreak } from '../killstreak.js';
@@ -203,6 +203,13 @@ export async function renderListView(root) {
   applyCompositeToggleUI(readBoolPref(COMPOSITE_EXPANDED_PREF_KEY, true));
 
   compositeToggle.addEventListener('click', () => {
+    // Below 360px there isn't room to expand the chart inline without the
+    // page layout jumping around (see the matching weight-toggle behavior
+    // below) -- send those screens to the dedicated composite page instead.
+    if (window.matchMedia('(max-width: 359px)').matches) {
+      goToComposite();
+      return;
+    }
     const expanded = compositeToggle.getAttribute('aria-expanded') === 'true';
     applyCompositeToggleUI(!expanded);
     writeBoolPref(COMPOSITE_EXPANDED_PREF_KEY, !expanded);
