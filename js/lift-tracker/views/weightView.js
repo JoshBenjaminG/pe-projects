@@ -102,13 +102,19 @@ export async function renderWeightSummaryCard(container, { onExpand } = {}) {
       // width there isn't room for toggle + value + a second button, so
       // tapping this row only expands inline; the arrow comes back once
       // expanded below.
+      // The value sits inside the same <button> as the "Weight" label
+      // (rather than as a separate sibling) so the whole row is one tap
+      // target -- previously only the label half responded to taps, and
+      // the value half (where a thumb naturally lands) did nothing.
       container.innerHTML = `
         <div class="lt-weight-card-row-collapsed">
           <button type="button" class="lt-weight-toggle" data-weight-toggle aria-expanded="false">
-            <span>Weight</span>
-            <span class="lt-chevron" data-weight-chevron>&#9660;</span>
+            <span class="lt-weight-toggle-label">
+              <span>Weight</span>
+              <span class="lt-chevron" data-weight-chevron>&#9660;</span>
+            </span>
+            <span class="lt-weight-stat-value lt-weight-collapsed-value">${formatWeight(summary.current)} lbs</span>
           </button>
-          <span class="lt-weight-stat-value lt-weight-collapsed-value">${formatWeight(summary.current)} lbs</span>
         </div>
       `;
     } else {

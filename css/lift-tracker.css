@@ -614,11 +614,22 @@ html::-webkit-scrollbar,
   gap: 12px;
 }
 
+/* The value used to be a sibling outside this button, leaving only the
+   label half tappable. Now the button spans the whole row (flex: 1) and
+   lays its two spans out with space-between, so the value is inside the
+   same tap target as the label. */
 .lt-weight-card-row-collapsed .lt-weight-toggle {
-  flex: 0 0 auto;
+  flex: 1;
+  justify-content: space-between;
   gap: 4px;
   font-size: 0.9rem;
   min-height: 0;
+}
+
+.lt-weight-toggle-label {
+  display: flex;
+  align-items: center;
+  gap: 4px;
 }
 
 .lt-weight-collapsed-value {
