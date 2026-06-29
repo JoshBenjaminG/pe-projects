@@ -1809,6 +1809,17 @@ html::-webkit-scrollbar,
   font-size: 0.72rem;
 }
 
+/* Same override as .lt-lift-name-input/.lt-feedback-textarea -- the site's
+   global ::placeholder rule (css/modules/contact-me.css) is near-black,
+   which disappears against this dark field background. */
+.lt-rest-setting-field input::placeholder {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.lt-rest-setting-field-disabled {
+  opacity: 0.5;
+}
+
 /* ---------- Tabs ---------- */
 .lt-tabs {
   display: flex;

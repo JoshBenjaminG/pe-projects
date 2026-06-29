@@ -56,15 +56,15 @@ export async function renderDetailView(root, liftId) {
 
     <section class="lt-rest-settings" aria-label="Rest timer settings">
       <label class="lt-rest-setting-toggle">
-        <span>Rest timer (all lifts)</span>
+        <span data-rest-enabled-label>Rest timer: Off</span>
         <input type="checkbox" data-rest-enabled-input />
       </label>
-      <label class="lt-rest-setting-field">
+      <label class="lt-rest-setting-field" data-default-rest-field>
         <span>Default rest</span>
         <input type="number" inputmode="numeric" step="15" min="15" max="600" data-default-rest-input />
         <small>sec</small>
       </label>
-      <label class="lt-rest-setting-field">
+      <label class="lt-rest-setting-field" data-lift-rest-field>
         <span>This lift</span>
         <input type="number" inputmode="numeric" step="15" min="15" max="600" placeholder="Default" data-lift-rest-input />
         <small>sec</small>
@@ -137,13 +137,22 @@ export async function renderDetailView(root, liftId) {
   const defaultRestInput = root.querySelector('[data-default-rest-input]');
   const liftRestInput = root.querySelector('[data-lift-rest-input]');
   const restEnabledInput = root.querySelector('[data-rest-enabled-input]');
+  const restEnabledLabel = root.querySelector('[data-rest-enabled-label]');
+  const defaultRestField = root.querySelector('[data-default-rest-field]');
+  const liftRestField = root.querySelector('[data-lift-rest-field]');
 
   let activeSets = [];
 
   function syncRestInputs() {
     defaultRestInput.value = getDefaultRestSeconds();
     liftRestInput.value = getLiftRestSeconds(liftId) || '';
-    restEnabledInput.checked = isRestTimerEnabled();
+    const enabled = isRestTimerEnabled();
+    restEnabledInput.checked = enabled;
+    restEnabledLabel.textContent = enabled ? 'Rest timer: On' : 'Rest timer: Off';
+    defaultRestInput.disabled = !enabled;
+    liftRestInput.disabled = !enabled;
+    defaultRestField.classList.toggle('lt-rest-setting-field-disabled', !enabled);
+    liftRestField.classList.toggle('lt-rest-setting-field-disabled', !enabled);
   }
 
   function normalizeRestInput(input) {
