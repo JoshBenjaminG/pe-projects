@@ -3,6 +3,14 @@
 // `supabase.from(...)` directly.
 import { supabase } from './supabaseClient.js';
 
+// ---------- Auth ----------
+
+export async function getCurrentUserId() {
+  const { data, error } = await supabase.auth.getUser();
+  if (error) throw error;
+  return data?.user?.id ?? null;
+}
+
 // ---------- Lifts ----------
 
 export async function listLifts() {

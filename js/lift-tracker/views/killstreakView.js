@@ -2,7 +2,7 @@
 // showing lifetime stats -- this is where the homepage killstreak banner
 // (see listView.js) now links to, since there wasn't room in that banner
 // for more than a couple words without text getting clipped.
-import { listLifts, listActiveSetsForLifts } from '../api.js';
+import { listLifts, listActiveSetsForLifts, getCurrentUserId } from '../api.js';
 import { weeklyKillstreak, killstreakHistory, KILLSTREAK_TIERS, achievementProgress, newlyUnlockedIds } from '../killstreak.js';
 import { goToList } from '../state.js';
 import { setTheme, getStoredThemeId } from '../theme.js';
@@ -49,13 +49,14 @@ export async function renderKillstreakView(root) {
 
   const lifts = await listLifts();
   const sets = lifts.length ? await listActiveSetsForLifts(lifts.map((l) => l.id)) : [];
+  const userId = await getCurrentUserId();
 
   const { days, tier: currentTier } = weeklyKillstreak(sets);
   root.querySelector('[data-killstreak-current-icon]').textContent = currentTier ? currentTier.icon : '\u{1F3AF}';
   root.querySelector('[data-killstreak-current-label]').textContent = currentTier ? `${currentTier.label} Killstreak` : 'No Killstreak';
   root.querySelector('[data-killstreak-current-sub]').textContent = `${days} Day streak`;
 
-  const counts = killstreakHistory(sets);
+  const counts = killstreakHistory(sets, userId);
   const listEl = root.querySelector('[data-killstreak-tier-list]');
   listEl.innerHTML = KILLSTREAK_TIERS.map((tier) => {
     const count = counts[tier.key];
@@ -72,7 +73,7 @@ export async function renderKillstreakView(root) {
     `;
   }).join('');
 
-  const progress = achievementProgress(sets);
+  const progress = achievementProgress(sets, userId);
   const unlockedCount = progress.filter((a) => a.unlocked).length;
   root.querySelector('[data-achievements-summary]').textContent =
     `${unlockedCount} / ${progress.length} unlocked. Each badge stays unlocked for good once you've earned it.`;
