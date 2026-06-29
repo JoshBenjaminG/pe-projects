@@ -1908,6 +1908,10 @@ html::-webkit-scrollbar,
 }
 
 /* ---------- Feedback modal ---------- */
+.lt-body.lt-feedback-modal-open {
+  overflow: hidden;
+}
+
 .lt-feedback-overlay {
   position: fixed;
   inset: 0;
@@ -1917,6 +1921,14 @@ html::-webkit-scrollbar,
   justify-content: center;
   padding: 16px;
   z-index: 3000;
+  box-sizing: border-box;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+    Helvetica, Arial, sans-serif;
+  overflow: hidden;
+}
+
+.lt-feedback-overlay * {
+  box-sizing: border-box;
 }
 
 .lt-feedback-modal {

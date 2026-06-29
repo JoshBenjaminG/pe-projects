@@ -5,6 +5,9 @@
 const FEEDBACK_EMAIL = 'joshuaegage@gmail.com';
 
 export function openFeedbackModal() {
+  const returnFocusEl = document.activeElement instanceof HTMLElement
+    ? document.activeElement
+    : null;
   const overlay = document.createElement('div');
   overlay.className = 'lt-feedback-overlay';
   overlay.innerHTML = `
@@ -23,17 +26,34 @@ export function openFeedbackModal() {
     </div>
   `;
   document.body.appendChild(overlay);
+  document.body.classList.add('lt-feedback-modal-open');
 
   const textarea = overlay.querySelector('[data-feedback-text]');
-  textarea.focus();
+  textarea.focus({ preventScroll: true });
 
+  let isClosed = false;
   function close() {
+    if (isClosed) return;
+    isClosed = true;
+    document.removeEventListener('keydown', handleKeyDown);
     overlay.remove();
+    document.body.classList.remove('lt-feedback-modal-open');
+
+    const scroller = document.scrollingElement;
+    if (scroller) scroller.scrollLeft = 0;
+    if (returnFocusEl && document.contains(returnFocusEl)) {
+      requestAnimationFrame(() => returnFocusEl.focus({ preventScroll: true }));
+    }
+  }
+
+  function handleKeyDown(e) {
+    if (e.key === 'Escape') close();
   }
 
   overlay.addEventListener('click', (e) => {
     if (e.target === overlay) close();
   });
+  document.addEventListener('keydown', handleKeyDown);
 
   overlay.querySelector('[data-feedback-cancel]').addEventListener('click', close);
 
