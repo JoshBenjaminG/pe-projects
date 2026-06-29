@@ -1932,10 +1932,14 @@ html::-webkit-scrollbar,
 }
 
 .lt-feedback-title {
-  font-size: 1.1rem;
-  font-weight: 800;
+  font-family: inherit;
+  font-size: 1rem;
+  font-weight: 700;
+  line-height: 1.25;
+  letter-spacing: 0;
+  text-transform: none;
   margin: 0;
-  color: var(--lt-text);
+  color: var(--lt-gold);
 }
 
 .lt-feedback-textarea {
