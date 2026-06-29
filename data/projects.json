@@ -21,6 +21,12 @@
                 },
                 {
                     "module": "image",
+                    "img": "images/lift-tracker/design-language-inspiration.png",
+                    "caption": "<p class='caption'>Early visual references for Lift Tracker: blocky display type, dense mobile dashboards, and dark training interfaces.</p>",
+                    "description": "<p>The visual language of Lift Tracker came from paying attention to apps and interfaces I already liked using, then being honest about which parts actually helped me. The goal was never to copy one source directly. It was to learn from familiar patterns: the density of fitness dashboards, the immediacy of quick mobile controls, the punch of blocky display type, and the confidence of dark, high-contrast interfaces.</p><p>That is how most personal tools get their shape. We use similar apps, notice what feels motivating or efficient, leave out the pieces that get in our way, and add the details we wish those apps had. Lift Tracker's design language grew from that kind of selective borrowing: heavy, direct, compact, and built around the way I actually train.</p>"
+                },
+                {
+                    "module": "image",
                     "img": "images/lift-tracker/feature-notes.png",
                     "caption": "<p class='caption'>Working notes from a single session of using the app and writing down what was annoying, confusing, or missing.</p>",
                     "description": "<p>Most of Lift Tracker's roadmap didn't start as a polished spec. It started as raw notes taken straight from using the app myself: friction points, half-formed ideas, and questions about what to build next. Keeping the input this loose mattered, because the next step was feeding it directly into an AI coding session rather than translating it into a formal ticket first.</p>"
