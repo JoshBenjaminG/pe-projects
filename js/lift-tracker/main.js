@@ -18,14 +18,23 @@ const root = document.getElementById('lift-tracker-app');
 // early as possible, before the first render call.
 applyStoredTheme();
 
+let renderRunId = 0;
+
 async function render() {
+  const runId = ++renderRunId;
+  const isStaleRender = () => runId !== renderRunId;
+
   try {
     const { data: { session } } = await supabase.auth.getSession();
+    if (isStaleRender()) return;
+
     if (!session) {
       if (isDemoLink()) {
         try {
           await startGuestSession();
+          if (isStaleRender()) return;
         } catch (err) {
+          if (isStaleRender()) return;
           // Most likely cause: anonymous sign-ins aren't enabled on the
           // Supabase project. Fall back to the normal gate rather than
           // showing the generic error screen for what's just a demo link.
@@ -35,6 +44,7 @@ async function render() {
         }
       } else {
         await renderAuthView(root);
+        if (isStaleRender()) return;
         return;
       }
     }
@@ -59,6 +69,7 @@ async function render() {
     } else {
       await renderListView(root);
     }
+    if (isStaleRender()) return;
 
     // Each branch above swaps in a whole new "page" of content, but since
     // this is all one physical document (hash routing, no real navigation),
@@ -67,6 +78,7 @@ async function render() {
     // the detail view too, hiding the lift name and quick-log form.
     window.scrollTo(0, 0);
   } catch (err) {
+    if (isStaleRender()) return;
     console.error('[lift-tracker]', err);
     root.innerHTML = `<p class="lt-error">Something went wrong loading the lift tracker. Open the console for details.</p>`;
   }

@@ -35,7 +35,6 @@
 @import 'animation.css';
 @import 'detail.css';
 @import 'image.css';
-@import 'modules/resume.css';
 @import 'modules/goal-list.css';
 @import 'modules/goal.css';
 @import 'modules/resume-list.css';
@@ -130,4 +129,3 @@ body {
 .site-footer .logo {
 
 }
-
