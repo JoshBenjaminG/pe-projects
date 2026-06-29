@@ -1,7 +1,10 @@
 // Quick feedback prompt — collects a short bug report or idea and hands it
-// off to the user's email client via a mailto: link. Deliberately no
-// backend or schema changes: this is meant to be the simplest thing that
-// gets a message to joshuaegage@gmail.com, not a full feedback system.
+// off to the user's email client via a mailto: link. No backend storage of
+// the message itself -- the only thing persisted is a no-content
+// "feedback was submitted" marker (see api.js: recordFeedbackSubmission),
+// used solely to gate the secret-one-wish-willow achievement.
+import { recordFeedbackSubmission } from '../api.js';
+
 const FEEDBACK_EMAIL = 'joshuaegage@gmail.com';
 
 export function openFeedbackModal() {
@@ -61,6 +64,9 @@ export function openFeedbackModal() {
     const message = textarea.value.trim();
     const subject = encodeURIComponent('Lift Tracker feedback');
     const body = encodeURIComponent(message || '(no message entered)');
+    // Best-effort: never let a logging failure (offline, signed out, etc.)
+    // block the actual feedback email from going out.
+    recordFeedbackSubmission().catch(() => {});
     window.location.href = `mailto:${FEEDBACK_EMAIL}?subject=${subject}&body=${body}`;
     close();
   });

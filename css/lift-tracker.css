@@ -857,6 +857,18 @@ html::-webkit-scrollbar,
   opacity: 0.75;
 }
 
+/* Flavor text shown under a secret achievement's real description once
+   it's unlocked -- a little reward quote, not part of the condition
+   itself. Quoted/italic to read as a side comment rather than more
+   instructional copy. */
+.lt-achievement-card-flavor {
+  display: block;
+  font-size: 0.78rem;
+  font-style: italic;
+  color: var(--lt-text-muted);
+  margin-top: 3px;
+}
+
 /* Rank achievements double as theme unlocks (see killstreak.js /
    killstreakView.js): the whole card becomes a button so tapping an
    unlocked rank applies its theme. The <li> keeps the original card

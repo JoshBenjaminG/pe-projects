@@ -213,14 +213,30 @@ export function longestConsecutiveDayStreak(sets) {
  *
  * @param {{performed_at:string}[]} sets
  */
-export function achievementStats(sets, userId = null) {
+export function achievementStats(sets, userId = null, options = {}) {
+  const { hasSubmittedFeedback = false } = options;
   return {
     totalDays: totalWorkoutDays(sets),
     tierCounts: killstreakHistory(sets, userId),
     longestStreak: longestConsecutiveWeekStreak(sets),
     totalSets: sets.length,
     longestDayStreak: longestConsecutiveDayStreak(sets),
+    hasSubmittedFeedback: hasSubmittedFeedback || isFeedbackGrandfathered(userId),
   };
+}
+
+// Accounts manually granted secret-one-wish-willow credit without going
+// through the real "submitted feedback in the app" check. Mason gave his
+// feedback to Joshua in person rather than through the in-app feedback
+// modal, and Joshua is granted the same way -- agreed via chat on
+// 2026-06-29. Keyed by Supabase auth user id.
+const FEEDBACK_GRANDFATHERED_USER_IDS = new Set([
+  '19bf3140-6738-496f-ac0c-20e316c4c3c0', // Joshua
+  '1445e5d7-276a-4fca-bb91-1c0a7ff44b65', // Mason
+]);
+
+function isFeedbackGrandfathered(userId) {
+  return userId != null && FEEDBACK_GRANDFATHERED_USER_IDS.has(userId);
 }
 
 // Achievement catalog, Call of Duty-themed. Four tracks:
@@ -258,11 +274,15 @@ export function achievementStats(sets, userId = null) {
 //   each one is intentionally a single plain stat check (no multi-part
 //   combos to puzzle out blind) built from something that piles up
 //   automatically during ordinary, undirected use -- there's no special
-//   trick to find. Every condition also requires at least
+//   trick to find. Every stat-based condition also requires at least
 //   MIN_SECRET_SETS logged sets, so these can't be backed into by an
 //   account with barely any data. Thresholds are sized for a genuinely
 //   consistent lifter to cross sometime over about a 4-month span --
 //   harder than anything in the other tracks, but not a multi-year grind.
+//   secret-one-wish-willow is the exception: its condition is a discrete
+//   action (submitting feedback through the app) rather than a stat, so
+//   it skips the MIN_SECRET_SETS floor entirely -- see the catalog entry
+//   below.
 export const MIN_SECRET_SETS = 50;
 
 export const ACHIEVEMENTS = [
@@ -318,7 +338,7 @@ export const ACHIEVEMENTS = [
   { id: 'secret-red-pill', name: 'Red Pill', track: 'secret', description: 'Participated in the alpha.', isUnlocked: () => false },
   { id: 'secret-psl-god', name: 'PSL God', track: 'secret', description: 'Log 300 total sets.', isUnlocked: (s) => s.totalSets >= MIN_SECRET_SETS && s.totalSets >= 300 },
   { id: 'secret-human-instrumentality', name: 'Human Instrumentality Project', track: 'secret', description: 'Log a workout on 70 distinct days.', isUnlocked: (s) => s.totalSets >= MIN_SECRET_SETS && s.totalDays >= 70 },
-  { id: 'secret-one-wish-willow', name: 'One Wish Willow', track: 'secret', description: 'Log a set on 14 consecutive days.', isUnlocked: (s) => s.totalSets >= MIN_SECRET_SETS && s.longestDayStreak >= 14 },
+  { id: 'secret-one-wish-willow', name: 'One Wish Willow', track: 'secret', description: 'Submit feedback through the app.', flavor: '"I wish Nikki Freeman loved me more than anyone in the f**king world." — Baron "Bear" Bailey', isUnlocked: (s) => s.hasSubmittedFeedback },
 ];
 
 /**
@@ -327,13 +347,14 @@ export const ACHIEVEMENTS = [
  *
  * @param {{performed_at:string}[]} sets
  */
-export function achievementProgress(sets, userId = null) {
-  const stats = achievementStats(sets, userId);
+export function achievementProgress(sets, userId = null, options = {}) {
+  const stats = achievementStats(sets, userId, options);
   return ACHIEVEMENTS.map((a) => ({
     id: a.id,
     name: a.name,
     track: a.track,
     description: a.description,
+    flavor: a.flavor ?? null,
     theme: a.theme ?? null,
     unlocked: a.isUnlocked(stats),
   }));

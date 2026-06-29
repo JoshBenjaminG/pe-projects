@@ -2,7 +2,7 @@
 // showing lifetime stats -- this is where the homepage killstreak banner
 // (see listView.js) now links to, since there wasn't room in that banner
 // for more than a couple words without text getting clipped.
-import { listLifts, listActiveSetsForLifts, getCurrentUserId } from '../api.js';
+import { listLifts, listActiveSetsForLifts, getCurrentUserId, hasSubmittedFeedback } from '../api.js';
 import { weeklyKillstreak, killstreakHistory, KILLSTREAK_TIERS, achievementProgress, newlyUnlockedIds } from '../killstreak.js';
 import { goToList } from '../state.js';
 import { setTheme, getStoredThemeId } from '../theme.js';
@@ -50,6 +50,7 @@ export async function renderKillstreakView(root) {
   const lifts = await listLifts();
   const sets = lifts.length ? await listActiveSetsForLifts(lifts.map((l) => l.id)) : [];
   const userId = await getCurrentUserId();
+  const feedbackGiven = await hasSubmittedFeedback();
 
   const { days, tier: currentTier } = weeklyKillstreak(sets);
   root.querySelector('[data-killstreak-current-icon]').textContent = currentTier ? currentTier.icon : '\u{1F3AF}';
@@ -73,7 +74,7 @@ export async function renderKillstreakView(root) {
     `;
   }).join('');
 
-  const progress = achievementProgress(sets, userId);
+  const progress = achievementProgress(sets, userId, { hasSubmittedFeedback: feedbackGiven });
   const unlockedCount = progress.filter((a) => a.unlocked).length;
   root.querySelector('[data-achievements-summary]').textContent =
     `${unlockedCount} / ${progress.length} unlocked. Each badge stays unlocked for good once you've earned it.`;
@@ -94,12 +95,19 @@ export async function renderKillstreakView(root) {
       const isHiddenSecret = a.track === 'secret' && !a.unlocked;
       const descClass = isHiddenSecret ? ' lt-achievement-card-desc-hidden' : '';
       const desc = isHiddenSecret ? HIDDEN_SECRET_DESCRIPTION : a.description;
+      // Flavor text stays hidden along with everything else about a
+      // locked secret badge -- it's a little reward for unlocking, not a
+      // clue for unlocking.
+      const flavorLine = a.flavor && !isHiddenSecret
+        ? `<span class="lt-achievement-card-flavor">${a.flavor}</span>`
+        : '';
       return `
         <li class="lt-achievement-card${a.unlocked ? ' lt-achievement-card-unlocked' : ' lt-achievement-card-locked'}">
           <span class="lt-achievement-card-icon">${a.unlocked ? '🎖️' : '🔒'}</span>
           <span class="lt-achievement-card-info">
             <span class="lt-achievement-card-name">${a.name}</span>
             <span class="lt-achievement-card-desc${descClass}">${desc}</span>
+            ${flavorLine}
           </span>
         </li>
       `;

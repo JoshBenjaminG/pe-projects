@@ -11,6 +11,27 @@ export async function getCurrentUserId() {
   return data?.user?.id ?? null;
 }
 
+// ---------- Feedback ----------
+
+// Records that the signed-in account submitted feedback through
+// feedbackModal.js. Deliberately stores no message content -- the actual
+// feedback text still only ever goes out via the mailto: link, never
+// touches the database. This row's sole purpose is letting the
+// secret-one-wish-willow achievement check "has this account ever sent
+// feedback" without storing what they said.
+export async function recordFeedbackSubmission() {
+  const { error } = await supabase.from('feedback_submissions').insert({});
+  if (error) throw error;
+}
+
+export async function hasSubmittedFeedback() {
+  const { count, error } = await supabase
+    .from('feedback_submissions')
+    .select('id', { count: 'exact', head: true });
+  if (error) throw error;
+  return (count ?? 0) > 0;
+}
+
 // ---------- Lifts ----------
 
 export async function listLifts() {
