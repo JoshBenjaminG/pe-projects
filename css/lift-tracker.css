@@ -1751,6 +1751,28 @@ html::-webkit-scrollbar,
   margin: -4px 0 16px;
 }
 
+.lt-rest-setting-toggle {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 10px;
+  border: 1px solid var(--lt-border);
+  border-radius: 10px;
+  background: var(--lt-surface);
+  color: var(--lt-text);
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+.lt-rest-setting-toggle input {
+  width: 20px;
+  height: 20px;
+  accent-color: var(--lt-accent);
+  flex-shrink: 0;
+}
+
 .lt-rest-setting-field {
   display: grid;
   grid-template-columns: 1fr auto;

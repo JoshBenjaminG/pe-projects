@@ -19,7 +19,7 @@ import { readBoolPref, writeBoolPref } from '../prefs.js';
 import { readSeenRankIds } from '../seenAchievements.js';
 import { readStoredActiveWorkoutId, writeStoredActiveWorkoutId } from '../workoutPrefs.js';
 import { DISCOVERY_FEATURES, hasSeenDiscovery, markDiscoverySeen } from '../discovery.js';
-import { primeRestTimerSound, restSecondsForLift, startRestTimer } from '../restTimer.js';
+import { isRestTimerEnabled, primeRestTimerSound, restSecondsForLift, startRestTimer } from '../restTimer.js';
 
 const COMPOSITE_EXPANDED_PREF_KEY = 'lt-composite-expanded';
 const HEADER_MENU_OPEN_PREF_KEY = 'lt-header-menu-open';
@@ -695,11 +695,13 @@ export async function renderListView(root) {
         const isPR = isNewPR(newE1RM, priorSets);
         const now = new Date();
         const performedAt = now.toISOString();
-        primeRestTimerSound();
+        if (isRestTimerEnabled()) primeRestTimerSound();
 
         const newSet = await createSet(liftId, weight, reps, performedAt);
         const lift = currentLifts.find((l) => l.id === liftId);
-        startRestTimer({ seconds: restSecondsForLift(liftId), liftName: lift?.name || '' });
+        if (isRestTimerEnabled()) {
+          startRestTimer({ seconds: restSecondsForLift(liftId), liftName: lift?.name || '' });
+        }
 
         // Patch local cache + DOM in place rather than reloading the whole
         // list -- keeps focus and rhythm intact for rapid-fire logging.

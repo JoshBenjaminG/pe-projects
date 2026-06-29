@@ -16,10 +16,12 @@ import { goToList, refreshView } from '../state.js';
 import {
   getDefaultRestSeconds,
   getLiftRestSeconds,
+  isRestTimerEnabled,
   primeRestTimerSound,
   restSecondsForLift,
   setDefaultRestSeconds,
   setLiftRestSeconds,
+  setRestTimerEnabled,
   startRestTimer,
 } from '../restTimer.js';
 
@@ -53,6 +55,10 @@ export async function renderDetailView(root, liftId) {
     </form>
 
     <section class="lt-rest-settings" aria-label="Rest timer settings">
+      <label class="lt-rest-setting-toggle">
+        <span>Rest timer (all lifts)</span>
+        <input type="checkbox" data-rest-enabled-input />
+      </label>
       <label class="lt-rest-setting-field">
         <span>Default rest</span>
         <input type="number" inputmode="numeric" step="15" min="15" max="600" data-default-rest-input />
@@ -130,12 +136,14 @@ export async function renderDetailView(root, liftId) {
   const feedback = root.querySelector('[data-log-feedback]');
   const defaultRestInput = root.querySelector('[data-default-rest-input]');
   const liftRestInput = root.querySelector('[data-lift-rest-input]');
+  const restEnabledInput = root.querySelector('[data-rest-enabled-input]');
 
   let activeSets = [];
 
   function syncRestInputs() {
     defaultRestInput.value = getDefaultRestSeconds();
     liftRestInput.value = getLiftRestSeconds(liftId) || '';
+    restEnabledInput.checked = isRestTimerEnabled();
   }
 
   function normalizeRestInput(input) {
@@ -155,6 +163,11 @@ export async function renderDetailView(root, liftId) {
   liftRestInput.addEventListener('change', () => {
     const seconds = normalizeRestInput(liftRestInput);
     setLiftRestSeconds(liftId, seconds);
+    syncRestInputs();
+  });
+
+  restEnabledInput.addEventListener('change', () => {
+    setRestTimerEnabled(restEnabledInput.checked);
     syncRestInputs();
   });
 
@@ -178,10 +191,12 @@ export async function renderDetailView(root, liftId) {
     const priorSets = activeSets; // snapshot before insert, for correct PR comparison
     const isPR = isNewPR(newE1RM, priorSets);
     const now = new Date();
-    primeRestTimerSound();
+    if (isRestTimerEnabled()) primeRestTimerSound();
 
     await createSet(liftId, weight, reps, now.toISOString());
-    startRestTimer({ seconds: restSecondsForLift(liftId), liftName: lastSavedName });
+    if (isRestTimerEnabled()) {
+      startRestTimer({ seconds: restSecondsForLift(liftId), liftName: lastSavedName });
+    }
     repsInput.value = '';
     repsInput.focus();
 

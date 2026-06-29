@@ -1,6 +1,13 @@
+import { readBoolPref, writeBoolPref } from './prefs.js';
+
 const DEFAULT_REST_SECONDS = 120;
 const DEFAULT_REST_KEY = 'lt-default-rest-seconds';
 const LIFT_REST_PREFIX = 'lt-lift-rest-seconds-';
+// Global on/off switch for the whole feature -- off by default since the
+// timer is new and shouldn't surprise existing users; once turned on from
+// any lift detail page it stays on (cookie-persisted) for every lift,
+// across sessions, until switched off again.
+const ENABLED_PREF_KEY = 'lt-rest-timer-enabled';
 
 let timerEl = null;
 let intervalId = null;
@@ -29,6 +36,14 @@ function writeStorageNumber(key, value) {
   } catch {
     // Ignore preference persistence failures; the timer can still run.
   }
+}
+
+export function isRestTimerEnabled() {
+  return readBoolPref(ENABLED_PREF_KEY, false);
+}
+
+export function setRestTimerEnabled(enabled) {
+  writeBoolPref(ENABLED_PREF_KEY, Boolean(enabled));
 }
 
 export function getDefaultRestSeconds() {
