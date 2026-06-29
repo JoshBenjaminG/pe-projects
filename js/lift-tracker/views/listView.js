@@ -93,11 +93,12 @@ export async function renderListView(root) {
         <span>+ Add Lift</span>
         <span class="lt-discovery-badge" data-add-lift-discovery hidden aria-label="Add your first lift">!</span>
       </button>
-      <button type="button" class="lt-create-workout-btn" data-create-workout-btn>
+      <button type="button" class="lt-create-workout-btn" data-create-workout-btn disabled aria-disabled="true">
         <span>+ Create Workout</span>
         <span class="lt-discovery-badge" data-create-workout-discovery hidden aria-label="Create your first workout">!</span>
       </button>
     </div>
+    <p class="lt-empty lt-add-lift-hint" data-add-lift-hint hidden>Add one more lift to unlock workouts.</p>
 
     <form class="lt-add-lift" data-add-lift-form hidden>
       <input type="text" name="name" placeholder="New lift name" required maxlength="60" autocomplete="off" />
@@ -108,7 +109,7 @@ export async function renderListView(root) {
       <div class="lt-workout-pills" data-workout-pills></div>
     </div>
     <p class="lt-empty lt-workout-empty-hint" data-workout-empty-hint hidden>
-      Group your lifts into a workout (like "Push Day") to filter the list down to just those.
+      You have enough lifts to create a workout, like "Push Day" or "Full Body".
     </p>
 
     <ul class="lt-lift-list" data-lift-list></ul>
@@ -279,6 +280,8 @@ export async function renderListView(root) {
   const addForm = root.querySelector('[data-add-lift-form]');
   const addLiftToggleBtn = root.querySelector('[data-add-lift-toggle]');
   const addLiftDiscoveryBadge = root.querySelector('[data-add-lift-discovery]');
+  const addLiftHintEl = root.querySelector('[data-add-lift-hint]');
+  const createWorkoutBtn = root.querySelector('[data-create-workout-btn]');
   const createWorkoutDiscoveryBadge = root.querySelector('[data-create-workout-discovery]');
   // A toggle, not a one-shot reveal: tapping it again hides the form, and
   // (per the request this implements) the form otherwise just stays open
@@ -296,7 +299,10 @@ export async function renderListView(root) {
   const listEl = root.querySelector('[data-lift-list]');
   const listEmptyEl = root.querySelector('[data-list-empty]');
 
-  root.querySelector('[data-create-workout-btn]').addEventListener('click', goToWorkoutNew);
+  createWorkoutBtn.addEventListener('click', () => {
+    if (createWorkoutBtn.disabled) return;
+    goToWorkoutNew();
+  });
 
   const workoutPillsEl = root.querySelector('[data-workout-pills]');
   const workoutEmptyHintEl = root.querySelector('[data-workout-empty-hint]');
@@ -323,11 +329,6 @@ export async function renderListView(root) {
   }
 
   function renderWorkoutPills() {
-    // Nudge new users toward grouping lifts into a workout, but only until
-    // they've made their first one -- once any workout exists, the pills
-    // row speaks for itself.
-    workoutEmptyHintEl.hidden = workouts.length > 0;
-
     workoutPillsEl.innerHTML = workouts
       .map((w) => {
         const isActive = w.id === activeWorkoutId;
@@ -497,13 +498,19 @@ export async function renderListView(root) {
     renderWorkoutPills();
 
     currentLifts = await listLifts();
-    addLiftDiscoveryBadge.hidden = currentLifts.length > 0;
-    createWorkoutDiscoveryBadge.hidden = currentLifts.length === 0 || workouts.length > 0;
+    const canCreateWorkout = currentLifts.length >= 2;
+    addLiftDiscoveryBadge.hidden = currentLifts.length >= 2;
+    addLiftHintEl.hidden = currentLifts.length !== 1;
+    createWorkoutBtn.disabled = !canCreateWorkout;
+    createWorkoutBtn.setAttribute('aria-disabled', String(!canCreateWorkout));
+    createWorkoutDiscoveryBadge.hidden = !canCreateWorkout || workouts.length > 0;
+    workoutEmptyHintEl.hidden = !canCreateWorkout || workouts.length > 0;
 
     if (currentLifts.length === 0) {
       listEl.innerHTML = '';
       listEmptyEl.hidden = false;
       listEmptyEl.textContent = 'Start by adding your first lift above. Once it exists, you can log sets and build workouts around it.';
+      addLiftHintEl.hidden = true;
       compositeSection.hidden = true;
       renderKillstreak([]);
       await renderWeightSummaryCard(weightCard, {

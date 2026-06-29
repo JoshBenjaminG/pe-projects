@@ -282,6 +282,13 @@ html::-webkit-scrollbar,
   font-size: 0.85rem;
 }
 
+.lt-add-lift-hint {
+  text-align: left;
+  padding: 0 2px 12px;
+  margin-top: -8px;
+  font-size: 0.85rem;
+}
+
 .lt-error {
   color: var(--lt-accent);
 }
@@ -1359,6 +1366,18 @@ html::-webkit-scrollbar,
 .lt-add-lift-toggle-btn:active,
 .lt-create-workout-btn:active {
   background: var(--lt-surface-alt);
+}
+
+.lt-create-workout-btn:disabled,
+.lt-create-workout-btn[aria-disabled="true"] {
+  opacity: 0.45;
+  color: var(--lt-text-muted);
+  cursor: not-allowed;
+}
+
+.lt-create-workout-btn:disabled:active,
+.lt-create-workout-btn[aria-disabled="true"]:active {
+  background: var(--lt-surface);
 }
 
 .lt-add-lift-toggle-active {
