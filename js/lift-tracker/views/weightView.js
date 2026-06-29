@@ -67,11 +67,15 @@ function formatLongDate(dateKey) {
 export async function renderWeightSummaryCard(container, { onExpand, showDiscovery = false } = {}) {
   container.classList.remove('lt-stats-row-expanded');
   container.innerHTML = `
-    <div class="lt-weight-card-header">
-      <h2>Weight</h2>
-      <button type="button" class="lt-weight-expand" data-weight-expand aria-label="Open weight tracker">&#8250;</button>
+    <div class="lt-weight-card-row-collapsed">
+      <button type="button" class="lt-weight-toggle" data-weight-expand aria-label="Open weight tracker">
+        <span class="lt-weight-toggle-label">
+          <span>Weight</span>
+          <span class="lt-chevron">&#9660;</span>
+        </span>
+        <span class="lt-weight-stat-value lt-weight-collapsed-value">Loading...</span>
+      </button>
     </div>
-    <p class="lt-weight-empty">Loading weight...</p>
   `;
   container.querySelector('[data-weight-expand]').addEventListener('click', () => {
     if (onExpand) onExpand();
