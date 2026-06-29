@@ -1255,6 +1255,13 @@ html::-webkit-scrollbar,
   color: var(--lt-text-muted);
 }
 
+.lt-composite-scope {
+  margin: 0 0 4px;
+  font-size: 0.82rem;
+  font-weight: 800;
+  color: var(--lt-gold);
+}
+
 .lt-chart-wrap {
   position: relative;
   height: 200px;

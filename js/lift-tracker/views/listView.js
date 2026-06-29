@@ -17,6 +17,7 @@ import { weeklyKillstreak, achievementProgress, newlyUnlockedIds } from '../kill
 import { renderWeightSummaryCard } from './weightView.js';
 import { readBoolPref, writeBoolPref } from '../prefs.js';
 import { readSeenRankIds } from '../seenAchievements.js';
+import { readStoredActiveWorkoutId, writeStoredActiveWorkoutId } from '../workoutPrefs.js';
 
 const COMPOSITE_EXPANDED_PREF_KEY = 'lt-composite-expanded';
 const HEADER_MENU_OPEN_PREF_KEY = 'lt-header-menu-open';
@@ -74,7 +75,8 @@ export async function renderListView(root) {
           <span class="lt-chevron" data-chevron>&#9650;</span>
         </button>
         <div class="lt-composite-body" data-composite-body>
-          <p class="lt-composite-blurb">Your average strength gain across all lifts, relative to where each one started.</p>
+          <p class="lt-composite-scope" data-composite-scope></p>
+          <p class="lt-composite-blurb" data-composite-blurb></p>
           <div class="lt-chart-wrap"><canvas data-composite-canvas></canvas></div>
           <p class="lt-empty" data-composite-empty hidden>Log a few workouts to see your composite progress.</p>
         </div>
@@ -278,22 +280,18 @@ export async function renderListView(root) {
   // tapping the active pill again clears it back to null rather than
   // requiring a separate "All" pill, since with only one filter active at
   // a time the active pill itself is the obvious thing to tap to undo it.
-  // Declared up front (not just hoisted as a function) because the very
-  // next line calls readStoredActiveWorkoutId() immediately -- that function
-  // is hoisted fine, but it closes over this const, and reading a const
-  // before its own declaration line executes throws (temporal dead zone),
-  // which a naive try/catch around localStorage access will silently turn
-  // into "always returns null".
-  const ACTIVE_WORKOUT_STORAGE_KEY = 'lt-active-workout';
-
   let workouts = [];
   // Persisted across reloads/closing the app, same as fast mode below --
   // whichever workout filter you left active is the one you land back on.
   let activeWorkoutId = readStoredActiveWorkoutId();
 
+  function activeWorkout() {
+    if (!activeWorkoutId) return null;
+    return workouts.find((w) => w.id === activeWorkoutId) || null;
+  }
+
   function visibleLifts() {
-    if (!activeWorkoutId) return currentLifts;
-    const workout = workouts.find((w) => w.id === activeWorkoutId);
+    const workout = activeWorkout();
     if (!workout) return currentLifts;
     const memberIds = new Set(workout.liftIds);
     return currentLifts.filter((l) => memberIds.has(l.id));
@@ -333,6 +331,7 @@ export async function renderListView(root) {
         writeStoredActiveWorkoutId(activeWorkoutId);
         renderWorkoutPills();
         renderLiftRows(lastLiftsData);
+        renderComposite(lastLiftsData);
       });
     });
 
@@ -342,29 +341,6 @@ export async function renderListView(root) {
         goToWorkoutEdit(btn.dataset.workoutEdit);
       });
     });
-  }
-
-  function readStoredActiveWorkoutId() {
-    // Same Safari-private-browsing safety net as fast mode below -- a
-    // missing preference should never break the page.
-    try {
-      return window.localStorage.getItem(ACTIVE_WORKOUT_STORAGE_KEY) || null;
-    } catch {
-      return null;
-    }
-  }
-
-  function writeStoredActiveWorkoutId(id) {
-    try {
-      if (id) {
-        window.localStorage.setItem(ACTIVE_WORKOUT_STORAGE_KEY, id);
-      } else {
-        window.localStorage.removeItem(ACTIVE_WORKOUT_STORAGE_KEY);
-      }
-    } catch {
-      // Ignore -- the filter still works for the rest of this session, it
-      // just won't be remembered next time.
-    }
   }
 
   const FAST_MODE_STORAGE_KEY = 'lt-fast-mode';
@@ -526,10 +502,27 @@ export async function renderListView(root) {
   }
 
   function renderComposite(liftsData) {
-    const points = computeComposite(liftsData);
+    const workout = activeWorkout();
+    const scopedLiftsData = workout
+      ? liftsData.filter((lift) => workout.liftIds.includes(lift.liftId))
+      : liftsData;
+    const points = computeComposite(scopedLiftsData);
     compositeSection.hidden = false;
     const canvas = root.querySelector('[data-composite-canvas]');
     const emptyEl = root.querySelector('[data-composite-empty]');
+    const scopeEl = root.querySelector('[data-composite-scope]');
+    const blurbEl = root.querySelector('[data-composite-blurb]');
+
+    scopeEl.textContent = workout
+      ? `Measuring ${workout.name}`
+      : 'Measuring all lifts';
+    blurbEl.textContent = workout
+      ? 'Your average strength gain across the lifts in this workout, relative to where each one started.'
+      : 'Your average strength gain across all lifts, relative to where each one started.';
+    emptyEl.textContent = workout
+      ? `Log a few sets for lifts in ${workout.name} to see this workout's composite progress.`
+      : 'Log a few workouts to see your composite progress.';
+
     if (points.length === 0) {
       canvas.hidden = true;
       emptyEl.hidden = false;

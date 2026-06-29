@@ -4,10 +4,11 @@
 // composite toggle on narrow screens, where there isn't room to expand the
 // chart inline without the page layout jumping around (see listView.js's
 // composite toggle click handler).
-import { listLifts, listActiveSetsForLifts } from '../api.js';
+import { listLifts, listActiveSetsForLifts, listWorkouts } from '../api.js';
 import { dailyMaxE1RM, computeComposite } from '../math.js';
 import { renderCompositeChart } from '../charts.js';
 import { goToList } from '../state.js';
+import { findStoredActiveWorkout } from '../workoutPrefs.js';
 
 export async function renderCompositeView(root) {
   root.innerHTML = `
@@ -16,14 +17,19 @@ export async function renderCompositeView(root) {
       <h1 class="lt-weight-view-title">Composite</h1>
     </header>
 
-    <p class="lt-composite-blurb">Your average strength gain across all lifts, relative to where each one started.</p>
+    <p class="lt-composite-scope" data-composite-scope></p>
+    <p class="lt-composite-blurb" data-composite-blurb></p>
     <div class="lt-chart-wrap"><canvas data-composite-canvas></canvas></div>
     <p class="lt-empty" data-composite-empty hidden>Log a few workouts to see your composite progress.</p>
   `;
 
   root.querySelector('[data-back]').addEventListener('click', goToList);
 
-  const lifts = await listLifts();
+  const [allLifts, workouts] = await Promise.all([listLifts(), listWorkouts()]);
+  const activeWorkout = findStoredActiveWorkout(workouts);
+  const lifts = activeWorkout
+    ? allLifts.filter((lift) => activeWorkout.liftIds.includes(lift.id))
+    : allLifts;
   const sets = lifts.length ? await listActiveSetsForLifts(lifts.map((l) => l.id)) : [];
 
   const setsByLift = new Map(lifts.map((l) => [l.id, []]));
@@ -40,6 +46,18 @@ export async function renderCompositeView(root) {
   const points = computeComposite(liftsData);
   const canvas = root.querySelector('[data-composite-canvas]');
   const emptyEl = root.querySelector('[data-composite-empty]');
+  const scopeEl = root.querySelector('[data-composite-scope]');
+  const blurbEl = root.querySelector('[data-composite-blurb]');
+
+  scopeEl.textContent = activeWorkout
+    ? `Measuring ${activeWorkout.name}`
+    : 'Measuring all lifts';
+  blurbEl.textContent = activeWorkout
+    ? 'Your average strength gain across the lifts in this workout, relative to where each one started.'
+    : 'Your average strength gain across all lifts, relative to where each one started.';
+  emptyEl.textContent = activeWorkout
+    ? `Log a few sets for lifts in ${activeWorkout.name} to see this workout's composite progress.`
+    : 'Log a few workouts to see your composite progress.';
 
   if (points.length === 0) {
     canvas.hidden = true;
