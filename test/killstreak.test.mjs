@@ -438,6 +438,16 @@ test('achievement secret-blue-pill: always unlocked, regardless of stats', () =>
   }
 });
 
+test('achievement secret-red-pill: not awarded yet, locked regardless of stats', () => {
+  const a = findAchievement('secret-red-pill');
+  if (a.isUnlocked(makeStats()) !== false) {
+    throw new Error('expected locked with all-zero stats');
+  }
+  if (a.isUnlocked(makeStats({ totalDays: 999, totalSets: 999, longestDayStreak: 999, longestStreak: 999 })) !== false) {
+    throw new Error('expected locked regardless of stats -- not wired up to award anyone yet');
+  }
+});
+
 test('secret achievements carry no theme, same as mastery/streak/capstone', () => {
   const secrets = ACHIEVEMENTS.filter((a) => a.track === 'secret');
   if (secrets.length === 0) throw new Error('expected at least one secret achievement');
@@ -446,8 +456,8 @@ test('secret achievements carry no theme, same as mastery/streak/capstone', () =
   }
 });
 
-test('ACHIEVEMENTS: exactly 35 entries with unique ids across 5 tracks', () => {
-  if (ACHIEVEMENTS.length !== 35) throw new Error(`expected 35 got ${ACHIEVEMENTS.length}`);
+test('ACHIEVEMENTS: exactly 36 entries with unique ids across 5 tracks', () => {
+  if (ACHIEVEMENTS.length !== 36) throw new Error(`expected 36 got ${ACHIEVEMENTS.length}`);
   const ids = ACHIEVEMENTS.map((a) => a.id);
   if (new Set(ids).size !== ids.length) throw new Error('duplicate id found');
   const tracks = new Set(ACHIEVEMENTS.map((a) => a.track));
