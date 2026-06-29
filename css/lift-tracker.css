@@ -308,11 +308,19 @@ html::-webkit-scrollbar,
 }
 
 .lt-header h1 {
-  font-size: 1.3rem;
-  font-weight: 800;
-  letter-spacing: 0.01em;
+  font-family: Impact, Haettenschweiler, 'Arial Black', 'Segoe UI Black',
+    sans-serif;
+  font-size: 1.45rem;
+  font-style: italic;
+  font-weight: 900;
+  letter-spacing: 0.03em;
+  line-height: 0.95;
   margin: 8px 0 8px;
   color: var(--lt-text);
+  text-transform: uppercase;
+  text-shadow: 2px 0 0 rgba(255, 255, 255, 0.08);
+  transform: skewX(-9deg);
+  transform-origin: left center;
   /* Never let "Lift Tracker" shrink or wrap onto two lines -- on mobile,
      opening the hamburger menu was eating into the title's space and
      flexbox would shrink it down to its narrowest word instead of
@@ -331,7 +339,7 @@ html::-webkit-scrollbar,
    covers every current non-Max/Plus iPhone with real room to spare. */
 @media (max-width: 430px) {
   .lt-header h1 {
-    font-size: 1.05rem;
+    font-size: 1.18rem;
   }
 }
 
