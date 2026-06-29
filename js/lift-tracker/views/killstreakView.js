@@ -13,8 +13,13 @@ const ACHIEVEMENT_TRACK_LABELS = {
   mastery: 'Killstreak Mastery',
   streak: 'Consistency',
   capstone: 'Capstone',
+  secret: 'Secrets',
 };
-const ACHIEVEMENT_TRACK_ORDER = ['rank', 'mastery', 'streak', 'capstone'];
+const ACHIEVEMENT_TRACK_ORDER = ['rank', 'mastery', 'streak', 'capstone', 'secret'];
+// Shown instead of the real description for any locked "secret" track
+// badge -- the whole point is that the condition isn't visible until
+// it's already been met.
+const HIDDEN_SECRET_DESCRIPTION = 'Hidden until unlocked.';
 
 export async function renderKillstreakView(root) {
   root.innerHTML = `
@@ -85,12 +90,15 @@ export async function renderKillstreakView(root) {
 
   function renderAchievementCard(a) {
     if (a.track !== 'rank') {
+      const isHiddenSecret = a.track === 'secret' && !a.unlocked;
+      const descClass = isHiddenSecret ? ' lt-achievement-card-desc-hidden' : '';
+      const desc = isHiddenSecret ? HIDDEN_SECRET_DESCRIPTION : a.description;
       return `
         <li class="lt-achievement-card${a.unlocked ? ' lt-achievement-card-unlocked' : ' lt-achievement-card-locked'}">
           <span class="lt-achievement-card-icon">${a.unlocked ? '🎖️' : '🔒'}</span>
           <span class="lt-achievement-card-info">
             <span class="lt-achievement-card-name">${a.name}</span>
-            <span class="lt-achievement-card-desc">${a.description}</span>
+            <span class="lt-achievement-card-desc${descClass}">${desc}</span>
           </span>
         </li>
       `;

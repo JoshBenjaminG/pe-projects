@@ -852,6 +852,11 @@ html::-webkit-scrollbar,
   color: var(--lt-text-muted);
 }
 
+.lt-achievement-card-desc-hidden {
+  font-style: italic;
+  opacity: 0.75;
+}
+
 /* Rank achievements double as theme unlocks (see killstreak.js /
    killstreakView.js): the whole card becomes a button so tapping an
    unlocked rank applies its theme. The <li> keeps the original card

@@ -1,4 +1,4 @@
-import { weekStart, workoutDaysThisWeek, killstreakForDays, weeklyKillstreak, killstreakHistory, totalWorkoutDays, longestConsecutiveWeekStreak, ACHIEVEMENTS, achievementProgress, newlyUnlockedIds } from '../js/lift-tracker/killstreak.js';
+import { weekStart, workoutDaysThisWeek, killstreakForDays, weeklyKillstreak, killstreakHistory, totalWorkoutDays, longestConsecutiveWeekStreak, longestConsecutiveDayStreak, MIN_SECRET_SETS, ACHIEVEMENTS, achievementProgress, newlyUnlockedIds } from '../js/lift-tracker/killstreak.js';
 
 let passed = 0;
 function test(name, fn) {
@@ -214,15 +214,59 @@ test('longestConsecutiveWeekStreak: a skipped week breaks the streak, and the lo
   if (streak !== 3) throw new Error(`expected 3 (the earlier run, not extended by the isolated week) got ${streak}`);
 });
 
+test('longestConsecutiveDayStreak: empty sets is 0', () => {
+  if (longestConsecutiveDayStreak([]) !== 0) throw new Error('expected 0');
+});
+
+test('longestConsecutiveDayStreak: a single workout day is a streak of 1', () => {
+  const sets = [{ performed_at: iso(2026, 6, 15, 9) }];
+  if (longestConsecutiveDayStreak(sets) !== 1) throw new Error('expected 1');
+});
+
+test('longestConsecutiveDayStreak: multiple sets on the same day still count as one day', () => {
+  const sets = [
+    { performed_at: iso(2026, 6, 15, 9) },
+    { performed_at: iso(2026, 6, 15, 20) },
+  ];
+  if (longestConsecutiveDayStreak(sets) !== 1) throw new Error('expected 1');
+});
+
+test('longestConsecutiveDayStreak: 5 back-to-back calendar days is a streak of 5', () => {
+  const sets = [
+    { performed_at: iso(2026, 6, 15, 9) },
+    { performed_at: iso(2026, 6, 16, 9) },
+    { performed_at: iso(2026, 6, 17, 9) },
+    { performed_at: iso(2026, 6, 18, 9) },
+    { performed_at: iso(2026, 6, 19, 9) },
+  ];
+  const streak = longestConsecutiveDayStreak(sets);
+  if (streak !== 5) throw new Error(`expected 5 got ${streak}`);
+});
+
+test('longestConsecutiveDayStreak: a single skipped day breaks the streak, and the longest run wins', () => {
+  const sets = [
+    { performed_at: iso(2026, 6, 15, 9) }, // streak of 3 starts
+    { performed_at: iso(2026, 6, 16, 9) },
+    { performed_at: iso(2026, 6, 17, 9) }, // streak of 3 ends here
+    // June 18 has no set -- gap
+    { performed_at: iso(2026, 6, 19, 9) },
+    { performed_at: iso(2026, 6, 20, 9) }, // isolated run of 2
+  ];
+  const streak = longestConsecutiveDayStreak(sets);
+  if (streak !== 3) throw new Error(`expected 3 (the earlier run, not extended by the later one) got ${streak}`);
+});
+
 // --- Achievement catalog: every threshold re-derived independently here
 // (not copy-pasted from killstreak.js) so a transcription mistake in the
 // catalog gets caught rather than just re-confirmed. ---
 
-function makeStats({ totalDays = 0, tierCounts = {}, longestStreak = 0 } = {}) {
+function makeStats({ totalDays = 0, tierCounts = {}, longestStreak = 0, totalSets = 0, longestDayStreak = 0 } = {}) {
   return {
     totalDays,
     tierCounts: { uav: 0, predator: 0, harrier: 0, chopper: 0, ...tierCounts },
     longestStreak,
+    totalSets,
+    longestDayStreak,
   };
 }
 
@@ -346,12 +390,58 @@ test('achievement capstone-dark-matter: requires BOTH 40 days AND 5x chopper', (
   }
 });
 
-test('ACHIEVEMENTS: exactly 31 entries with unique ids across 4 tracks', () => {
-  if (ACHIEVEMENTS.length !== 31) throw new Error(`expected 31 got ${ACHIEVEMENTS.length}`);
+test('achievement secret-psl-god: locked below 300 total sets, unlocked at 300', () => {
+  const a = findAchievement('secret-psl-god');
+  if (a.isUnlocked(makeStats({ totalSets: 299 })) !== false) {
+    throw new Error('expected locked at 299 total sets');
+  }
+  if (a.isUnlocked(makeStats({ totalSets: 300 })) !== true) {
+    throw new Error('expected unlocked at 300 total sets');
+  }
+});
+
+test('achievement secret-human-instrumentality: locked below 70 workout days, unlocked at 70 -- but only with enough total sets logged', () => {
+  const a = findAchievement('secret-human-instrumentality');
+  if (a.isUnlocked(makeStats({ totalDays: 69, totalSets: 200 })) !== false) {
+    throw new Error('expected locked at 69 days');
+  }
+  if (a.isUnlocked(makeStats({ totalDays: 70, totalSets: 200 })) !== true) {
+    throw new Error('expected unlocked at 70 days with plenty of total sets');
+  }
+  // 70 distinct days could in principle come from a single set per day --
+  // the MIN_SECRET_SETS floor exists specifically to block that case.
+  if (a.isUnlocked(makeStats({ totalDays: 70, totalSets: MIN_SECRET_SETS - 1 })) !== false) {
+    throw new Error('expected locked when total sets is below the MIN_SECRET_SETS floor, even with 70 days met');
+  }
+});
+
+test('achievement secret-one-wish-willow: locked below a 14-day streak, unlocked at 14 -- but only with enough total sets logged', () => {
+  const a = findAchievement('secret-one-wish-willow');
+  if (a.isUnlocked(makeStats({ longestDayStreak: 13, totalSets: 200 })) !== false) {
+    throw new Error('expected locked at a 13-day streak');
+  }
+  if (a.isUnlocked(makeStats({ longestDayStreak: 14, totalSets: 200 })) !== true) {
+    throw new Error('expected unlocked at a 14-day streak with plenty of total sets');
+  }
+  if (a.isUnlocked(makeStats({ longestDayStreak: 14, totalSets: MIN_SECRET_SETS - 1 })) !== false) {
+    throw new Error('expected locked when total sets is below the MIN_SECRET_SETS floor, even with the streak met');
+  }
+});
+
+test('secret achievements carry no theme, same as mastery/streak/capstone', () => {
+  const secrets = ACHIEVEMENTS.filter((a) => a.track === 'secret');
+  if (secrets.length === 0) throw new Error('expected at least one secret achievement');
+  if (secrets.some((a) => a.theme !== undefined)) {
+    throw new Error('expected secret achievements to define no theme');
+  }
+});
+
+test('ACHIEVEMENTS: exactly 34 entries with unique ids across 5 tracks', () => {
+  if (ACHIEVEMENTS.length !== 34) throw new Error(`expected 34 got ${ACHIEVEMENTS.length}`);
   const ids = ACHIEVEMENTS.map((a) => a.id);
   if (new Set(ids).size !== ids.length) throw new Error('duplicate id found');
   const tracks = new Set(ACHIEVEMENTS.map((a) => a.track));
-  for (const t of ['rank', 'mastery', 'streak', 'capstone']) {
+  for (const t of ['rank', 'mastery', 'streak', 'capstone', 'secret']) {
     if (!tracks.has(t)) throw new Error(`missing track ${t}`);
   }
 });

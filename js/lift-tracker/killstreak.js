@@ -149,6 +149,41 @@ export function longestConsecutiveWeekStreak(sets) {
 }
 
 /**
+ * Longest run of consecutive calendar days with at least one set, across
+ * a user's full history. Unlike longestConsecutiveWeekStreak (which only
+ * cares whether a week had a workout at all), every single day in the
+ * run has to have its own set -- skip even one day and the run resets.
+ * This is a lifetime maximum, same as the week-streak version above.
+ *
+ * @param {{performed_at:string}[]} sets
+ */
+export function longestConsecutiveDayStreak(sets) {
+  const dayKeys = new Set();
+  for (const s of sets) {
+    dayKeys.add(toDateKey(s.performed_at));
+  }
+  // toDateKey gives zero-padded "YYYY-MM-DD" strings, so a plain string
+  // sort already puts them in chronological order.
+  const sortedDays = Array.from(dayKeys)
+    .sort()
+    .map((key) => {
+      const [y, m, d] = key.split('-').map(Number);
+      return new Date(y, m - 1, d);
+    });
+  if (sortedDays.length === 0) return 0;
+
+  let longest = 1;
+  let current = 1;
+  for (let i = 1; i < sortedDays.length; i++) {
+    const expectedNext = new Date(sortedDays[i - 1]);
+    expectedNext.setDate(expectedNext.getDate() + 1);
+    current = expectedNext.getTime() === sortedDays[i].getTime() ? current + 1 : 1;
+    if (current > longest) longest = current;
+  }
+  return longest;
+}
+
+/**
  * Stats every achievement's `isUnlocked()` check reads. Computed once per
  * page view and threaded through rather than having each achievement
  * re-walk the full set history itself.
@@ -160,6 +195,8 @@ export function achievementStats(sets) {
     totalDays: totalWorkoutDays(sets),
     tierCounts: killstreakHistory(sets),
     longestStreak: longestConsecutiveWeekStreak(sets),
+    totalSets: sets.length,
+    longestDayStreak: longestConsecutiveDayStreak(sets),
   };
 }
 
@@ -190,6 +227,21 @@ export function achievementStats(sets) {
 // - "capstone" -- combines a hard rank/mastery/streak achievement from
 //   two different tracks, rewarding different play styles (volume vs.
 //   steady consistency) with one shared finish line.
+// - "secret" -- hidden achievements. Their names show up in the list like
+//   any other badge, but the description (i.e. the actual unlock
+//   condition) stays masked until earned -- see killstreakView.js, which
+//   special-cases this track to render "???" instead of `description`
+//   while locked. Because nobody can see the requirement in advance,
+//   each one is intentionally a single plain stat check (no multi-part
+//   combos to puzzle out blind) built from something that piles up
+//   automatically during ordinary, undirected use -- there's no special
+//   trick to find. Every condition also requires at least
+//   MIN_SECRET_SETS logged sets, so these can't be backed into by an
+//   account with barely any data. Thresholds are sized for a genuinely
+//   consistent lifter to cross sometime over about a 4-month span --
+//   harder than anything in the other tracks, but not a multi-year grind.
+export const MIN_SECRET_SETS = 50;
+
 export const ACHIEVEMENTS = [
   // --- Rank: lifetime total workout days ---
   { id: 'rank-private', name: 'Private', track: 'rank', description: 'Log 1 workout day.', theme: { id: 'default', label: 'Lift Tracker' }, isUnlocked: (s) => s.totalDays >= 1 },
@@ -229,6 +281,11 @@ export const ACHIEVEMENTS = [
   { id: 'capstone-tactical-nuke', name: 'Tactical Nuke', track: 'capstone', description: 'Reach General (27 days) and earn Gunship (Chopper Gunner x5).', isUnlocked: (s) => s.totalDays >= 27 && s.tierCounts.chopper >= 5 },
   { id: 'capstone-moab', name: 'MOAB', track: 'capstone', description: 'Reach Juggernaut (8-week streak) and Harrier Veteran (x15).', isUnlocked: (s) => s.longestStreak >= 8 && s.tierCounts.harrier >= 15 },
   { id: 'capstone-dark-matter', name: 'Dark Matter', track: 'capstone', description: 'Reach Prestige Master (40 days) and earn Gunship (x5).', isUnlocked: (s) => s.totalDays >= 40 && s.tierCounts.chopper >= 5 },
+
+  // --- Secret: condition hidden until unlocked (see killstreakView.js) ---
+  { id: 'secret-psl-god', name: 'PSL God', track: 'secret', description: 'Log 300 total sets.', isUnlocked: (s) => s.totalSets >= MIN_SECRET_SETS && s.totalSets >= 300 },
+  { id: 'secret-human-instrumentality', name: 'Human Instrumentality Project', track: 'secret', description: 'Log a workout on 70 distinct days.', isUnlocked: (s) => s.totalSets >= MIN_SECRET_SETS && s.totalDays >= 70 },
+  { id: 'secret-one-wish-willow', name: 'One Wish Willow', track: 'secret', description: 'Log a set on 14 consecutive days.', isUnlocked: (s) => s.totalSets >= MIN_SECRET_SETS && s.longestDayStreak >= 14 },
 ];
 
 /**
