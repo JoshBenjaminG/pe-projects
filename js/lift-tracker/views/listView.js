@@ -270,6 +270,24 @@ export async function renderListView(root) {
     goToWeight();
   }
 
+  function renderWeightCard(options) {
+    renderWeightSummaryCard(weightCard, {
+      onExpand: openWeightView,
+      ...options,
+    }).catch((err) => {
+      console.error('[lift-tracker]', err);
+      weightCard.classList.remove('lt-stats-row-expanded');
+      weightCard.innerHTML = `
+        <div class="lt-weight-card-header">
+          <h2>Weight</h2>
+          <button type="button" class="lt-weight-expand" data-weight-expand aria-label="Open weight tracker">&#8250;</button>
+        </div>
+        <p class="lt-weight-empty">Could not load weight right now.</p>
+      `;
+      weightCard.querySelector('[data-weight-expand]').addEventListener('click', openWeightView);
+    });
+  }
+
   const historyDiscoveryBadge = root.querySelector('[data-history-discovery]');
   root.querySelector('[data-history-btn]').addEventListener('click', () => {
     markDiscoverySeen(DISCOVERY_FEATURES.history);
@@ -513,8 +531,7 @@ export async function renderListView(root) {
       addLiftHintEl.hidden = true;
       compositeSection.hidden = true;
       renderKillstreak([]);
-      await renderWeightSummaryCard(weightCard, {
-        onExpand: openWeightView,
+      renderWeightCard({
         showDiscovery: false,
       });
       historyDiscoveryBadge.hidden = true;
@@ -527,8 +544,7 @@ export async function renderListView(root) {
     const sets = await listActiveSetsForLifts(currentLifts.map((l) => l.id));
     const hasLoggedSets = sets.length > 0;
     renderKillstreak(sets);
-    await renderWeightSummaryCard(weightCard, {
-      onExpand: openWeightView,
+    renderWeightCard({
       showDiscovery: hasLoggedSets && !hasSeenDiscovery(DISCOVERY_FEATURES.weight),
     });
     historyDiscoveryBadge.hidden = !hasLoggedSets || hasSeenDiscovery(DISCOVERY_FEATURES.history);

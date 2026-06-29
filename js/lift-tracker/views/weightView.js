@@ -65,6 +65,18 @@ function formatLongDate(dateKey) {
  * view for logging/editing/deleting entries.
  */
 export async function renderWeightSummaryCard(container, { onExpand, showDiscovery = false } = {}) {
+  container.classList.remove('lt-stats-row-expanded');
+  container.innerHTML = `
+    <div class="lt-weight-card-header">
+      <h2>Weight</h2>
+      <button type="button" class="lt-weight-expand" data-weight-expand aria-label="Open weight tracker">&#8250;</button>
+    </div>
+    <p class="lt-weight-empty">Loading weight...</p>
+  `;
+  container.querySelector('[data-weight-expand]').addEventListener('click', () => {
+    if (onExpand) onExpand();
+  });
+
   const entries = await listWeightEntries();
   const series = dailyWeightSeries(entries);
   const summary = weightSummary(series);
@@ -278,7 +290,7 @@ export async function renderWeightView(root) {
       // lazy-render-on-switch approach as the lift detail page's Details
       // tab.
       if (activeTab === 'weight') renderWeightChartIfVisible();
-      else renderWaistChartIfVisible();
+      else ensureWaistLoaded().catch((err) => console.error('[lift-tracker]', err));
     });
   });
 
@@ -422,11 +434,30 @@ export async function renderWeightView(root) {
   waistDateInput.value = toDateKey(new Date().toISOString());
 
   let waistEntries = [];
+  let waistLoaded = false;
+  let waistLoadPromise = null;
 
   async function loadWaist() {
     waistEntries = await listWaistEntries();
+    waistLoaded = true;
     renderWaistHistory();
     renderWaistChartIfVisible();
+  }
+
+  async function ensureWaistLoaded() {
+    if (waistLoaded) {
+      renderWaistChartIfVisible();
+      return;
+    }
+    if (!waistLoadPromise) {
+      waistEmptyEl.hidden = false;
+      waistEmptyEl.textContent = 'Loading waist...';
+      waistChartSection.hidden = true;
+      waistLoadPromise = loadWaist().finally(() => {
+        waistLoadPromise = null;
+      });
+    }
+    await waistLoadPromise;
   }
 
   function renderWaistChartIfVisible() {
@@ -434,6 +465,7 @@ export async function renderWeightView(root) {
     if (series.length === 0) {
       waistChartSection.hidden = true;
       waistEmptyEl.hidden = false;
+      waistEmptyEl.textContent = 'No waist measurements yet — add your first one above.';
       destroyWaistChart();
       return;
     }
@@ -533,5 +565,5 @@ export async function renderWeightView(root) {
     await loadWaist();
   });
 
-  await Promise.all([loadWeight(), loadWaist()]);
+  await loadWeight();
 }
