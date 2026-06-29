@@ -13,6 +13,15 @@ import { calcE1RM, dailyMaxE1RM, isNewPR, sessionVolume, toDateKey } from '../ma
 import { renderLiftChart, destroyLiftChart } from '../charts.js';
 import { showUndoToast } from '../toast.js';
 import { goToList, refreshView } from '../state.js';
+import {
+  getDefaultRestSeconds,
+  getLiftRestSeconds,
+  primeRestTimerSound,
+  restSecondsForLift,
+  setDefaultRestSeconds,
+  setLiftRestSeconds,
+  startRestTimer,
+} from '../restTimer.js';
 
 export async function renderDetailView(root, liftId) {
   const lift = await getLift(liftId);
@@ -42,6 +51,19 @@ export async function renderDetailView(root, liftId) {
       <button type="submit" class="lt-log-btn">Log set</button>
       <p class="lt-log-feedback" data-log-feedback hidden></p>
     </form>
+
+    <section class="lt-rest-settings" aria-label="Rest timer settings">
+      <label class="lt-rest-setting-field">
+        <span>Default rest</span>
+        <input type="number" inputmode="numeric" step="15" min="15" max="600" data-default-rest-input />
+        <small>sec</small>
+      </label>
+      <label class="lt-rest-setting-field">
+        <span>This lift</span>
+        <input type="number" inputmode="numeric" step="15" min="15" max="600" placeholder="Default" data-lift-rest-input />
+        <small>sec</small>
+      </label>
+    </section>
 
     <div class="lt-tabs" role="tablist">
       <button type="button" class="lt-tab" data-tab="history" role="tab" aria-selected="true">History</button>
@@ -106,8 +128,35 @@ export async function renderDetailView(root, liftId) {
   const weightInput = root.querySelector('[data-weight-input]');
   const repsInput = root.querySelector('[data-reps-input]');
   const feedback = root.querySelector('[data-log-feedback]');
+  const defaultRestInput = root.querySelector('[data-default-rest-input]');
+  const liftRestInput = root.querySelector('[data-lift-rest-input]');
 
   let activeSets = [];
+
+  function syncRestInputs() {
+    defaultRestInput.value = getDefaultRestSeconds();
+    liftRestInput.value = getLiftRestSeconds(liftId) || '';
+  }
+
+  function normalizeRestInput(input) {
+    const value = Number(input.value);
+    if (input.value === '') return null;
+    if (!Number.isFinite(value) || value < 15) return 15;
+    if (value > 600) return 600;
+    return Math.round(value);
+  }
+
+  defaultRestInput.addEventListener('change', () => {
+    const seconds = normalizeRestInput(defaultRestInput) || 120;
+    setDefaultRestSeconds(seconds);
+    syncRestInputs();
+  });
+
+  liftRestInput.addEventListener('change', () => {
+    const seconds = normalizeRestInput(liftRestInput);
+    setLiftRestSeconds(liftId, seconds);
+    syncRestInputs();
+  });
 
   async function loadSets() {
     activeSets = await listSetsForLift(liftId);
@@ -129,8 +178,10 @@ export async function renderDetailView(root, liftId) {
     const priorSets = activeSets; // snapshot before insert, for correct PR comparison
     const isPR = isNewPR(newE1RM, priorSets);
     const now = new Date();
+    primeRestTimerSound();
 
     await createSet(liftId, weight, reps, now.toISOString());
+    startRestTimer({ seconds: restSecondsForLift(liftId), liftName: lastSavedName });
     repsInput.value = '';
     repsInput.focus();
 
@@ -292,6 +343,7 @@ export async function renderDetailView(root, liftId) {
   }
 
   await loadSets();
+  syncRestInputs();
   prefillWeightFromLastSet();
   renderHistoryTab();
 }

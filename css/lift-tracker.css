@@ -1736,6 +1736,49 @@ html::-webkit-scrollbar,
   font-weight: 700;
 }
 
+.lt-rest-settings {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin: -4px 0 16px;
+}
+
+.lt-rest-setting-field {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  column-gap: 6px;
+  row-gap: 5px;
+  padding: 10px;
+  border: 1px solid var(--lt-border);
+  border-radius: 10px;
+  background: var(--lt-surface);
+  color: var(--lt-text-muted);
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.lt-rest-setting-field span {
+  grid-column: 1 / -1;
+}
+
+.lt-rest-setting-field input {
+  width: 100%;
+  min-width: 0;
+  border: none;
+  background: transparent;
+  color: var(--lt-text);
+  font: inherit;
+  font-size: 1rem;
+  font-weight: 800;
+  outline: none;
+}
+
+.lt-rest-setting-field small {
+  color: var(--lt-text-muted);
+  font-size: 0.72rem;
+}
+
 /* ---------- Tabs ---------- */
 .lt-tabs {
   display: flex;
@@ -1925,6 +1968,89 @@ html::-webkit-scrollbar,
   padding: 8px 14px;
   min-height: 36px;
   flex-shrink: 0;
+}
+
+/* ---------- Rest timer ---------- */
+.lt-rest-timer {
+  position: fixed;
+  left: 50%;
+  bottom: 72px;
+  width: min(92vw, 420px);
+  transform: translate(-50%, 16px);
+  opacity: 0;
+  pointer-events: none;
+  z-index: 2300;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 14px;
+  border: 1px solid var(--lt-border);
+  border-radius: 14px;
+  background: color-mix(in srgb, var(--lt-surface) 94%, black);
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.35);
+  transition: opacity 0.16s ease, transform 0.16s ease;
+}
+
+.lt-rest-timer-visible {
+  opacity: 1;
+  transform: translate(-50%, 0);
+  pointer-events: auto;
+}
+
+.lt-rest-timer-main {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.lt-rest-timer-label {
+  font-size: 0.76rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--lt-accent);
+}
+
+.lt-rest-timer-time {
+  font-size: 1.45rem;
+  line-height: 1;
+  font-weight: 900;
+  color: var(--lt-text);
+}
+
+.lt-rest-timer-lift {
+  max-width: 220px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 0.78rem;
+  color: var(--lt-text-muted);
+}
+
+.lt-rest-timer-actions {
+  display: flex;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.lt-rest-timer-actions button {
+  min-height: 34px;
+  padding: 7px 10px;
+  border: 1px solid var(--lt-border);
+  border-radius: 9px;
+  background: var(--lt-surface-alt);
+  color: var(--lt-text);
+  font-weight: 800;
+}
+
+.lt-rest-timer-done {
+  border-color: var(--lt-gold);
+}
+
+.lt-rest-timer-done .lt-rest-timer-label {
+  color: var(--lt-gold);
 }
 
 /* ---------- Feedback modal ---------- */
