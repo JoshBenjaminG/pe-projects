@@ -331,13 +331,13 @@ export const ACHIEVEMENTS = [
   // thank-you grandfather badge for everyone who used the app during the
   // beta, retroactively unlocked unconditionally rather than something
   // anyone has to go earn.
-  { id: 'secret-blue-pill', name: 'Blue Pill', track: 'secret', description: 'Participated in the beta.', isUnlocked: () => true },
+  { id: 'secret-blue-pill', name: 'Blue Pill', track: 'secret', description: 'Participated in the beta.', flavor: '"Believe whatever you want to believe." — Morpheus', isUnlocked: () => true },
   // Red Pill: same kind of one-off grandfather badge as Blue Pill, but for
   // the alpha period. Not wired up to award anyone yet -- isUnlocked is
   // pinned to false until we're ready to grant it retroactively.
-  { id: 'secret-red-pill', name: 'Red Pill', track: 'secret', description: 'Participated in the alpha.', isUnlocked: () => false },
-  { id: 'secret-psl-god', name: 'PSL God', track: 'secret', description: 'Log 300 total sets.', isUnlocked: (s) => s.totalSets >= MIN_SECRET_SETS && s.totalSets >= 300 },
-  { id: 'secret-human-instrumentality', name: 'Human Instrumentality Project', track: 'secret', description: 'Log a workout on 70 distinct days.', isUnlocked: (s) => s.totalSets >= MIN_SECRET_SETS && s.totalDays >= 70 },
+  { id: 'secret-red-pill', name: 'Red Pill', track: 'secret', description: 'Participated in the alpha.', flavor: '"I\'ll show you how deep the rabbit hole goes." — Morpheus', isUnlocked: () => false },
+  { id: 'secret-psl-god', name: 'PSL God', track: 'secret', description: 'Log 300 total sets.', flavor: '"December 17, 2005" — ???', isUnlocked: (s) => s.totalSets >= MIN_SECRET_SETS && s.totalSets >= 300 },
+  { id: 'secret-human-instrumentality', name: 'Human Instrumentality Project', track: 'secret', description: 'Log a workout on 70 distinct days.', flavor: '"From now on, you\'re on your own. You\'ll have to make your own decisions." — Misato', isUnlocked: (s) => s.totalSets >= MIN_SECRET_SETS && s.totalDays >= 70 },
   { id: 'secret-one-wish-willow', name: 'One Wish Willow', track: 'secret', description: 'Submit feedback through the app.', flavor: '"I wish Nikki Freeman loved me more than anyone in the f**king world." — Baron "Bear" Bailey', isUnlocked: (s) => s.hasSubmittedFeedback },
 ];
 

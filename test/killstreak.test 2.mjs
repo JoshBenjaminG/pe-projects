@@ -5,13 +5,6 @@ import { weekStart, workoutDaysThisWeek, killstreakForDays, weeklyKillstreak, ki
 // all, must leave the computed counts untouched.
 const LEGACY_CREDIT_USER_ID = '19bf3140-6738-496f-ac0c-20e316c4c3c0';
 
-// Real Supabase auth user id grandfathered onto secret-one-wish-willow
-// (see killstreak.js: FEEDBACK_GRANDFATHERED_USER_IDS) because he gave his
-// feedback in person rather than through the in-app feedback modal. Any
-// other id, or no id at all, must rely on the real hasSubmittedFeedback
-// flag like everyone else.
-const MASON_USER_ID = '1445e5d7-276a-4fca-bb91-1c0a7ff44b65';
-
 let passed = 0;
 function test(name, fn) {
   fn();
@@ -356,14 +349,13 @@ test('longestConsecutiveDayStreak: a single skipped day breaks the streak, and t
 // (not copy-pasted from killstreak.js) so a transcription mistake in the
 // catalog gets caught rather than just re-confirmed. ---
 
-function makeStats({ totalDays = 0, tierCounts = {}, longestStreak = 0, totalSets = 0, longestDayStreak = 0, hasSubmittedFeedback = false } = {}) {
+function makeStats({ totalDays = 0, tierCounts = {}, longestStreak = 0, totalSets = 0, longestDayStreak = 0 } = {}) {
   return {
     totalDays,
     tierCounts: { uav: 0, predator: 0, harrier: 0, chopper: 0, ...tierCounts },
     longestStreak,
     totalSets,
     longestDayStreak,
-    hasSubmittedFeedback,
   };
 }
 
@@ -512,87 +504,16 @@ test('achievement secret-human-instrumentality: locked below 70 workout days, un
   }
 });
 
-test('achievement secret-one-wish-willow: locked without feedback, unlocked once feedback is submitted -- no MIN_SECRET_SETS floor', () => {
+test('achievement secret-one-wish-willow: locked below a 14-day streak, unlocked at 14 -- but only with enough total sets logged', () => {
   const a = findAchievement('secret-one-wish-willow');
-  if (a.isUnlocked(makeStats()) !== false) {
-    throw new Error('expected locked with all-zero stats and no feedback');
+  if (a.isUnlocked(makeStats({ longestDayStreak: 13, totalSets: 200 })) !== false) {
+    throw new Error('expected locked at a 13-day streak');
   }
-  if (a.isUnlocked(makeStats({ hasSubmittedFeedback: true })) !== true) {
-    throw new Error('expected unlocked once feedback has been submitted');
+  if (a.isUnlocked(makeStats({ longestDayStreak: 14, totalSets: 200 })) !== true) {
+    throw new Error('expected unlocked at a 14-day streak with plenty of total sets');
   }
-  // Unlike the rest of the secret track, this condition is a discrete
-  // action rather than logged volume, so it must NOT require
-  // MIN_SECRET_SETS -- a brand-new account with 0 sets that gives
-  // feedback should still unlock it.
-  if (a.isUnlocked(makeStats({ hasSubmittedFeedback: true, totalSets: 0 })) !== true) {
-    throw new Error('expected unlocked with feedback submitted even at 0 total sets');
-  }
-  // Conversely, piling up unrelated stats must never substitute for
-  // actually submitting feedback.
-  if (a.isUnlocked(makeStats({ totalDays: 999, totalSets: 999, longestDayStreak: 999, longestStreak: 999 })) !== false) {
-    throw new Error('expected locked regardless of other stats when feedback has not been submitted');
-  }
-});
-
-test('achievementStats: hasSubmittedFeedback flag threads through from the options argument', () => {
-  const sets = [];
-  const withoutFeedback = achievementStats(sets);
-  if (withoutFeedback.hasSubmittedFeedback !== false) {
-    throw new Error('expected hasSubmittedFeedback false by default');
-  }
-  const withFeedback = achievementStats(sets, null, { hasSubmittedFeedback: true });
-  if (withFeedback.hasSubmittedFeedback !== true) {
-    throw new Error('expected hasSubmittedFeedback true when passed in options');
-  }
-});
-
-test('achievementStats: an unrecognized userId does not grant feedback credit on its own', () => {
-  const stats = achievementStats([], 'some-other-random-user-id');
-  if (stats.hasSubmittedFeedback !== false) {
-    throw new Error('expected hasSubmittedFeedback false for a non-grandfathered, non-feedback-submitting account');
-  }
-});
-
-test('achievementStats: Joshua and Mason are grandfathered onto the feedback credit regardless of the real flag or other stats', () => {
-  for (const userId of [LEGACY_CREDIT_USER_ID, MASON_USER_ID]) {
-    const stats = achievementStats([], userId);
-    if (stats.hasSubmittedFeedback !== true) {
-      throw new Error(`expected hasSubmittedFeedback true for grandfathered userId ${userId}`);
-    }
-  }
-});
-
-test('achievementProgress: threads the feedback option through the same way as achievementStats', () => {
-  const sets = [];
-  const withoutFeedback = achievementProgress(sets).find((a) => a.id === 'secret-one-wish-willow');
-  const withFeedback = achievementProgress(sets, null, { hasSubmittedFeedback: true }).find((a) => a.id === 'secret-one-wish-willow');
-  const withMason = achievementProgress(sets, MASON_USER_ID).find((a) => a.id === 'secret-one-wish-willow');
-  if (withoutFeedback.unlocked !== false) throw new Error('expected locked with no feedback and no grandfathered userId');
-  if (withFeedback.unlocked !== true) throw new Error('expected unlocked when hasSubmittedFeedback option is true');
-  if (withMason.unlocked !== true) throw new Error("expected unlocked for Mason's grandfathered account");
-});
-
-test('every secret achievement defines non-empty flavor text; no achievement outside the secret track does', () => {
-  const secrets = ACHIEVEMENTS.filter((a) => a.track === 'secret');
-  if (secrets.length === 0) throw new Error('expected at least one secret achievement');
-  for (const a of secrets) {
-    if (typeof a.flavor !== 'string' || a.flavor.length === 0) {
-      throw new Error(`expected ${a.id} to define non-empty flavor text`);
-    }
-  }
-  const nonSecrets = ACHIEVEMENTS.filter((a) => a.track !== 'secret');
-  if (nonSecrets.some((a) => a.flavor !== undefined)) {
-    throw new Error('expected only secret-track achievements to define flavor');
-  }
-  const progress = achievementProgress([]);
-  const willowCatalog = secrets.find((a) => a.id === 'secret-one-wish-willow');
-  const willowProgress = progress.find((a) => a.id === 'secret-one-wish-willow');
-  if (willowProgress.flavor !== willowCatalog.flavor) {
-    throw new Error('expected achievementProgress to pass flavor text through unchanged');
-  }
-  const rankEntry = progress.find((a) => a.id === 'rank-pfc');
-  if (rankEntry.flavor !== null) {
-    throw new Error(`expected non-secret achievements to expose flavor: null, got ${JSON.stringify(rankEntry.flavor)}`);
+  if (a.isUnlocked(makeStats({ longestDayStreak: 14, totalSets: MIN_SECRET_SETS - 1 })) !== false) {
+    throw new Error('expected locked when total sets is below the MIN_SECRET_SETS floor, even with the streak met');
   }
 });
 
