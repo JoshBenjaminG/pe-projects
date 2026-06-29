@@ -1951,7 +1951,7 @@ html::-webkit-scrollbar,
   letter-spacing: 0;
   text-transform: none;
   margin: 0;
-  color: var(--lt-gold);
+  color: var(--lt-text);
 }
 
 .lt-feedback-textarea {
