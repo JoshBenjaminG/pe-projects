@@ -101,8 +101,11 @@ export async function renderKillstreakView(root) {
     const isActive = a.unlocked && getStoredThemeId() === a.theme.id;
     const isNew = a.unlocked && newRankIds.has(a.id);
     const themeLine = a.unlocked
-      ? `<span class="lt-achievement-card-theme">🎨 ${a.theme.label}${isActive ? ' · Active' : ''}</span>`
+      ? `<span class="lt-achievement-card-theme">${a.theme.label} theme${isActive ? ' selected' : ''}</span>`
       : `<span class="lt-achievement-card-theme lt-achievement-card-theme-locked">🎨 Unlocks: ${a.theme.label}</span>`;
+    const newThemeLine = isNew
+      ? '<span class="lt-achievement-card-new-theme">New theme unlocked</span>'
+      : '';
 
     return `
       <li class="lt-achievement-card${a.unlocked ? ' lt-achievement-card-unlocked' : ' lt-achievement-card-locked'}${isNew ? ' lt-achievement-card-new' : ''}${isActive ? ' lt-achievement-card-active-theme' : ''}">
@@ -112,6 +115,7 @@ export async function renderKillstreakView(root) {
             <span class="lt-achievement-card-name">${a.name}</span>
             <span class="lt-achievement-card-desc">${a.description}</span>
             ${themeLine}
+            ${newThemeLine}
           </span>
         </button>
       </li>
@@ -131,6 +135,7 @@ export async function renderKillstreakView(root) {
       return `
         <section class="lt-achievement-track">
           <h3 class="lt-achievement-track-heading">${ACHIEVEMENT_TRACK_LABELS[track]}</h3>
+          ${track === 'rank' ? '<p class="lt-achievement-track-note">Ranks unlock themes. Try out a theme below.</p>' : ''}
           <ul class="lt-achievement-list">${cards}</ul>
         </section>
       `;

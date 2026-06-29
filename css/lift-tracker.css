@@ -782,6 +782,12 @@ html::-webkit-scrollbar,
   margin: 0 0 8px;
 }
 
+.lt-achievement-track-note {
+  margin: -2px 0 10px;
+  font-size: 0.85rem;
+  color: var(--lt-text-muted);
+}
+
 .lt-achievement-list {
   display: flex;
   flex-direction: column;
@@ -868,15 +874,29 @@ html::-webkit-scrollbar,
 }
 
 .lt-achievement-card-theme {
-  font-size: 0.78rem;
-  font-weight: 600;
+  font-size: 0.9rem;
+  font-weight: 700;
   color: var(--lt-gold);
   margin-top: 2px;
 }
 
 .lt-achievement-card-theme-locked {
   color: var(--lt-text-muted);
-  font-weight: 400;
+  font-weight: 500;
+}
+
+.lt-achievement-card-new-theme {
+  display: inline-flex;
+  align-self: flex-start;
+  margin-top: 5px;
+  padding: 3px 8px;
+  border-radius: 999px;
+  background: var(--lt-gold);
+  color: #111;
+  font-size: 0.72rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
 }
 
 /* A rank that was unlocked since the achievements page was last viewed --
@@ -893,6 +913,10 @@ html::-webkit-scrollbar,
 /* The rank whose theme is currently applied. */
 .lt-achievement-card-active-theme {
   border-width: 2px;
+}
+
+.lt-achievement-card-active-theme .lt-achievement-card-theme {
+  color: var(--lt-text);
 }
 
 /* ---------- Export section (collapsible, like composite) ---------- */
