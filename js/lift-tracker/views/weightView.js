@@ -27,6 +27,7 @@ import { renderWeightChart, destroyWeightChart, renderWaistChart, destroyWaistCh
 import { showUndoToast } from '../toast.js';
 import { goToList } from '../state.js';
 import { readBoolPref, writeBoolPref } from '../prefs.js';
+import { DISCOVERY_FEATURES, markDiscoverySeen } from '../discovery.js';
 
 const WEIGHT_CARD_EXPANDED_PREF_KEY = 'lt-weight-card-expanded';
 
@@ -63,15 +64,18 @@ function formatLongDate(dateKey) {
  * Separately, the arrow button (onExpand) navigates to the full weight
  * view for logging/editing/deleting entries.
  */
-export async function renderWeightSummaryCard(container, { onExpand } = {}) {
+export async function renderWeightSummaryCard(container, { onExpand, showDiscovery = false } = {}) {
   const entries = await listWeightEntries();
   const series = dailyWeightSeries(entries);
   const summary = weightSummary(series);
+  const discoveryBadge = showDiscovery && entries.length === 0
+    ? '<span class="lt-discovery-badge" aria-label="Weight tracker not tried yet">!</span>'
+    : '';
 
   if (!summary) {
     container.innerHTML = `
       <div class="lt-weight-card-header">
-        <h2>Weight</h2>
+        <h2>Weight ${discoveryBadge}</h2>
         <button type="button" class="lt-weight-expand" data-weight-expand aria-label="Open weight tracker">&#8250;</button>
       </div>
       <p class="lt-weight-empty">No weight entries yet — tap the arrow above to log one.</p>
@@ -111,6 +115,7 @@ export async function renderWeightSummaryCard(container, { onExpand } = {}) {
           <button type="button" class="lt-weight-toggle" data-weight-toggle aria-expanded="false">
             <span class="lt-weight-toggle-label">
               <span>Weight</span>
+              ${discoveryBadge}
               <span class="lt-chevron" data-weight-chevron>&#9660;</span>
             </span>
             <span class="lt-weight-stat-value lt-weight-collapsed-value">${formatWeight(summary.current)} lbs</span>
@@ -122,6 +127,7 @@ export async function renderWeightSummaryCard(container, { onExpand } = {}) {
         <div class="lt-weight-card-header">
           <button type="button" class="lt-weight-toggle" data-weight-toggle aria-expanded="true">
             <span>Weight</span>
+            ${discoveryBadge}
             <span class="lt-chevron" data-weight-chevron>&#9650;</span>
           </button>
           <button type="button" class="lt-weight-expand" data-weight-expand aria-label="Open weight tracker">&#8250;</button>
@@ -188,6 +194,8 @@ export async function renderWeightSummaryCard(container, { onExpand } = {}) {
  * neither measurement ever requires or implies the other.
  */
 export async function renderWeightView(root) {
+  markDiscoverySeen(DISCOVERY_FEATURES.weight);
+
   root.innerHTML = `
     <header class="lt-detail-header">
       <button type="button" class="lt-back" data-back aria-label="Back to all lifts">&larr;</button>

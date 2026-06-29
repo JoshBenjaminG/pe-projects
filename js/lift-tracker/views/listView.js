@@ -18,6 +18,7 @@ import { renderWeightSummaryCard } from './weightView.js';
 import { readBoolPref, writeBoolPref } from '../prefs.js';
 import { readSeenRankIds } from '../seenAchievements.js';
 import { readStoredActiveWorkoutId, writeStoredActiveWorkoutId } from '../workoutPrefs.js';
+import { DISCOVERY_FEATURES, hasSeenDiscovery, markDiscoverySeen } from '../discovery.js';
 
 const COMPOSITE_EXPANDED_PREF_KEY = 'lt-composite-expanded';
 const HEADER_MENU_OPEN_PREF_KEY = 'lt-header-menu-open';
@@ -60,7 +61,10 @@ export async function renderListView(root) {
         <span class="lt-killstreak-chevron" aria-hidden="true">&#8250;</span>
       </button>
 
-      <button type="button" class="lt-history-btn" data-history-btn>History</button>
+      <button type="button" class="lt-history-btn" data-history-btn>
+        <span>History</span>
+        <span class="lt-discovery-badge" data-history-discovery hidden aria-label="History not opened yet">!</span>
+      </button>
     </div>
 
     <div class="lt-stats-row" data-stats-row>
@@ -70,6 +74,7 @@ export async function renderListView(root) {
         <button type="button" class="lt-composite-toggle" data-composite-toggle aria-expanded="true">
           <span class="lt-composite-toggle-label">
             <span>Composite</span>
+            <span class="lt-discovery-badge" data-composite-discovery hidden aria-label="Composite not explored yet">!</span>
             <span class="lt-composite-summary" data-composite-summary></span>
           </span>
           <span class="lt-chevron" data-chevron>&#9650;</span>
@@ -84,8 +89,14 @@ export async function renderListView(root) {
     </div>
 
     <div class="lt-action-row" data-action-row>
-      <button type="button" class="lt-add-lift-toggle-btn" data-add-lift-toggle aria-pressed="false">+ Add Lift</button>
-      <button type="button" class="lt-create-workout-btn" data-create-workout-btn>+ Create Workout</button>
+      <button type="button" class="lt-add-lift-toggle-btn" data-add-lift-toggle aria-pressed="false">
+        <span>+ Add Lift</span>
+        <span class="lt-discovery-badge" data-add-lift-discovery hidden aria-label="Add your first lift">!</span>
+      </button>
+      <button type="button" class="lt-create-workout-btn" data-create-workout-btn>
+        <span>+ Create Workout</span>
+        <span class="lt-discovery-badge" data-create-workout-discovery hidden aria-label="Create your first workout">!</span>
+      </button>
     </div>
 
     <form class="lt-add-lift" data-add-lift-form hidden>
@@ -192,6 +203,7 @@ export async function renderListView(root) {
   const compositeBody = root.querySelector('[data-composite-body]');
   const chevron = root.querySelector('[data-chevron]');
   const compositeSummary = root.querySelector('[data-composite-summary]');
+  const compositeDiscoveryBadge = root.querySelector('[data-composite-discovery]');
 
   // Defaults to expanded (matching the markup above) if nothing's been
   // saved yet -- whichever state the user leaves it in is the state it
@@ -208,6 +220,8 @@ export async function renderListView(root) {
   applyCompositeToggleUI(readBoolPref(COMPOSITE_EXPANDED_PREF_KEY, true));
 
   compositeToggle.addEventListener('click', () => {
+    markDiscoverySeen(DISCOVERY_FEATURES.composite);
+    compositeDiscoveryBadge.hidden = true;
     // Below 360px there isn't room to expand the chart inline without the
     // page layout jumping around (see the matching weight-toggle behavior
     // below) -- send those screens to the dedicated composite page instead.
@@ -249,12 +263,23 @@ export async function renderListView(root) {
   }
 
   const weightCard = root.querySelector('[data-weight-card]');
-  renderWeightSummaryCard(weightCard, { onExpand: goToWeight });
 
-  root.querySelector('[data-history-btn]').addEventListener('click', goToHistory);
+  function openWeightView() {
+    markDiscoverySeen(DISCOVERY_FEATURES.weight);
+    goToWeight();
+  }
+
+  const historyDiscoveryBadge = root.querySelector('[data-history-discovery]');
+  root.querySelector('[data-history-btn]').addEventListener('click', () => {
+    markDiscoverySeen(DISCOVERY_FEATURES.history);
+    historyDiscoveryBadge.hidden = true;
+    goToHistory();
+  });
 
   const addForm = root.querySelector('[data-add-lift-form]');
   const addLiftToggleBtn = root.querySelector('[data-add-lift-toggle]');
+  const addLiftDiscoveryBadge = root.querySelector('[data-add-lift-discovery]');
+  const createWorkoutDiscoveryBadge = root.querySelector('[data-create-workout-discovery]');
   // A toggle, not a one-shot reveal: tapping it again hides the form, and
   // (per the request this implements) the form otherwise just stays open
   // across repeated adds -- handy when someone new is entering several
@@ -472,20 +497,34 @@ export async function renderListView(root) {
     renderWorkoutPills();
 
     currentLifts = await listLifts();
+    addLiftDiscoveryBadge.hidden = currentLifts.length > 0;
+    createWorkoutDiscoveryBadge.hidden = currentLifts.length === 0 || workouts.length > 0;
 
     if (currentLifts.length === 0) {
       listEl.innerHTML = '';
       listEmptyEl.hidden = false;
-      listEmptyEl.textContent = 'No lifts yet — add your first one above.';
+      listEmptyEl.textContent = 'Start by adding your first lift above. Once it exists, you can log sets and build workouts around it.';
       compositeSection.hidden = true;
       renderKillstreak([]);
+      await renderWeightSummaryCard(weightCard, {
+        onExpand: openWeightView,
+        showDiscovery: false,
+      });
+      historyDiscoveryBadge.hidden = true;
+      compositeDiscoveryBadge.hidden = true;
       setsByLift = new Map();
       lastLiftsData = [];
       return;
     }
 
     const sets = await listActiveSetsForLifts(currentLifts.map((l) => l.id));
+    const hasLoggedSets = sets.length > 0;
     renderKillstreak(sets);
+    await renderWeightSummaryCard(weightCard, {
+      onExpand: openWeightView,
+      showDiscovery: hasLoggedSets && !hasSeenDiscovery(DISCOVERY_FEATURES.weight),
+    });
+    historyDiscoveryBadge.hidden = !hasLoggedSets || hasSeenDiscovery(DISCOVERY_FEATURES.history);
     setsByLift = new Map(currentLifts.map((l) => [l.id, []]));
     for (const s of sets) {
       const bucket = setsByLift.get(s.lift_id);
@@ -527,11 +566,13 @@ export async function renderListView(root) {
       canvas.hidden = true;
       emptyEl.hidden = false;
       compositeSummary.textContent = '';
+      compositeDiscoveryBadge.hidden = true;
       return;
     }
     canvas.hidden = false;
     emptyEl.hidden = true;
     compositeSummary.textContent = formatPct(points[points.length - 1].pct);
+    compositeDiscoveryBadge.hidden = hasSeenDiscovery(DISCOVERY_FEATURES.composite);
     renderCompositeChart(canvas, points);
   }
 

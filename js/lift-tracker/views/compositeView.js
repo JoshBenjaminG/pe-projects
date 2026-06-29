@@ -9,8 +9,11 @@ import { dailyMaxE1RM, computeComposite } from '../math.js';
 import { renderCompositeChart } from '../charts.js';
 import { goToList } from '../state.js';
 import { findStoredActiveWorkout } from '../workoutPrefs.js';
+import { DISCOVERY_FEATURES, markDiscoverySeen } from '../discovery.js';
 
 export async function renderCompositeView(root) {
+  markDiscoverySeen(DISCOVERY_FEATURES.composite);
+
   root.innerHTML = `
     <header class="lt-detail-header">
       <button type="button" class="lt-back" data-back aria-label="Back to all lifts">&larr;</button>

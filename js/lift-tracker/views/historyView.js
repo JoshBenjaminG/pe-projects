@@ -12,6 +12,7 @@
 import { listLifts, listActiveSetsForLifts } from '../api.js';
 import { calcE1RM, groupSetsByDate, countWorkoutDays } from '../math.js';
 import { goToList } from '../state.js';
+import { DISCOVERY_FEATURES, markDiscoverySeen } from '../discovery.js';
 
 /** "YYYY-MM-DD" -> "Mon, Jun 22", matching the per-lift History tab and the
  * Weight/Waist pages' history lists. */
@@ -103,6 +104,8 @@ function renderDayGroup(dateKey, sets) {
 }
 
 export async function renderHistoryView(root) {
+  markDiscoverySeen(DISCOVERY_FEATURES.history);
+
   root.innerHTML = `
     <header class="lt-detail-header">
       <button type="button" class="lt-back" data-back aria-label="Back to all lifts">&larr;</button>
