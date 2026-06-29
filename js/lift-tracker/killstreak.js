@@ -283,6 +283,12 @@ export const ACHIEVEMENTS = [
   { id: 'capstone-dark-matter', name: 'Dark Matter', track: 'capstone', description: 'Reach Prestige Master (40 days) and earn Gunship (x5).', isUnlocked: (s) => s.totalDays >= 40 && s.tierCounts.chopper >= 5 },
 
   // --- Secret: condition hidden until unlocked (see killstreakView.js) ---
+  // Blue Pill is the one exception to the "real, earnable, hidden stat
+  // check" rule the rest of this track follows: it's a one-time
+  // thank-you grandfather badge for everyone who used the app during the
+  // beta, retroactively unlocked unconditionally rather than something
+  // anyone has to go earn.
+  { id: 'secret-blue-pill', name: 'Blue Pill', track: 'secret', description: 'Participated in the beta.', isUnlocked: () => true },
   { id: 'secret-psl-god', name: 'PSL God', track: 'secret', description: 'Log 300 total sets.', isUnlocked: (s) => s.totalSets >= MIN_SECRET_SETS && s.totalSets >= 300 },
   { id: 'secret-human-instrumentality', name: 'Human Instrumentality Project', track: 'secret', description: 'Log a workout on 70 distinct days.', isUnlocked: (s) => s.totalSets >= MIN_SECRET_SETS && s.totalDays >= 70 },
   { id: 'secret-one-wish-willow', name: 'One Wish Willow', track: 'secret', description: 'Log a set on 14 consecutive days.', isUnlocked: (s) => s.totalSets >= MIN_SECRET_SETS && s.longestDayStreak >= 14 },
