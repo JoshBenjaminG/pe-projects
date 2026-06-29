@@ -915,10 +915,6 @@ html::-webkit-scrollbar,
   border-width: 2px;
 }
 
-.lt-achievement-card-active-theme .lt-achievement-card-theme {
-  color: var(--lt-text);
-}
-
 /* ---------- Export section (collapsible, like composite) ---------- */
 .lt-export-section {
   border: 1px solid var(--lt-border);
