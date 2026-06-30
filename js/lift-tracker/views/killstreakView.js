@@ -2,7 +2,7 @@
 // showing lifetime stats -- this is where the homepage killstreak banner
 // (see listView.js) now links to, since there wasn't room in that banner
 // for more than a couple words without text getting clipped.
-import { listLifts, listActiveSetsForLifts, getCurrentUserId, hasSubmittedFeedback } from '../api.js';
+import { listLifts, listActiveSetsForLifts, listWeightEntries, getCurrentUserId, hasSubmittedFeedback } from '../api.js';
 import { weeklyKillstreak, killstreakHistory, KILLSTREAK_TIERS, achievementProgress, newlyUnlockedIds } from '../killstreak.js';
 import { goToList } from '../state.js';
 import { setTheme, getStoredThemeId } from '../theme.js';
@@ -49,6 +49,7 @@ export async function renderKillstreakView(root) {
 
   const lifts = await listLifts();
   const sets = lifts.length ? await listActiveSetsForLifts(lifts.map((l) => l.id)) : [];
+  const bodyWeightEntries = await listWeightEntries();
   const userId = await getCurrentUserId();
   const feedbackGiven = await hasSubmittedFeedback();
 
@@ -74,7 +75,7 @@ export async function renderKillstreakView(root) {
     `;
   }).join('');
 
-  const progress = achievementProgress(sets, userId, { hasSubmittedFeedback: feedbackGiven });
+  const progress = achievementProgress(sets, userId, { bodyWeightEntries, hasSubmittedFeedback: feedbackGiven });
   const unlockedCount = progress.filter((a) => a.unlocked).length;
   root.querySelector('[data-achievements-summary]').textContent =
     `${unlockedCount} / ${progress.length} unlocked. Each badge stays unlocked for good once you've earned it.`;

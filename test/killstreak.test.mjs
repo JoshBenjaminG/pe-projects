@@ -1,4 +1,4 @@
-import { weekStart, workoutDaysThisWeek, killstreakForDays, weeklyKillstreak, killstreakHistory, totalWorkoutDays, longestConsecutiveWeekStreak, longestConsecutiveDayStreak, compositeMaxPct, MIN_SECRET_SETS, ACHIEVEMENTS, achievementProgress, achievementStats, newlyUnlockedIds } from '../js/lift-tracker/killstreak.js';
+import { weekStart, workoutDaysThisWeek, killstreakForDays, weeklyKillstreak, killstreakHistory, totalWorkoutDays, longestConsecutiveWeekStreak, longestConsecutiveDayStreak, compositeMaxPct, bodyWeightChangeStats, MIN_SECRET_SETS, ACHIEVEMENTS, achievementProgress, achievementStats, newlyUnlockedIds } from '../js/lift-tracker/killstreak.js';
 
 // Real Supabase auth user id with a one-off legacy tier credit applied
 // (see killstreak.js: LEGACY_TIER_CREDITS). Any other id, or no id at
@@ -356,7 +356,7 @@ test('longestConsecutiveDayStreak: a single skipped day breaks the streak, and t
 // (not copy-pasted from killstreak.js) so a transcription mistake in the
 // catalog gets caught rather than just re-confirmed. ---
 
-function makeStats({ totalDays = 0, tierCounts = {}, longestStreak = 0, totalSets = 0, longestDayStreak = 0, compositeMaxPct = 0, hasSubmittedFeedback = false } = {}) {
+function makeStats({ totalDays = 0, tierCounts = {}, longestStreak = 0, totalSets = 0, longestDayStreak = 0, compositeMaxPct = 0, bodyWeightGain = 0, bodyWeightLoss = 0, hasSubmittedFeedback = false } = {}) {
   return {
     totalDays,
     tierCounts: { uav: 0, predator: 0, harrier: 0, chopper: 0, ...tierCounts },
@@ -364,6 +364,8 @@ function makeStats({ totalDays = 0, tierCounts = {}, longestStreak = 0, totalSet
     totalSets,
     longestDayStreak,
     compositeMaxPct,
+    bodyWeightGain,
+    bodyWeightLoss,
     hasSubmittedFeedback,
   };
 }
@@ -518,6 +520,59 @@ test('compositeMaxPct: measures the highest all-lifts composite percentage', () 
   }
 });
 
+test('bodyWeightChangeStats: measures max gain and loss from the first logged body weight', () => {
+  const entries = [
+    { weight: 180, logged_at: iso(2026, 6, 1, 9), created_at: iso(2026, 6, 1, 9) },
+    { weight: 171, logged_at: iso(2026, 6, 8, 9), created_at: iso(2026, 6, 8, 9) },
+    { weight: 190, logged_at: iso(2026, 6, 15, 9), created_at: iso(2026, 6, 15, 9) },
+  ];
+  const stats = bodyWeightChangeStats(entries);
+  if (stats.loss !== 9) throw new Error(`expected 9 lb loss, got ${stats.loss}`);
+  if (stats.gain !== 10) throw new Error(`expected 10 lb gain, got ${stats.gain}`);
+});
+
+test('achievement secret-enlightenment: locked below 9 lb lost, unlocked at 9 lb lost', () => {
+  const a = findAchievement('secret-enlightenment');
+  if (a.name !== 'Enlightenment') throw new Error(`expected Enlightenment, got ${a.name}`);
+  if (a.description !== 'Lose 9 pounds.') throw new Error(`unexpected condition text: ${a.description}`);
+  if (!a.flavor.includes('bare flesh of the one who is free')) {
+    throw new Error('expected Enlightenment flavor text');
+  }
+  if (a.isUnlocked(makeStats({ bodyWeightLoss: 8.99 })) !== false) {
+    throw new Error('expected locked below 9 lb lost');
+  }
+  if (a.isUnlocked(makeStats({ bodyWeightLoss: 9 })) !== true) {
+    throw new Error('expected unlocked at 9 lb lost');
+  }
+});
+
+test('achievement secret-gamma-radiation: locked below 9 lb gained, unlocked at 9 lb gained', () => {
+  const a = findAchievement('secret-gamma-radiation');
+  if (a.name !== 'Gamma Radiation') throw new Error(`expected Gamma Radiation, got ${a.name}`);
+  if (a.description !== 'Gain 9 pounds.') throw new Error(`unexpected condition text: ${a.description}`);
+  if (!a.flavor.includes('I’m always angry')) {
+    throw new Error('expected Gamma Radiation flavor text');
+  }
+  if (a.isUnlocked(makeStats({ bodyWeightGain: 8.99 })) !== false) {
+    throw new Error('expected locked below 9 lb gained');
+  }
+  if (a.isUnlocked(makeStats({ bodyWeightGain: 9 })) !== true) {
+    throw new Error('expected unlocked at 9 lb gained');
+  }
+});
+
+test('achievementStats: body-weight entries feed gain/loss secret achievement stats', () => {
+  const stats = achievementStats([], null, {
+    bodyWeightEntries: [
+      { weight: 180, logged_at: iso(2026, 6, 1, 9), created_at: iso(2026, 6, 1, 9) },
+      { weight: 171, logged_at: iso(2026, 6, 8, 9), created_at: iso(2026, 6, 8, 9) },
+      { weight: 190, logged_at: iso(2026, 6, 15, 9), created_at: iso(2026, 6, 15, 9) },
+    ],
+  });
+  if (stats.bodyWeightLoss !== 9) throw new Error(`expected bodyWeightLoss 9, got ${stats.bodyWeightLoss}`);
+  if (stats.bodyWeightGain !== 10) throw new Error(`expected bodyWeightGain 10, got ${stats.bodyWeightGain}`);
+});
+
 test('achievement secret-human-instrumentality: locked below 70 workout days, unlocked at 70 -- but only with enough total sets logged', () => {
   const a = findAchievement('secret-human-instrumentality');
   if (a.isUnlocked(makeStats({ totalDays: 69, totalSets: 200 })) !== false) {
@@ -645,8 +700,8 @@ test('secret achievements carry no theme, same as mastery/streak/capstone', () =
   }
 });
 
-test('ACHIEVEMENTS: exactly 36 entries with unique ids across 5 tracks', () => {
-  if (ACHIEVEMENTS.length !== 36) throw new Error(`expected 36 got ${ACHIEVEMENTS.length}`);
+test('ACHIEVEMENTS: exactly 38 entries with unique ids across 5 tracks', () => {
+  if (ACHIEVEMENTS.length !== 38) throw new Error(`expected 38 got ${ACHIEVEMENTS.length}`);
   const ids = ACHIEVEMENTS.map((a) => a.id);
   if (new Set(ids).size !== ids.length) throw new Error('duplicate id found');
   const tracks = new Set(ACHIEVEMENTS.map((a) => a.track));

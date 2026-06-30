@@ -2,7 +2,7 @@
 // consistency using Call of Duty killstreak rewards. No DOM, no network —
 // kept pure and separate so it can be unit tested on its own, same pattern
 // as math.js and export.js.
-import { computeComposite, dailyMaxE1RM, toDateKey } from './math.js';
+import { computeComposite, dailyMaxE1RM, dailyWeightSeries, toDateKey } from './math.js';
 
 // Tiers in ascending order. Earning N days means you've earned every tier
 // up to and including the highest one whose `days` threshold is met — 4+
@@ -230,6 +230,28 @@ export function compositeMaxPct(sets) {
 }
 
 /**
+ * Largest body-weight movement away from the first logged body weight.
+ * Both values are positive magnitudes in pounds, so losing 9 lb yields
+ * `{ loss: 9 }` and gaining 9 lb yields `{ gain: 9 }`.
+ *
+ * @param {{weight:number|string, logged_at:string, created_at?:string, id?:string}[]} entries
+ */
+export function bodyWeightChangeStats(entries) {
+  const series = dailyWeightSeries(entries);
+  if (series.length === 0) return { gain: 0, loss: 0 };
+
+  const start = series[0].weight;
+  let gain = 0;
+  let loss = 0;
+  for (const point of series) {
+    const change = point.weight - start;
+    gain = Math.max(gain, change);
+    loss = Math.max(loss, -change);
+  }
+  return { gain, loss };
+}
+
+/**
  * Stats every achievement's `isUnlocked()` check reads. Computed once per
  * page view and threaded through rather than having each achievement
  * re-walk the full set history itself.
@@ -237,7 +259,8 @@ export function compositeMaxPct(sets) {
  * @param {{performed_at:string}[]} sets
  */
 export function achievementStats(sets, userId = null, options = {}) {
-  const { hasSubmittedFeedback = false } = options;
+  const { bodyWeightEntries = [], hasSubmittedFeedback = false } = options;
+  const bodyWeightChange = bodyWeightChangeStats(bodyWeightEntries);
   return {
     totalDays: totalWorkoutDays(sets),
     tierCounts: killstreakHistory(sets, userId),
@@ -245,6 +268,8 @@ export function achievementStats(sets, userId = null, options = {}) {
     totalSets: sets.length,
     longestDayStreak: longestConsecutiveDayStreak(sets),
     compositeMaxPct: compositeMaxPct(sets),
+    bodyWeightGain: bodyWeightChange.gain,
+    bodyWeightLoss: bodyWeightChange.loss,
     hasSubmittedFeedback: hasSubmittedFeedback || isFeedbackGrandfathered(userId),
   };
 }
@@ -363,6 +388,8 @@ export const ACHIEVEMENTS = [
   // pinned to false until we're ready to grant it retroactively.
   { id: 'secret-red-pill', name: 'Red Pill', track: 'secret', description: 'Participated in the alpha.', flavor: '"I\'ll show you how deep the rabbit hole goes." — Morpheus', isUnlocked: () => false },
   { id: 'secret-clear-pill', name: 'Clear Pill', track: 'secret', description: 'Reach +17% composite score across all lifts.', flavor: '"There is a quiet at the top of the Bridge that no one warns you about. It is not peace. It is the room after everyone has gone home." - M. Halvard Strickett', isUnlocked: (s) => s.compositeMaxPct >= 17 },
+  { id: 'secret-enlightenment', name: 'Enlightenment', track: 'secret', description: 'Lose 9 pounds.', flavor: '"They would all bear witness to the bare flesh of the one who is free. To the one who left it all behind." - Narrator, Jujstu Kaisen', isUnlocked: (s) => s.bodyWeightLoss >= 9 },
+  { id: 'secret-gamma-radiation', name: 'Gamma Radiation', track: 'secret', description: 'Gain 9 pounds.', flavor: '"That’s my secret, Captain: I’m always angry." - Bruce Banner', isUnlocked: (s) => s.bodyWeightGain >= 9 },
   { id: 'secret-human-instrumentality', name: 'Human Instrumentality Project', track: 'secret', description: 'Log a workout on 70 distinct days.', flavor: '"From now on, you\'re on your own. You\'ll have to make your own decisions." — Misato', isUnlocked: (s) => s.totalSets >= MIN_SECRET_SETS && s.totalDays >= 70 },
   { id: 'secret-one-wish-willow', name: 'One Wish Willow', track: 'secret', description: 'Submit feedback through the app.', flavor: '"I wish Nikki Freeman loved me more than anyone in the f**king world." — Baron "Bear" Bailey', isUnlocked: (s) => s.hasSubmittedFeedback },
 ];
