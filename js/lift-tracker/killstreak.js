@@ -2,7 +2,7 @@
 // consistency using Call of Duty killstreak rewards. No DOM, no network —
 // kept pure and separate so it can be unit tested on its own, same pattern
 // as math.js and export.js.
-import { toDateKey } from './math.js';
+import { computeComposite, dailyMaxE1RM, toDateKey } from './math.js';
 
 // Tiers in ascending order. Earning N days means you've earned every tier
 // up to and including the highest one whose `days` threshold is met — 4+
@@ -207,6 +207,29 @@ export function longestConsecutiveDayStreak(sets) {
 }
 
 /**
+ * Highest all-lifts composite percentage ever reached. This deliberately
+ * ignores any active workout filter: secret achievements are based on the
+ * user's whole lift history.
+ *
+ * @param {{lift_id?:string, weight:number|string, reps:number|string, performed_at:string, id?:string}[]} sets
+ */
+export function compositeMaxPct(sets) {
+  const setsByLift = new Map();
+  for (const s of sets) {
+    if (!s.lift_id) continue;
+    if (!setsByLift.has(s.lift_id)) setsByLift.set(s.lift_id, []);
+    setsByLift.get(s.lift_id).push(s);
+  }
+
+  const points = computeComposite(Array.from(setsByLift.entries()).map(([liftId, liftSets]) => ({
+    liftId,
+    dailySeries: dailyMaxE1RM(liftSets),
+  })));
+
+  return points.length ? Math.max(...points.map((p) => p.pct)) : 0;
+}
+
+/**
  * Stats every achievement's `isUnlocked()` check reads. Computed once per
  * page view and threaded through rather than having each achievement
  * re-walk the full set history itself.
@@ -221,6 +244,7 @@ export function achievementStats(sets, userId = null, options = {}) {
     longestStreak: longestConsecutiveWeekStreak(sets),
     totalSets: sets.length,
     longestDayStreak: longestConsecutiveDayStreak(sets),
+    compositeMaxPct: compositeMaxPct(sets),
     hasSubmittedFeedback: hasSubmittedFeedback || isFeedbackGrandfathered(userId),
   };
 }
@@ -274,15 +298,17 @@ function isFeedbackGrandfathered(userId) {
 //   each one is intentionally a single plain stat check (no multi-part
 //   combos to puzzle out blind) built from something that piles up
 //   automatically during ordinary, undirected use -- there's no special
-//   trick to find. Every stat-based condition also requires at least
-//   MIN_SECRET_SETS logged sets, so these can't be backed into by an
-//   account with barely any data. Thresholds are sized for a genuinely
-//   consistent lifter to cross sometime over about a 4-month span --
-//   harder than anything in the other tracks, but not a multi-year grind.
-//   secret-one-wish-willow is the exception: its condition is a discrete
-//   action (submitting feedback through the app) rather than a stat, so
-//   it skips the MIN_SECRET_SETS floor entirely -- see the catalog entry
-//   below.
+//   trick to find. Most stat-based conditions also require at least
+//   MIN_SECRET_SETS logged sets, so they can't be backed into by an
+//   account with barely any data. Clear Pill is the exception: its
+//   condition is exactly the all-lifts composite score crossing +17%.
+//   Thresholds are sized for a genuinely consistent lifter to cross
+//   sometime over about a 4-month span -- harder than anything in the
+//   other tracks, but not a multi-year grind.
+//   secret-one-wish-willow is another exception: its condition is a
+//   discrete action (submitting feedback through the app) rather than a
+//   stat, so it skips the MIN_SECRET_SETS floor entirely -- see the
+//   catalog entry below.
 export const MIN_SECRET_SETS = 50;
 
 export const ACHIEVEMENTS = [
@@ -336,7 +362,7 @@ export const ACHIEVEMENTS = [
   // the alpha period. Not wired up to award anyone yet -- isUnlocked is
   // pinned to false until we're ready to grant it retroactively.
   { id: 'secret-red-pill', name: 'Red Pill', track: 'secret', description: 'Participated in the alpha.', flavor: '"I\'ll show you how deep the rabbit hole goes." — Morpheus', isUnlocked: () => false },
-  { id: 'secret-psl-god', name: 'PSL God', track: 'secret', description: 'Log 300 total sets.', flavor: '"December 17, 2005" — ???', isUnlocked: (s) => s.totalSets >= MIN_SECRET_SETS && s.totalSets >= 300 },
+  { id: 'secret-clear-pill', name: 'Clear Pill', track: 'secret', description: 'Reach +17% composite score across all lifts.', flavor: '"There is a quiet at the top of the Bridge that no one warns you about. It is not peace. It is the room after everyone has gone home." - M. Halvard Strickett', isUnlocked: (s) => s.compositeMaxPct >= 17 },
   { id: 'secret-human-instrumentality', name: 'Human Instrumentality Project', track: 'secret', description: 'Log a workout on 70 distinct days.', flavor: '"From now on, you\'re on your own. You\'ll have to make your own decisions." — Misato', isUnlocked: (s) => s.totalSets >= MIN_SECRET_SETS && s.totalDays >= 70 },
   { id: 'secret-one-wish-willow', name: 'One Wish Willow', track: 'secret', description: 'Submit feedback through the app.', flavor: '"I wish Nikki Freeman loved me more than anyone in the f**king world." — Baron "Bear" Bailey', isUnlocked: (s) => s.hasSubmittedFeedback },
 ];

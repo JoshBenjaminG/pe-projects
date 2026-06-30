@@ -1,4 +1,4 @@
-import { weekStart, workoutDaysThisWeek, killstreakForDays, weeklyKillstreak, killstreakHistory, totalWorkoutDays, longestConsecutiveWeekStreak, longestConsecutiveDayStreak, MIN_SECRET_SETS, ACHIEVEMENTS, achievementProgress, achievementStats, newlyUnlockedIds } from '../js/lift-tracker/killstreak.js';
+import { weekStart, workoutDaysThisWeek, killstreakForDays, weeklyKillstreak, killstreakHistory, totalWorkoutDays, longestConsecutiveWeekStreak, longestConsecutiveDayStreak, compositeMaxPct, MIN_SECRET_SETS, ACHIEVEMENTS, achievementProgress, achievementStats, newlyUnlockedIds } from '../js/lift-tracker/killstreak.js';
 
 // Real Supabase auth user id with a one-off legacy tier credit applied
 // (see killstreak.js: LEGACY_TIER_CREDITS). Any other id, or no id at
@@ -356,13 +356,14 @@ test('longestConsecutiveDayStreak: a single skipped day breaks the streak, and t
 // (not copy-pasted from killstreak.js) so a transcription mistake in the
 // catalog gets caught rather than just re-confirmed. ---
 
-function makeStats({ totalDays = 0, tierCounts = {}, longestStreak = 0, totalSets = 0, longestDayStreak = 0, hasSubmittedFeedback = false } = {}) {
+function makeStats({ totalDays = 0, tierCounts = {}, longestStreak = 0, totalSets = 0, longestDayStreak = 0, compositeMaxPct = 0, hasSubmittedFeedback = false } = {}) {
   return {
     totalDays,
     tierCounts: { uav: 0, predator: 0, harrier: 0, chopper: 0, ...tierCounts },
     longestStreak,
     totalSets,
     longestDayStreak,
+    compositeMaxPct,
     hasSubmittedFeedback,
   };
 }
@@ -487,13 +488,33 @@ test('achievement capstone-dark-matter: requires BOTH 40 days AND 5x chopper', (
   }
 });
 
-test('achievement secret-psl-god: locked below 300 total sets, unlocked at 300', () => {
-  const a = findAchievement('secret-psl-god');
-  if (a.isUnlocked(makeStats({ totalSets: 299 })) !== false) {
-    throw new Error('expected locked at 299 total sets');
+test('achievement secret-clear-pill: locked below +17% all-lifts composite, unlocked at +17%', () => {
+  const a = findAchievement('secret-clear-pill');
+  if (a.name !== 'Clear Pill') throw new Error(`expected Clear Pill, got ${a.name}`);
+  if (a.description !== 'Reach +17% composite score across all lifts.') {
+    throw new Error(`unexpected condition text: ${a.description}`);
   }
-  if (a.isUnlocked(makeStats({ totalSets: 300 })) !== true) {
-    throw new Error('expected unlocked at 300 total sets');
+  if (!a.flavor.includes('There is a quiet at the top of the Bridge')) {
+    throw new Error('expected Clear Pill flavor text');
+  }
+  if (a.isUnlocked(makeStats({ compositeMaxPct: 16.99 })) !== false) {
+    throw new Error('expected locked below +17% composite');
+  }
+  if (a.isUnlocked(makeStats({ compositeMaxPct: 17 })) !== true) {
+    throw new Error('expected unlocked at +17% composite');
+  }
+});
+
+test('compositeMaxPct: measures the highest all-lifts composite percentage', () => {
+  const sets = [
+    { lift_id: 'bench', weight: 100, reps: 10, performed_at: iso(2026, 6, 1, 9) },
+    { lift_id: 'bench', weight: 120, reps: 10, performed_at: iso(2026, 6, 8, 9) },
+    { lift_id: 'row', weight: 80, reps: 10, performed_at: iso(2026, 6, 1, 9) },
+    { lift_id: 'row', weight: 96, reps: 10, performed_at: iso(2026, 6, 8, 9) },
+  ];
+  const pct = compositeMaxPct(sets);
+  if (Math.abs(pct - 20) > 0.0001) {
+    throw new Error(`expected max composite +20%, got ${pct}`);
   }
 });
 
