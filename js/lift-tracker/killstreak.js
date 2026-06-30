@@ -361,7 +361,7 @@ export const ACHIEVEMENTS = [
   { id: 'mastery-harrier-1', name: 'Harrier Specialist', track: 'mastery', description: 'Earn Harrier Strike 5 times.', isUnlocked: (s) => s.tierCounts.harrier >= 5 },
   { id: 'mastery-harrier-2', name: 'Harrier Veteran', track: 'mastery', description: 'Earn Harrier Strike 15 times.', isUnlocked: (s) => s.tierCounts.harrier >= 15 },
   { id: 'mastery-chopper-1', name: 'Chopper Gunner', track: 'mastery', description: 'Earn Chopper Gunner for the first time.', isUnlocked: (s) => s.tierCounts.chopper >= 1 },
-  { id: 'mastery-chopper-2', name: 'Gunship', track: 'mastery', description: 'Earn Chopper Gunner 5 times.', isUnlocked: (s) => s.tierCounts.chopper >= 5 },
+  { id: 'mastery-chopper-2', name: 'Gunship', track: 'mastery', description: 'Earn Chopper Gunner 3 times.', isUnlocked: (s) => s.tierCounts.chopper >= 3 },
 
   // --- Streak: longest consecutive Sun-Sat weeks with at least a UAV ---
   { id: 'streak-2', name: 'Counter-UAV', track: 'streak', description: '2 consecutive weeks with at least a UAV.', isUnlocked: (s) => s.longestStreak >= 2 },
@@ -372,9 +372,9 @@ export const ACHIEVEMENTS = [
   { id: 'streak-8', name: 'Juggernaut', track: 'streak', description: '8 consecutive weeks with at least a UAV.', isUnlocked: (s) => s.longestStreak >= 8 },
 
   // --- Capstone: combine a hard achievement from two different tracks ---
-  { id: 'capstone-tactical-nuke', name: 'Tactical Nuke', track: 'capstone', description: 'Reach General (27 days) and earn Gunship (Chopper Gunner x5).', isUnlocked: (s) => s.totalDays >= 27 && s.tierCounts.chopper >= 5 },
+  { id: 'capstone-tactical-nuke', name: 'Tactical Nuke', track: 'capstone', description: 'Reach General (27 days) and earn Gunship (Chopper Gunner x3).', isUnlocked: (s) => s.totalDays >= 27 && s.tierCounts.chopper >= 3 },
   { id: 'capstone-moab', name: 'MOAB', track: 'capstone', description: 'Reach Juggernaut (8-week streak) and Harrier Veteran (x15).', isUnlocked: (s) => s.longestStreak >= 8 && s.tierCounts.harrier >= 15 },
-  { id: 'capstone-dark-matter', name: 'Dark Matter', track: 'capstone', description: 'Reach Prestige Master (40 days) and earn Gunship (x5).', isUnlocked: (s) => s.totalDays >= 40 && s.tierCounts.chopper >= 5 },
+  { id: 'capstone-dark-matter', name: 'Dark Matter', track: 'capstone', description: 'Reach Prestige Master (40 days) and earn Gunship (x3).', isUnlocked: (s) => s.totalDays >= 40 && s.tierCounts.chopper >= 3 },
 
   // --- Secret: condition hidden until unlocked (see killstreakView.js) ---
   // Blue Pill is the one exception to the "real, earnable, hidden stat

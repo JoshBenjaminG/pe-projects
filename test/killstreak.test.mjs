@@ -413,7 +413,7 @@ const MASTERY_THRESHOLDS = {
   'mastery-harrier-1': ['harrier', 5],
   'mastery-harrier-2': ['harrier', 15],
   'mastery-chopper-1': ['chopper', 1],
-  'mastery-chopper-2': ['chopper', 5],
+  'mastery-chopper-2': ['chopper', 3],
 };
 
 for (const [id, [tierKey, threshold]] of Object.entries(MASTERY_THRESHOLDS)) {
@@ -451,15 +451,15 @@ for (const [id, threshold] of Object.entries(STREAK_THRESHOLDS)) {
   });
 }
 
-test('achievement capstone-tactical-nuke: requires BOTH 27 days AND 5x chopper, not either alone', () => {
+test('achievement capstone-tactical-nuke: requires BOTH 27 days AND 3x chopper, not either alone', () => {
   const a = findAchievement('capstone-tactical-nuke');
-  if (a.isUnlocked(makeStats({ totalDays: 27, tierCounts: { chopper: 4 } })) !== false) {
+  if (a.isUnlocked(makeStats({ totalDays: 27, tierCounts: { chopper: 2 } })) !== false) {
     throw new Error('expected locked with days met but chopper short');
   }
-  if (a.isUnlocked(makeStats({ totalDays: 26, tierCounts: { chopper: 5 } })) !== false) {
+  if (a.isUnlocked(makeStats({ totalDays: 26, tierCounts: { chopper: 3 } })) !== false) {
     throw new Error('expected locked with chopper met but days short');
   }
-  if (a.isUnlocked(makeStats({ totalDays: 27, tierCounts: { chopper: 5 } })) !== true) {
+  if (a.isUnlocked(makeStats({ totalDays: 27, tierCounts: { chopper: 3 } })) !== true) {
     throw new Error('expected unlocked when both conditions met');
   }
 });
@@ -477,15 +477,15 @@ test('achievement capstone-moab: requires BOTH an 8-week streak AND 15x harrier'
   }
 });
 
-test('achievement capstone-dark-matter: requires BOTH 40 days AND 5x chopper', () => {
+test('achievement capstone-dark-matter: requires BOTH 40 days AND 3x chopper', () => {
   const a = findAchievement('capstone-dark-matter');
-  if (a.isUnlocked(makeStats({ totalDays: 40, tierCounts: { chopper: 4 } })) !== false) {
+  if (a.isUnlocked(makeStats({ totalDays: 40, tierCounts: { chopper: 2 } })) !== false) {
     throw new Error('expected locked with days met but chopper short');
   }
-  if (a.isUnlocked(makeStats({ totalDays: 39, tierCounts: { chopper: 5 } })) !== false) {
+  if (a.isUnlocked(makeStats({ totalDays: 39, tierCounts: { chopper: 3 } })) !== false) {
     throw new Error('expected locked with chopper met but days short');
   }
-  if (a.isUnlocked(makeStats({ totalDays: 40, tierCounts: { chopper: 5 } })) !== true) {
+  if (a.isUnlocked(makeStats({ totalDays: 40, tierCounts: { chopper: 3 } })) !== true) {
     throw new Error('expected unlocked when both conditions met');
   }
 });
