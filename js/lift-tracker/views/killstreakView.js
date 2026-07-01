@@ -2,7 +2,7 @@
 // showing lifetime stats -- this is where the homepage killstreak banner
 // (see listView.js) now links to, since there wasn't room in that banner
 // for more than a couple words without text getting clipped.
-import { listLifts, listActiveSetsForLifts, listWeightEntries, getCurrentUserId, hasSubmittedFeedback } from '../api.js';
+import { listWorkoutHistorySets, listWeightEntries, getCurrentUserId, hasSubmittedFeedback } from '../api.js';
 import { weeklyKillstreak, killstreakHistory, KILLSTREAK_TIERS, achievementProgress, newlyUnlockedIds } from '../killstreak.js';
 import { goToList } from '../state.js';
 import { setTheme, getStoredThemeId } from '../theme.js';
@@ -47,8 +47,7 @@ export async function renderKillstreakView(root) {
 
   root.querySelector('[data-back]').addEventListener('click', goToList);
 
-  const lifts = await listLifts();
-  const sets = lifts.length ? await listActiveSetsForLifts(lifts.map((l) => l.id)) : [];
+  const sets = await listWorkoutHistorySets();
   const bodyWeightEntries = await listWeightEntries();
   const userId = await getCurrentUserId();
   const feedbackGiven = await hasSubmittedFeedback();

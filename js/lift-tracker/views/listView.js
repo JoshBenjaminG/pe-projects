@@ -4,6 +4,7 @@ import {
   createSet,
   reorderLifts,
   listActiveSetsForLifts,
+  listWorkoutHistorySets,
   listWorkouts,
   reorderWorkouts,
 } from '../api.js';
@@ -516,7 +517,11 @@ export async function renderListView(root) {
     }
     renderWorkoutPills();
 
-    currentLifts = await listLifts();
+    const [lifts, workoutHistorySets] = await Promise.all([
+      listLifts(),
+      listWorkoutHistorySets(),
+    ]);
+    currentLifts = lifts;
     const canCreateWorkout = currentLifts.length >= 2;
     addLiftDiscoveryBadge.hidden = currentLifts.length >= 2;
     addLiftHintEl.hidden = currentLifts.length !== 1;
@@ -531,7 +536,7 @@ export async function renderListView(root) {
       listEmptyEl.textContent = 'Start by adding your first lift above. Once it exists, you can log sets and build workouts around it.';
       addLiftHintEl.hidden = true;
       compositeSection.hidden = true;
-      renderKillstreak([]);
+      renderKillstreak(workoutHistorySets);
       renderWeightCard({
         showDiscovery: false,
       });
@@ -544,7 +549,7 @@ export async function renderListView(root) {
 
     const sets = await listActiveSetsForLifts(currentLifts.map((l) => l.id));
     const hasLoggedSets = sets.length > 0;
-    renderKillstreak(sets);
+    renderKillstreak(workoutHistorySets);
     renderWeightCard({
       showDiscovery: hasLoggedSets && !hasSeenDiscovery(DISCOVERY_FEATURES.weight),
     });

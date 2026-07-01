@@ -44,6 +44,14 @@ export async function listLifts() {
   return data;
 }
 
+async function listLiftIdsIncludingDeleted() {
+  const { data, error } = await supabase
+    .from('lifts')
+    .select('id');
+  if (error) throw error;
+  return data.map((lift) => lift.id);
+}
+
 export async function getLift(id) {
   const { data, error } = await supabase.from('lifts').select('*').eq('id', id).maybeSingle();
   if (error) throw error;
@@ -118,6 +126,16 @@ export async function listActiveSetsForLifts(liftIds) {
     .order('performed_at', { ascending: true });
   if (error) throw error;
   return data;
+}
+
+/**
+ * Non-deleted set history across all of the user's lifts, including lifts
+ * that were later soft-deleted. Consistency stats should preserve the fact
+ * that a workout happened even if the specific lift is no longer visible.
+ */
+export async function listWorkoutHistorySets() {
+  const liftIds = await listLiftIdsIncludingDeleted();
+  return listActiveSetsForLifts(liftIds);
 }
 
 /**
