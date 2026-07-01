@@ -1,15 +1,11 @@
 import { weekStart, workoutDaysThisWeek, killstreakForDays, weeklyKillstreak, killstreakHistory, totalWorkoutDays, totalWorkoutWeeks, longestConsecutiveWeekStreak, longestConsecutiveDayStreak, compositeMaxPct, bodyWeightChangeStats, MIN_SECRET_SETS, ACHIEVEMENTS, achievementProgress, achievementStats, newlyUnlockedIds } from '../js/lift-tracker/killstreak.js';
 
-// Real Supabase auth user id with a one-off legacy tier credit applied
-// (see killstreak.js: LEGACY_TIER_CREDITS). Any other id, or no id at
-// all, must leave the computed counts untouched.
-const LEGACY_CREDIT_USER_ID = '19bf3140-6738-496f-ac0c-20e316c4c3c0';
-
 // Real Supabase auth user id grandfathered onto secret-one-wish-willow
 // (see killstreak.js: FEEDBACK_GRANDFATHERED_USER_IDS) because he gave his
 // feedback in person rather than through the in-app feedback modal. Any
 // other id, or no id at all, must rely on the real hasSubmittedFeedback
 // flag like everyone else.
+const JOSHUA_USER_ID = '19bf3140-6738-496f-ac0c-20e316c4c3c0';
 const MASON_USER_ID = '1445e5d7-276a-4fca-bb91-1c0a7ff44b65';
 
 let passed = 0;
@@ -177,88 +173,12 @@ test('killstreakHistory: multiple sets on the same day in a week still count as 
 });
 
 
-test('killstreakHistory: no userId leaves counts untouched (no legacy credit)', () => {
-  const sets = [{ performed_at: iso(2026, 6, 15, 9) }];
-  const counts = killstreakHistory(sets);
-  if (counts.uav !== 1 || counts.harrier !== 0) {
-    throw new Error(`expected uav 1 / harrier 0 got ${JSON.stringify(counts)}`);
-  }
-});
-
-test('killstreakHistory: an unrecognized userId leaves counts untouched', () => {
+test('killstreakHistory: userId does not alter computed tier counts', () => {
   const sets = [{ performed_at: iso(2026, 6, 15, 9) }];
   const counts = killstreakHistory(sets, 'some-other-random-uuid');
   if (counts.uav !== 1 || counts.harrier !== 0) {
     throw new Error(`expected uav 1 / harrier 0 got ${JSON.stringify(counts)}`);
   }
-});
-
-test('killstreakHistory: the legacy-credit userId adds +1 uav and +1 harrier on top of real counts', () => {
-  const sets = [
-    // Week of June 14 2026: 1 day -> 1 real UAV
-    { performed_at: iso(2026, 6, 15, 9) },
-    // Week of June 21 2026: 2 days -> 1 real Predator
-    { performed_at: iso(2026, 6, 22, 9) },
-    { performed_at: iso(2026, 6, 23, 9) },
-  ];
-  const withoutCredit = killstreakHistory(sets);
-  const withCredit = killstreakHistory(sets, LEGACY_CREDIT_USER_ID);
-  if (withCredit.uav !== withoutCredit.uav + 1) {
-    throw new Error(`expected uav credited by 1, got ${withoutCredit.uav} -> ${withCredit.uav}`);
-  }
-  if (withCredit.harrier !== withoutCredit.harrier + 1) {
-    throw new Error(`expected harrier credited by 1, got ${withoutCredit.harrier} -> ${withCredit.harrier}`);
-  }
-  if (withCredit.predator !== withoutCredit.predator) {
-    throw new Error('expected predator left untouched by the legacy credit');
-  }
-  if (withCredit.chopper !== withoutCredit.chopper) {
-    throw new Error('expected chopper left untouched by the legacy credit');
-  }
-});
-
-test('achievementStats: threads userId through to tierCounts so mastery achievements see the legacy credit', () => {
-  // 4 real Harrier Strike weeks -- one below the 5 needed for
-  // mastery-harrier-1. The +1 legacy credit should be exactly enough to
-  // cross that threshold for the credited account, but not for anyone
-  // else looking at the same sets.
-  const sets = [];
-  const harrierWeekStarts = [
-    [2026, 1, 4], [2026, 1, 11], [2026, 1, 18], [2026, 1, 25],
-  ];
-  for (const [y, m, d] of harrierWeekStarts) {
-    sets.push({ performed_at: iso(y, m, d, 9) });
-    sets.push({ performed_at: iso(y, m, d + 1, 9) });
-    sets.push({ performed_at: iso(y, m, d + 2, 9) });
-  }
-
-  const withoutCredit = achievementStats(sets);
-  if (withoutCredit.tierCounts.harrier !== 4) {
-    throw new Error(`expected 4 real harrier weeks, got ${withoutCredit.tierCounts.harrier}`);
-  }
-
-  const mastery = findAchievement('mastery-harrier-1');
-  if (mastery.isUnlocked(withoutCredit) !== false) {
-    throw new Error('expected mastery-harrier-1 locked without the credit (4 < 5)');
-  }
-
-  const withCredit = achievementStats(sets, LEGACY_CREDIT_USER_ID);
-  if (mastery.isUnlocked(withCredit) !== true) {
-    throw new Error('expected mastery-harrier-1 unlocked once the legacy credit pushes harrier to 5');
-  }
-});
-
-test('achievementProgress: threads userId through the same way as achievementStats', () => {
-  const sets = [];
-  for (const [y, m, d] of [[2026, 1, 4], [2026, 1, 11], [2026, 1, 18], [2026, 1, 25]]) {
-    sets.push({ performed_at: iso(y, m, d, 9) });
-    sets.push({ performed_at: iso(y, m, d + 1, 9) });
-    sets.push({ performed_at: iso(y, m, d + 2, 9) });
-  }
-  const withoutCredit = achievementProgress(sets).find((a) => a.id === 'mastery-harrier-1');
-  const withCredit = achievementProgress(sets, LEGACY_CREDIT_USER_ID).find((a) => a.id === 'mastery-harrier-1');
-  if (withoutCredit.unlocked !== false) throw new Error('expected locked without credit');
-  if (withCredit.unlocked !== true) throw new Error('expected unlocked with credit');
 });
 
 test('totalWorkoutDays: empty sets is 0', () => {
@@ -642,7 +562,7 @@ test('achievementStats: an unrecognized userId does not grant feedback credit on
 });
 
 test('achievementStats: Joshua and Mason are grandfathered onto the feedback credit regardless of the real flag or other stats', () => {
-  for (const userId of [LEGACY_CREDIT_USER_ID, MASON_USER_ID]) {
+  for (const userId of [JOSHUA_USER_ID, MASON_USER_ID]) {
     const stats = achievementStats([], userId);
     if (stats.hasSubmittedFeedback !== true) {
       throw new Error(`expected hasSubmittedFeedback true for grandfathered userId ${userId}`);

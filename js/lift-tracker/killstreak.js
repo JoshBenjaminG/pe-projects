@@ -99,29 +99,7 @@ export function killstreakHistory(sets, userId = null) {
     }
   }
 
-  return applyLegacyTierCredit(counts, userId);
-}
-
-// One-off manual corrections layered on top of the real, computed tier
-// counts for specific accounts -- not derived from logged sets at all.
-// Used sparingly, by agreement with the account holder, to backfill a
-// tier that should be credited but isn't reflected in the raw set
-// history. Keyed by Supabase auth user id.
-//
-// - 19bf3140-...c3c0: +1 UAV, +1 Harrier Strike, agreed via chat on
-//   2026-06-29.
-const LEGACY_TIER_CREDITS = {
-  '19bf3140-6738-496f-ac0c-20e316c4c3c0': { uav: 1, harrier: 1 },
-};
-
-function applyLegacyTierCredit(counts, userId) {
-  const credit = userId ? LEGACY_TIER_CREDITS[userId] : null;
-  if (!credit) return counts;
-  const result = { ...counts };
-  for (const key of Object.keys(credit)) {
-    result[key] = (result[key] ?? 0) + credit[key];
-  }
-  return result;
+  return counts;
 }
 
 /**
