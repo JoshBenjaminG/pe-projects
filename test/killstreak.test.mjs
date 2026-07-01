@@ -131,10 +131,10 @@ test('killstreakHistory: empty history is all zeros', () => {
   }
 });
 
-test('killstreakHistory: a week counts toward its single highest tier only', () => {
+test('killstreakHistory: a week credits every tier reached', () => {
   // Same Sun-Sat week (June 14-20 2026) as THURSDAY's week, 3 distinct
-  // workout days -- should tally one Harrier Strike, not also a UAV and
-  // a Predator Missile along the way.
+  // workout days -- should tally one UAV, one Predator Missile, and one
+  // Harrier Strike.
   const sets = [
     { performed_at: iso(2026, 6, 15, 9) },
     { performed_at: iso(2026, 6, 16, 9) },
@@ -142,8 +142,8 @@ test('killstreakHistory: a week counts toward its single highest tier only', () 
   ];
   const counts = killstreakHistory(sets);
   if (counts.harrier !== 1) throw new Error(`expected 1 harrier got ${counts.harrier}`);
-  if (counts.uav !== 0) throw new Error(`expected 0 uav got ${counts.uav}`);
-  if (counts.predator !== 0) throw new Error(`expected 0 predator got ${counts.predator}`);
+  if (counts.uav !== 1) throw new Error(`expected 1 uav got ${counts.uav}`);
+  if (counts.predator !== 1) throw new Error(`expected 1 predator got ${counts.predator}`);
 });
 
 test('killstreakHistory: tallies separately across multiple distinct weeks', () => {
@@ -160,10 +160,10 @@ test('killstreakHistory: tallies separately across multiple distinct weeks', () 
     { performed_at: iso(2026, 6, 30, 9) },
   ];
   const counts = killstreakHistory(sets);
-  if (counts.uav !== 1) throw new Error(`expected 1 uav got ${counts.uav}`);
-  if (counts.predator !== 1) throw new Error(`expected 1 predator got ${counts.predator}`);
+  if (counts.uav !== 3) throw new Error(`expected 3 uav got ${counts.uav}`);
+  if (counts.predator !== 2) throw new Error(`expected 2 predator got ${counts.predator}`);
   if (counts.chopper !== 1) throw new Error(`expected 1 chopper got ${counts.chopper}`);
-  if (counts.harrier !== 0) throw new Error(`expected 0 harrier got ${counts.harrier}`);
+  if (counts.harrier !== 1) throw new Error(`expected 1 harrier got ${counts.harrier}`);
 });
 
 test('killstreakHistory: multiple sets on the same day in a week still count as one day toward that week\'s tier', () => {

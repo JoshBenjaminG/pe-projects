@@ -70,11 +70,9 @@ export function weeklyKillstreak(sets, now = new Date()) {
 
 /**
  * Lifetime tally of how many distinct Sun-Sat weeks earned each tier,
- * across a user's full set history (not just the current week). Each
- * week counts toward its single highest tier only -- a 3-workout-day week
- * counts as one Harrier Strike, not also a UAV and a Predator Missile --
- * matching how the weekly badge itself only ever shows the top tier
- * earned, never every tier passed through on the way there.
+ * across a user's full set history (not just the current week). Each week
+ * credits every tier whose threshold was reached -- a 3-workout-day week
+ * earns one UAV, one Predator Missile, and one Harrier Strike.
  *
  * Returns a plain object keyed by tier `key` (see KILLSTREAK_TIERS), e.g.
  * `{ uav: 3, predator: 1, harrier: 0, chopper: 2 }`, always including
@@ -96,8 +94,9 @@ export function killstreakHistory(sets, userId = null) {
   for (const tier of KILLSTREAK_TIERS) counts[tier.key] = 0;
 
   for (const dayKeys of dayKeysByWeek.values()) {
-    const tier = killstreakForDays(dayKeys.size);
-    if (tier) counts[tier.key] += 1;
+    for (const tier of KILLSTREAK_TIERS) {
+      if (dayKeys.size >= tier.days) counts[tier.key] += 1;
+    }
   }
 
   return applyLegacyTierCredit(counts, userId);
@@ -110,8 +109,7 @@ export function killstreakHistory(sets, userId = null) {
 // history. Keyed by Supabase auth user id.
 //
 // - 19bf3140-...c3c0: +1 UAV, +1 Harrier Strike, agreed via chat on
-//   2026-06-29 (account's real history had a Predator and a Chopper
-//   Gunner week but no Harrier week or second UAV week).
+//   2026-06-29.
 const LEGACY_TIER_CREDITS = {
   '19bf3140-6738-496f-ac0c-20e316c4c3c0': { uav: 1, harrier: 1 },
 };
