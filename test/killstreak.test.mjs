@@ -1,4 +1,4 @@
-import { weekStart, workoutDaysThisWeek, killstreakForDays, weeklyKillstreak, killstreakHistory, totalWorkoutDays, longestConsecutiveWeekStreak, longestConsecutiveDayStreak, compositeMaxPct, bodyWeightChangeStats, MIN_SECRET_SETS, ACHIEVEMENTS, achievementProgress, achievementStats, newlyUnlockedIds } from '../js/lift-tracker/killstreak.js';
+import { weekStart, workoutDaysThisWeek, killstreakForDays, weeklyKillstreak, killstreakHistory, totalWorkoutDays, totalWorkoutWeeks, longestConsecutiveWeekStreak, longestConsecutiveDayStreak, compositeMaxPct, bodyWeightChangeStats, MIN_SECRET_SETS, ACHIEVEMENTS, achievementProgress, achievementStats, newlyUnlockedIds } from '../js/lift-tracker/killstreak.js';
 
 // Real Supabase auth user id with a one-off legacy tier credit applied
 // (see killstreak.js: LEGACY_TIER_CREDITS). Any other id, or no id at
@@ -275,6 +275,17 @@ test('totalWorkoutDays: counts distinct lifetime calendar dates, not sets, acros
   if (total !== 2) throw new Error(`expected 2 got ${total}`);
 });
 
+test('totalWorkoutWeeks: counts distinct lifetime weeks, not sets or days', () => {
+  const sets = [
+    { performed_at: iso(2026, 6, 15, 9) },
+    { performed_at: iso(2026, 6, 16, 9) }, // same Sun-Sat week as above
+    { performed_at: iso(2026, 6, 22, 9) },
+    { performed_at: iso(2026, 7, 13, 9) },
+  ];
+  const weeks = totalWorkoutWeeks(sets);
+  if (weeks !== 3) throw new Error(`expected 3 got ${weeks}`);
+});
+
 test('longestConsecutiveWeekStreak: empty sets is 0', () => {
   if (longestConsecutiveWeekStreak([]) !== 0) throw new Error('expected 0');
 });
@@ -356,9 +367,10 @@ test('longestConsecutiveDayStreak: a single skipped day breaks the streak, and t
 // (not copy-pasted from killstreak.js) so a transcription mistake in the
 // catalog gets caught rather than just re-confirmed. ---
 
-function makeStats({ totalDays = 0, tierCounts = {}, longestStreak = 0, totalSets = 0, longestDayStreak = 0, compositeMaxPct = 0, bodyWeightGain = 0, bodyWeightLoss = 0, hasSubmittedFeedback = false } = {}) {
+function makeStats({ totalDays = 0, totalWeeks = 0, tierCounts = {}, longestStreak = 0, totalSets = 0, longestDayStreak = 0, compositeMaxPct = 0, bodyWeightGain = 0, bodyWeightLoss = 0, hasSubmittedFeedback = false } = {}) {
   return {
     totalDays,
+    totalWeeks,
     tierCounts: { uav: 0, predator: 0, harrier: 0, chopper: 0, ...tierCounts },
     longestStreak,
     totalSets,
@@ -490,20 +502,20 @@ test('achievement capstone-dark-matter: requires BOTH 40 days AND 3x chopper', (
   }
 });
 
-test('achievement secret-clear-pill: locked below +17% all-lifts composite, unlocked at +17%', () => {
+test('achievement secret-clear-pill: locked below 12 workout weeks, unlocked at 12', () => {
   const a = findAchievement('secret-clear-pill');
   if (a.name !== 'Clear Pill') throw new Error(`expected Clear Pill, got ${a.name}`);
-  if (a.description !== 'Reach +17% composite score across all lifts.') {
+  if (a.description !== 'Log workouts in 12 different weeks.') {
     throw new Error(`unexpected condition text: ${a.description}`);
   }
   if (!a.flavor.includes('There is a quiet at the top of the Bridge')) {
     throw new Error('expected Clear Pill flavor text');
   }
-  if (a.isUnlocked(makeStats({ compositeMaxPct: 16.99 })) !== false) {
-    throw new Error('expected locked below +17% composite');
+  if (a.isUnlocked(makeStats({ totalWeeks: 11 })) !== false) {
+    throw new Error('expected locked below 12 workout weeks');
   }
-  if (a.isUnlocked(makeStats({ compositeMaxPct: 17 })) !== true) {
-    throw new Error('expected unlocked at +17% composite');
+  if (a.isUnlocked(makeStats({ totalWeeks: 12 })) !== true) {
+    throw new Error('expected unlocked at 12 workout weeks');
   }
 });
 

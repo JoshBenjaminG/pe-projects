@@ -144,6 +144,21 @@ export function totalWorkoutDays(sets) {
 }
 
 /**
+ * Lifetime count of distinct Sun-Sat weeks with at least one set logged.
+ * Used for long-horizon consistency achievements where the user does not
+ * need an unbroken streak, just repeated return over time.
+ *
+ * @param {{performed_at:string}[]} sets
+ */
+export function totalWorkoutWeeks(sets) {
+  const weeks = new Set();
+  for (const s of sets) {
+    weeks.add(weekStart(new Date(s.performed_at)).getTime());
+  }
+  return weeks.size;
+}
+
+/**
  * Longest run of consecutive Sun-Sat weeks in which at least one workout
  * day was logged (i.e. at least a UAV was earned each of those weeks).
  * This is a lifetime maximum, not "is a streak currently active" -- once
@@ -263,6 +278,7 @@ export function achievementStats(sets, userId = null, options = {}) {
   const bodyWeightChange = bodyWeightChangeStats(bodyWeightEntries);
   return {
     totalDays: totalWorkoutDays(sets),
+    totalWeeks: totalWorkoutWeeks(sets),
     tierCounts: killstreakHistory(sets, userId),
     longestStreak: longestConsecutiveWeekStreak(sets),
     totalSets: sets.length,
@@ -325,11 +341,12 @@ function isFeedbackGrandfathered(userId) {
 //   automatically during ordinary, undirected use -- there's no special
 //   trick to find. Most stat-based conditions also require at least
 //   MIN_SECRET_SETS logged sets, so they can't be backed into by an
-//   account with barely any data. Clear Pill is the exception: its
-//   condition is exactly the all-lifts composite score crossing +17%.
-//   Thresholds are sized for a genuinely consistent lifter to cross
-//   sometime over about a 4-month span -- harder than anything in the
-//   other tracks, but not a multi-year grind.
+//   account with barely any data. Clear Pill is the exception: it measures
+//   showing up across 12 different weeks, matching the app's consistency
+//   orientation without caring about a streak staying unbroken. Thresholds
+//   are sized for a genuinely consistent lifter to cross sometime over
+//   about a 4-month span -- harder than anything in the other tracks, but
+//   not a multi-year grind.
 //   secret-one-wish-willow is another exception: its condition is a
 //   discrete action (submitting feedback through the app) rather than a
 //   stat, so it skips the MIN_SECRET_SETS floor entirely -- see the
@@ -387,7 +404,7 @@ export const ACHIEVEMENTS = [
   // the alpha period. Not wired up to award anyone yet -- isUnlocked is
   // pinned to false until we're ready to grant it retroactively.
   { id: 'secret-red-pill', name: 'Red Pill', track: 'secret', description: 'Participated in the alpha.', flavor: '"I\'ll show you how deep the rabbit hole goes." — Morpheus', isUnlocked: () => false },
-  { id: 'secret-clear-pill', name: 'Clear Pill', track: 'secret', description: 'Reach +17% composite score across all lifts.', flavor: '"There is a quiet at the top of the Bridge that no one warns you about. It is not peace. It is the room after everyone has gone home." - M. Halvard Strickett', isUnlocked: (s) => s.compositeMaxPct >= 17 },
+  { id: 'secret-clear-pill', name: 'Clear Pill', track: 'secret', description: 'Log workouts in 12 different weeks.', flavor: '"There is a quiet at the top of the Bridge that no one warns you about. It is not peace. It is the room after everyone has gone home." - M. Halvard Strickett', isUnlocked: (s) => s.totalWeeks >= 12 },
   { id: 'secret-enlightenment', name: 'Enlightenment', track: 'secret', description: 'Lose 9 pounds.', flavor: '"They would all bear witness to the bare flesh of the one who is free. To the one who left it all behind." - Narrator, Jujstu Kaisen', isUnlocked: (s) => s.bodyWeightLoss >= 9 },
   { id: 'secret-gamma-radiation', name: 'Gamma Radiation', track: 'secret', description: 'Gain 9 pounds.', flavor: '"That’s my secret, Captain: I’m always angry." - Bruce Banner', isUnlocked: (s) => s.bodyWeightGain >= 9 },
   { id: 'secret-human-instrumentality', name: 'Human Instrumentality Project', track: 'secret', description: 'Log a workout on 70 distinct days.', flavor: '"From now on, you\'re on your own. You\'ll have to make your own decisions." — Misato', isUnlocked: (s) => s.totalSets >= MIN_SECRET_SETS && s.totalDays >= 70 },
