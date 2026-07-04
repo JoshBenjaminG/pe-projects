@@ -1,7 +1,17 @@
-import { createGoal, createGoals, softDeleteGoal } from '../api.js';
+import {
+  createGoal,
+  createGoals,
+  listLifts,
+  listRecentSetsForLifts,
+  listWaistEntries,
+  listWeightEntries,
+  softDeleteGoal,
+} from '../api.js';
+import { buildExportText, exportWindowStart } from '../export.js';
 import { evaluateGoalContext, loadGoalContext, syncGoalEvents } from '../goalSync.js';
 import { GOAL_TYPES, formatProgressPct, parseGoalImport } from '../goals.js';
-import { goToList } from '../state.js';
+import { dailyWaistSeries, dailyWeightSeries } from '../math.js';
+import { goToHelp, goToList } from '../state.js';
 
 const IMPORT_EXAMPLE = `goal_format: lift_tracker_goals_v1
 goals:
@@ -59,9 +69,20 @@ export async function renderGoalsView(root) {
 
       <section class="lt-goals-section">
         <h2 class="lt-goals-heading">Import Goals</h2>
-        <p class="lt-composite-blurb">Paste Lift Tracker YAML. Use exact lift and workout names. This format is intentionally simple so an LLM can read your export and generate goals.</p>
+        <p class="lt-composite-blurb">You can have an LLM turn your recent Lift Tracker history into goals, then paste the YAML it returns here.</p>
+        <ol class="lt-goal-steps">
+          <li>Export your recent history from the <button type="button" class="lt-inline-link" data-help-export-link>? Help page</button>, or use the all-in-one copy button below.</li>
+          <li>Paste the history, goal format, and prompt into an LLM.</li>
+          <li>Ask it to return only Lift Tracker YAML using exact lift and workout names.</li>
+          <li>Paste the YAML output into this box, tap Preview, then tap Import goals.</li>
+        </ol>
+        <div class="lt-goal-helper-actions">
+          <button type="button" class="lt-goal-secondary-btn" data-copy-goal-packet>Copy 60-day history + prompt</button>
+          <span class="lt-export-status" data-goal-packet-status hidden></span>
+        </div>
+        <textarea class="lt-goal-packet-output" data-goal-packet-output rows="10" readonly hidden></textarea>
         <details class="lt-goal-import-help">
-          <summary>Format and LLM prompt</summary>
+          <summary><span>Goal format and LLM prompt</span><strong>View More -&gt;</strong></summary>
           <p class="lt-composite-blurb">Allowed types: <strong>lift_set</strong>, <strong>weekly_workout_days</strong>, <strong>weekly_workout_volume</strong>, <strong>workout_session_volume</strong>.</p>
           <pre>${escapeHtml(IMPORT_EXAMPLE)}</pre>
           <p class="lt-composite-blurb">Prompt to give an LLM:</p>
@@ -84,6 +105,7 @@ export async function renderGoalsView(root) {
     `;
 
     root.querySelector('[data-back]').addEventListener('click', goToList);
+    root.querySelector('[data-help-export-link]').addEventListener('click', goToHelp);
     wireGoalForm();
     wireImport();
     root.querySelectorAll('[data-delete-goal]').forEach((btn) => {
@@ -204,6 +226,29 @@ export async function renderGoalsView(root) {
     const textarea = root.querySelector('[data-import-text]');
     const feedback = root.querySelector('[data-import-feedback]');
     const saveBtn = root.querySelector('[data-save-import]');
+    const packetBtn = root.querySelector('[data-copy-goal-packet]');
+    const packetOutput = root.querySelector('[data-goal-packet-output]');
+    const packetStatus = root.querySelector('[data-goal-packet-status]');
+
+    packetBtn.addEventListener('click', async () => {
+      const originalText = packetBtn.textContent;
+      packetBtn.disabled = true;
+      packetBtn.textContent = 'Building...';
+      packetStatus.hidden = true;
+      try {
+        const packet = await buildGoalLlmPacket();
+        packetOutput.value = packet;
+        packetOutput.hidden = false;
+        const copied = await copyText(packet);
+        packetStatus.hidden = false;
+        packetStatus.textContent = copied
+          ? 'Copied. Paste this into an LLM.'
+          : 'Copy from the box below.';
+      } finally {
+        packetBtn.disabled = false;
+        packetBtn.textContent = originalText;
+      }
+    });
 
     root.querySelector('[data-preview-import]').addEventListener('click', () => {
       const parsed = parseGoalImport(textarea.value, {
@@ -233,6 +278,69 @@ export async function renderGoalsView(root) {
   }
 
   render();
+}
+
+async function buildGoalLlmPacket() {
+  const lifts = await listLifts();
+  const liftIds = lifts.map((lift) => lift.id);
+  const since = exportWindowStart().toISOString();
+  const recentSets = await listRecentSetsForLifts(liftIds, since);
+  const setsByLift = new Map(lifts.map((lift) => [lift.id, []]));
+  for (const set of recentSets) {
+    const bucket = setsByLift.get(set.lift_id);
+    if (bucket) bucket.push(set);
+  }
+  const weightEntries = await listWeightEntries();
+  const recentWeightEntries = weightEntries.filter((entry) => new Date(entry.logged_at) >= new Date(since));
+  const waistEntries = await listWaistEntries();
+  const recentWaistEntries = waistEntries.filter((entry) => new Date(entry.logged_at) >= new Date(since));
+  const history = buildExportText(
+    lifts,
+    setsByLift,
+    new Date(),
+    undefined,
+    dailyWeightSeries(recentWeightEntries),
+    dailyWaistSeries(recentWaistEntries)
+  );
+
+  return [
+    'Use the Lift Tracker export below to create goals.',
+    '',
+    LLM_PROMPT,
+    '',
+    'Return only YAML in this exact format. Do not wrap it in markdown fences.',
+    '',
+    IMPORT_EXAMPLE,
+    '',
+    'Lift Tracker export:',
+    '',
+    history,
+  ].join('\n');
+}
+
+async function copyText(text) {
+  if (navigator.clipboard?.writeText) {
+    try {
+      await navigator.clipboard.writeText(text);
+      return true;
+    } catch {
+      // Fall back to execCommand below.
+    }
+  }
+  try {
+    const scratch = document.createElement('textarea');
+    scratch.value = text;
+    scratch.setAttribute('readonly', '');
+    scratch.style.position = 'fixed';
+    scratch.style.left = '-9999px';
+    document.body.appendChild(scratch);
+    scratch.select();
+    const copied = document.execCommand('copy');
+    scratch.remove();
+    return copied;
+  } catch {
+    return false;
+  }
 }
 
 function renderGoalCard(item) {

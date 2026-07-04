@@ -37,7 +37,6 @@ export async function renderListView(root) {
       <h1>Lift Tracker</h1>
       <div class="lt-header-menu" data-header-menu>
         <div class="lt-header-actions" data-header-actions hidden>
-          ${isGuest ? '' : '<button type="button" class="lt-feedback-btn" data-feedback-btn>Feedback</button>'}
           <button type="button" class="lt-feedback-btn" data-goals-btn>Goals</button>
           <button type="button" class="lt-logout-btn" data-logout-btn>Log out</button>
           <button type="button" class="lt-help-btn" data-help-btn aria-label="Help">?</button>
@@ -125,9 +124,10 @@ export async function renderListView(root) {
 
     <ul class="lt-lift-list" data-lift-list></ul>
     <p class="lt-empty" data-list-empty hidden>No lifts yet — add your first one above.</p>
+    ${isGuest ? '' : '<button type="button" class="lt-feedback-btn lt-bottom-feedback-btn" data-feedback-btn>Feedback</button>'}
   `;
 
-  // Hamburger menu: Feedback/Help/Log out stay exactly the buttons they
+  // Hamburger menu: Goals/Help/Log out stay exactly the buttons they
   // were, just tucked behind a toggle instead of sitting in the header
   // permanently. Its open/closed state is a real sticky toggle (saved via
   // cookie below) -- it only closes when the hamburger is tapped again or

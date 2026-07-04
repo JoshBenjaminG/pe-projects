@@ -524,6 +524,15 @@ html::-webkit-scrollbar,
   }
 }
 
+.lt-bottom-feedback-btn {
+  display: block;
+  width: 100%;
+  min-height: 44px;
+  margin: 18px 0 0;
+  font-size: 0.95rem;
+  padding: 12px 16px;
+}
+
 .lt-toolbar {
   display: flex;
   /* stretch (not center) so the toggle button always matches whatever
@@ -1535,6 +1544,38 @@ html::-webkit-scrollbar,
   margin-top: 10px;
 }
 
+.lt-goal-steps {
+  margin: 10px 0;
+  padding-left: 22px;
+  color: var(--lt-text-muted);
+  font-size: 0.86rem;
+  line-height: 1.4;
+}
+
+.lt-goal-steps li {
+  margin-bottom: 8px;
+}
+
+.lt-inline-link {
+  display: inline;
+  border: none;
+  background: none;
+  color: var(--lt-gold);
+  padding: 0;
+  font: inherit;
+  font-weight: 800;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.lt-goal-helper-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+  margin: 12px 0;
+}
+
 .lt-goal-secondary-btn {
   min-height: 40px;
   border-radius: 10px;
@@ -1553,9 +1594,25 @@ html::-webkit-scrollbar,
 }
 
 .lt-goal-import-help summary {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
   color: var(--lt-text);
   font-weight: 800;
   cursor: pointer;
+}
+
+.lt-goal-import-help summary::marker {
+  content: "";
+}
+
+.lt-goal-import-help summary::-webkit-details-marker {
+  display: none;
+}
+
+.lt-goal-import-help summary strong {
+  color: var(--lt-gold);
+  white-space: nowrap;
 }
 
 .lt-goal-import-help pre {
@@ -1569,9 +1626,9 @@ html::-webkit-scrollbar,
   font-size: 0.75rem;
 }
 
-.lt-goal-import-text {
+.lt-goal-import-text,
+.lt-goal-packet-output {
   width: 100%;
-  min-height: 220px;
   border: 1px solid var(--lt-border);
   border-radius: 10px;
   background: var(--lt-surface-alt);
@@ -1580,6 +1637,15 @@ html::-webkit-scrollbar,
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
   font-size: 0.8rem;
   resize: vertical;
+}
+
+.lt-goal-import-text {
+  min-height: 220px;
+}
+
+.lt-goal-packet-output {
+  min-height: 180px;
+  margin: 0 0 12px;
 }
 
 .lt-goal-import-errors {
