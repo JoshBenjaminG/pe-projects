@@ -526,11 +526,11 @@ html::-webkit-scrollbar,
 
 .lt-bottom-feedback-btn {
   display: block;
-  width: 100%;
-  min-height: 44px;
-  margin: 18px 0 0;
-  font-size: 0.95rem;
-  padding: 12px 16px;
+  width: fit-content;
+  min-height: 34px;
+  margin: 18px auto 0;
+  font-size: 0.78rem;
+  padding: 7px 12px;
 }
 
 .lt-toolbar {
