@@ -12,7 +12,9 @@ import {
 import { calcE1RM, dailyMaxE1RM, isNewPR, sessionVolume, toDateKey } from '../math.js';
 import { renderLiftChart, destroyLiftChart } from '../charts.js';
 import { showUndoToast } from '../toast.js';
-import { goToList, refreshView } from '../state.js';
+import { goToGoals, goToList, refreshView } from '../state.js';
+import { evaluateGoalContext, loadGoalContext, syncGoalEvents } from '../goalSync.js';
+import { formatProgressPct } from '../goals.js';
 import {
   getDefaultRestSeconds,
   getLiftRestSeconds,
@@ -70,6 +72,8 @@ export async function renderDetailView(root, liftId) {
         <small>sec</small>
       </label>
     </section>
+
+    <section class="lt-lift-goals" data-lift-goals></section>
 
     <div class="lt-tabs" role="tablist">
       <button type="button" class="lt-tab" data-tab="history" role="tab" aria-selected="true">History</button>
@@ -140,6 +144,7 @@ export async function renderDetailView(root, liftId) {
   const restEnabledLabel = root.querySelector('[data-rest-enabled-label]');
   const defaultRestField = root.querySelector('[data-default-rest-field]');
   const liftRestField = root.querySelector('[data-lift-rest-field]');
+  const liftGoalsEl = root.querySelector('[data-lift-goals]');
 
   let activeSets = [];
 
@@ -212,6 +217,7 @@ export async function renderDetailView(root, liftId) {
     await loadSets();
     renderHistoryTab();
     if (!panels.details.hidden) renderDetailsTab();
+    renderLiftGoals().catch((err) => console.error('[lift-tracker]', err));
 
     const todayKey = toDateKey(now.toISOString());
     const todaysVolume = sessionVolume(activeSets.filter((s) => toDateKey(s.performed_at) === todayKey));
@@ -221,6 +227,7 @@ export async function renderDetailView(root, liftId) {
     feedback.textContent = isPR
       ? `New PR! Today's volume: ${Math.round(todaysVolume)} lb`
       : `Logged. Today's volume: ${Math.round(todaysVolume)} lb`;
+    syncGoalEvents({ showToasts: true }).catch((err) => console.error('[lift-tracker]', err));
   });
 
   // ---- History tab ----
@@ -370,4 +377,44 @@ export async function renderDetailView(root, liftId) {
   syncRestInputs();
   prefillWeightFromLastSet();
   renderHistoryTab();
+  await renderLiftGoals();
+
+  async function renderLiftGoals() {
+    const context = await loadGoalContext();
+    const { goalEvaluations } = evaluateGoalContext(context);
+    const liftGoals = goalEvaluations
+      .filter((item) => item.goal.type === 'lift_set' && item.goal.lift_id === liftId)
+      .slice(0, 3);
+    if (liftGoals.length === 0) {
+      liftGoalsEl.innerHTML = `
+        <button type="button" class="lt-lift-goals-empty" data-open-goals>
+          Set a goal for this lift
+        </button>
+      `;
+      liftGoalsEl.querySelector('[data-open-goals]').addEventListener('click', goToGoals);
+      return;
+    }
+    liftGoalsEl.innerHTML = `
+      <div class="lt-lift-goals-header">
+        <span>Goals</span>
+        <button type="button" data-open-goals>Manage</button>
+      </div>
+      ${liftGoals.map((item) => `
+        <article class="lt-lift-goal-row">
+          <span>
+            <strong>${escapeHtml(item.title)}</strong>
+            <small>${escapeHtml(item.currentLabel)} · ${escapeHtml(item.targetLabel)}</small>
+          </span>
+          <em>${item.achieved ? 'Hit' : formatProgressPct(item.progress)}</em>
+        </article>
+      `).join('')}
+    `;
+    liftGoalsEl.querySelector('[data-open-goals]').addEventListener('click', goToGoals);
+  }
+}
+
+function escapeHtml(str) {
+  return String(str ?? '').replace(/[&<>"']/g, (c) => ({
+    '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;',
+  }[c]));
 }

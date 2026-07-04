@@ -1,17 +1,13 @@
 import {
-  listLifts,
   createLift,
   createSet,
   reorderLifts,
-  listActiveSetsForLifts,
-  listWorkoutHistorySets,
-  listWorkouts,
   reorderWorkouts,
 } from '../api.js';
 import { dailyMaxE1RM, computeComposite, calcE1RM, isNewPR, sessionVolume, toDateKey, formatPct } from '../math.js';
 import { renderCompositeChart } from '../charts.js';
 import { enableDragReorder } from '../dragReorder.js';
-import { goToLift, goToHelp, goToWeight, goToComposite, goToHistory, goToKillstreak, goToWorkoutNew, goToWorkoutEdit } from '../state.js';
+import { goToLift, goToHelp, goToWeight, goToComposite, goToHistory, goToKillstreak, goToGoals, goToWorkoutNew, goToWorkoutEdit } from '../state.js';
 import { supabase } from '../supabaseClient.js';
 import { openFeedbackModal } from './feedbackModal.js';
 import { weeklyKillstreak, achievementProgress, newlyUnlockedIds } from '../killstreak.js';
@@ -21,9 +17,12 @@ import { readSeenRankIds } from '../seenAchievements.js';
 import { readStoredActiveWorkoutId, writeStoredActiveWorkoutId } from '../workoutPrefs.js';
 import { DISCOVERY_FEATURES, hasSeenDiscovery, markDiscoverySeen } from '../discovery.js';
 import { isRestTimerEnabled, primeRestTimerSound, restSecondsForLift, startRestTimer } from '../restTimer.js';
+import { evaluateGoalContext, loadGoalContext, syncGoalEvents } from '../goalSync.js';
+import { formatProgressPct } from '../goals.js';
 
 const COMPOSITE_EXPANDED_PREF_KEY = 'lt-composite-expanded';
 const HEADER_MENU_OPEN_PREF_KEY = 'lt-header-menu-open';
+const MOMENTUM_EXPANDED_PREF_KEY = 'lt-momentum-expanded';
 
 export async function renderListView(root) {
   // Guest (anonymous demo) sessions don't get the feedback button --
@@ -39,6 +38,7 @@ export async function renderListView(root) {
       <div class="lt-header-menu" data-header-menu>
         <div class="lt-header-actions" data-header-actions hidden>
           ${isGuest ? '' : '<button type="button" class="lt-feedback-btn" data-feedback-btn>Feedback</button>'}
+          <button type="button" class="lt-feedback-btn" data-goals-btn>Goals</button>
           <button type="button" class="lt-logout-btn" data-logout-btn>Log out</button>
           <button type="button" class="lt-help-btn" data-help-btn aria-label="Help">?</button>
         </div>
@@ -89,6 +89,15 @@ export async function renderListView(root) {
         </div>
       </section>
     </div>
+
+    <section class="lt-momentum" data-momentum-section>
+      <button type="button" class="lt-momentum-toggle" data-momentum-toggle aria-expanded="false">
+        <span class="lt-momentum-title">Momentum</span>
+        <span class="lt-momentum-summary" data-momentum-summary>Loading momentum...</span>
+        <span class="lt-chevron" data-momentum-chevron>&#9660;</span>
+      </button>
+      <div class="lt-momentum-body" data-momentum-body hidden></div>
+    </section>
 
     <div class="lt-action-row" data-action-row>
       <button type="button" class="lt-add-lift-toggle-btn" data-add-lift-toggle aria-pressed="false">
@@ -197,6 +206,7 @@ export async function renderListView(root) {
   if (feedbackBtn) {
     feedbackBtn.addEventListener('click', () => openFeedbackModal());
   }
+  root.querySelector('[data-goals-btn]').addEventListener('click', goToGoals);
 
   const logoutBtn = root.querySelector('[data-logout-btn]');
   logoutBtn.addEventListener('click', () => supabase.auth.signOut());
@@ -207,6 +217,10 @@ export async function renderListView(root) {
   const chevron = root.querySelector('[data-chevron]');
   const compositeSummary = root.querySelector('[data-composite-summary]');
   const compositeDiscoveryBadge = root.querySelector('[data-composite-discovery]');
+  const momentumToggle = root.querySelector('[data-momentum-toggle]');
+  const momentumBody = root.querySelector('[data-momentum-body]');
+  const momentumSummary = root.querySelector('[data-momentum-summary]');
+  const momentumChevron = root.querySelector('[data-momentum-chevron]');
 
   // Defaults to expanded (matching the markup above) if nothing's been
   // saved yet -- whichever state the user leaves it in is the state it
@@ -235,6 +249,18 @@ export async function renderListView(root) {
     const expanded = compositeToggle.getAttribute('aria-expanded') === 'true';
     applyCompositeToggleUI(!expanded);
     writeBoolPref(COMPOSITE_EXPANDED_PREF_KEY, !expanded);
+  });
+
+  function applyMomentumToggleUI(expanded) {
+    momentumToggle.setAttribute('aria-expanded', String(expanded));
+    momentumBody.hidden = !expanded;
+    momentumChevron.innerHTML = expanded ? '&#9650;' : '&#9660;';
+  }
+  applyMomentumToggleUI(readBoolPref(MOMENTUM_EXPANDED_PREF_KEY, false));
+  momentumToggle.addEventListener('click', () => {
+    const expanded = momentumToggle.getAttribute('aria-expanded') === 'true';
+    applyMomentumToggleUI(!expanded);
+    writeBoolPref(MOMENTUM_EXPANDED_PREF_KEY, !expanded);
   });
 
   const killstreakIcon = root.querySelector('[data-killstreak-icon]');
@@ -510,18 +536,15 @@ export async function renderListView(root) {
   });
 
   async function load() {
-    workouts = await listWorkouts();
+    const goalContext = await loadGoalContext();
+    workouts = goalContext.workouts;
     if (activeWorkoutId && !workouts.some((w) => w.id === activeWorkoutId)) {
       activeWorkoutId = null;
       writeStoredActiveWorkoutId(null);
     }
     renderWorkoutPills();
 
-    const [lifts, workoutHistorySets] = await Promise.all([
-      listLifts(),
-      listWorkoutHistorySets(),
-    ]);
-    currentLifts = lifts;
+    currentLifts = goalContext.lifts;
     const canCreateWorkout = currentLifts.length >= 2;
     addLiftDiscoveryBadge.hidden = currentLifts.length >= 2;
     addLiftHintEl.hidden = currentLifts.length !== 1;
@@ -536,7 +559,8 @@ export async function renderListView(root) {
       listEmptyEl.textContent = 'Start by adding your first lift above. Once it exists, you can log sets and build workouts around it.';
       addLiftHintEl.hidden = true;
       compositeSection.hidden = true;
-      renderKillstreak(workoutHistorySets);
+      renderKillstreak(goalContext.workoutHistorySets);
+      renderMomentum(evaluateGoalContext(goalContext).momentum);
       renderWeightCard({
         showDiscovery: false,
       });
@@ -547,9 +571,10 @@ export async function renderListView(root) {
       return;
     }
 
-    const sets = await listActiveSetsForLifts(currentLifts.map((l) => l.id));
+    const sets = goalContext.activeSets;
     const hasLoggedSets = sets.length > 0;
-    renderKillstreak(workoutHistorySets);
+    renderKillstreak(goalContext.workoutHistorySets);
+    renderMomentum(evaluateGoalContext(goalContext).momentum);
     renderWeightCard({
       showDiscovery: hasLoggedSets && !hasSeenDiscovery(DISCOVERY_FEATURES.weight),
     });
@@ -728,14 +753,55 @@ export async function renderListView(root) {
         feedback.hidden = false;
         feedback.classList.toggle('lt-pr', isPR);
         feedback.textContent = isPR ? `PR! ${Math.round(todaysVolume)} lb today` : `Logged · ${Math.round(todaysVolume)} lb today`;
+        syncGoalEvents({ showToasts: true }).catch((err) => console.error('[lift-tracker]', err));
       });
     });
+  }
+
+  function renderMomentum(momentum) {
+    const latest = momentum.latest;
+    const closest = momentum.closest || [];
+    const closestFirst = closest[0];
+    momentumSummary.textContent = latest
+      ? `Latest: ${latest.title}`
+      : closestFirst
+        ? `Closest: ${closestFirst.title} · ${formatProgressPct(closestFirst.progress)}`
+        : 'No goals yet';
+    momentumBody.innerHTML = `
+      <div class="lt-momentum-grid">
+        <section>
+          <h3>Recently Achieved</h3>
+          ${latest ? `
+            <article class="lt-momentum-item lt-momentum-item-achieved">
+              <span>${escapeHtml(latest.title)}</span>
+              <small>${escapeHtml(latest.message || 'Recently achieved.')}</small>
+            </article>
+          ` : '<p class="lt-empty">New goal and achievement wins will show here.</p>'}
+        </section>
+        <section>
+          <h3>Closest</h3>
+          ${closest.length ? closest.map((item) => `
+            <article class="lt-momentum-item">
+              <span>${escapeHtml(item.title)}</span>
+              <small>${escapeHtml(item.currentLabel)} · ${escapeHtml(item.detail)}</small>
+              <span class="lt-goal-progress"><span style="width: ${Math.round(item.progress * 100)}%"></span></span>
+            </article>
+          `).join('') : '<p class="lt-empty">Set goals or keep logging to surface close achievements.</p>'}
+        </section>
+      </div>
+      <button type="button" class="lt-goal-secondary-btn" data-open-goals>View goals</button>
+    `;
+    momentumBody.querySelector('[data-open-goals]').addEventListener('click', goToGoals);
   }
 
   function escapeAttr(str) {
     return String(str).replace(/[&<>"']/g, (c) => ({
       '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;',
     }[c]));
+  }
+
+  function escapeHtml(str) {
+    return escapeAttr(str);
   }
 
   await load();
