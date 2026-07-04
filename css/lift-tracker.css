@@ -1507,8 +1507,15 @@ html::-webkit-scrollbar,
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 10px;
+  background: none;
+  border: none;
   padding: 0;
   margin: 0;
+}
+
+.lt-goal-form * {
+  margin: 0;
+  padding: 0;
 }
 
 .lt-goal-form .lt-log-btn,
@@ -2049,7 +2056,8 @@ html::-webkit-scrollbar,
   color: var(--lt-text-muted);
 }
 
-.lt-field input {
+.lt-field input,
+.lt-field select {
   font-size: 1.3rem;
   padding: 12px;
   border: 1px solid var(--lt-border);
@@ -2059,6 +2067,12 @@ html::-webkit-scrollbar,
   min-width: 0;
   background: var(--lt-surface-alt);
   color: var(--lt-text);
+  font-family: inherit;
+}
+
+.lt-field select {
+  appearance: auto;
+  color-scheme: dark;
 }
 
 .lt-log-btn {
@@ -2257,6 +2271,14 @@ html::-webkit-scrollbar,
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
+  margin: 0;
+  background: none;
+  border: none;
+}
+
+.lt-edit-set-form * {
+  margin: 0;
+  padding: 0;
 }
 
 .lt-edit-set-form label {
