@@ -2075,6 +2075,18 @@ html::-webkit-scrollbar,
   color-scheme: dark;
 }
 
+.lt-field input::placeholder {
+  color: var(--lt-text-muted);
+  font-family: inherit;
+}
+
+.lt-field input:-webkit-autofill,
+.lt-field input:-webkit-autofill:hover,
+.lt-field input:-webkit-autofill:focus {
+  -webkit-text-fill-color: var(--lt-text);
+  box-shadow: 0 0 0 1000px var(--lt-surface-alt) inset;
+}
+
 .lt-log-btn {
   width: 100%;
   background: var(--lt-accent);
