@@ -453,6 +453,10 @@ html::-webkit-scrollbar,
 }
 
 .lt-feedback-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
   font-size: 0.8rem;
   font-weight: 700;
   padding: 8px 12px;
@@ -602,7 +606,7 @@ html::-webkit-scrollbar,
   display: flex;
   align-items: center;
   gap: 10px;
-  flex: 1;
+  flex: 1 1 0;
   min-width: 0;
   border: 1px solid var(--lt-border);
   border-radius: 12px;
@@ -1366,6 +1370,12 @@ html::-webkit-scrollbar,
   overflow: hidden;
 }
 
+.lt-momentum-topline {
+  flex: 1 1 0;
+  min-width: 0;
+  margin: 0;
+}
+
 .lt-momentum-toggle {
   width: 100%;
   display: flex;
@@ -1379,10 +1389,31 @@ html::-webkit-scrollbar,
   font-family: inherit;
 }
 
+.lt-momentum-topline .lt-momentum-toggle {
+  position: relative;
+  min-height: 100%;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 1px;
+  padding: 8px 28px 8px 10px;
+}
+
+.lt-momentum-topline .lt-momentum-toggle .lt-chevron {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
 .lt-momentum-title {
   font-size: 0.95rem;
   font-weight: 800;
   color: var(--lt-text);
+}
+
+.lt-momentum-topline .lt-momentum-title {
+  font-size: 0.82rem;
 }
 
 .lt-momentum-summary {
@@ -1395,8 +1426,22 @@ html::-webkit-scrollbar,
   text-overflow: ellipsis;
 }
 
+.lt-momentum-topline .lt-momentum-summary {
+  flex: none;
+  width: 100%;
+  font-size: 0.72rem;
+}
+
 .lt-momentum-body {
   padding: 0 14px 14px;
+}
+
+.lt-momentum-body-panel {
+  margin: -8px 0 16px;
+  padding: 14px;
+  border: 1px solid var(--lt-border);
+  border-radius: 12px;
+  background: var(--lt-surface);
 }
 
 .lt-momentum-grid {

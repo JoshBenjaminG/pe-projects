@@ -37,7 +37,10 @@ export async function renderListView(root) {
       <h1>Lift Tracker</h1>
       <div class="lt-header-menu" data-header-menu>
         <div class="lt-header-actions" data-header-actions hidden>
-          <button type="button" class="lt-feedback-btn" data-goals-btn>Goals</button>
+          <button type="button" class="lt-feedback-btn" data-history-btn>
+            <span>History</span>
+            <span class="lt-discovery-badge" data-history-discovery hidden aria-label="History not opened yet">!</span>
+          </button>
           <button type="button" class="lt-logout-btn" data-logout-btn>Log out</button>
           <button type="button" class="lt-help-btn" data-help-btn aria-label="Help">?</button>
         </div>
@@ -62,11 +65,16 @@ export async function renderListView(root) {
         <span class="lt-killstreak-chevron" aria-hidden="true">&#8250;</span>
       </button>
 
-      <button type="button" class="lt-history-btn" data-history-btn>
-        <span>History</span>
-        <span class="lt-discovery-badge" data-history-discovery hidden aria-label="History not opened yet">!</span>
-      </button>
+      <section class="lt-momentum lt-momentum-topline" data-momentum-section>
+        <button type="button" class="lt-momentum-toggle" data-momentum-toggle aria-expanded="false">
+          <span class="lt-momentum-title">Momentum</span>
+          <span class="lt-momentum-summary" data-momentum-summary>Loading momentum...</span>
+          <span class="lt-chevron" data-momentum-chevron>&#9660;</span>
+        </button>
+      </section>
     </div>
+
+    <div class="lt-momentum-body lt-momentum-body-panel" data-momentum-body hidden></div>
 
     <div class="lt-stats-row" data-stats-row>
       <section class="lt-weight-card" data-weight-card></section>
@@ -88,15 +96,6 @@ export async function renderListView(root) {
         </div>
       </section>
     </div>
-
-    <section class="lt-momentum" data-momentum-section>
-      <button type="button" class="lt-momentum-toggle" data-momentum-toggle aria-expanded="false">
-        <span class="lt-momentum-title">Momentum</span>
-        <span class="lt-momentum-summary" data-momentum-summary>Loading momentum...</span>
-        <span class="lt-chevron" data-momentum-chevron>&#9660;</span>
-      </button>
-      <div class="lt-momentum-body" data-momentum-body hidden></div>
-    </section>
 
     <div class="lt-action-row" data-action-row>
       <button type="button" class="lt-add-lift-toggle-btn" data-add-lift-toggle aria-pressed="false">
@@ -127,7 +126,7 @@ export async function renderListView(root) {
     ${isGuest ? '' : '<button type="button" class="lt-feedback-btn lt-bottom-feedback-btn" data-feedback-btn>Feedback</button>'}
   `;
 
-  // Hamburger menu: Goals/Help/Log out stay exactly the buttons they
+  // Hamburger menu: History/Help/Log out stay exactly the buttons they
   // were, just tucked behind a toggle instead of sitting in the header
   // permanently. Its open/closed state is a real sticky toggle (saved via
   // cookie below) -- it only closes when the hamburger is tapped again or
@@ -206,8 +205,6 @@ export async function renderListView(root) {
   if (feedbackBtn) {
     feedbackBtn.addEventListener('click', () => openFeedbackModal());
   }
-  root.querySelector('[data-goals-btn]').addEventListener('click', goToGoals);
-
   const logoutBtn = root.querySelector('[data-logout-btn]');
   logoutBtn.addEventListener('click', () => supabase.auth.signOut());
 
