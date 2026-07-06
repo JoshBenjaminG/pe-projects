@@ -2444,6 +2444,91 @@ html::-webkit-scrollbar,
 }
 
 /* ---------- Details tab ---------- */
+.lt-progression-card {
+  margin-bottom: 14px;
+  padding: 12px;
+  border: 1px solid var(--lt-border);
+  border-radius: 12px;
+  background: var(--lt-surface);
+}
+
+.lt-progression-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 6px;
+}
+
+.lt-progression-header span {
+  font-size: 0.88rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--lt-text);
+}
+
+.lt-progression-header small,
+.lt-progression-context {
+  color: var(--lt-text-muted);
+  font-size: 0.78rem;
+}
+
+.lt-progression-context {
+  margin: 0 0 10px;
+}
+
+.lt-progression-options {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.lt-progression-option {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 3px;
+  min-width: 0;
+  min-height: 86px;
+  padding: 9px;
+  border: 1px solid var(--lt-border);
+  border-radius: 10px;
+  background: var(--lt-surface-alt);
+  color: var(--lt-text);
+  text-align: left;
+  font-family: inherit;
+}
+
+.lt-progression-option:active {
+  border-color: var(--lt-accent);
+}
+
+.lt-progression-option span {
+  color: var(--lt-gold);
+  font-size: 0.72rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.lt-progression-option strong {
+  font-size: 0.92rem;
+  line-height: 1.15;
+}
+
+.lt-progression-option small {
+  color: var(--lt-text-muted);
+  font-size: 0.72rem;
+  line-height: 1.2;
+}
+
+@media (max-width: 380px) {
+  .lt-progression-options {
+    grid-template-columns: 1fr;
+  }
+}
+
 .lt-point-detail {
   text-align: center;
   font-size: 0.9rem;

@@ -15,6 +15,7 @@ import { showUndoToast } from '../toast.js';
 import { goToGoals, goToList, refreshView } from '../state.js';
 import { evaluateGoalContext, loadGoalContext, syncGoalEvents } from '../goalSync.js';
 import { formatProgressPct } from '../goals.js';
+import { buildProgressionOptions } from '../progression.js';
 import {
   getDefaultRestSeconds,
   getLiftRestSeconds,
@@ -359,10 +360,23 @@ export async function renderDetailView(root, liftId) {
       destroyLiftChart();
       return;
     }
+    const progression = buildProgressionOptions(activeSets);
     panel.innerHTML = `
+      ${renderProgressionCard(progression)}
       <div class="lt-chart-wrap"><canvas data-lift-canvas></canvas></div>
       <p class="lt-point-detail" data-point-detail hidden></p>
     `;
+    panel.querySelectorAll('[data-progression-option]').forEach((button) => {
+      button.addEventListener('click', () => {
+        const option = progression.options.find((item) => item.id === button.dataset.progressionOption);
+        if (!option) return;
+        weightInput.value = option.weight;
+        repsInput.value = option.reps;
+        feedback.hidden = true;
+        logForm.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        repsInput.focus();
+      });
+    });
     const canvas = panel.querySelector('[data-lift-canvas]');
     const detailEl = panel.querySelector('[data-point-detail]');
     renderLiftChart(canvas, series, {
@@ -411,6 +425,31 @@ export async function renderDetailView(root, liftId) {
     `;
     liftGoalsEl.querySelector('[data-open-goals]').addEventListener('click', goToGoals);
   }
+}
+
+function renderProgressionCard(progression) {
+  if (!progression.baseline) return '';
+  const volumeText = progression.context.previousVolume == null
+    ? `${Math.round(progression.context.latestVolume)} lb last session`
+    : `${Math.round(progression.context.latestVolume)} lb last session · ${Math.round(progression.context.previousVolume)} lb previous`;
+  return `
+    <section class="lt-progression-card">
+      <div class="lt-progression-header">
+        <span>Progression Options</span>
+        <small>Based on ${escapeHtml(progression.baseline.label)}</small>
+      </div>
+      <p class="lt-progression-context">${escapeHtml(volumeText)}</p>
+      <div class="lt-progression-options">
+        ${progression.options.map((option) => `
+          <button type="button" class="lt-progression-option" data-progression-option="${escapeHtml(option.id)}">
+            <span>${escapeHtml(option.label)}</span>
+            <strong>${escapeHtml(option.title)}</strong>
+            <small>${escapeHtml(option.description)}</small>
+          </button>
+        `).join('')}
+      </div>
+    </section>
+  `;
 }
 
 function escapeHtml(str) {
