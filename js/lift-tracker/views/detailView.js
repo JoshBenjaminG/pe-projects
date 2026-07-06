@@ -15,6 +15,7 @@ import { showUndoToast } from '../toast.js';
 import { goToGoals, goToList, refreshView } from '../state.js';
 import { evaluateGoalContext, loadGoalContext, syncGoalEvents } from '../goalSync.js';
 import { formatProgressPct } from '../goals.js';
+import { findLiftDictionaryEntry } from '../liftDictionary.js';
 import { buildProgressionOptions } from '../progression.js';
 import {
   getDefaultRestSeconds,
@@ -361,7 +362,9 @@ export async function renderDetailView(root, liftId) {
       return;
     }
     const progression = buildProgressionOptions(activeSets);
+    const dictionaryEntry = findLiftDictionaryEntry(lift.dictionary_key || lastSavedName);
     panel.innerHTML = `
+      ${renderLiftInfoCard(dictionaryEntry)}
       ${renderProgressionCard(progression)}
       <div class="lt-chart-wrap"><canvas data-lift-canvas></canvas></div>
       <p class="lt-point-detail" data-point-detail hidden></p>
@@ -425,6 +428,46 @@ export async function renderDetailView(root, liftId) {
     `;
     liftGoalsEl.querySelector('[data-open-goals]').addEventListener('click', goToGoals);
   }
+}
+
+function renderLiftInfoCard(entry) {
+  if (!entry) return '';
+  const primaryTags = entry.primaryMuscles.map((tag) => `<span>${escapeHtml(tag)}</span>`).join('');
+  const secondaryTags = entry.secondaryMuscles.map((tag) => `<span>${escapeHtml(tag)}</span>`).join('');
+  const equipmentTags = entry.equipment.map((tag) => `<span>${escapeHtml(tag)}</span>`).join('');
+  const patternTags = entry.movementPatterns.map((tag) => `<span>${escapeHtml(tag)}</span>`).join('');
+  return `
+    <section class="lt-lift-info-card">
+      <div class="lt-lift-info-header">
+        <span>Lift Info</span>
+        <strong>${escapeHtml(entry.name)}</strong>
+      </div>
+      <div class="lt-lift-info-group">
+        <h3>Primary</h3>
+        <div class="lt-lift-info-tags">${primaryTags || '<span>Not tagged</span>'}</div>
+      </div>
+      <div class="lt-lift-info-group">
+        <h3>Secondary</h3>
+        <div class="lt-lift-info-tags">${secondaryTags || '<span>None listed</span>'}</div>
+      </div>
+      <div class="lt-lift-info-group">
+        <h3>Equipment</h3>
+        <div class="lt-lift-info-tags">${equipmentTags || '<span>Not listed</span>'}</div>
+      </div>
+      <div class="lt-lift-info-group">
+        <h3>Pattern</h3>
+        <div class="lt-lift-info-tags">${patternTags || '<span>Not listed</span>'}</div>
+      </div>
+      ${entry.cues?.length ? `
+        <ul class="lt-lift-info-cues">
+          ${entry.cues.map((cue) => `<li>${escapeHtml(cue)}</li>`).join('')}
+        </ul>
+      ` : ''}
+      ${entry.tutorialUrl
+        ? `<a class="lt-lift-info-link" href="${escapeHtml(entry.tutorialUrl)}" target="_blank" rel="noopener noreferrer">Watch tutorial</a>`
+        : '<p class="lt-lift-info-empty">Tutorial link not set yet.</p>'}
+    </section>
+  `;
 }
 
 function renderProgressionCard(progression) {

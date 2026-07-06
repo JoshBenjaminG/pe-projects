@@ -1798,8 +1798,14 @@ html::-webkit-scrollbar,
   outline: none;
 }
 
-.lt-add-lift input {
+.lt-add-lift-field {
   flex: 1;
+  position: relative;
+  min-width: 0;
+}
+
+.lt-add-lift input {
+  width: 100%;
   min-width: 0;
   font-size: 1rem;
   padding: 12px 14px;
@@ -1819,6 +1825,48 @@ html::-webkit-scrollbar,
   border: 1px solid rgba(246, 87, 82, 0.9);
   box-shadow: none;
   outline: none;
+}
+
+.lt-lift-suggestions {
+  position: absolute;
+  z-index: 20;
+  top: calc(100% + 6px);
+  left: 0;
+  right: 0;
+  padding: 6px;
+  border: 1px solid var(--lt-border);
+  border-radius: 10px;
+  background: var(--lt-surface-alt);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.35);
+}
+
+.lt-lift-suggestions button {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  width: 100%;
+  border: none;
+  border-radius: 8px;
+  background: none;
+  color: var(--lt-text);
+  padding: 8px 9px;
+  text-align: left;
+  font-family: inherit;
+}
+
+.lt-lift-suggestions button:active {
+  background: var(--lt-surface);
+}
+
+.lt-lift-suggestions span {
+  font-size: 0.9rem;
+  font-weight: 800;
+}
+
+.lt-lift-suggestions small {
+  color: var(--lt-text-muted);
+  font-size: 0.74rem;
 }
 
 .lt-action-row {
@@ -2444,6 +2492,82 @@ html::-webkit-scrollbar,
 }
 
 /* ---------- Details tab ---------- */
+.lt-lift-info-card {
+  margin-bottom: 14px;
+  padding: 12px;
+  border: 1px solid var(--lt-border);
+  border-radius: 12px;
+  background: var(--lt-surface);
+}
+
+.lt-lift-info-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.lt-lift-info-header span,
+.lt-lift-info-group h3 {
+  font-size: 0.78rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--lt-text-muted);
+}
+
+.lt-lift-info-header strong {
+  color: var(--lt-text);
+  font-size: 0.95rem;
+}
+
+.lt-lift-info-group {
+  margin-bottom: 9px;
+}
+
+.lt-lift-info-group h3 {
+  margin: 0 0 5px;
+}
+
+.lt-lift-info-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.lt-lift-info-tags span {
+  border: 1px solid var(--lt-border);
+  border-radius: 999px;
+  background: var(--lt-surface-alt);
+  color: var(--lt-text);
+  padding: 4px 8px;
+  font-size: 0.76rem;
+  font-weight: 700;
+}
+
+.lt-lift-info-cues {
+  margin: 8px 0 0;
+  padding-left: 18px;
+  color: var(--lt-text-muted);
+  font-size: 0.82rem;
+  line-height: 1.35;
+}
+
+.lt-lift-info-link {
+  display: inline-block;
+  margin-top: 10px;
+  color: var(--lt-gold);
+  font-size: 0.85rem;
+  font-weight: 800;
+}
+
+.lt-lift-info-empty {
+  margin: 10px 0 0;
+  color: var(--lt-text-muted);
+  font-size: 0.8rem;
+}
+
 .lt-progression-card {
   margin-bottom: 14px;
   padding: 12px;

@@ -19,6 +19,7 @@ import { DISCOVERY_FEATURES, hasSeenDiscovery, markDiscoverySeen } from '../disc
 import { isRestTimerEnabled, primeRestTimerSound, restSecondsForLift, startRestTimer } from '../restTimer.js';
 import { evaluateGoalContext, loadGoalContext, syncGoalEvents } from '../goalSync.js';
 import { formatProgressPct } from '../goals.js';
+import { findLiftDictionaryEntry, searchLiftDictionary } from '../liftDictionary.js';
 
 const COMPOSITE_EXPANDED_PREF_KEY = 'lt-composite-expanded';
 const HEADER_MENU_OPEN_PREF_KEY = 'lt-header-menu-open';
@@ -110,7 +111,10 @@ export async function renderListView(root) {
     <p class="lt-empty lt-add-lift-hint" data-add-lift-hint hidden>Add one more lift to unlock workouts.</p>
 
     <form class="lt-add-lift" data-add-lift-form hidden>
-      <input type="text" name="name" placeholder="New lift name" required maxlength="60" autocomplete="off" />
+      <div class="lt-add-lift-field">
+        <input type="text" name="name" placeholder="New lift name" required maxlength="60" autocomplete="off" />
+        <div class="lt-lift-suggestions" data-lift-suggestions hidden></div>
+      </div>
       <button type="submit" aria-label="Add lift">+</button>
     </form>
 
@@ -321,11 +325,57 @@ export async function renderListView(root) {
   });
 
   const addForm = root.querySelector('[data-add-lift-form]');
+  const addLiftInput = addForm.querySelector('input[name="name"]');
+  const liftSuggestionsEl = root.querySelector('[data-lift-suggestions]');
   const addLiftToggleBtn = root.querySelector('[data-add-lift-toggle]');
   const addLiftDiscoveryBadge = root.querySelector('[data-add-lift-discovery]');
   const addLiftHintEl = root.querySelector('[data-add-lift-hint]');
   const createWorkoutBtn = root.querySelector('[data-create-workout-btn]');
   const createWorkoutDiscoveryBadge = root.querySelector('[data-create-workout-discovery]');
+  let selectedLiftDictionaryEntry = null;
+
+  function hideLiftSuggestions() {
+    liftSuggestionsEl.hidden = true;
+    liftSuggestionsEl.innerHTML = '';
+  }
+
+  function renderLiftSuggestions(query) {
+    selectedLiftDictionaryEntry = null;
+    const matches = searchLiftDictionary(query, { limit: 4 });
+    if (matches.length === 0) {
+      hideLiftSuggestions();
+      return;
+    }
+    liftSuggestionsEl.hidden = false;
+    liftSuggestionsEl.innerHTML = matches.map((entry) => `
+      <button type="button" data-lift-suggestion="${escapeAttr(entry.key)}">
+        <span>${escapeHtml(entry.name)}</span>
+        <small>${escapeHtml([...entry.primaryMuscles, ...(entry.equipment || [])].slice(0, 3).join(' · '))}</small>
+      </button>
+    `).join('');
+  }
+
+  addLiftInput.addEventListener('input', () => {
+    const query = addLiftInput.value.trim();
+    if (query.length < 2) {
+      selectedLiftDictionaryEntry = null;
+      hideLiftSuggestions();
+      return;
+    }
+    renderLiftSuggestions(query);
+  });
+
+  liftSuggestionsEl.addEventListener('click', (e) => {
+    const button = e.target.closest('[data-lift-suggestion]');
+    if (!button) return;
+    const entry = findLiftDictionaryEntry(button.dataset.liftSuggestion);
+    if (!entry) return;
+    selectedLiftDictionaryEntry = entry;
+    addLiftInput.value = entry.name;
+    hideLiftSuggestions();
+    addLiftInput.focus();
+  });
+
   // A toggle, not a one-shot reveal: tapping it again hides the form, and
   // (per the request this implements) the form otherwise just stays open
   // across repeated adds -- handy when someone new is entering several
@@ -336,7 +386,10 @@ export async function renderListView(root) {
     addLiftToggleBtn.setAttribute('aria-pressed', String(opening));
     addLiftToggleBtn.classList.toggle('lt-add-lift-toggle-active', opening);
     if (opening) {
-      addForm.querySelector('input[name="name"]').focus();
+      addLiftInput.focus();
+    } else {
+      selectedLiftDictionaryEntry = null;
+      hideLiftSuggestions();
     }
   });
   const listEl = root.querySelector('[data-lift-list]');
@@ -482,10 +535,17 @@ export async function renderListView(root) {
     const input = addForm.querySelector('input[name="name"]');
     const name = input.value.trim();
     if (!name) return;
+    const dictionaryEntry = selectedLiftDictionaryEntry && selectedLiftDictionaryEntry.name === name
+      ? selectedLiftDictionaryEntry
+      : findLiftDictionaryEntry(name);
     input.value = '';
+    selectedLiftDictionaryEntry = null;
+    hideLiftSuggestions();
     input.disabled = true;
     try {
-      await createLift(name, currentLifts.length);
+      await createLift(name, currentLifts.length, {
+        dictionary_key: dictionaryEntry?.key || null,
+      });
       await load();
     } finally {
       input.disabled = false;

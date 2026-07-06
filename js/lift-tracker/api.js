@@ -58,10 +58,10 @@ export async function getLift(id) {
   return data;
 }
 
-export async function createLift(name, sortOrder) {
+export async function createLift(name, sortOrder, fields = {}) {
   const { data, error } = await supabase
     .from('lifts')
-    .insert({ name, sort_order: sortOrder })
+    .insert({ ...fields, name, sort_order: sortOrder })
     .select()
     .single();
   if (error) throw error;
