@@ -1781,6 +1781,7 @@ html::-webkit-scrollbar,
 /* ---------- Add lift form ---------- */
 .lt-add-lift {
   display: flex;
+  align-items: flex-start;
   gap: 8px;
   margin-bottom: 16px;
   background: none;
@@ -1805,7 +1806,9 @@ html::-webkit-scrollbar,
 }
 
 .lt-add-lift input {
+  box-sizing: border-box;
   width: 100%;
+  min-height: 46px;
   min-width: 0;
   font-size: 1rem;
   padding: 12px 14px;
@@ -1913,7 +1916,7 @@ html::-webkit-scrollbar,
   color: var(--lt-accent);
 }
 
-.lt-add-lift button,
+.lt-add-lift > button,
 .lt-log-btn,
 .lt-edit-actions button,
 .lt-toast-undo {
@@ -1928,7 +1931,19 @@ html::-webkit-scrollbar,
   cursor: pointer;
 }
 
-.lt-add-lift button:active,
+.lt-add-lift > button {
+  align-self: flex-start;
+  flex: 0 0 46px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 46px;
+  height: 46px;
+  min-height: 46px;
+  padding: 0;
+}
+
+.lt-add-lift > button:active,
 .lt-log-btn:active,
 .lt-edit-actions button:active,
 .lt-toast-undo:active {
