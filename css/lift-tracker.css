@@ -1803,6 +1803,8 @@ html::-webkit-scrollbar,
   flex: 1;
   position: relative;
   min-width: 0;
+  margin: 0;
+  padding: 0;
 }
 
 .lt-add-lift input {
@@ -1810,6 +1812,7 @@ html::-webkit-scrollbar,
   width: 100%;
   min-height: 46px;
   min-width: 0;
+  margin: 0;
   font-size: 1rem;
   padding: 12px 14px;
   border: 1px solid var(--lt-border);
@@ -1940,6 +1943,7 @@ html::-webkit-scrollbar,
   width: 46px;
   height: 46px;
   min-height: 46px;
+  margin: 0;
   padding: 0;
 }
 
