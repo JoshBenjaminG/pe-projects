@@ -265,7 +265,7 @@ export function renderFoodCaloriesChart(canvas, points, { onPointClick } = {}) {
   const data = points.map((p) => Math.round(Number(p.calories)));
 
   foodCaloriesChart = new Chart(canvas, {
-    type: 'bar',
+    type: 'line',
     data: {
       labels,
       datasets: [
@@ -274,8 +274,11 @@ export function renderFoodCaloriesChart(canvas, points, { onPointClick } = {}) {
           data,
           borderColor: COLOR_GOLD,
           backgroundColor: COLOR_GOLD_SOFT,
-          borderWidth: 1,
-          borderRadius: 6,
+          fill: true,
+          tension: 0.25,
+          pointRadius: 4,
+          pointBackgroundColor: COLOR_GOLD,
+          pointHitRadius: POINT_HIT_RADIUS,
         },
       ],
     },
