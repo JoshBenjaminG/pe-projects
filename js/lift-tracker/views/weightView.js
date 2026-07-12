@@ -21,6 +21,11 @@ import {
   updateWaistEntry,
   softDeleteWaistEntry,
   restoreWaistEntry,
+  listFoodLogEntriesForWindow,
+  createFoodLogEntry,
+  updateFoodLogEntry,
+  softDeleteFoodLogEntry,
+  restoreFoodLogEntry,
 } from '../api.js';
 import { dailyWeightSeries, dailyWaistSeries, weightSummary, toDateKey } from '../math.js';
 import { renderWeightChart, destroyWeightChart, renderWaistChart, destroyWaistChart } from '../charts.js';
@@ -53,6 +58,18 @@ function formatLongDate(dateKey) {
     month: 'short',
     day: 'numeric',
   });
+}
+
+function formatCalories(n) {
+  return `${Math.round(Number(n) || 0)} cal`;
+}
+
+function startOfLocalDay(date = new Date()) {
+  return new Date(date.getFullYear(), date.getMonth(), date.getDate());
+}
+
+function nextLocalDay(date = new Date()) {
+  return new Date(date.getFullYear(), date.getMonth(), date.getDate() + 1);
 }
 
 /**
@@ -221,6 +238,7 @@ export async function renderWeightView(root) {
     <div class="lt-tabs" role="tablist">
       <button type="button" class="lt-tab" data-tab="weight" role="tab" aria-selected="true">Weight</button>
       <button type="button" class="lt-tab" data-tab="waist" role="tab" aria-selected="false">Waist</button>
+      <button type="button" class="lt-tab" data-tab="food" role="tab" aria-selected="false">Food</button>
     </div>
 
     <section data-tab-panel="weight">
@@ -268,6 +286,30 @@ export async function renderWeightView(root) {
 
       <ul class="lt-history-list" data-waist-history></ul>
     </section>
+
+    <section data-tab-panel="food" hidden>
+      <form class="lt-quick-log" data-food-form>
+        <div class="lt-quick-log-fields">
+          <label class="lt-field">
+            <span>Food</span>
+            <input type="text" name="title" maxlength="80" placeholder="Chicken bowl" required data-food-title-input />
+          </label>
+          <label class="lt-field">
+            <span>Calories</span>
+            <input type="number" inputmode="numeric" step="1" min="1" name="calories" required data-food-calories-input />
+          </label>
+        </div>
+        <button type="submit" class="lt-log-btn">Log food</button>
+      </form>
+
+      <section class="lt-food-summary" data-food-summary>
+        <span>Today</span>
+        <strong data-food-total>0 cal</strong>
+      </section>
+      <p class="lt-empty" data-food-empty hidden>No food logged today — add your first entry above.</p>
+
+      <ul class="lt-history-list" data-food-history></ul>
+    </section>
   `;
 
   root.querySelector('[data-back]').addEventListener('click', goToList);
@@ -277,6 +319,7 @@ export async function renderWeightView(root) {
   const panels = {
     weight: root.querySelector('[data-tab-panel="weight"]'),
     waist: root.querySelector('[data-tab-panel="waist"]'),
+    food: root.querySelector('[data-tab-panel="food"]'),
   };
   let activeTab = 'weight';
 
@@ -294,7 +337,8 @@ export async function renderWeightView(root) {
       // lazy-render-on-switch approach as the lift detail page's Details
       // tab.
       if (activeTab === 'weight') renderWeightChartIfVisible();
-      else ensureWaistLoaded().catch((err) => console.error('[lift-tracker]', err));
+      else if (activeTab === 'waist') ensureWaistLoaded().catch((err) => console.error('[lift-tracker]', err));
+      else ensureFoodLoaded().catch((err) => console.error('[lift-tracker]', err));
     });
   });
 
@@ -569,5 +613,148 @@ export async function renderWeightView(root) {
     await loadWaist();
   });
 
+  // ============================================================
+  // Food tab
+  // ============================================================
+  const foodForm = root.querySelector('[data-food-form]');
+  const foodTitleInput = root.querySelector('[data-food-title-input]');
+  const foodCaloriesInput = root.querySelector('[data-food-calories-input]');
+  const foodTotalEl = root.querySelector('[data-food-total]');
+  const foodEmptyEl = root.querySelector('[data-food-empty]');
+  const foodHistoryEl = root.querySelector('[data-food-history]');
+
+  let foodEntries = [];
+  let foodLoaded = false;
+  let foodLoadPromise = null;
+
+  function todayWindow() {
+    return {
+      start: startOfLocalDay(new Date()),
+      end: nextLocalDay(new Date()),
+    };
+  }
+
+  async function loadFood() {
+    const { start, end } = todayWindow();
+    foodEntries = await listFoodLogEntriesForWindow(start.toISOString(), end.toISOString());
+    foodLoaded = true;
+    renderFoodLog();
+  }
+
+  async function ensureFoodLoaded() {
+    if (foodLoaded) {
+      renderFoodLog();
+      return;
+    }
+    if (!foodLoadPromise) {
+      foodEmptyEl.hidden = false;
+      foodEmptyEl.textContent = 'Loading food log...';
+      foodLoadPromise = loadFood().finally(() => {
+        foodLoadPromise = null;
+      });
+    }
+    await foodLoadPromise;
+  }
+
+  function renderFoodLog() {
+    const total = foodEntries.reduce((sum, entry) => sum + Number(entry.calories), 0);
+    foodTotalEl.textContent = formatCalories(total);
+    foodEmptyEl.hidden = foodEntries.length > 0;
+    foodEmptyEl.textContent = 'No food logged today — add your first entry above.';
+
+    if (foodEntries.length === 0) {
+      foodHistoryEl.innerHTML = '';
+      return;
+    }
+
+    foodHistoryEl.innerHTML = foodEntries
+      .map(
+        (entry) => `
+          <li class="lt-history-row" data-food-entry-id="${entry.id}">
+            <button type="button" class="lt-history-main" data-food-edit-trigger="${entry.id}">
+              <span class="lt-history-weight">${escapeHtml(entry.title)}</span>
+              <span class="lt-history-e1rm">${formatCalories(entry.calories)}</span>
+            </button>
+          </li>
+        `
+      )
+      .join('');
+
+    foodHistoryEl.querySelectorAll('[data-food-edit-trigger]').forEach((el) => {
+      el.addEventListener('click', () => openFoodEntryEditor(el.dataset.foodEditTrigger));
+    });
+  }
+
+  function openFoodEntryEditor(entryId) {
+    const row = foodHistoryEl.querySelector(`[data-food-entry-id="${entryId}"]`);
+    const entry = foodEntries.find((item) => item.id === entryId);
+    if (!row || !entry) return;
+
+    row.innerHTML = `
+      <form class="lt-edit-set-form" data-food-edit-form>
+        <label>Food <input type="text" maxlength="80" value="${escapeAttr(entry.title)}" data-edit-food-title /></label>
+        <label>Calories <input type="number" step="1" min="1" value="${entry.calories}" data-edit-food-calories /></label>
+        <div class="lt-edit-actions">
+          <button type="submit">Save</button>
+          <button type="button" data-edit-cancel>Cancel</button>
+          <button type="button" class="lt-delete-set" data-edit-delete>Delete</button>
+        </div>
+      </form>
+    `;
+
+    row.querySelector('[data-edit-cancel]').addEventListener('click', renderFoodLog);
+
+    row.querySelector('[data-edit-delete]').addEventListener('click', async () => {
+      if (!window.confirm("Delete this food entry? You'll have a few seconds to undo it after.")) {
+        return;
+      }
+      await softDeleteFoodLogEntry(entryId);
+      await loadFood();
+      showUndoToast('Food entry deleted', {
+        onUndo: async () => {
+          await restoreFoodLogEntry(entryId);
+          await loadFood();
+        },
+      });
+    });
+
+    row.querySelector('[data-food-edit-form]').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const title = row.querySelector('[data-edit-food-title]').value.trim();
+      const calories = Number(row.querySelector('[data-edit-food-calories]').value);
+      if (!title || !Number.isInteger(calories) || calories <= 0) return;
+
+      await updateFoodLogEntry(entryId, { title, calories });
+      await loadFood();
+    });
+  }
+
+  foodForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const title = foodTitleInput.value.trim();
+    const calories = Number(foodCaloriesInput.value);
+    if (!title || !Number.isInteger(calories) || calories <= 0) return;
+
+    await createFoodLogEntry(title, calories, new Date().toISOString());
+    foodTitleInput.value = '';
+    foodCaloriesInput.value = '';
+    foodTitleInput.focus();
+
+    await loadFood();
+  });
+
   await loadWeight();
+}
+
+function escapeHtml(str) {
+  return String(str || '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
+}
+
+function escapeAttr(str) {
+  return escapeHtml(str);
 }

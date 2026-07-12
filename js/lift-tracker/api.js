@@ -459,3 +459,53 @@ export async function restoreWaistEntry(id) {
   const { error } = await supabase.from('waist_measurements').update({ deleted_at: null }).eq('id', id);
   if (error) throw error;
 }
+
+// ---------- Food log ----------
+// Lightweight daily food entries for the Weight area. Each row is a single
+// food/title + calorie amount, scoped to the signed-in user by RLS.
+
+export async function listFoodLogEntriesForWindow(startISO, endISO) {
+  const { data, error } = await supabase
+    .from('food_log_entries')
+    .select('*')
+    .is('deleted_at', null)
+    .gte('logged_at', startISO)
+    .lt('logged_at', endISO)
+    .order('logged_at', { ascending: false });
+  if (error) throw error;
+  return data;
+}
+
+export async function createFoodLogEntry(title, calories, loggedAt) {
+  const { data, error } = await supabase
+    .from('food_log_entries')
+    .insert({ title, calories, logged_at: loggedAt || new Date().toISOString() })
+    .select()
+    .single();
+  if (error) throw error;
+  return data;
+}
+
+export async function updateFoodLogEntry(id, fields) {
+  const { data, error } = await supabase
+    .from('food_log_entries')
+    .update(fields)
+    .eq('id', id)
+    .select()
+    .single();
+  if (error) throw error;
+  return data;
+}
+
+export async function softDeleteFoodLogEntry(id) {
+  const { error } = await supabase
+    .from('food_log_entries')
+    .update({ deleted_at: new Date().toISOString() })
+    .eq('id', id);
+  if (error) throw error;
+}
+
+export async function restoreFoodLogEntry(id) {
+  const { error } = await supabase.from('food_log_entries').update({ deleted_at: null }).eq('id', id);
+  if (error) throw error;
+}

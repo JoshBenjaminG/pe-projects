@@ -2282,6 +2282,31 @@ html::-webkit-scrollbar,
   font-weight: 700;
 }
 
+.lt-food-summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 12px;
+  padding: 12px 14px;
+  border: 1px solid var(--lt-border);
+  border-radius: 10px;
+  background: var(--lt-surface);
+  color: var(--lt-text-muted);
+}
+
+.lt-food-summary span {
+  font-size: 0.82rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.lt-food-summary strong {
+  color: var(--lt-text);
+  font-size: 1.2rem;
+}
+
 .lt-rest-settings {
   display: grid;
   grid-template-columns: 1fr 1fr;
