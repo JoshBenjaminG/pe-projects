@@ -13,6 +13,7 @@ let compositeChart = null;
 let liftChart = null;
 let weightChart = null;
 let waistChart = null;
+let foodCaloriesChart = null;
 
 const POINT_HIT_RADIUS = 14; // generous tap target for mobile
 
@@ -251,5 +252,63 @@ export function destroyWaistChart() {
   if (waistChart) {
     waistChart.destroy();
     waistChart = null;
+  }
+}
+
+export function renderFoodCaloriesChart(canvas, points, { onPointClick } = {}) {
+  if (foodCaloriesChart) {
+    foodCaloriesChart.destroy();
+    foodCaloriesChart = null;
+  }
+
+  const labels = points.map((p) => p.date);
+  const data = points.map((p) => Math.round(Number(p.calories)));
+
+  foodCaloriesChart = new Chart(canvas, {
+    type: 'bar',
+    data: {
+      labels,
+      datasets: [
+        {
+          label: 'Calories',
+          data,
+          borderColor: COLOR_GOLD,
+          backgroundColor: COLOR_GOLD_SOFT,
+          borderWidth: 1,
+          borderRadius: 6,
+        },
+      ],
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      interaction: { mode: 'nearest', intersect: true },
+      scales: {
+        x: {
+          ticks: { color: COLOR_TEXT_MUTED },
+          grid: { color: COLOR_GRID },
+        },
+        y: {
+          beginAtZero: true,
+          ticks: {
+            color: COLOR_TEXT_MUTED,
+            callback: (v) => `${v} cal`,
+          },
+          grid: { color: COLOR_GRID },
+        },
+      },
+      plugins: { legend: { display: false } },
+      onClick: (evt, elements) => {
+        if (elements.length && onPointClick) onPointClick(points[elements[0].index]);
+      },
+    },
+  });
+  return foodCaloriesChart;
+}
+
+export function destroyFoodCaloriesChart() {
+  if (foodCaloriesChart) {
+    foodCaloriesChart.destroy();
+    foodCaloriesChart = null;
   }
 }

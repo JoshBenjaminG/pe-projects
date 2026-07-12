@@ -487,7 +487,7 @@ html::-webkit-scrollbar,
   background: var(--lt-surface-alt);
 }
 
-/* On narrow phones the open menu (Feedback/Log out/?/hamburger) plus the
+/* On narrow phones the open menu (History/Calories/?/hamburger) plus the
    title was wide enough to overflow onto its own row (see flex-wrap on
    .lt-header above). Shrinking the buttons themselves -- rather than the
    title further -- buys back enough width to keep everything on one
@@ -528,11 +528,20 @@ html::-webkit-scrollbar,
   }
 }
 
-.lt-bottom-feedback-btn {
+.lt-bottom-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  margin: 18px auto 0;
+}
+
+.lt-bottom-feedback-btn,
+.lt-bottom-logout-btn {
   display: block;
   width: fit-content;
   min-height: 34px;
-  margin: 18px auto 0;
+  margin: 0;
   font-size: 0.78rem;
   padding: 7px 12px;
 }

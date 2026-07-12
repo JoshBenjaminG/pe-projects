@@ -7,7 +7,7 @@ import {
 import { dailyMaxE1RM, computeComposite, calcE1RM, isNewPR, sessionVolume, toDateKey, formatPct } from '../math.js';
 import { renderCompositeChart } from '../charts.js';
 import { enableDragReorder } from '../dragReorder.js';
-import { goToLift, goToHelp, goToWeight, goToComposite, goToHistory, goToKillstreak, goToGoals, goToWorkoutNew, goToWorkoutEdit } from '../state.js';
+import { goToLift, goToHelp, goToWeight, goToCalories, goToComposite, goToHistory, goToKillstreak, goToGoals, goToWorkoutNew, goToWorkoutEdit } from '../state.js';
 import { supabase } from '../supabaseClient.js';
 import { openFeedbackModal } from './feedbackModal.js';
 import { weeklyKillstreak, achievementProgress, newlyUnlockedIds } from '../killstreak.js';
@@ -42,7 +42,7 @@ export async function renderListView(root) {
             <span>History</span>
             <span class="lt-discovery-badge" data-history-discovery hidden aria-label="History not opened yet">!</span>
           </button>
-          <button type="button" class="lt-logout-btn" data-logout-btn>Log out</button>
+          <button type="button" class="lt-feedback-btn" data-calories-btn>Calories</button>
           <button type="button" class="lt-help-btn" data-help-btn aria-label="Help">?</button>
         </div>
         <button type="button" class="lt-hamburger-btn" data-hamburger-btn aria-label="Menu" aria-expanded="false">
@@ -127,7 +127,10 @@ export async function renderListView(root) {
 
     <ul class="lt-lift-list" data-lift-list></ul>
     <p class="lt-empty" data-list-empty hidden>No lifts yet — add your first one above.</p>
-    ${isGuest ? '' : '<button type="button" class="lt-feedback-btn lt-bottom-feedback-btn" data-feedback-btn>Feedback</button>'}
+    <div class="lt-bottom-actions">
+      ${isGuest ? '' : '<button type="button" class="lt-feedback-btn lt-bottom-feedback-btn" data-feedback-btn>Feedback</button>'}
+      <button type="button" class="lt-logout-btn lt-bottom-logout-btn" data-logout-btn>Log out</button>
+    </div>
   `;
 
   // Hamburger menu: History/Help/Log out stay exactly the buttons they
@@ -204,6 +207,9 @@ export async function renderListView(root) {
 
   const helpBtn = root.querySelector('[data-help-btn]');
   helpBtn.addEventListener('click', goToHelp);
+
+  const caloriesBtn = root.querySelector('[data-calories-btn]');
+  caloriesBtn.addEventListener('click', goToCalories);
 
   const feedbackBtn = root.querySelector('[data-feedback-btn]');
   if (feedbackBtn) {

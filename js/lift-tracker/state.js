@@ -18,7 +18,10 @@ export function parseRoute() {
     return { name: 'help' };
   }
   if (hash === 'weight') {
-    return { name: 'weight' };
+    return { name: 'weight', tab: 'weight' };
+  }
+  if (hash === 'weight/food') {
+    return { name: 'weight', tab: 'food' };
   }
   if (hash === 'composite') {
     return { name: 'composite' };
@@ -57,6 +60,10 @@ export function goToHelp() {
 
 export function goToWeight() {
   window.location.hash = '#/weight';
+}
+
+export function goToCalories() {
+  window.location.hash = '#/weight/food';
 }
 
 export function goToComposite() {

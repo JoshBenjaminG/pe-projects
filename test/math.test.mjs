@@ -10,6 +10,7 @@ import {
   dailyWeightSeries,
   weightSummary,
   dailyWaistSeries,
+  dailyCaloriesSeries,
   groupSetsByDate,
   countWorkoutDays,
 } from '../js/lift-tracker/math.js';
@@ -229,6 +230,23 @@ test('dailyWaistSeries: same-day correction -- most recently CREATED entry wins'
 });
 test('dailyWaistSeries: empty input -> empty output', () => {
   assert.deepEqual(dailyWaistSeries([]), []);
+});
+
+// --- dailyCaloriesSeries ---
+test('dailyCaloriesSeries: sums calories by date, sorted ascending', () => {
+  const entries = [
+    { calories: 250, logged_at: '2026-06-22T12:00:00Z' },
+    { calories: 400, logged_at: '2026-06-14T12:00:00Z' },
+    { calories: 125, logged_at: '2026-06-22T18:00:00Z' },
+  ];
+  const series = dailyCaloriesSeries(entries);
+  assert.deepEqual(series, [
+    { date: '2026-06-14', calories: 400 },
+    { date: '2026-06-22', calories: 375 },
+  ]);
+});
+test('dailyCaloriesSeries: empty input -> empty output', () => {
+  assert.deepEqual(dailyCaloriesSeries([]), []);
 });
 
 // --- groupSetsByDate ---

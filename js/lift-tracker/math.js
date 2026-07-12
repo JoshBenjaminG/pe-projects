@@ -225,3 +225,21 @@ export function dailyWaistSeries(entries) {
     .sort((a, b) => a.date.localeCompare(b.date))
     .map(({ date, waist, entryId }) => ({ date, waist, entryId }));
 }
+
+/**
+ * Aggregates food log entries into total calories per local calendar day.
+ * Unlike weight/waist measurements, multiple food entries on the same day
+ * are additive rather than corrections.
+ *
+ * @param {{calories:number|string, logged_at:string}[]} entries
+ */
+export function dailyCaloriesSeries(entries) {
+  const byDate = new Map();
+  for (const entry of entries) {
+    const dateKey = toDateKey(entry.logged_at);
+    byDate.set(dateKey, (byDate.get(dateKey) || 0) + Number(entry.calories));
+  }
+  return Array.from(byDate.entries())
+    .sort((a, b) => a[0].localeCompare(b[0]))
+    .map(([date, calories]) => ({ date, calories }));
+}

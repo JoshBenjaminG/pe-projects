@@ -5,11 +5,11 @@
 // edit-in-place in a history list) but for a single weight+date pair instead
 // of weight+reps.
 //
-// Weight and waist circumference are deliberately independent: separate
-// tables (body_weight / waist_measurements, see api.js), separate log
-// forms, separate history lists and charts on the Weight/Waist tabs below.
-// Logging one never requires the other, and a tab never shows a value for
-// a date where that specific measurement wasn't actually logged.
+// Weight, waist circumference, and food entries are deliberately independent:
+// separate tables (body_weight / waist_measurements / food_log_entries, see
+// api.js), separate log forms, separate history lists and charts on the tabs
+// below. Logging one never requires the other, and a tab never shows a value
+// for a date where that specific measurement/log wasn't actually recorded.
 import {
   listWeightEntries,
   createWeightEntry,
@@ -27,14 +27,22 @@ import {
   softDeleteFoodLogEntry,
   restoreFoodLogEntry,
 } from '../api.js';
-import { dailyWeightSeries, dailyWaistSeries, weightSummary, toDateKey } from '../math.js';
-import { renderWeightChart, destroyWeightChart, renderWaistChart, destroyWaistChart } from '../charts.js';
+import { dailyWeightSeries, dailyWaistSeries, dailyCaloriesSeries, weightSummary, toDateKey } from '../math.js';
+import {
+  renderWeightChart,
+  destroyWeightChart,
+  renderWaistChart,
+  destroyWaistChart,
+  renderFoodCaloriesChart,
+  destroyFoodCaloriesChart,
+} from '../charts.js';
 import { showUndoToast } from '../toast.js';
 import { goToList } from '../state.js';
 import { readBoolPref, writeBoolPref } from '../prefs.js';
 import { DISCOVERY_FEATURES, markDiscoverySeen } from '../discovery.js';
 
 const WEIGHT_CARD_EXPANDED_PREF_KEY = 'lt-weight-card-expanded';
+const FOOD_CHART_WINDOW_DAYS = 30;
 
 /** Trims to at most one decimal place, dropping a trailing ".0". Shared by
  * both weight (lb) and waist (in) display -- same rounding rule, the unit
@@ -226,7 +234,7 @@ export async function renderWeightSummaryCard(container, { onExpand, showDiscove
  * with its own inline edit/delete. They don't share a form or a table, so
  * neither measurement ever requires or implies the other.
  */
-export async function renderWeightView(root) {
+export async function renderWeightView(root, { initialTab = 'weight' } = {}) {
   markDiscoverySeen(DISCOVERY_FEATURES.weight);
 
   root.innerHTML = `
@@ -288,6 +296,11 @@ export async function renderWeightView(root) {
     </section>
 
     <section data-tab-panel="food" hidden>
+      <div class="lt-chart-wrap" data-food-chart-section>
+        <canvas data-food-canvas></canvas>
+      </div>
+      <p class="lt-empty" data-food-chart-empty hidden>No food entries yet — log food to see daily calories.</p>
+
       <form class="lt-quick-log" data-food-form>
         <div class="lt-quick-log-fields">
           <label class="lt-field">
@@ -323,22 +336,26 @@ export async function renderWeightView(root) {
   };
   let activeTab = 'weight';
 
+  function activateTab(nextTab) {
+    if (!panels[nextTab] || nextTab === activeTab) return;
+    activeTab = nextTab;
+    tabs.forEach((t) => t.setAttribute('aria-selected', String(t.dataset.tab === activeTab)));
+    Object.entries(panels).forEach(([key, panel]) => {
+      panel.hidden = key !== activeTab;
+    });
+    // Chart.js needs its canvas to actually be visible (non-zero size)
+    // at creation time or it sizes itself wrong -- so each tab's chart
+    // is (re-)rendered here, the moment that tab becomes visible, same
+    // lazy-render-on-switch approach as the lift detail page's Details
+    // tab.
+    if (activeTab === 'weight') renderWeightChartIfVisible();
+    else if (activeTab === 'waist') ensureWaistLoaded().catch((err) => console.error('[lift-tracker]', err));
+    else ensureFoodLoaded().catch((err) => console.error('[lift-tracker]', err));
+  }
+
   tabs.forEach((tab) => {
     tab.addEventListener('click', () => {
-      if (tab.dataset.tab === activeTab) return;
-      activeTab = tab.dataset.tab;
-      tabs.forEach((t) => t.setAttribute('aria-selected', String(t === tab)));
-      Object.entries(panels).forEach(([key, panel]) => {
-        panel.hidden = key !== activeTab;
-      });
-      // Chart.js needs its canvas to actually be visible (non-zero size)
-      // at creation time or it sizes itself wrong -- so each tab's chart
-      // is (re-)rendered here, the moment that tab becomes visible, same
-      // lazy-render-on-switch approach as the lift detail page's Details
-      // tab.
-      if (activeTab === 'weight') renderWeightChartIfVisible();
-      else if (activeTab === 'waist') ensureWaistLoaded().catch((err) => console.error('[lift-tracker]', err));
-      else ensureFoodLoaded().catch((err) => console.error('[lift-tracker]', err));
+      activateTab(tab.dataset.tab);
     });
   });
 
@@ -619,6 +636,9 @@ export async function renderWeightView(root) {
   const foodForm = root.querySelector('[data-food-form]');
   const foodTitleInput = root.querySelector('[data-food-title-input]');
   const foodCaloriesInput = root.querySelector('[data-food-calories-input]');
+  const foodChartSection = root.querySelector('[data-food-chart-section]');
+  const foodCanvas = root.querySelector('[data-food-canvas]');
+  const foodChartEmptyEl = root.querySelector('[data-food-chart-empty]');
   const foodTotalEl = root.querySelector('[data-food-total]');
   const foodEmptyEl = root.querySelector('[data-food-empty]');
   const foodHistoryEl = root.querySelector('[data-food-history]');
@@ -628,16 +648,26 @@ export async function renderWeightView(root) {
   let foodLoadPromise = null;
 
   function todayWindow() {
+    const now = new Date();
     return {
-      start: startOfLocalDay(new Date()),
-      end: nextLocalDay(new Date()),
+      start: startOfLocalDay(now),
+      end: nextLocalDay(now),
+    };
+  }
+
+  function foodChartWindow() {
+    const today = startOfLocalDay(new Date());
+    return {
+      start: new Date(today.getFullYear(), today.getMonth(), today.getDate() - (FOOD_CHART_WINDOW_DAYS - 1)),
+      end: nextLocalDay(today),
     };
   }
 
   async function loadFood() {
-    const { start, end } = todayWindow();
-    foodEntries = await listFoodLogEntriesForWindow(start.toISOString(), end.toISOString());
+    const chartWindow = foodChartWindow();
+    foodEntries = await listFoodLogEntriesForWindow(chartWindow.start.toISOString(), chartWindow.end.toISOString());
     foodLoaded = true;
+    renderFoodChartIfVisible();
     renderFoodLog();
   }
 
@@ -657,17 +687,22 @@ export async function renderWeightView(root) {
   }
 
   function renderFoodLog() {
-    const total = foodEntries.reduce((sum, entry) => sum + Number(entry.calories), 0);
+    const { start, end } = todayWindow();
+    const todayEntries = foodEntries.filter((entry) => {
+      const loggedAt = new Date(entry.logged_at);
+      return loggedAt >= start && loggedAt < end;
+    });
+    const total = todayEntries.reduce((sum, entry) => sum + Number(entry.calories), 0);
     foodTotalEl.textContent = formatCalories(total);
-    foodEmptyEl.hidden = foodEntries.length > 0;
+    foodEmptyEl.hidden = todayEntries.length > 0;
     foodEmptyEl.textContent = 'No food logged today — add your first entry above.';
 
-    if (foodEntries.length === 0) {
+    if (todayEntries.length === 0) {
       foodHistoryEl.innerHTML = '';
       return;
     }
 
-    foodHistoryEl.innerHTML = foodEntries
+    foodHistoryEl.innerHTML = todayEntries
       .map(
         (entry) => `
           <li class="lt-history-row" data-food-entry-id="${entry.id}">
@@ -683,6 +718,19 @@ export async function renderWeightView(root) {
     foodHistoryEl.querySelectorAll('[data-food-edit-trigger]').forEach((el) => {
       el.addEventListener('click', () => openFoodEntryEditor(el.dataset.foodEditTrigger));
     });
+  }
+
+  function renderFoodChartIfVisible() {
+    const series = dailyCaloriesSeries(foodEntries);
+    if (series.length === 0) {
+      foodChartSection.hidden = true;
+      foodChartEmptyEl.hidden = false;
+      destroyFoodCaloriesChart();
+      return;
+    }
+    foodChartSection.hidden = false;
+    foodChartEmptyEl.hidden = true;
+    if (!panels.food.hidden) renderFoodCaloriesChart(foodCanvas, series);
   }
 
   function openFoodEntryEditor(entryId) {
@@ -743,6 +791,7 @@ export async function renderWeightView(root) {
     await loadFood();
   });
 
+  activateTab(initialTab);
   await loadWeight();
 }
 

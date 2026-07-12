@@ -56,7 +56,7 @@ async function render() {
     } else if (route.name === 'help') {
       await renderHelpView(root);
     } else if (route.name === 'weight') {
-      await renderWeightView(root);
+      await renderWeightView(root, { initialTab: route.tab });
     } else if (route.name === 'composite') {
       await renderCompositeView(root);
     } else if (route.name === 'history') {
