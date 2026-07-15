@@ -20,6 +20,17 @@ function formatMeasurement(n) {
   return rounded % 1 === 0 ? String(rounded) : rounded.toFixed(1);
 }
 
+function normalizeWaistExportEntries(entries) {
+  return entries
+    .map((entry) => ({
+      date: entry.date || toDateKey(entry.logged_at),
+      waist: Number(entry.waist ?? entry.waist_circumference),
+      sortAt: entry.logged_at || entry.date,
+    }))
+    .filter((entry) => Number.isFinite(entry.waist) && entry.date)
+    .sort((a, b) => new Date(a.sortAt) - new Date(b.sortAt));
+}
+
 /**
  * Builds the plain-text progress summary for the export panel.
  *
@@ -34,9 +45,12 @@ function formatMeasurement(n) {
  *   already filtered to whatever window applies -- omitted entirely from the
  *   output when empty, so callers with no weight data don't need a special
  *   case.
- * @param {{date:string, waist:number}[]} waistSeries - same shape/rules as
- *   weightSeries above (e.g. via math.js's dailyWaistSeries), just for waist
- *   circumference -- also omitted entirely when empty.
+ * @param {{date?:string, waist?:number, waist_circumference?:number|string, logged_at?:string}[]} waistSeries -
+ *   waist entries for export. Unlike the chart series, exports preserve every
+ *   entry, including multiple measurements on the same day.
+ * @param {{date:string, calories:number}[]} calorieSeries - one entry per
+ *   day, already summed/sorted ascending (e.g. via math.js's
+ *   dailyCaloriesSeries), omitted entirely when empty.
  */
 export function buildExportText(
   lifts,
@@ -44,7 +58,8 @@ export function buildExportText(
   now = new Date(),
   windowLabel = `last ${EXPORT_WINDOW_DAYS} days`,
   weightSeries = [],
-  waistSeries = []
+  waistSeries = [],
+  calorieSeries = []
 ) {
   const todayLabel = toDateKey(now.toISOString());
   const lines = [`Lift Tracker — ${windowLabel} (as of ${todayLabel})`, ''];
@@ -94,18 +109,30 @@ export function buildExportText(
     lines.push('');
   }
 
-  if (waistSeries.length > 0) {
+  const waistExportEntries = normalizeWaistExportEntries(waistSeries);
+  if (waistExportEntries.length > 0) {
     lines.push('Waist');
-    for (const entry of waistSeries) {
+    for (const entry of waistExportEntries) {
       lines.push(`  ${entry.date}: ${formatMeasurement(entry.waist)} in`);
     }
-    const start = waistSeries[0].waist;
-    const current = waistSeries[waistSeries.length - 1].waist;
+    const start = waistExportEntries[0].waist;
+    const current = waistExportEntries[waistExportEntries.length - 1].waist;
     const change = current - start;
     const sign = change > 0 ? '+' : '';
     lines.push(
       `  Start: ${formatMeasurement(start)} in | Current: ${formatMeasurement(current)} in | Change: ${sign}${formatMeasurement(change)} in`
     );
+    lines.push('');
+  }
+
+  if (calorieSeries.length > 0) {
+    lines.push('Calories');
+    for (const entry of calorieSeries) {
+      lines.push(`  ${entry.date}: ${Math.round(Number(entry.calories))} cal`);
+    }
+    const total = calorieSeries.reduce((sum, entry) => sum + Number(entry.calories), 0);
+    const average = total / calorieSeries.length;
+    lines.push(`  Days logged: ${calorieSeries.length} | Total: ${Math.round(total)} cal | Avg/day: ${Math.round(average)} cal`);
     lines.push('');
   }
 

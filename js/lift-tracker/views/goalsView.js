@@ -1,6 +1,7 @@
 import {
   createGoal,
   createGoals,
+  listFoodLogEntriesForWindow,
   listLifts,
   listRecentSetsForLifts,
   listWaistEntries,
@@ -10,7 +11,7 @@ import {
 import { buildExportText, exportWindowStart } from '../export.js';
 import { evaluateGoalContext, loadGoalContext, syncGoalEvents } from '../goalSync.js';
 import { GOAL_TYPES, formatProgressPct, parseGoalImport } from '../goals.js';
-import { dailyWaistSeries, dailyWeightSeries } from '../math.js';
+import { dailyCaloriesSeries, dailyWeightSeries } from '../math.js';
 import { goToHelp, goToList } from '../state.js';
 
 const IMPORT_EXAMPLE = `goal_format: lift_tracker_goals_v1
@@ -294,13 +295,16 @@ async function buildGoalLlmPacket() {
   const recentWeightEntries = weightEntries.filter((entry) => new Date(entry.logged_at) >= new Date(since));
   const waistEntries = await listWaistEntries();
   const recentWaistEntries = waistEntries.filter((entry) => new Date(entry.logged_at) >= new Date(since));
+  const now = new Date();
+  const foodEntries = await listFoodLogEntriesForWindow(since, now.toISOString());
   const history = buildExportText(
     lifts,
     setsByLift,
-    new Date(),
+    now,
     undefined,
     dailyWeightSeries(recentWeightEntries),
-    dailyWaistSeries(recentWaistEntries)
+    recentWaistEntries,
+    dailyCaloriesSeries(foodEntries)
   );
 
   return [

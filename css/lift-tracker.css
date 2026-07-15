@@ -2471,6 +2471,19 @@ html::-webkit-scrollbar,
   border-radius: 10px;
 }
 
+.lt-food-day-row-active {
+  border-color: rgba(242, 177, 52, 0.55);
+}
+
+.lt-food-day-row-active .lt-history-main {
+  color: var(--lt-gold);
+  font-weight: 800;
+}
+
+.lt-food-entry-row {
+  margin-left: 14px;
+}
+
 .lt-history-main {
   width: 100%;
   display: flex;

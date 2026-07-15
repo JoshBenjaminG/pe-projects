@@ -2,9 +2,16 @@
 // back button — same single-PHP-page hash-routing pattern as the other
 // views (see state.js), just with nothing to fetch.
 import { goToList } from '../state.js';
-import { listLifts, listActiveSetsForLifts, listRecentSetsForLifts, listWeightEntries, listWaistEntries } from '../api.js';
+import {
+  listFoodLogEntriesForWindow,
+  listLifts,
+  listActiveSetsForLifts,
+  listRecentSetsForLifts,
+  listWeightEntries,
+  listWaistEntries,
+} from '../api.js';
 import { buildExportText, exportWindowStart } from '../export.js';
-import { dailyWeightSeries, dailyWaistSeries } from '../math.js';
+import { dailyCaloriesSeries, dailyWeightSeries } from '../math.js';
 
 const SECTIONS = [
   {
@@ -32,8 +39,8 @@ const SECTIONS = [
     title: 'Export progress',
     body: `Tap "Export progress (last 60 days)" below to expand a plain-text
       summary of every set you've logged in the last 60 days, grouped by
-      lift, with volume and estimated 1-rep max, plus your body weight
-      history over the same window. Tap "Copy to clipboard" to grab it —
+      lift, with volume and estimated 1-rep max, plus your body weight,
+      waist, and calorie history over the same window. Tap "Copy to clipboard" to grab it —
       useful for pasting into Claude or anywhere else you want feedback on
       your progress. Need older data? Use "Export full history" right below
       instead.`,
@@ -191,8 +198,10 @@ export async function renderHelpView(root) {
       const weightSeries = dailyWeightSeries(recentWeightEntries);
       const waistEntries = await listWaistEntries();
       const recentWaistEntries = waistEntries.filter((e) => new Date(e.logged_at) >= new Date(since));
-      const waistSeries = dailyWaistSeries(recentWaistEntries);
-      exportTextarea.value = buildExportText(lifts, setsByLift, new Date(), undefined, weightSeries, waistSeries);
+      const now = new Date();
+      const foodEntries = await listFoodLogEntriesForWindow(since, now.toISOString());
+      const calorieSeries = dailyCaloriesSeries(foodEntries);
+      exportTextarea.value = buildExportText(lifts, setsByLift, now, undefined, weightSeries, recentWaistEntries, calorieSeries);
       exportStatus.hidden = true;
     } finally {
       exportToggle.disabled = false;
@@ -250,8 +259,9 @@ export async function renderHelpView(root) {
       const weightEntries = await listWeightEntries();
       const weightSeries = dailyWeightSeries(weightEntries);
       const waistEntries = await listWaistEntries();
-      const waistSeries = dailyWaistSeries(waistEntries);
-      fullExportTextarea.value = buildExportText(lifts, setsByLift, new Date(), 'all-time', weightSeries, waistSeries);
+      const foodEntries = await listFoodLogEntriesForWindow('1970-01-01T00:00:00.000Z', new Date().toISOString());
+      const calorieSeries = dailyCaloriesSeries(foodEntries);
+      fullExportTextarea.value = buildExportText(lifts, setsByLift, new Date(), 'all-time', weightSeries, waistEntries, calorieSeries);
       fullExportStatus.hidden = true;
     } finally {
       fullExportToggle.disabled = false;

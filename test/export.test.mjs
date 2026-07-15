@@ -259,4 +259,44 @@ test('buildExportText: single waist entry -> change is exactly 0, no sign', () =
   assert.ok(text.endsWith('Start: 35 in | Current: 35 in | Change: 0 in'));
 });
 
+test('buildExportText: raw waist entries preserve multiple measurements on the same day', () => {
+  const waistEntries = [
+    { waist_circumference: 35, logged_at: '2026-06-01T08:00:00Z' },
+    { waist_circumference: 34.5, logged_at: '2026-06-01T20:00:00Z' },
+    { waist_circumference: 34, logged_at: '2026-06-02T08:00:00Z' },
+  ];
+  const text = buildExportText([], new Map(), new Date('2026-06-19T12:00:00Z'), undefined, [], waistEntries);
+  const expected = [
+    'Lift Tracker — last 60 days (as of 2026-06-19)',
+    '',
+    'No sets logged in this period.',
+    '',
+    'Waist',
+    '  2026-06-01: 35 in',
+    '  2026-06-01: 34.5 in',
+    '  2026-06-02: 34 in',
+    '  Start: 35 in | Current: 34 in | Change: -1 in',
+  ].join('\n');
+  assert.equal(text, expected);
+});
+
+test('buildExportText: calorieSeries appends daily calories and summary totals', () => {
+  const calorieSeries = [
+    { date: '2026-06-17', calories: 2100 },
+    { date: '2026-06-18', calories: 2301.4 },
+  ];
+  const text = buildExportText([], new Map(), new Date('2026-06-19T12:00:00Z'), undefined, [], [], calorieSeries);
+  const expected = [
+    'Lift Tracker — last 60 days (as of 2026-06-19)',
+    '',
+    'No sets logged in this period.',
+    '',
+    'Calories',
+    '  2026-06-17: 2100 cal',
+    '  2026-06-18: 2301 cal',
+    '  Days logged: 2 | Total: 4401 cal | Avg/day: 2201 cal',
+  ].join('\n');
+  assert.equal(text, expected);
+});
+
 console.log(`\n${passed} tests passed`);

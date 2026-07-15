@@ -42,7 +42,7 @@ import { readBoolPref, writeBoolPref } from '../prefs.js';
 import { DISCOVERY_FEATURES, markDiscoverySeen } from '../discovery.js';
 
 const WEIGHT_CARD_EXPANDED_PREF_KEY = 'lt-weight-card-expanded';
-const FOOD_CHART_WINDOW_DAYS = 30;
+const FOOD_HISTORY_START_ISO = '1970-01-01T00:00:00.000Z';
 
 /** Trims to at most one decimal place, dropping a trailing ".0". Shared by
  * both weight (lb) and waist (in) display -- same rounding rule, the unit
@@ -68,16 +68,14 @@ function formatLongDate(dateKey) {
   });
 }
 
+function formatFoodDayLabel(dateKey) {
+  const todayKey = toDateKey(new Date().toISOString());
+  if (dateKey === todayKey) return 'Today';
+  return formatLongDate(dateKey);
+}
+
 function formatCalories(n) {
   return `${Math.round(Number(n) || 0)} cal`;
-}
-
-function startOfLocalDay(date = new Date()) {
-  return new Date(date.getFullYear(), date.getMonth(), date.getDate());
-}
-
-function nextLocalDay(date = new Date()) {
-  return new Date(date.getFullYear(), date.getMonth(), date.getDate() + 1);
 }
 
 /**
@@ -646,26 +644,10 @@ export async function renderWeightView(root, { initialTab = 'weight' } = {}) {
   let foodEntries = [];
   let foodLoaded = false;
   let foodLoadPromise = null;
-
-  function todayWindow() {
-    const now = new Date();
-    return {
-      start: startOfLocalDay(now),
-      end: nextLocalDay(now),
-    };
-  }
-
-  function foodChartWindow() {
-    const today = startOfLocalDay(new Date());
-    return {
-      start: new Date(today.getFullYear(), today.getMonth(), today.getDate() - (FOOD_CHART_WINDOW_DAYS - 1)),
-      end: nextLocalDay(today),
-    };
-  }
+  let selectedFoodDateKey = toDateKey(new Date().toISOString());
 
   async function loadFood() {
-    const chartWindow = foodChartWindow();
-    foodEntries = await listFoodLogEntriesForWindow(chartWindow.start.toISOString(), chartWindow.end.toISOString());
+    foodEntries = await listFoodLogEntriesForWindow(FOOD_HISTORY_START_ISO, new Date().toISOString());
     foodLoaded = true;
     renderFoodChartIfVisible();
     renderFoodLog();
@@ -687,33 +669,67 @@ export async function renderWeightView(root, { initialTab = 'weight' } = {}) {
   }
 
   function renderFoodLog() {
-    const { start, end } = todayWindow();
-    const todayEntries = foodEntries.filter((entry) => {
-      const loggedAt = new Date(entry.logged_at);
-      return loggedAt >= start && loggedAt < end;
-    });
-    const total = todayEntries.reduce((sum, entry) => sum + Number(entry.calories), 0);
-    foodTotalEl.textContent = formatCalories(total);
-    foodEmptyEl.hidden = todayEntries.length > 0;
-    foodEmptyEl.textContent = 'No food logged today — add your first entry above.';
+    const series = dailyCaloriesSeries(foodEntries);
+    const totalsByDate = new Map(series.map((entry) => [entry.date, entry.calories]));
+    if (series.length > 0 && !totalsByDate.has(selectedFoodDateKey)) {
+      selectedFoodDateKey = series[series.length - 1].date;
+    }
+    const selectedEntries = foodEntries
+      .filter((entry) => toDateKey(entry.logged_at) === selectedFoodDateKey)
+      .sort((a, b) => new Date(b.logged_at) - new Date(a.logged_at));
+    const selectedLabel = formatFoodDayLabel(selectedFoodDateKey);
+    const total = totalsByDate.get(selectedFoodDateKey) || 0;
 
-    if (todayEntries.length === 0) {
+    root.querySelector('[data-food-summary] span').textContent = selectedLabel;
+    foodTotalEl.textContent = formatCalories(total);
+    foodEmptyEl.hidden = selectedEntries.length > 0 || series.length === 0;
+    foodEmptyEl.textContent = `No food logged for ${selectedLabel.toLowerCase()}.`;
+
+    if (series.length === 0) {
       foodHistoryEl.innerHTML = '';
+      foodEmptyEl.hidden = false;
+      foodEmptyEl.textContent = 'No food logged yet — add your first entry above.';
       return;
     }
 
-    foodHistoryEl.innerHTML = todayEntries
-      .map(
-        (entry) => `
-          <li class="lt-history-row" data-food-entry-id="${entry.id}">
-            <button type="button" class="lt-history-main" data-food-edit-trigger="${entry.id}">
-              <span class="lt-history-weight">${escapeHtml(entry.title)}</span>
-              <span class="lt-history-e1rm">${formatCalories(entry.calories)}</span>
+    const days = series.slice().sort((a, b) => b.date.localeCompare(a.date));
+    foodHistoryEl.innerHTML = days
+      .map((day) => {
+        const expanded = day.date === selectedFoodDateKey;
+        const entriesMarkup = expanded
+          ? selectedEntries
+              .map(
+                (entry) => `
+                  <li class="lt-history-row lt-food-entry-row" data-food-entry-id="${entry.id}">
+                    <button type="button" class="lt-history-main" data-food-edit-trigger="${entry.id}">
+                      <span class="lt-history-weight">${escapeHtml(entry.title)}</span>
+                      <span class="lt-history-e1rm">${formatCalories(entry.calories)}</span>
+                    </button>
+                  </li>
+                `
+              )
+              .join('')
+          : '';
+
+        return `
+          <li class="lt-history-row lt-food-day-row${expanded ? ' lt-food-day-row-active' : ''}" data-food-day-row="${day.date}">
+            <button type="button" class="lt-history-main" data-food-day="${day.date}" aria-expanded="${expanded}">
+              <span class="lt-history-weight">${formatFoodDayLabel(day.date)}</span>
+              <span class="lt-history-e1rm">${formatCalories(day.calories)}</span>
             </button>
           </li>
-        `
-      )
+          ${entriesMarkup}
+        `;
+      })
       .join('');
+
+    foodHistoryEl.querySelectorAll('[data-food-day]').forEach((el) => {
+      el.addEventListener('click', () => {
+        selectedFoodDateKey = el.dataset.foodDay;
+        renderFoodLog();
+        renderFoodChartIfVisible();
+      });
+    });
 
     foodHistoryEl.querySelectorAll('[data-food-edit-trigger]').forEach((el) => {
       el.addEventListener('click', () => openFoodEntryEditor(el.dataset.foodEditTrigger));
@@ -730,7 +746,15 @@ export async function renderWeightView(root, { initialTab = 'weight' } = {}) {
     }
     foodChartSection.hidden = false;
     foodChartEmptyEl.hidden = true;
-    if (!panels.food.hidden) renderFoodCaloriesChart(foodCanvas, series);
+    if (!panels.food.hidden) {
+      renderFoodCaloriesChart(foodCanvas, series, {
+        onPointClick: (point) => {
+          selectedFoodDateKey = point.date;
+          renderFoodLog();
+          renderFoodChartIfVisible();
+        },
+      });
+    }
   }
 
   function openFoodEntryEditor(entryId) {
@@ -783,7 +807,9 @@ export async function renderWeightView(root, { initialTab = 'weight' } = {}) {
     const calories = Number(foodCaloriesInput.value);
     if (!title || !Number.isInteger(calories) || calories <= 0) return;
 
-    await createFoodLogEntry(title, calories, new Date().toISOString());
+    const loggedAt = new Date();
+    await createFoodLogEntry(title, calories, loggedAt.toISOString());
+    selectedFoodDateKey = toDateKey(loggedAt.toISOString());
     foodTitleInput.value = '';
     foodCaloriesInput.value = '';
     foodTitleInput.focus();
