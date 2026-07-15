@@ -693,24 +693,9 @@ export async function renderWeightView(root, { initialTab = 'weight' } = {}) {
     }
 
     const days = series.slice().sort((a, b) => b.date.localeCompare(a.date));
-    foodHistoryEl.innerHTML = days
+    const dayRowsMarkup = days
       .map((day) => {
         const expanded = day.date === selectedFoodDateKey;
-        const entriesMarkup = expanded
-          ? selectedEntries
-              .map(
-                (entry) => `
-                  <li class="lt-history-row lt-food-entry-row" data-food-entry-id="${entry.id}">
-                    <button type="button" class="lt-history-main" data-food-edit-trigger="${entry.id}">
-                      <span class="lt-history-weight">${escapeHtml(entry.title)}</span>
-                      <span class="lt-history-e1rm">${formatCalories(entry.calories)}</span>
-                    </button>
-                  </li>
-                `
-              )
-              .join('')
-          : '';
-
         return `
           <li class="lt-history-row lt-food-day-row${expanded ? ' lt-food-day-row-active' : ''}" data-food-day-row="${day.date}">
             <button type="button" class="lt-history-main" data-food-day="${day.date}" aria-expanded="${expanded}">
@@ -718,10 +703,26 @@ export async function renderWeightView(root, { initialTab = 'weight' } = {}) {
               <span class="lt-history-e1rm">${formatCalories(day.calories)}</span>
             </button>
           </li>
-          ${entriesMarkup}
         `;
       })
       .join('');
+    const selectedEntriesMarkup = selectedEntries
+      .map(
+        (entry) => `
+          <li class="lt-history-row lt-food-entry-row" data-food-entry-id="${entry.id}">
+            <button type="button" class="lt-history-main" data-food-edit-trigger="${entry.id}">
+              <span class="lt-history-weight">${escapeHtml(entry.title)}</span>
+              <span class="lt-history-e1rm">${formatCalories(entry.calories)}</span>
+            </button>
+          </li>
+        `
+      )
+      .join('');
+    foodHistoryEl.innerHTML = `
+      ${dayRowsMarkup}
+      <li class="lt-food-entry-heading" aria-hidden="true">${escapeHtml(selectedLabel)} entries</li>
+      ${selectedEntriesMarkup}
+    `;
 
     foodHistoryEl.querySelectorAll('[data-food-day]').forEach((el) => {
       el.addEventListener('click', () => {
