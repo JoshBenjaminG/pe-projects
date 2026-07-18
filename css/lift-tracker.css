@@ -1365,9 +1365,11 @@ html::-webkit-scrollbar,
   height: 200px;
 }
 
-/* ---------- Momentum / Goals ---------- */
+/* ---------- Momentum / PRs ---------- */
 .lt-momentum,
+.lt-prs-section,
 .lt-goals-section,
+.lt-lift-prs,
 .lt-lift-goals {
   border: 1px solid var(--lt-border);
   border-radius: 12px;
@@ -1461,6 +1463,7 @@ html::-webkit-scrollbar,
 }
 
 .lt-momentum-grid h3,
+.lt-prs-heading,
 .lt-goals-heading {
   margin: 0 0 8px;
   font-size: 0.82rem;
@@ -1471,7 +1474,9 @@ html::-webkit-scrollbar,
 }
 
 .lt-momentum-item,
+.lt-pr-card,
 .lt-goal-card,
+.lt-lift-pr-row,
 .lt-lift-goal-row {
   border: 1px solid var(--lt-border);
   border-radius: 10px;
@@ -1491,6 +1496,7 @@ html::-webkit-scrollbar,
 }
 
 .lt-momentum-item span,
+.lt-pr-card-title,
 .lt-goal-card-title {
   font-size: 0.9rem;
   font-weight: 800;
@@ -1498,15 +1504,60 @@ html::-webkit-scrollbar,
 }
 
 .lt-momentum-item small,
+.lt-pr-card-sub,
 .lt-goal-card-sub,
+.lt-lift-pr-row small,
 .lt-lift-goal-row small {
   font-size: 0.78rem;
   color: var(--lt-text-muted);
 }
 
+.lt-prs-section,
 .lt-goals-section {
   padding: 14px;
   margin-bottom: 16px;
+}
+
+.lt-pr-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.lt-pr-card {
+  display: flex;
+  align-items: stretch;
+  overflow: hidden;
+}
+
+.lt-pr-card-main {
+  flex: 1;
+  min-width: 0;
+  border: none;
+  background: none;
+  color: inherit;
+  text-align: left;
+  font: inherit;
+  padding: 11px 12px;
+}
+
+.lt-pr-card-title,
+.lt-pr-card-sub {
+  display: block;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.lt-pr-card-side {
+  display: flex;
+  align-items: center;
+  padding: 0 12px;
+  border-left: 1px solid var(--lt-border);
+  color: var(--lt-gold);
+  font-weight: 800;
+  white-space: nowrap;
 }
 
 .lt-goal-card {
@@ -1551,6 +1602,7 @@ html::-webkit-scrollbar,
   line-height: 1;
 }
 
+.lt-progress-bar,
 .lt-goal-progress {
   display: block;
   height: 6px;
@@ -1559,6 +1611,7 @@ html::-webkit-scrollbar,
   overflow: hidden;
 }
 
+.lt-progress-bar span,
 .lt-goal-progress span {
   display: block;
   height: 100%;
@@ -1630,6 +1683,7 @@ html::-webkit-scrollbar,
   margin: 12px 0;
 }
 
+.lt-secondary-btn,
 .lt-goal-secondary-btn {
   min-height: 40px;
   border-radius: 10px;
@@ -1727,11 +1781,13 @@ html::-webkit-scrollbar,
   color: var(--lt-text-muted);
 }
 
+.lt-lift-prs,
 .lt-lift-goals {
   margin: 0 0 14px;
   padding: 12px;
 }
 
+.lt-lift-prs-header,
 .lt-lift-goals-header {
   display: flex;
   justify-content: space-between;
@@ -1758,6 +1814,13 @@ html::-webkit-scrollbar,
   min-height: 34px;
 }
 
+.lt-lift-prs-empty {
+  margin: 0;
+  color: var(--lt-text-muted);
+  font-size: 0.82rem;
+}
+
+.lt-lift-pr-row,
 .lt-lift-goal-row {
   display: flex;
   justify-content: space-between;
@@ -1766,12 +1829,14 @@ html::-webkit-scrollbar,
   margin-top: 7px;
 }
 
+.lt-lift-pr-row span,
 .lt-lift-goal-row span {
   display: flex;
   flex-direction: column;
   min-width: 0;
 }
 
+.lt-lift-pr-row em,
 .lt-lift-goal-row em {
   flex-shrink: 0;
   color: var(--lt-gold);

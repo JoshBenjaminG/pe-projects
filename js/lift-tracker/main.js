@@ -7,7 +7,7 @@ import { renderWeightView } from './views/weightView.js';
 import { renderCompositeView } from './views/compositeView.js';
 import { renderHistoryView } from './views/historyView.js';
 import { renderKillstreakView } from './views/killstreakView.js';
-import { renderGoalsView } from './views/goalsView.js';
+import { renderPRsView } from './views/prsView.js';
 import { renderWorkoutFormView } from './views/workoutFormView.js';
 import { renderAuthView } from './views/authView.js';
 import { isDemoLink, startGuestSession } from './demo.js';
@@ -63,8 +63,8 @@ async function render() {
       await renderHistoryView(root);
     } else if (route.name === 'killstreak') {
       await renderKillstreakView(root);
-    } else if (route.name === 'goals') {
-      await renderGoalsView(root);
+    } else if (route.name === 'prs') {
+      await renderPRsView(root);
     } else if (route.name === 'workout-new') {
       await renderWorkoutFormView(root, { mode: 'create' });
     } else if (route.name === 'workout-edit') {

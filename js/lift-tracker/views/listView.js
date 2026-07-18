@@ -4,10 +4,10 @@ import {
   reorderLifts,
   reorderWorkouts,
 } from '../api.js';
-import { dailyMaxE1RM, computeComposite, calcE1RM, isNewPR, sessionVolume, toDateKey, formatPct } from '../math.js';
+import { dailyMaxE1RM, computeComposite, calcE1RM, isNewPR, recentPRs, sessionVolume, toDateKey, formatPct } from '../math.js';
 import { renderCompositeChart } from '../charts.js';
 import { enableDragReorder } from '../dragReorder.js';
-import { goToLift, goToHelp, goToWeight, goToCalories, goToComposite, goToHistory, goToKillstreak, goToGoals, goToWorkoutNew, goToWorkoutEdit } from '../state.js';
+import { goToLift, goToHelp, goToWeight, goToCalories, goToComposite, goToHistory, goToKillstreak, goToPRs, goToWorkoutNew, goToWorkoutEdit } from '../state.js';
 import { supabase } from '../supabaseClient.js';
 import { openFeedbackModal } from './feedbackModal.js';
 import { weeklyKillstreak, achievementProgress, newlyUnlockedIds } from '../killstreak.js';
@@ -17,8 +17,8 @@ import { readSeenRankIds } from '../seenAchievements.js';
 import { readStoredActiveWorkoutId, writeStoredActiveWorkoutId } from '../workoutPrefs.js';
 import { DISCOVERY_FEATURES, hasSeenDiscovery, markDiscoverySeen } from '../discovery.js';
 import { isRestTimerEnabled, primeRestTimerSound, restSecondsForLift, startRestTimer } from '../restTimer.js';
-import { evaluateGoalContext, loadGoalContext, syncGoalEvents } from '../goalSync.js';
-import { formatProgressPct } from '../goals.js';
+import { evaluateTrackerContext, loadTrackerContext } from '../trackerContext.js';
+import { formatProgressPct } from '../achievementMomentum.js';
 import { findLiftDictionaryEntry, searchLiftDictionary } from '../liftDictionary.js';
 
 const COMPOSITE_EXPANDED_PREF_KEY = 'lt-composite-expanded';
@@ -68,8 +68,8 @@ export async function renderListView(root) {
 
       <section class="lt-momentum lt-momentum-topline" data-momentum-section>
         <button type="button" class="lt-momentum-toggle" data-momentum-toggle aria-expanded="false">
-          <span class="lt-momentum-title">Momentum</span>
-          <span class="lt-momentum-summary" data-momentum-summary>Loading momentum...</span>
+          <span class="lt-momentum-title">PRs</span>
+          <span class="lt-momentum-summary" data-momentum-summary>Loading PRs...</span>
           <span class="lt-chevron" data-momentum-chevron>&#9660;</span>
         </button>
       </section>
@@ -517,6 +517,7 @@ export async function renderListView(root) {
   // extra round trip per row.
   let setsByLift = new Map();
   let lastLiftsData = [];
+  let lastTrackerContext = null;
 
   const modeToggleBtn = root.querySelector('[data-mode-toggle]');
 
@@ -599,15 +600,16 @@ export async function renderListView(root) {
   });
 
   async function load() {
-    const goalContext = await loadGoalContext();
-    workouts = goalContext.workouts;
+    const trackerContext = await loadTrackerContext();
+    lastTrackerContext = trackerContext;
+    workouts = trackerContext.workouts;
     if (activeWorkoutId && !workouts.some((w) => w.id === activeWorkoutId)) {
       activeWorkoutId = null;
       writeStoredActiveWorkoutId(null);
     }
     renderWorkoutPills();
 
-    currentLifts = goalContext.lifts;
+    currentLifts = trackerContext.lifts;
     const canCreateWorkout = currentLifts.length >= 2;
     addLiftDiscoveryBadge.hidden = currentLifts.length >= 2;
     addLiftHintEl.hidden = currentLifts.length !== 1;
@@ -622,8 +624,8 @@ export async function renderListView(root) {
       listEmptyEl.textContent = 'Start by adding your first lift above. Once it exists, you can log sets and build workouts around it.';
       addLiftHintEl.hidden = true;
       compositeSection.hidden = true;
-      renderKillstreak(goalContext.workoutHistorySets);
-      renderMomentum(evaluateGoalContext(goalContext).momentum);
+      renderKillstreak(trackerContext.workoutHistorySets);
+      renderMomentum(evaluateTrackerContext(trackerContext).momentum, trackerContext);
       renderWeightCard({
         showDiscovery: false,
       });
@@ -634,10 +636,10 @@ export async function renderListView(root) {
       return;
     }
 
-    const sets = goalContext.activeSets;
+    const sets = trackerContext.activeSets;
     const hasLoggedSets = sets.length > 0;
-    renderKillstreak(goalContext.workoutHistorySets);
-    renderMomentum(evaluateGoalContext(goalContext).momentum);
+    renderKillstreak(trackerContext.workoutHistorySets);
+    renderMomentum(evaluateTrackerContext(trackerContext).momentum, trackerContext);
     renderWeightCard({
       showDiscovery: hasLoggedSets && !hasSeenDiscovery(DISCOVERY_FEATURES.weight),
     });
@@ -816,45 +818,71 @@ export async function renderListView(root) {
         feedback.hidden = false;
         feedback.classList.toggle('lt-pr', isPR);
         feedback.textContent = isPR ? `PR! ${Math.round(todaysVolume)} lb today` : `Logged · ${Math.round(todaysVolume)} lb today`;
-        syncGoalEvents({ showToasts: true }).catch((err) => console.error('[lift-tracker]', err));
+        if (lastTrackerContext) {
+          lastTrackerContext.activeSets = [...lastTrackerContext.activeSets, newSet];
+          renderMomentum(evaluateTrackerContext(lastTrackerContext).momentum, lastTrackerContext);
+        }
       });
     });
   }
 
-  function renderMomentum(momentum) {
-    const latest = momentum.latest;
+  function renderMomentum(momentum, context = {}) {
+    const prItems = buildRecentPRItems(context).slice(0, 4);
+    const latest = prItems[0];
     const closest = momentum.closest || [];
     const closestFirst = closest[0];
     momentumSummary.textContent = latest
-      ? `Latest: ${latest.title}`
+      ? `Latest: ${latest.liftName}`
       : closestFirst
         ? `Closest: ${closestFirst.title} · ${formatProgressPct(closestFirst.progress)}`
-        : 'No goals yet';
+        : 'No PRs yet';
     momentumBody.innerHTML = `
       <div class="lt-momentum-grid">
         <section>
-          <h3>Recently Achieved</h3>
-          ${latest ? `
+          <h3>Recent PRs</h3>
+          ${prItems.length ? prItems.map((item) => `
             <article class="lt-momentum-item lt-momentum-item-achieved">
-              <span>${escapeHtml(latest.title)}</span>
-              <small>${escapeHtml(latest.message || 'Recently achieved.')}</small>
+              <span>${escapeHtml(item.liftName)}</span>
+              <small>${escapeHtml(item.summary)}</small>
             </article>
-          ` : '<p class="lt-empty">New goal and achievement wins will show here.</p>'}
+          `).join('') : '<p class="lt-empty">New personal records will show here.</p>'}
         </section>
         <section>
-          <h3>Closest</h3>
+          <h3>Close Achievements</h3>
           ${closest.length ? closest.map((item) => `
             <article class="lt-momentum-item">
               <span>${escapeHtml(item.title)}</span>
               <small>${escapeHtml(item.currentLabel)} · ${escapeHtml(item.detail)}</small>
-              <span class="lt-goal-progress"><span style="width: ${Math.round(item.progress * 100)}%"></span></span>
+              <span class="lt-progress-bar"><span style="width: ${Math.round(item.progress * 100)}%"></span></span>
             </article>
-          `).join('') : '<p class="lt-empty">Set goals or keep logging to surface close achievements.</p>'}
+          `).join('') : '<p class="lt-empty">Keep logging to surface close achievements.</p>'}
         </section>
       </div>
-      <button type="button" class="lt-goal-secondary-btn" data-open-goals>View goals</button>
+      <button type="button" class="lt-secondary-btn" data-open-prs>View PRs</button>
     `;
-    momentumBody.querySelector('[data-open-goals]').addEventListener('click', goToGoals);
+    momentumBody.querySelector('[data-open-prs]').addEventListener('click', goToPRs);
+  }
+
+  function buildRecentPRItems(context) {
+    const liftsById = context.liftsById || new Map((context.lifts || []).map((lift) => [lift.id, lift]));
+    return recentPRs(context.activeSets || []).map((pr) => {
+      const liftName = liftsById.get(pr.liftId)?.name || 'Lift';
+      return {
+        ...pr,
+        liftName,
+        summary: `${formatShortDate(pr.performed_at)} · ${formatNumber(pr.weight)} lb x ${formatNumber(pr.reps)} · ${Math.round(pr.e1rm)} e1RM`,
+      };
+    });
+  }
+
+  function formatShortDate(isoString) {
+    return new Date(isoString).toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
+  }
+
+  function formatNumber(value) {
+    const n = Number(value);
+    if (!Number.isFinite(n)) return String(value);
+    return Number.isInteger(n) ? String(n) : String(Math.round(n * 10) / 10);
   }
 
   function escapeAttr(str) {

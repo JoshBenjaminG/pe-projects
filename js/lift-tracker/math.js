@@ -111,6 +111,54 @@ export function isNewPR(newE1RM, priorSets) {
   return newE1RM > priorMax;
 }
 
+/**
+ * Returns every set that established a new e1RM record for its lift, sorted
+ * most-recent-first. The first logged set for a lift establishes the baseline
+ * but is not counted as a PR, matching isNewPR's quick-log behavior.
+ *
+ * @param {{id?:string,lift_id:string,weight:number|string,reps:number|string,performed_at:string}[]} sets
+ */
+export function recentPRs(sets) {
+  const byLift = new Map();
+  for (const set of sets || []) {
+    if (!set?.lift_id || !set.performed_at) continue;
+    if (!byLift.has(set.lift_id)) byLift.set(set.lift_id, []);
+    byLift.get(set.lift_id).push(set);
+  }
+
+  const prs = [];
+  for (const [liftId, liftSets] of byLift.entries()) {
+    const sorted = liftSets
+      .slice()
+      .sort((a, b) => new Date(a.performed_at) - new Date(b.performed_at));
+    let bestE1RM = null;
+    for (const set of sorted) {
+      const weight = Number(set.weight);
+      const reps = Number(set.reps);
+      const e1rm = calcE1RM(weight, reps);
+      if (bestE1RM == null) {
+        bestE1RM = e1rm;
+        continue;
+      }
+      if (e1rm > bestE1RM) {
+        prs.push({
+          liftId,
+          setId: set.id,
+          performed_at: set.performed_at,
+          weight,
+          reps,
+          e1rm,
+          previousE1RM: bestE1RM,
+          improvement: e1rm - bestE1RM,
+        });
+        bestE1RM = e1rm;
+      }
+    }
+  }
+
+  return prs.sort((a, b) => new Date(b.performed_at) - new Date(a.performed_at));
+}
+
 /** Total volume (weight * reps, summed) for a set of sets — e.g. one session. */
 export function sessionVolume(sets) {
   return sets.reduce((sum, s) => sum + Number(s.weight) * Number(s.reps), 0);

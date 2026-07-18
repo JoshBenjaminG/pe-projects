@@ -11,6 +11,7 @@ import {
   weightSummary,
   dailyWaistSeries,
   dailyCaloriesSeries,
+  recentPRs,
   groupSetsByDate,
   countWorkoutDays,
 } from '../js/lift-tracker/math.js';
@@ -142,6 +143,30 @@ test('isNewPR: beats prior max -> true', () => {
 test('isNewPR: does not beat prior max -> false', () => {
   const prior = [{ weight: 110, reps: 5 }]; // e1RM 128.33
   assert.equal(isNewPR(120, prior), false);
+});
+
+// --- recentPRs ---
+test('recentPRs: skips first set baseline and returns later records most-recent first', () => {
+  const sets = [
+    { id: 'a1', lift_id: 'a', weight: 100, reps: 5, performed_at: '2026-01-01T08:00:00Z' },
+    { id: 'a2', lift_id: 'a', weight: 100, reps: 4, performed_at: '2026-01-02T08:00:00Z' },
+    { id: 'a3', lift_id: 'a', weight: 110, reps: 5, performed_at: '2026-01-03T08:00:00Z' },
+    { id: 'b1', lift_id: 'b', weight: 50, reps: 10, performed_at: '2026-01-01T09:00:00Z' },
+    { id: 'b2', lift_id: 'b', weight: 60, reps: 10, performed_at: '2026-01-04T09:00:00Z' },
+  ];
+  const prs = recentPRs(sets);
+  assert.equal(prs.length, 2);
+  assert.equal(prs[0].setId, 'b2');
+  assert.equal(prs[1].setId, 'a3');
+  assert.ok(prs[1].e1rm > prs[1].previousE1RM);
+});
+
+test('recentPRs: returns empty when no lift beats its baseline', () => {
+  const sets = [
+    { id: 'a1', lift_id: 'a', weight: 100, reps: 5, performed_at: '2026-01-01T08:00:00Z' },
+    { id: 'a2', lift_id: 'a', weight: 90, reps: 5, performed_at: '2026-01-02T08:00:00Z' },
+  ];
+  assert.deepEqual(recentPRs(sets), []);
 });
 
 // --- sessionVolume ---
