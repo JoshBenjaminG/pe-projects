@@ -192,6 +192,32 @@
   --lt-gold: #bfca4e;
 }
 
+:root[data-lt-theme="blush"] {
+  --lt-bg: #f6e1e4;
+  --lt-surface: #fff1f2;
+  --lt-surface-alt: #f4d2d7;
+  --lt-border: #e4b6bf;
+  --lt-text: #3a1f27;
+  --lt-text-muted: #86646d;
+  --lt-accent: #df5f6a;
+  --lt-accent-strong: #c94754;
+  --lt-accent-soft: rgba(223, 95, 106, 0.18);
+  --lt-gold: #a86773;
+}
+
+:root[data-lt-theme="clementine"] {
+  --lt-bg: #f6e3cf;
+  --lt-surface: #fff2df;
+  --lt-surface-alt: #f1d5b5;
+  --lt-border: #e1bc92;
+  --lt-text: #382512;
+  --lt-text-muted: #826850;
+  --lt-accent: #e3893d;
+  --lt-accent-strong: #c96f24;
+  --lt-accent-soft: rgba(227, 137, 61, 0.18);
+  --lt-gold: #9e6b2f;
+}
+
 /* The site's global meyer-reset.css sets `section { display: block; }`
    for old-browser HTML5 support. As an author-stylesheet rule it beats the
    browser's native `[hidden] { display: none }` UA rule outright (origin

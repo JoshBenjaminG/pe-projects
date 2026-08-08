@@ -323,6 +323,8 @@ const RANK_THRESHOLDS = {
   'rank-general': 27,
   'rank-prestige': 33,
   'rank-prestige-master': 40,
+  'rank-prestige-grandmaster': 45,
+  'rank-prestige-legend': 50,
 };
 
 for (const [id, threshold] of Object.entries(RANK_THRESHOLDS)) {
@@ -632,8 +634,8 @@ test('secret achievements carry no theme, same as mastery/streak/capstone', () =
   }
 });
 
-test('ACHIEVEMENTS: exactly 38 entries with unique ids across 5 tracks', () => {
-  if (ACHIEVEMENTS.length !== 38) throw new Error(`expected 38 got ${ACHIEVEMENTS.length}`);
+test('ACHIEVEMENTS: exactly 40 entries with unique ids across 5 tracks', () => {
+  if (ACHIEVEMENTS.length !== 40) throw new Error(`expected 40 got ${ACHIEVEMENTS.length}`);
   const ids = ACHIEVEMENTS.map((a) => a.id);
   if (new Set(ids).size !== ids.length) throw new Error('duplicate id found');
   const tracks = new Set(ACHIEVEMENTS.map((a) => a.track));
@@ -652,7 +654,7 @@ test('achievementProgress: returns unlocked booleans (not functions) keyed by st
   if (next.unlocked !== false) throw new Error('expected rank-pfc locked with only 1 workout day');
 });
 
-// --- Rank themes: every rank carries a theme, lining up with the 13
+// --- Rank themes: every rank carries a theme, lining up with the 15
 // named CSS theme blocks plus the original "Lift Tracker" default ---
 
 test('every rank achievement has a theme with a non-empty id and label', () => {

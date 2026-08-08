@@ -285,7 +285,7 @@ function isFeedbackGrandfathered(userId) {
 // - "rank" -- military rank ladder gated on lifetime total workout days.
 //   Thresholds are front-loaded on purpose: new users should see a quick
 //   run of unlocks (themes included) instead of a long dry spell, so all
-//   14 tiers are reachable within roughly the first one to two months for
+//   16 tiers are reachable within roughly the first one to two months for
 //   someone training a few times a week, with the back half (Major
 //   onward) just stretched enough to still feel earned. Once the catalog
 //   here feels too easy to exhaust, add more named theme blocks + ranks
@@ -296,8 +296,8 @@ function isFeedbackGrandfathered(userId) {
 //   where unlocked rank cards become clickable to apply their theme).
 //   Private (the very first rank) comes with the app's original look,
 //   named "Lift Tracker" here so it has an identity alongside the rest.
-//   There are 13 named theme blocks in the stylesheet plus that default,
-//   lining up exactly with these 14 rank tiers.
+//   There are 15 named theme blocks in the stylesheet plus that default,
+//   lining up exactly with these 16 rank tiers.
 // - "mastery" -- lifetime count of each weekly killstreak tier earned.
 //   Less predictable than the rank track (it depends on workout-pattern
 //   mix, not just elapsed time) so thresholds are kept modest.
@@ -345,6 +345,8 @@ export const ACHIEVEMENTS = [
   { id: 'rank-general', name: 'General', track: 'rank', description: 'Log 27 workout days.', theme: { id: 'evolution', label: 'Evolution' }, isUnlocked: (s) => s.totalDays >= 27 },
   { id: 'rank-prestige', name: 'Prestige', track: 'rank', description: 'Log 33 workout days.', theme: { id: 'gwen', label: 'Gwen' }, isUnlocked: (s) => s.totalDays >= 33 },
   { id: 'rank-prestige-master', name: 'Prestige Master', track: 'rank', description: 'Log 40 workout days.', theme: { id: 'questionable', label: 'Questionable' }, isUnlocked: (s) => s.totalDays >= 40 },
+  { id: 'rank-prestige-grandmaster', name: 'Prestige Grandmaster', track: 'rank', description: 'Log 45 workout days.', theme: { id: 'blush', label: 'Blush' }, isUnlocked: (s) => s.totalDays >= 45 },
+  { id: 'rank-prestige-legend', name: 'Prestige Legend', track: 'rank', description: 'Log 50 workout days.', theme: { id: 'clementine', label: 'Clementine' }, isUnlocked: (s) => s.totalDays >= 50 },
 
   // --- Mastery: lifetime count of each weekly tier earned ---
   { id: 'mastery-uav-1', name: 'UAV Specialist', track: 'mastery', description: 'Earn the UAV tier 3 times.', isUnlocked: (s) => s.tierCounts.uav >= 3 },
