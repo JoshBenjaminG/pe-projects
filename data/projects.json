@@ -66,6 +66,23 @@
             ]
         }
         },
+    {
+        "heading": "Dota 2 Hero Threat Guide",
+        "technologies": "HTML, CSS, Vanilla JavaScript",
+        "description": "A searchable new-player reference covering every Dota 2 hero, their threat level, abilities, warning signs, and practical counterplay.",
+        "thumbnail": "https://cdn.cloudflare.steamstatic.com/apps/dota2/images/dota_react/heroes/axe.png",
+        "url": "https://josheg.com/projects/dota-hero-threat-guide/",
+        "hasCaseStudy": false,
+        "hasRepo": true,
+        "hasDemo": true,
+        "youtube": false,
+        "youtubeurl": false,
+        "gitrepo": "https://github.com/JoshBenjaminG/pe-projects/tree/master/projects/dota-hero-threat-guide",
+        "slug": "dota-hero-threat-guide",
+        "case-study": {
+            "sections": []
+        }
+    },
         {
         "heading": "OWA Marketing Showcase",
         "technologies": "Websites, Emails, Social Media",
