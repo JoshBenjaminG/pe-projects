@@ -43,9 +43,9 @@ select { min-height:44px; border:1px solid var(--border); background:var(--panel
 .mini { color:var(--muted); margin-top:7px; font-size:12px; line-height:1.35; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; min-height:32px; }
 dialog { width:min(720px,calc(100% - 28px)); border:1px solid #40505f; border-radius:16px; background:#11171d; color:var(--text); padding:0; box-shadow:0 22px 80px #000b; }
 dialog::backdrop { background:#000a; }
-.modal-hero { display:grid; grid-template-columns:220px 1fr; }
-.modal-image { width:100%; height:100%; min-height:210px; object-fit:cover; background:#202832; }
-.modal-main { padding:22px; min-width:0; }
+.modal-hero { display:block; }
+.modal-image { display:block; width:112px; height:63px; margin:22px 22px 0; object-fit:cover; background:#202832; border:1px solid var(--border); border-radius:9px; }
+.modal-main { padding:14px 22px 22px; min-width:0; }
 .modal-top { display:flex; align-items:flex-start; justify-content:space-between; gap:12px; }
 .modal-title { margin:0; font-size:28px; letter-spacing:-.02em; }
 .close { width:40px; height:40px; border:1px solid var(--border); border-radius:10px; background:var(--panel2); color:var(--text); cursor:pointer; flex:0 0 auto; }
@@ -63,9 +63,8 @@ dialog::backdrop { background:#000a; }
   .legend { grid-template-columns:1fr 1fr; }
   .grid { grid-template-columns:repeat(2,minmax(0,1fr)); gap:9px; padding-left:12px; padding-right:12px; }
   header,.toolbar,.filters,.meta,.legend,.footer-note { padding-left:12px; padding-right:12px; }
-  .modal-hero { grid-template-columns:1fr; }
-  .modal-image { max-height:230px; }
-  .modal-main { padding:18px; }
+  .modal-image { width:96px; height:54px; margin:18px 18px 0; }
+  .modal-main { padding:12px 18px 18px; }
   .badge { min-width:58px; font-size:10px; }
 }
 
