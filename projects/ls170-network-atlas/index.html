@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex,nofollow,noarchive">
+  <title>LS170 Network Atlas</title>
+  <meta name="description" content="A private, dependency-driven study tool for the LS170 interview assessment.">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <section id="loginView" class="login-shell">
+    <form id="loginForm" class="login-card">
+      <div class="signal-mark" aria-hidden="true"><i></i><i></i><i></i></div>
+      <p class="eyebrow">PRIVATE STUDY SYSTEM</p>
+      <h1>LS170 Network Atlas</h1>
+      <p class="muted">Sign in with your existing account to load the course map.</p>
+      <label>Email<input id="email" type="email" autocomplete="username" required></label>
+      <label>Password<input id="password" type="password" autocomplete="current-password" required></label>
+      <button type="submit">Unlock atlas</button>
+      <p id="loginMessage" class="form-message" role="status"></p>
+    </form>
+  </section>
+
+  <div id="app" class="app" hidden>
+    <aside class="sidebar">
+      <div class="brand"><span class="brand-node"></span><span>LS170<br><b>NETWORK ATLAS</b></span></div>
+      <nav aria-label="Study modes">
+        <button class="nav-item active" data-view="path"><span>01</span>Learning path</button>
+        <button class="nav-item" data-view="map"><span>02</span>Term map</button>
+        <button class="nav-item" data-view="interview"><span>03</span>Interview lab</button>
+        <button class="nav-item" data-view="review"><span>04</span>Recall queue</button>
+      </nav>
+      <div class="sidebar-foot">
+        <div class="progress-label"><span>Course mastery</span><b id="masteryText">0%</b></div>
+        <div class="progress-track"><i id="masteryBar"></i></div>
+        <button id="signOut" class="text-button">Sign out</button>
+      </div>
+    </aside>
+
+    <main>
+      <header class="topbar">
+        <div><p class="eyebrow" id="sectionKicker">SEQUENCED FOUNDATIONS</p><h1 id="sectionTitle">Learning path</h1></div>
+        <div class="top-actions"><label class="search"><span>⌕</span><input id="search" type="search" placeholder="Find a term or idea"></label></div>
+      </header>
+
+      <section id="pathView" class="view active-view">
+        <div class="intro-strip">
+          <div><strong id="nextTitle">Begin with protocols</strong><span id="nextSummary">Build the language every later topic depends on.</span></div>
+          <button id="continueButton">Continue →</button>
+        </div>
+        <div id="stageList" class="stage-list"></div>
+      </section>
+
+      <section id="mapView" class="view" hidden>
+        <div class="map-toolbar"><p>Follow the dependency lines from physical transmission to secure web applications.</p><div id="mapLegend"></div></div>
+        <div id="conceptMap" class="concept-map"></div>
+      </section>
+
+      <section id="interviewView" class="view" hidden>
+        <div class="interview-grid">
+          <div class="prompt-panel">
+            <p class="eyebrow">MOCK INTERVIEW</p>
+            <div class="prompt-meta"><span id="promptTopic">Internet</span><span id="promptNumber">1 / 12</span></div>
+            <h2 id="promptQuestion"></h2>
+            <p id="promptFollowup" class="muted"></p>
+            <div class="timer"><span id="timer">02:00</span><button id="timerButton">Start timer</button></div>
+            <textarea id="answerNotes" placeholder="Write the structure of your answer or code example here..."></textarea>
+            <div class="prompt-actions"><button id="revealButton">Reveal answer framework</button><button id="nextPrompt" class="secondary">Next prompt</button></div>
+          </div>
+          <aside id="answerFramework" class="answer-panel" hidden></aside>
+        </div>
+      </section>
+
+      <section id="reviewView" class="view" hidden>
+        <div class="review-header"><p>Your weakest and least recently reviewed concepts appear first.</p><button id="shuffleReview" class="secondary">Shuffle queue</button></div>
+        <div id="reviewCard" class="review-card"></div>
+      </section>
+    </main>
+  </div>
+
+  <dialog id="conceptDialog">
+    <button id="closeDialog" class="dialog-close" aria-label="Close">×</button>
+    <div id="conceptDetail"></div>
+  </dialog>
+  <script src="config.js"></script>
+  <script type="module" src="app.js"></script>
+</body>
+</html>
