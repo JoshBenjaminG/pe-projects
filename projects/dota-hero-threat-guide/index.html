@@ -81,6 +81,10 @@ dialog::backdrop { background:#000a; }
 .role-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(150px,1fr)); gap:12px; }
 .role-grid .card { aspect-ratio:256/144; }
 .role-grid .portrait-wrap { height:100%; }
+.search-hint { color:var(--muted); font-size:13px; line-height:1.4; }
+.typing-overlay { position:fixed; inset:0; z-index:20; display:grid; place-items:center; padding:24px; pointer-events:none; opacity:0; transition:opacity .12s ease; }
+.typing-overlay.visible { opacity:1; }
+.typing-overlay-text { max-width:min(1000px,90vw); color:rgba(237,242,247,.26); font-size:clamp(52px,12vw,150px); font-weight:900; letter-spacing:-.055em; line-height:.9; text-align:center; overflow-wrap:anywhere; text-shadow:0 4px 30px rgba(0,0,0,.45); }
 @media (max-width:650px) { dialog { max-height:calc(100vh - 24px); overflow:auto; } }
 </style>
 </head>
@@ -98,7 +102,7 @@ dialog::backdrop { background:#000a; }
 </section>
 
 <div class="toolbar">
-  <input id="search" type="search" placeholder="Search heroes or descriptions..." autocomplete="off" aria-label="Search heroes">
+  <div class="search-hint">Start typing anywhere to search · Backspace to edit · Esc to clear</div>
   <select id="sort" aria-label="Sort heroes">
     <option value="alpha">Sort: A–Z</option>
     <option value="threat">Sort: Highest threat</option>
@@ -114,6 +118,7 @@ dialog::backdrop { background:#000a; }
 </div>
 
 <div class="meta" id="meta" aria-live="polite"></div>
+<div class="typing-overlay" id="typingOverlay" aria-hidden="true"><div class="typing-overlay-text" id="typingOverlayText"></div></div>
 <main class="role-sections" id="grid"></main>
 
 <p class="footer-note">Portraits are loaded from Valve's public Steam Dota 2 image CDN when the page has internet access. If an image cannot load, the card still works with a text fallback. Threat ratings are intentionally subjective and optimized for learning what to respect as a newer Dota player.</p>
@@ -174,6 +179,9 @@ const modalWatch = document.getElementById("modalWatch");
 const modalAction = document.getElementById("modalAction");
 const modalAbilities = document.getElementById("modalAbilities");
 const modalRoles = document.getElementById("modalRoles");
+const typingOverlay = document.getElementById("typingOverlay");
+const typingOverlayText = document.getElementById("typingOverlayText");
+let searchQuery = "";
 
 function initials(name) {
   return name.split(/\s+/).map(s => s[0]).join("").slice(0,3).toUpperCase();
@@ -209,7 +217,7 @@ function openHero(hero) {
   dialog.showModal();
 }
 function render() {
-  const q = search.value.trim().toLowerCase();
+  const q = searchQuery.trim().toLowerCase();
   const visibleHeroes = heroes.filter(h => {
     const filterOK = activeFilter === "all" || h.threat === activeFilter;
     const text = (h.name + " " + h.summary + " " + h.watch + " " + h.action + " " + h.roles.join(" ") + " " + h.abilities.map(a => a.name + " " + a.description).join(" ")).toLowerCase();
@@ -260,7 +268,33 @@ document.querySelectorAll(".filter-btn").forEach(btn => {
     render();
   });
 });
-search.addEventListener("input", render);
+function updateTypedSearch() {
+  typingOverlayText.textContent = searchQuery;
+  typingOverlay.classList.toggle("visible", Boolean(searchQuery));
+  typingOverlay.setAttribute("aria-hidden", searchQuery ? "false" : "true");
+  render();
+}
+document.addEventListener("keydown", event => {
+  if (dialog.open || event.metaKey || event.ctrlKey || event.altKey) return;
+  const target = event.target;
+  if (target instanceof HTMLInputElement || target instanceof HTMLTextAreaElement || target instanceof HTMLSelectElement) return;
+  if (event.key === "Escape") {
+    searchQuery = "";
+    updateTypedSearch();
+    return;
+  }
+  if (event.key === "Backspace") {
+    if (!searchQuery) return;
+    event.preventDefault();
+    searchQuery = searchQuery.slice(0, -1);
+    updateTypedSearch();
+    return;
+  }
+  if (event.key.length === 1) {
+    searchQuery += event.key;
+    updateTypedSearch();
+  }
+});
 sort.addEventListener("change", render);
 document.getElementById("close").addEventListener("click", () => dialog.close());
 dialog.addEventListener("click", e => {
