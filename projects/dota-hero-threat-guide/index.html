@@ -273,6 +273,46 @@ function initials(name) {
 }
 function portrait(hero) { return customPortraits[hero.slug] || cdn + hero.slug + ".png"; }
 function cropPosition(hero) { return `${hero.cropX ?? 50}% ${hero.cropY ?? 50}%`; }
+function normalizeSearch(value) {
+  return String(value || "")
+    .normalize("NFKD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase()
+    .replace(/&/g, " and ")
+    .replace(/[^a-z0-9]+/g, " ")
+    .trim()
+    .replace(/\s+/g, " ");
+}
+function compactSearch(value) { return normalizeSearch(value).replace(/\s/g, ""); }
+function editDistance(left, right) {
+  const a = compactSearch(left);
+  const b = compactSearch(right);
+  const rows = Array.from({ length: a.length + 1 }, () => Array(b.length + 1).fill(0));
+  for (let i = 0; i <= a.length; i += 1) rows[i][0] = i;
+  for (let j = 0; j <= b.length; j += 1) rows[0][j] = j;
+  for (let i = 1; i <= a.length; i += 1) {
+    for (let j = 1; j <= b.length; j += 1) {
+      const cost = a[i - 1] === b[j - 1] ? 0 : 1;
+      rows[i][j] = Math.min(rows[i - 1][j] + 1, rows[i][j - 1] + 1, rows[i - 1][j - 1] + cost);
+      if (i > 1 && j > 1 && a[i - 1] === b[j - 2] && a[i - 2] === b[j - 1]) {
+        rows[i][j] = Math.min(rows[i][j], rows[i - 2][j - 2] + cost);
+      }
+    }
+  }
+  return rows[a.length][b.length];
+}
+function heroMatchesSearch(hero, normalizedQuery) {
+  const searchable = normalizeSearch(hero.name + " " + hero.summary + " " + hero.watch + " " + hero.action + " " + hero.roles.join(" ") + " " + hero.abilities.map(ability => ability.name + " " + ability.description).join(" "));
+  const compactQuery = compactSearch(normalizedQuery);
+  if (searchable.includes(normalizedQuery) || compactSearch(searchable).includes(compactQuery)) return true;
+  const fullInitials = hero.name.split(/\s+/).map(part => part[0]).join("");
+  if (compactSearch(fullInitials) === compactQuery) return true;
+  if (compactQuery.length < 3) return false;
+  const compactName = compactSearch(hero.name);
+  const longest = Math.max(compactName.length, compactQuery.length);
+  const tolerance = longest <= 5 ? 1 : longest <= 10 ? 2 : 3;
+  return Math.abs(compactName.length - compactQuery.length) <= tolerance && editDistance(compactName, compactQuery) <= tolerance;
+}
 function esc(s) {
   return s.replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"})[c]);
 }
@@ -306,11 +346,10 @@ function openHero(hero) {
   dialog.showModal();
 }
 function render() {
-  const q = searchQuery.trim().toLowerCase();
+  const q = normalizeSearch(searchQuery);
   const visibleHeroes = heroes.filter(h => {
     const filterOK = activeFilter === "all" || h.threat === activeFilter;
-    const text = (h.name + " " + h.summary + " " + h.watch + " " + h.action + " " + h.roles.join(" ") + " " + h.abilities.map(a => a.name + " " + a.description).join(" ")).toLowerCase();
-    return filterOK && (!q || text.includes(q));
+    return filterOK && (!q || heroMatchesSearch(h, q));
   });
   const sortHeroes = list => list.sort((a,b) => a.name.localeCompare(b.name));
   let groups;
