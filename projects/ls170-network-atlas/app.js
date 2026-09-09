@@ -38,8 +38,62 @@ function renderPath(filter = '') {
       return !query || `${item.name} ${item.definition} ${item.connections.join(' ')}`.toLowerCase().includes(query);
     });
     if (!terms.length) return '';
-    return `<article class="stage"><div class="stage-index">${stage.number}</div><div class="stage-body"><div class="stage-heading"><h2>${stage.title}</h2><span>${terms.filter(id => state.mastered.has(id)).length} / ${terms.length} mastered</span></div><p class="muted">${stage.summary}</p><div class="term-row">${terms.map(id => `<button class="term-chip ${state.mastered.has(id) ? 'mastered' : ''}" data-concept="${id}">${concepts[id].name}</button>`).join('')}</div></div></article>`;
+    return `<article class="stage"><div class="stage-index">${stage.number}</div><div class="stage-body"><div class="stage-heading"><h2>${stage.title}</h2><span>${terms.filter(id => state.mastered.has(id)).length} / ${terms.length} mastered</span></div><p class="muted">${stage.summary}</p><div class="term-row">${terms.map(id => `<button class="term-chip ${state.mastered.has(id) ? 'mastered' : ''}" data-concept="${id}">${concepts[id].name}</button>`).join('')}</div><button class="stage-lesson" data-lesson="${stage.id}">Open lesson →</button></div></article>`;
   }).join('') || '<p class="muted">No concepts match that search.</p>';
+}
+
+function escapeHtml(value = '') {
+  return String(value).replace(/[&<>"']/g, character => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[character]));
+}
+
+function renderLessonText(text = '') {
+  const source = String(text);
+  const tokenPattern = /\[\[([^|\]]+)\|([^\]]+)\]\]/g;
+  let result = '';
+  let cursor = 0;
+  for (const match of source.matchAll(tokenPattern)) {
+    result += escapeHtml(source.slice(cursor, match.index)).replaceAll('\n', '<br>');
+    const label = match[1].trim();
+    const conceptId = match[2].trim();
+    result += concepts[conceptId]
+      ? `<button class="lesson-keyword" data-concept="${escapeHtml(conceptId)}">${escapeHtml(label)}</button>`
+      : escapeHtml(label);
+    cursor = match.index + match[0].length;
+  }
+  return result + escapeHtml(source.slice(cursor)).replaceAll('\n', '<br>');
+}
+
+function setActiveView(viewId) {
+  document.querySelectorAll('.view').forEach(view => {
+    const active = view.id === viewId;
+    view.hidden = !active;
+    view.classList.toggle('active-view', active);
+  });
+}
+
+function showPath() {
+  setActiveView('pathView');
+  document.querySelectorAll('.nav-item').forEach(item => item.classList.toggle('active', item.dataset.view === 'path'));
+  $('#sectionKicker').textContent = 'SEQUENCED FOUNDATIONS';
+  $('#sectionTitle').textContent = 'Learning path';
+  renderPath($('#search').value);
+}
+
+function openLesson(stageId) {
+  const stageIndex = stages.findIndex(stage => stage.id === stageId);
+  if (stageIndex < 0) return;
+  const stage = stages[stageIndex];
+  const lesson = stage.lesson;
+  if (!lesson?.lede || !Array.isArray(lesson.sections)) return;
+  setActiveView('lessonView');
+  document.querySelectorAll('.nav-item').forEach(item => item.classList.toggle('active', item.dataset.view === 'path'));
+  $('#sectionKicker').textContent = `LESSON ${stage.number}`;
+  $('#sectionTitle').textContent = stage.title;
+  $('#lessonArticle').innerHTML = `<header class="lesson-header"><p class="lesson-number">LESSON ${escapeHtml(stage.number)}</p><h2>${escapeHtml(stage.title)}</h2><p class="lesson-lede">${renderLessonText(lesson.lede)}</p></header><div class="lesson-sections">${lesson.sections.map(section => `<section class="lesson-section"><h3>${escapeHtml(section.title)}</h3><div class="lesson-copy">${renderLessonText(section.body)}</div></section>`).join('')}</div><section class="lesson-recap"><p class="eyebrow">RECAP TERMS</p><div class="term-row">${stage.terms.filter(id => concepts[id]).map(id => `<button class="term-chip ${state.mastered.has(id) ? 'mastered' : ''}" data-concept="${id}">${escapeHtml(concepts[id].name)}</button>`).join('')}</div></section>`;
+  const previous = stages[stageIndex - 1];
+  const next = stages[stageIndex + 1];
+  $('#lessonPager').innerHTML = `${previous ? `<button data-lesson="${previous.id}" aria-label="Previous lesson">← Lesson ${escapeHtml(previous.number)}</button>` : '<span></span>'}<button class="lesson-path-link" data-view-return="path">All lessons</button>${next ? `<button data-lesson="${next.id}" aria-label="Next lesson">Lesson ${escapeHtml(next.number)} →</button>` : '<span></span>'}`;
+  window.scrollTo({top:0,behavior:'smooth'});
 }
 
 function renderMap(filter = '') {
@@ -148,6 +202,10 @@ async function initAuth() {
 }
 
 document.addEventListener('click', async event => {
+  const lessonButton = event.target.closest('[data-lesson]');
+  if (lessonButton) openLesson(lessonButton.dataset.lesson);
+  const pathButton = event.target.closest('[data-view-return="path"]');
+  if (pathButton) showPath();
   const conceptButton = event.target.closest('[data-concept]');
   if (conceptButton) openConcept(conceptButton.dataset.concept);
   const masterButton = event.target.closest('[data-master]');
@@ -168,13 +226,13 @@ document.addEventListener('click', async event => {
 
 document.querySelectorAll('.nav-item').forEach(button => button.addEventListener('click', () => {
   document.querySelectorAll('.nav-item').forEach(item => item.classList.toggle('active', item === button));
-  document.querySelectorAll('.view').forEach(view => { view.hidden = true; view.classList.remove('active-view'); });
-  const target = $(`#${button.dataset.view}View`); target.hidden = false; target.classList.add('active-view');
+  setActiveView(`${button.dataset.view}View`);
   const titles = {path:['SEQUENCED FOUNDATIONS','Learning path'],map:['CONCEPT DEPENDENCIES','Term map'],interview:['PRECISION UNDER PRESSURE','Interview lab'],review:['SPACED ACTIVE RECALL','Recall queue']};
   [$('#sectionKicker').textContent,$('#sectionTitle').textContent] = titles[button.dataset.view];
 }));
 
 $('#search').addEventListener('input', event => { renderPath(event.target.value); renderMap(event.target.value); });
+$('#backToPath').addEventListener('click', event => { event.stopPropagation(); showPath(); });
 $('#continueButton').addEventListener('click', event => openConcept(event.target.dataset.id));
 $('#closeDialog').addEventListener('click', () => $('#conceptDialog').close());
 $('#conceptDialog').addEventListener('click', event => { if (event.target === $('#conceptDialog')) $('#conceptDialog').close(); });
