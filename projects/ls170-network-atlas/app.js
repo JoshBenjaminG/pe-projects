@@ -63,6 +63,11 @@ function renderLessonText(text = '') {
   return result + escapeHtml(source.slice(cursor)).replaceAll('\n', '<br>');
 }
 
+function renderLessonExamples(examples = []) {
+  if (!Array.isArray(examples) || !examples.length) return '';
+  return `<section class="lesson-practice"><header class="practice-heading"><p class="eyebrow">CONCEPTS IN PRACTICE</p><h3>Worked examples</h3></header><div class="example-grid">${examples.map(example => `<article class="example-card"><p class="example-label">${escapeHtml(example.label)}</p><h4>${escapeHtml(example.title)}</h4><pre><code>${escapeHtml(example.code)}</code></pre><p class="example-caption">${renderLessonText(example.caption)}</p></article>`).join('')}</div></section>`;
+}
+
 function setActiveView(viewId) {
   document.querySelectorAll('.view').forEach(view => {
     const active = view.id === viewId;
@@ -89,7 +94,7 @@ function openLesson(stageId) {
   document.querySelectorAll('.nav-item').forEach(item => item.classList.toggle('active', item.dataset.view === 'path'));
   $('#sectionKicker').textContent = `LESSON ${stage.number}`;
   $('#sectionTitle').textContent = stage.title;
-  $('#lessonArticle').innerHTML = `<header class="lesson-header"><p class="lesson-number">LESSON ${escapeHtml(stage.number)}</p><h2>${escapeHtml(stage.title)}</h2><p class="lesson-lede">${renderLessonText(lesson.lede)}</p></header><div class="lesson-sections">${lesson.sections.map(section => `<section class="lesson-section"><h3>${escapeHtml(section.title)}</h3><div class="lesson-copy">${renderLessonText(section.body)}</div></section>`).join('')}</div><section class="lesson-recap"><p class="eyebrow">RECAP TERMS</p><div class="term-row">${stage.terms.filter(id => concepts[id]).map(id => `<button class="term-chip ${state.mastered.has(id) ? 'mastered' : ''}" data-concept="${id}">${escapeHtml(concepts[id].name)}</button>`).join('')}</div></section>`;
+  $('#lessonArticle').innerHTML = `<header class="lesson-header"><p class="lesson-number">LESSON ${escapeHtml(stage.number)}</p><h2>${escapeHtml(stage.title)}</h2><p class="lesson-lede">${renderLessonText(lesson.lede)}</p></header><div class="lesson-sections">${lesson.sections.map(section => `<section class="lesson-section"><h3>${escapeHtml(section.title)}</h3><div class="lesson-copy">${renderLessonText(section.body)}</div></section>`).join('')}</div>${renderLessonExamples(lesson.examples)}<section class="lesson-recap"><p class="eyebrow">RECAP TERMS</p><div class="term-row">${stage.terms.filter(id => concepts[id]).map(id => `<button class="term-chip ${state.mastered.has(id) ? 'mastered' : ''}" data-concept="${id}">${escapeHtml(concepts[id].name)}</button>`).join('')}</div></section>`;
   const previous = stages[stageIndex - 1];
   const next = stages[stageIndex + 1];
   $('#lessonPager').innerHTML = `${previous ? `<button data-lesson="${previous.id}" aria-label="Previous lesson">← Lesson ${escapeHtml(previous.number)}</button>` : '<span></span>'}<button class="lesson-path-link" data-view-return="path">All lessons</button>${next ? `<button data-lesson="${next.id}" aria-label="Next lesson">Lesson ${escapeHtml(next.number)} →</button>` : '<span></span>'}`;
