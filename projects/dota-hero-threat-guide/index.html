@@ -261,4 +261,316 @@ const modalTitle = document.getElementById("modalTitle");
 const modalBadge = document.getElementById("modalBadge");
 const modalSummary = document.getElementById("modalSummary");
 const modalWatch = document.getElementById("modalWatch");
-const
+const modalAction = document.getElementById("modalAction");
+const modalAbilities = document.getElementById("modalAbilities");
+const modalRoles = document.getElementById("modalRoles");
+const typingOverlay = document.getElementById("typingOverlay");
+const typingOverlayText = document.getElementById("typingOverlayText");
+let searchQuery = "";
+
+function initials(name) {
+  return name.split(/\s+/).map(s => s[0]).join("").slice(0,3).toUpperCase();
+}
+function portrait(hero) { return customPortraits[hero.slug] || cdn + hero.slug + ".png"; }
+function cropPosition(hero) { return `${hero.cropX ?? 50}% ${hero.cropY ?? 50}%`; }
+function normalizeSearch(value) {
+  return String(value || "")
+    .normalize("NFKD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase()
+    .replace(/&/g, " and ")
+    .replace(/[^a-z0-9]+/g, " ")
+    .trim()
+    .replace(/\s+/g, " ");
+}
+function compactSearch(value) { return normalizeSearch(value).replace(/\s/g, ""); }
+function editDistance(left, right) {
+  const a = compactSearch(left);
+  const b = compactSearch(right);
+  const rows = Array.from({ length: a.length + 1 }, () => Array(b.length + 1).fill(0));
+  for (let i = 0; i <= a.length; i += 1) rows[i][0] = i;
+  for (let j = 0; j <= b.length; j += 1) rows[0][j] = j;
+  for (let i = 1; i <= a.length; i += 1) {
+    for (let j = 1; j <= b.length; j += 1) {
+      const cost = a[i - 1] === b[j - 1] ? 0 : 1;
+      rows[i][j] = Math.min(rows[i - 1][j] + 1, rows[i][j - 1] + 1, rows[i - 1][j - 1] + cost);
+      if (i > 1 && j > 1 && a[i - 1] === b[j - 2] && a[i - 2] === b[j - 1]) {
+        rows[i][j] = Math.min(rows[i][j], rows[i - 2][j - 2] + cost);
+      }
+    }
+  }
+  return rows[a.length][b.length];
+}
+function heroMatchesSearch(hero, normalizedQuery) {
+  const searchable = normalizeSearch(hero.name + " " + hero.summary + " " + hero.watch + " " + hero.action + " " + hero.roles.join(" ") + " " + hero.abilities.map(ability => ability.name + " " + ability.description).join(" "));
+  const compactQuery = compactSearch(normalizedQuery);
+  if (searchable.includes(normalizedQuery) || compactSearch(searchable).includes(compactQuery)) return true;
+  const fullInitials = hero.name.split(/\s+/).map(part => part[0]).join("");
+  if (compactSearch(fullInitials) === compactQuery) return true;
+  if (compactQuery.length < 3) return false;
+  const compactName = compactSearch(hero.name);
+  const longest = Math.max(compactName.length, compactQuery.length);
+  const tolerance = longest <= 5 ? 1 : longest <= 10 ? 2 : 3;
+  return Math.abs(compactName.length - compactQuery.length) <= tolerance && editDistance(compactName, compactQuery) <= tolerance;
+}
+function esc(s) {
+  return s.replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"})[c]);
+}
+function openHero(hero) {
+  modalTitle.textContent = hero.name;
+  modalBadge.textContent = labels[hero.threat];
+  modalBadge.className = "badge " + hero.threat;
+  modalSummary.textContent = hero.summary;
+  modalWatch.textContent = hero.watch;
+  modalAction.textContent = hero.action;
+  modalRoles.innerHTML = hero.roles.length
+    ? hero.roles.map(role => `<span class="role-pill">${esc(role)}</span>`).join("")
+    : '<span class="role-pill">Unassigned</span>';
+  modalAbilities.innerHTML = "";
+  for (const ability of hero.abilities) {
+    const item = document.createElement("div");
+    item.className = "ability";
+    item.innerHTML = `<img class="ability-icon" src="${esc(ability.icon)}" alt=""><div><h3 class="ability-name">${esc(ability.name)}</h3><p class="ability-description">${esc(ability.description)}</p></div>`;
+    item.querySelector("img").addEventListener("error", event => event.currentTarget.style.display = "none");
+    modalAbilities.appendChild(item);
+  }
+  modalImage.src = portrait(hero);
+  modalImage.style.objectPosition = cropPosition(hero);
+  currentHero = hero;
+  editHeroButton.hidden = !(editorUnlocked && editorMode);
+  modalImage.alt = hero.name + " portrait";
+  modalImage.onerror = () => {
+    modalImage.removeAttribute("src");
+    modalImage.alt = hero.name;
+  };
+  dialog.showModal();
+}
+function render() {
+  const q = normalizeSearch(searchQuery);
+  const visibleHeroes = heroes.filter(h => {
+    const filterOK = activeFilter === "all" || h.threat === activeFilter;
+    return filterOK && (!q || heroMatchesSearch(h, q));
+  });
+  const sortHeroes = list => list.sort((a,b) => a.name.localeCompare(b.name));
+  let groups;
+  if (viewSelect.value === "role") {
+    groups = roleOrder.map(role => ({ title: role, heroes: sortHeroes(visibleHeroes.filter(hero => hero.roles.includes(role))) }));
+    const unassigned = sortHeroes(visibleHeroes.filter(hero => !hero.roles.length));
+    if (unassigned.length) groups.push({ title: "Unassigned", heroes: unassigned });
+  } else if (viewSelect.value === "alphabetical") {
+    groups = [{ title: "All Heroes (A–Z)", heroes: sortHeroes([...visibleHeroes]) }];
+  } else {
+    groups = attributeOrder.map(attribute => ({ title: attribute, heroes: sortHeroes(visibleHeroes.filter(hero => hero.attribute === attribute)) }));
+  }
+  const cardCount = groups.reduce((total, group) => total + group.heroes.length, 0);
+  meta.textContent = visibleHeroes.length + (visibleHeroes.length === 1 ? " hero" : " heroes") + " shown across " + cardCount + (cardCount === 1 ? " card" : " cards");
+  grid.innerHTML = "";
+  if (!visibleHeroes.length) {
+    grid.innerHTML = '<div class="empty">No heroes match that search.</div>';
+    return;
+  }
+  for (const group of groups) {
+    if (!group.heroes.length) continue;
+    const section = document.createElement("section");
+    section.className = "role-group";
+    const heading = document.createElement("h2");
+    heading.className = "role-heading";
+    heading.textContent = group.title;
+    const roleGrid = document.createElement("div");
+    roleGrid.className = "role-grid";
+    for (const hero of group.heroes) {
+      const card = document.createElement("button");
+      card.type = "button";
+      card.className = "card";
+      card.setAttribute("aria-label", "Open " + hero.name + " details");
+      card.innerHTML = `<div class="portrait-wrap" data-initials="${esc(initials(hero.name))}"><img class="portrait" loading="lazy" src="${portrait(hero)}" style="object-position:${cropPosition(hero)}" alt="${esc(hero.name)} portrait"><span class="card-hover-name" aria-hidden="true">${esc(hero.name)}</span></div>`;
+      const img = card.querySelector("img");
+      img.addEventListener("error", () => img.style.display = "none");
+      card.addEventListener("click", () => openHero(hero));
+      roleGrid.appendChild(card);
+    }
+    section.appendChild(heading);
+    section.appendChild(roleGrid);
+    grid.appendChild(section);
+  }
+}
+document.querySelectorAll(".filter-btn").forEach(btn => {
+  btn.addEventListener("click", () => {
+    activeFilter = btn.dataset.filter;
+    document.querySelectorAll(".filter-btn").forEach(b => b.classList.toggle("active", b === btn));
+    render();
+  });
+});
+function updateTypedSearch() {
+  typingOverlayText.textContent = searchQuery;
+  typingOverlay.classList.toggle("visible", Boolean(searchQuery));
+  typingOverlay.setAttribute("aria-hidden", searchQuery ? "false" : "true");
+  render();
+}
+document.addEventListener("keydown", event => {
+  if (dialog.open || event.metaKey || event.ctrlKey || event.altKey) return;
+  const target = event.target;
+  if (target instanceof HTMLInputElement || target instanceof HTMLTextAreaElement || target instanceof HTMLSelectElement) return;
+  if (event.key === "Escape") {
+    searchQuery = "";
+    updateTypedSearch();
+    return;
+  }
+  if (event.key === "Backspace") {
+    if (!searchQuery) return;
+    event.preventDefault();
+    searchQuery = searchQuery.slice(0, -1);
+    updateTypedSearch();
+    return;
+  }
+  if (event.key.length === 1) {
+    searchQuery += event.key;
+    updateTypedSearch();
+  }
+});
+viewSelect.addEventListener("change", () => {
+  try { localStorage.setItem("dotaHeroGuideView", viewSelect.value); } catch {}
+  render();
+});
+const editorLogin = document.getElementById("editorLogin");
+const editorPassword = document.getElementById("editorPassword");
+const editorSession = document.getElementById("editorSession");
+const editorStatus = document.getElementById("editorStatus");
+const editorModeButton = document.getElementById("editorModeButton");
+const heroEditor = document.getElementById("heroEditor");
+const heroEditorForm = document.getElementById("heroEditorForm");
+const editHeroButton = document.getElementById("editHeroButton");
+const cropPreview = document.getElementById("cropPreview");
+const cropPreviewImage = document.getElementById("cropPreviewImage");
+const cropX = document.getElementById("cropX");
+const cropY = document.getElementById("cropY");
+const cropXNumber = document.getElementById("cropXNumber");
+const cropYNumber = document.getElementById("cropYNumber");
+const roleEditor = document.getElementById("roleEditor");
+const heroEditorStatus = document.getElementById("heroEditorStatus");
+let editorUnlocked = false;
+let editorMode = false;
+let currentHero = null;
+let editingHero = null;
+
+function setEditorStatus(message, isError = false) {
+  editorStatus.textContent = message;
+  editorStatus.classList.toggle("error", isError);
+}
+function setEditorSession(user) {
+  editorUnlocked = editorFeatureEnabled && user?.id === editorOwnerId;
+  editorLogin.hidden = editorUnlocked;
+  editorSession.hidden = !editorUnlocked;
+  editHeroButton.hidden = !(editorUnlocked && editorMode && currentHero);
+  if (user && !editorUnlocked) setEditorStatus("This account is not authorized to edit the guide.", true);
+  else if (editorUnlocked) setEditorStatus(editorMode ? "Editor mode is active. Click any hero, then Edit hero." : "Editor unlocked.");
+  else setEditorStatus("");
+}
+function applyOverride(row) {
+  const hero = heroes.find(item => item.slug === row?.hero_slug);
+  if (!hero) return;
+  hero.roles = Array.isArray(row.roles) ? row.roles.filter(role => roleOrder.includes(role)) : hero.roles;
+  hero.cropX = Number(row.crop_x);
+  hero.cropY = Number(row.crop_y);
+}
+async function loadOverrides() {
+  const { data, error } = await supabase.from("dota_hero_guide_overrides").select("hero_slug,roles,crop_x,crop_y");
+  if (error) { console.error("[guide overrides]", error); return; }
+  data.forEach(applyOverride);
+  render();
+}
+editorLogin.addEventListener("submit", async event => {
+  event.preventDefault();
+  if (!editorFeatureEnabled) return;
+  setEditorStatus("Unlocking…");
+  const { data, error } = await supabase.auth.signInWithPassword({ email: editorOwnerEmail, password: editorPassword.value });
+  editorPassword.value = "";
+  if (error) { setEditorStatus("Incorrect password or editor account unavailable.", true); return; }
+  setEditorSession(data.user);
+});
+document.getElementById("editorSignOut").addEventListener("click", async () => {
+  await supabase.auth.signOut();
+  editorMode = false;
+  document.body.classList.remove("editor-mode");
+  editorModeButton.textContent = "Enter editor mode";
+  setEditorSession(null);
+});
+editorModeButton.addEventListener("click", () => {
+  editorMode = !editorMode;
+  document.body.classList.toggle("editor-mode", editorMode);
+  editorModeButton.textContent = editorMode ? "Exit editor mode" : "Enter editor mode";
+  editHeroButton.hidden = !(editorUnlocked && editorMode && currentHero);
+  setEditorStatus(editorMode ? "Editor mode is active. Click any hero, then Edit hero." : "Editor unlocked.");
+});
+function updateCropPreview() {
+  cropPreviewImage.style.objectPosition = `${cropX.value}% ${cropY.value}%`;
+  cropXNumber.value = cropX.value;
+  cropYNumber.value = cropY.value;
+}
+function bindCropPair(range, number) {
+  range.addEventListener("input", updateCropPreview);
+  number.addEventListener("input", () => { range.value = Math.max(0, Math.min(100, Number(number.value) || 0)); updateCropPreview(); });
+}
+bindCropPair(cropX, cropXNumber);
+bindCropPair(cropY, cropYNumber);
+function setCropFromPointer(event) {
+  const rect = cropPreview.getBoundingClientRect();
+  cropX.value = Math.max(0, Math.min(100, ((event.clientX - rect.left) / rect.width) * 100)).toFixed(1);
+  cropY.value = Math.max(0, Math.min(100, ((event.clientY - rect.top) / rect.height) * 100)).toFixed(1);
+  updateCropPreview();
+}
+cropPreview.addEventListener("pointerdown", event => { cropPreview.setPointerCapture(event.pointerId); setCropFromPointer(event); });
+cropPreview.addEventListener("pointermove", event => { if (cropPreview.hasPointerCapture(event.pointerId)) setCropFromPointer(event); });
+function openHeroEditor(hero) {
+  editingHero = hero;
+  document.getElementById("editorHeroName").textContent = hero.name;
+  cropPreviewImage.src = portrait(hero);
+  cropPreviewImage.alt = hero.name + " crop preview";
+  cropX.value = hero.cropX ?? 50;
+  cropY.value = hero.cropY ?? 50;
+  updateCropPreview();
+  roleEditor.innerHTML = roleOrder.map(role => `<label class="role-option"><input type="checkbox" name="heroRole" value="${esc(role)}" ${hero.roles.includes(role) ? "checked" : ""}><span>${esc(role)}</span></label>`).join("");
+  heroEditorStatus.textContent = "";
+  dialog.close();
+  heroEditor.showModal();
+}
+editHeroButton.addEventListener("click", () => { if (editorUnlocked && currentHero) openHeroEditor(currentHero); });
+document.getElementById("closeEditor").addEventListener("click", () => heroEditor.close());
+document.getElementById("cancelHeroEdit").addEventListener("click", () => heroEditor.close());
+heroEditorForm.addEventListener("submit", async event => {
+  event.preventDefault();
+  if (!editorUnlocked || !editingHero) return;
+  const roles = [...heroEditorForm.querySelectorAll('input[name="heroRole"]:checked')].map(input => input.value);
+  const payload = { hero_slug: editingHero.slug, roles, crop_x: Number(cropX.value), crop_y: Number(cropY.value), updated_by: editorOwnerId };
+  heroEditorStatus.textContent = "Saving…";
+  const { error } = await supabase.from("dota_hero_guide_overrides").upsert(payload, { onConflict: "hero_slug" });
+  if (error) { heroEditorStatus.textContent = "Could not save: " + error.message; heroEditorStatus.classList.add("error"); return; }
+  editingHero.roles = roles;
+  editingHero.cropX = payload.crop_x;
+  editingHero.cropY = payload.crop_y;
+  render();
+  heroEditor.close();
+  setEditorStatus(editingHero.name + " saved.");
+});
+supabase.auth.getSession().then(({ data }) => setEditorSession(data.session?.user || null));
+supabase.auth.onAuthStateChange((_event, session) => setEditorSession(session?.user || null));
+loadOverrides();
+supabase
+  .channel("dota-hero-guide-live-overrides")
+  .on("postgres_changes", { event: "*", schema: "public", table: "dota_hero_guide_overrides" }, payload => {
+    if (payload.new?.hero_slug) {
+      applyOverride(payload.new);
+      render();
+    }
+  })
+  .subscribe();
+
+document.getElementById("close").addEventListener("click", () => dialog.close());
+dialog.addEventListener("click", e => {
+  const r = dialog.getBoundingClientRect();
+  if (e.clientX < r.left || e.clientX > r.right || e.clientY < r.top || e.clientY > r.bottom) dialog.close();
+});
+render();
+</script>
+</body>
+</html>
