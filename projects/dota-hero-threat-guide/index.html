@@ -81,6 +81,9 @@ dialog::backdrop { background:#000a; }
 .role-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(150px,1fr)); gap:12px; }
 .role-grid .card { aspect-ratio:256/144; }
 .role-grid .portrait-wrap { height:100%; }
+.card-hover-name { position:absolute; inset:auto 0 0; z-index:2; padding:28px 10px 9px; background:linear-gradient(transparent,rgba(0,0,0,.9)); color:#fff; font-size:14px; font-weight:800; line-height:1.2; text-align:center; opacity:0; transform:translateY(5px); transition:opacity .14s ease,transform .14s ease; }
+.card:hover .card-hover-name,.card:focus-visible .card-hover-name { opacity:1; transform:translateY(0); }
+:is(header,.toolbar,.filters,.meta,.legend,.footer-note,.role-sections) { padding-left:clamp(20px,4vw,50px); padding-right:clamp(20px,4vw,50px); }
 .search-hint { color:var(--muted); font-size:13px; line-height:1.4; }
 .typing-overlay { position:fixed; inset:0; z-index:20; display:grid; place-items:center; padding:24px; pointer-events:none; opacity:0; transition:opacity .12s ease; }
 .typing-overlay.visible { opacity:1; }
@@ -250,7 +253,7 @@ function render() {
       card.type = "button";
       card.className = "card";
       card.setAttribute("aria-label", "Open " + hero.name + " details");
-      card.innerHTML = `<div class="portrait-wrap" data-initials="${esc(initials(hero.name))}"><img class="portrait" loading="lazy" src="${portrait(hero)}" alt="${esc(hero.name)} portrait"></div>`;
+      card.innerHTML = `<div class="portrait-wrap" data-initials="${esc(initials(hero.name))}"><img class="portrait" loading="lazy" src="${portrait(hero)}" alt="${esc(hero.name)} portrait"><span class="card-hover-name" aria-hidden="true">${esc(hero.name)}</span></div>`;
       const img = card.querySelector("img");
       img.addEventListener("error", () => img.style.display = "none");
       card.addEventListener("click", () => openHero(hero));
