@@ -153,12 +153,12 @@ dialog::backdrop { background:#000a; }
 <main class="role-sections" id="grid"></main>
 
 
-<section class="editor-access editor-disabled" aria-labelledby="editorAccessTitle">
-  <h2 id="editorAccessTitle">Guide editor <span class="editor-disabled-badge">Disabled</span></h2>
-  <p>Editor mode is temporarily disabled.</p>
+<section class="editor-access" aria-labelledby="editorAccessTitle">
+  <h2 id="editorAccessTitle">Guide editor</h2>
+  <p>Sign in with the guide owner's password to adjust hero roles and portrait crops.</p>
   <form class="editor-login" id="editorLogin">
-    <input id="editorPassword" type="password" autocomplete="current-password" placeholder="Password" aria-label="Editor password" required disabled>
-    <button class="editor-button" type="submit" disabled>Unlock editor</button>
+    <input id="editorPassword" type="password" autocomplete="current-password" placeholder="Password" aria-label="Editor password" required>
+    <button class="editor-button" type="submit">Unlock editor</button>
   </form>
   <div class="editor-session" id="editorSession" hidden>
     <button class="editor-button primary" id="editorModeButton" type="button">Enter editor mode</button>
@@ -240,7 +240,7 @@ const cdn = "https://cdn.cloudflare.steamstatic.com/apps/dota2/images/dota_react
 const supabase = createClient("https://mqfsgammpsumpltfutwl.supabase.co", "sb_publishable_thcq6mjdiLYXwzfXUk3pgw_VJWYPFg5");
 const editorOwnerId = "19bf3140-6738-496f-ac0c-20e316c4c3c0";
 const editorOwnerEmail = "joshuaegage@gmail.com";
-const editorFeatureEnabled = false;
+const editorFeatureEnabled = true;
 for (const hero of heroes) { hero.cropX = 50; hero.cropY = 50; }
 let activeFilter = "all";
 
