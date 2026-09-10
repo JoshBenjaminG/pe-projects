@@ -61,7 +61,6 @@ function openLesson(stageId) {
   $('#sectionTitle').textContent = stage.title;
   const examples = stage.lesson.examples || [];
   const sections = stage.lesson.sections || [];
-  const sectionLinks = sections.map((section, sectionIndex) => `<a href="#lesson-${stage.id}-${sectionIndex + 1}"><span>${String(sectionIndex + 1).padStart(2,'0')}</span>${escapeHtml(section.title)}</a>`).join('');
   const sectionContent = sections.map((section, sectionIndex) => {
     const paragraphs = section.paragraphs || [section.body];
     return `<section class="lesson-chapter" id="lesson-${stage.id}-${sectionIndex + 1}"><div class="chapter-index">${stage.number}.${sectionIndex + 1}</div><div class="chapter-copy"><h3>${escapeHtml(section.title)}</h3>${paragraphs.filter(Boolean).map(paragraph => `<p>${renderLessonText(paragraph)}</p>`).join('')}${section.callout ? `<aside class="chapter-callout"><b>Keep this distinction clear</b><p>${renderLessonText(section.callout)}</p></aside>` : ''}</div></section>`;
