@@ -218,6 +218,8 @@ document.querySelectorAll('.nav-item').forEach(button => button.addEventListener
   [$('#sectionKicker').textContent,$('#sectionTitle').textContent] = titles[button.dataset.view];
 }));
 
+$('#homeButton').addEventListener('click', showPath);
+
 $('#search').addEventListener('input', event => { renderPath(event.target.value); renderMap(event.target.value); });
 $('#continueButton').addEventListener('click', event => openConcept(event.target.dataset.id));
 $('#backToPath').addEventListener('click', showPath);
