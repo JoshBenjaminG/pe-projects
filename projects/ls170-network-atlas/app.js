@@ -38,67 +38,50 @@ function renderPath(filter = '') {
       return !query || `${item.name} ${item.definition} ${item.connections.join(' ')}`.toLowerCase().includes(query);
     });
     if (!terms.length) return '';
-    return `<article class="stage"><div class="stage-index">${stage.number}</div><div class="stage-body"><div class="stage-heading"><h2>${stage.title}</h2><span>${terms.filter(id => state.mastered.has(id)).length} / ${terms.length} mastered</span></div><p class="muted">${stage.summary}</p><div class="term-row">${terms.map(id => `<button class="term-chip ${state.mastered.has(id) ? 'mastered' : ''}" data-concept="${id}">${concepts[id].name}</button>`).join('')}</div><button class="stage-lesson" data-lesson="${stage.id}">Open lesson →</button></div></article>`;
+    return `<article class="stage"><div class="stage-index">${stage.number}</div><div class="stage-body"><div class="stage-heading"><h2>${stage.title}</h2><span>${terms.filter(id => state.mastered.has(id)).length} / ${terms.length} mastered</span></div><p class="muted">${stage.summary}</p><div class="stage-actions"><div class="term-row">${terms.map(id => `<button class="term-chip ${state.mastered.has(id) ? 'mastered' : ''}" data-concept="${id}">${concepts[id].name}</button>`).join('')}</div><button class="lesson-button" data-lesson="${stage.id}">Open lesson →</button></div></div></article>`;
   }).join('') || '<p class="muted">No concepts match that search.</p>';
 }
 
-function escapeHtml(value = '') {
-  return String(value).replace(/[&<>"']/g, character => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[character]));
+function renderLessonText(text) {
+  return text.replace(/\[\[([^|]+)\|([^\]]+)\]\]/g, (_, label, id) => `<button class="lesson-keyword" data-concept="${id}">${label}</button>`);
 }
 
-function renderLessonText(text = '') {
-  const source = String(text);
-  const tokenPattern = /\[\[([^|\]]+)\|([^\]]+)\]\]/g;
-  let result = '';
-  let cursor = 0;
-  for (const match of source.matchAll(tokenPattern)) {
-    result += escapeHtml(source.slice(cursor, match.index)).replaceAll('\n', '<br>');
-    const label = match[1].trim();
-    const conceptId = match[2].trim();
-    result += concepts[conceptId]
-      ? `<button class="lesson-keyword" data-concept="${escapeHtml(conceptId)}">${escapeHtml(label)}</button>`
-      : escapeHtml(label);
-    cursor = match.index + match[0].length;
-  }
-  return result + escapeHtml(source.slice(cursor)).replaceAll('\n', '<br>');
-}
-
-function renderLessonExamples(examples = []) {
-  if (!Array.isArray(examples) || !examples.length) return '';
-  return `<section class="lesson-practice"><header class="practice-heading"><p class="eyebrow">CONCEPTS IN PRACTICE</p><h3>Worked examples</h3></header><div class="example-grid">${examples.map(example => `<article class="example-card"><p class="example-label">${escapeHtml(example.label)}</p><h4>${escapeHtml(example.title)}</h4><pre><code>${escapeHtml(example.code)}</code></pre><p class="example-caption">${renderLessonText(example.caption)}</p></article>`).join('')}</div></section>`;
-}
-
-function setActiveView(viewId) {
-  document.querySelectorAll('.view').forEach(view => {
-    const active = view.id === viewId;
-    view.hidden = !active;
-    view.classList.toggle('active-view', active);
-  });
-}
-
-function showPath() {
-  setActiveView('pathView');
-  document.querySelectorAll('.nav-item').forEach(item => item.classList.toggle('active', item.dataset.view === 'path'));
-  $('#sectionKicker').textContent = 'SEQUENCED FOUNDATIONS';
-  $('#sectionTitle').textContent = 'Learning path';
-  renderPath($('#search').value);
+function escapeHtml(value) {
+  return String(value).replace(/[&<>"']/g, character => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[character]));
 }
 
 function openLesson(stageId) {
-  const stageIndex = stages.findIndex(stage => stage.id === stageId);
-  if (stageIndex < 0) return;
-  const stage = stages[stageIndex];
-  const lesson = stage.lesson;
-  if (!lesson?.lede || !Array.isArray(lesson.sections)) return;
-  setActiveView('lessonView');
-  document.querySelectorAll('.nav-item').forEach(item => item.classList.toggle('active', item.dataset.view === 'path'));
-  $('#sectionKicker').textContent = `LESSON ${stage.number}`;
+  const index = stages.findIndex(stage => stage.id === stageId);
+  const stage = stages[index];
+  if (!stage?.lesson) return;
+  document.querySelectorAll('.view').forEach(view => { view.hidden = true; view.classList.remove('active-view'); });
+  $('#lessonView').hidden = false;
+  $('#lessonView').classList.add('active-view');
+  $('#sectionKicker').textContent = `LESSON ${stage.number} OF ${String(stages.length).padStart(2,'0')}`;
   $('#sectionTitle').textContent = stage.title;
-  $('#lessonArticle').innerHTML = `<header class="lesson-header"><p class="lesson-number">LESSON ${escapeHtml(stage.number)}</p><h2>${escapeHtml(stage.title)}</h2><p class="lesson-lede">${renderLessonText(lesson.lede)}</p></header><div class="lesson-sections">${lesson.sections.map(section => `<section class="lesson-section"><h3>${escapeHtml(section.title)}</h3><div class="lesson-copy">${renderLessonText(section.body)}</div></section>`).join('')}</div>${renderLessonExamples(lesson.examples)}<section class="lesson-recap"><p class="eyebrow">RECAP TERMS</p><div class="term-row">${stage.terms.filter(id => concepts[id]).map(id => `<button class="term-chip ${state.mastered.has(id) ? 'mastered' : ''}" data-concept="${id}">${escapeHtml(concepts[id].name)}</button>`).join('')}</div></section>`;
-  const previous = stages[stageIndex - 1];
-  const next = stages[stageIndex + 1];
-  $('#lessonPager').innerHTML = `${previous ? `<button data-lesson="${previous.id}" aria-label="Previous lesson">← Lesson ${escapeHtml(previous.number)}</button>` : '<span></span>'}<button class="lesson-path-link" data-view-return="path">All lessons</button>${next ? `<button data-lesson="${next.id}" aria-label="Next lesson">Lesson ${escapeHtml(next.number)} →</button>` : '<span></span>'}`;
-  window.scrollTo({top:0,behavior:'smooth'});
+  const examples = stage.lesson.examples || [];
+  const sections = stage.lesson.sections || [];
+  const sectionLinks = sections.map((section, sectionIndex) => `<a href="#lesson-${stage.id}-${sectionIndex + 1}"><span>${String(sectionIndex + 1).padStart(2,'0')}</span>${escapeHtml(section.title)}</a>`).join('');
+  const sectionContent = sections.map((section, sectionIndex) => {
+    const paragraphs = section.paragraphs || [section.body];
+    return `<section class="lesson-chapter" id="lesson-${stage.id}-${sectionIndex + 1}"><div class="chapter-index">${stage.number}.${sectionIndex + 1}</div><div class="chapter-copy"><h3>${escapeHtml(section.title)}</h3>${paragraphs.filter(Boolean).map(paragraph => `<p>${renderLessonText(paragraph)}</p>`).join('')}${section.callout ? `<aside class="chapter-callout"><b>Keep this distinction clear</b><p>${renderLessonText(section.callout)}</p></aside>` : ''}</div></section>`;
+  }).join('');
+  const objectives = stage.lesson.objectives || [];
+  const checkpoint = stage.lesson.checkpoint;
+  $('#lessonArticle').innerHTML = `<header class="lesson-header"><span class="lesson-number">${stage.number}</span><div><p class="eyebrow">FOUNDATION LESSON</p><h2>${stage.title}</h2><p>${stage.lesson.lede}</p></div></header>${objectives.length ? `<section class="lesson-objectives"><p class="eyebrow">BY THE END OF THIS LESSON</p><ul>${objectives.map(objective => `<li>${escapeHtml(objective)}</li>`).join('')}</ul></section>` : ''}<div class="lesson-reading-layout"><nav class="lesson-contents" aria-label="Lesson contents"><p>IN THIS LESSON</p>${sectionLinks}<a href="#lesson-${stage.id}-examples"><span>EX</span>Worked examples</a><a href="#lesson-${stage.id}-checkpoint"><span>✓</span>Check your understanding</a></nav><div class="lesson-sections">${sectionContent}</div></div>${examples.length ? `<section class="lesson-examples" id="lesson-${stage.id}-examples"><header><p class="eyebrow">CONCEPTS IN PRACTICE</p><h3>Worked examples</h3><p>Read each example line by line, then explain what is happening aloud.</p></header><div class="practice-grid">${examples.map((example, exampleIndex) => `<article class="practice-example"><div class="practice-label"><span>${stage.number}.E${exampleIndex + 1}</span><b>${escapeHtml(example.label)}</b></div><h4>${escapeHtml(example.title)}</h4><pre><code>${escapeHtml(example.code)}</code></pre><p>${renderLessonText(example.caption)}</p></article>`).join('')}</div></section>` : ''}${checkpoint ? `<section class="lesson-checkpoint" id="lesson-${stage.id}-checkpoint"><p class="eyebrow">CHECK YOUR UNDERSTANDING</p><h3>Explain it without notes</h3><p class="checkpoint-question">${escapeHtml(checkpoint.question)}</p><details><summary>Show the points your answer should cover</summary><ul>${checkpoint.points.map(point => `<li>${escapeHtml(point)}</li>`).join('')}</ul></details></section>` : ''}<aside class="lesson-recap"><p class="eyebrow">TERMS IN THIS LESSON</p><div class="term-row">${stage.terms.map(id => `<button class="term-chip" data-concept="${id}">${concepts[id].name}</button>`).join('')}</div></aside>`;
+  const previous = stages[index - 1];
+  const next = stages[index + 1];
+  $('#lessonPager').innerHTML = `${previous ? `<button data-lesson="${previous.id}">← ${previous.title}</button>` : '<span></span>'}${next ? `<button data-lesson="${next.id}">${next.title} →</button>` : '<button data-view-return="path">Return to learning path</button>'}`;
+  window.scrollTo({top: 0, behavior: 'smooth'});
+}
+
+function showPath() {
+  document.querySelectorAll('.view').forEach(view => { view.hidden = true; view.classList.remove('active-view'); });
+  $('#pathView').hidden = false;
+  $('#pathView').classList.add('active-view');
+  $('#sectionKicker').textContent = 'SEQUENCED FOUNDATIONS';
+  $('#sectionTitle').textContent = 'Learning path';
+  document.querySelectorAll('.nav-item').forEach(item => item.classList.toggle('active', item.dataset.view === 'path'));
 }
 
 function renderMap(filter = '') {
@@ -207,12 +190,11 @@ async function initAuth() {
 }
 
 document.addEventListener('click', async event => {
-  const lessonButton = event.target.closest('[data-lesson]');
-  if (lessonButton) openLesson(lessonButton.dataset.lesson);
-  const pathButton = event.target.closest('[data-view-return="path"]');
-  if (pathButton) showPath();
   const conceptButton = event.target.closest('[data-concept]');
   if (conceptButton) openConcept(conceptButton.dataset.concept);
+  const lessonButton = event.target.closest('[data-lesson]');
+  if (lessonButton) openLesson(lessonButton.dataset.lesson);
+  if (event.target.closest('[data-view-return="path"]')) showPath();
   const masterButton = event.target.closest('[data-master]');
   if (masterButton) {
     const id = masterButton.dataset.master;
@@ -231,14 +213,15 @@ document.addEventListener('click', async event => {
 
 document.querySelectorAll('.nav-item').forEach(button => button.addEventListener('click', () => {
   document.querySelectorAll('.nav-item').forEach(item => item.classList.toggle('active', item === button));
-  setActiveView(`${button.dataset.view}View`);
+  document.querySelectorAll('.view').forEach(view => { view.hidden = true; view.classList.remove('active-view'); });
+  const target = $(`#${button.dataset.view}View`); target.hidden = false; target.classList.add('active-view');
   const titles = {path:['SEQUENCED FOUNDATIONS','Learning path'],map:['CONCEPT DEPENDENCIES','Term map'],interview:['PRECISION UNDER PRESSURE','Interview lab'],review:['SPACED ACTIVE RECALL','Recall queue']};
   [$('#sectionKicker').textContent,$('#sectionTitle').textContent] = titles[button.dataset.view];
 }));
 
 $('#search').addEventListener('input', event => { renderPath(event.target.value); renderMap(event.target.value); });
-$('#backToPath').addEventListener('click', event => { event.stopPropagation(); showPath(); });
 $('#continueButton').addEventListener('click', event => openConcept(event.target.dataset.id));
+$('#backToPath').addEventListener('click', showPath);
 $('#closeDialog').addEventListener('click', () => $('#conceptDialog').close());
 $('#conceptDialog').addEventListener('click', event => { if (event.target === $('#conceptDialog')) $('#conceptDialog').close(); });
 $('#timerButton').addEventListener('click', toggleTimer);
