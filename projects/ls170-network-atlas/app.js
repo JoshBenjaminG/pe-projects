@@ -230,9 +230,13 @@ $('#shuffleReview').addEventListener('click', () => buildReviewQueue(true));
 $('#signOut').addEventListener('click', async () => { await state.supabase?.auth.signOut(); location.reload(); });
 const savedContentWidth = Number(localStorage.getItem('ls170-content-width'));
 if (savedContentWidth >= 680 && savedContentWidth <= 1400) document.documentElement.style.setProperty('--content-width', `${savedContentWidth}px`);
+const savedContentOffset = Number(localStorage.getItem('ls170-content-offset'));
+if (savedContentOffset >= -240 && savedContentOffset <= 240) document.documentElement.style.setProperty('--content-offset', `${savedContentOffset}px`);
 $('#layoutEditorButton').addEventListener('click', () => {
   const current = getComputedStyle(document.documentElement).getPropertyValue('--content-width').trim().replace('px','') || '900';
   $('#contentWidth').value = parseInt(current, 10);
+  const offset = getComputedStyle(document.documentElement).getPropertyValue('--content-offset').trim().replace('px','') || '0';
+  $('#contentOffset').value = parseInt(offset, 10);
   $('#layoutEditorDialog').showModal();
 });
 $('#closeLayoutEditor').addEventListener('click', () => $('#layoutEditorDialog').close());
@@ -240,6 +244,9 @@ $('#saveContentWidth').addEventListener('click', () => {
   const width = Math.max(680, Math.min(1400, Number($('#contentWidth').value) || 900));
   document.documentElement.style.setProperty('--content-width', `${width}px`);
   localStorage.setItem('ls170-content-width', String(width));
+  const offset = Math.max(-240, Math.min(240, Number($('#contentOffset').value) || 0));
+  document.documentElement.style.setProperty('--content-offset', `${offset}px`);
+  localStorage.setItem('ls170-content-offset', String(offset));
   $('#layoutEditorDialog').close();
 });
 $('#loginForm').addEventListener('submit', async event => {
