@@ -228,6 +228,20 @@ $('#revealButton').addEventListener('click', () => { $('#answerFramework').hidde
 $('#nextPrompt').addEventListener('click', () => { state.promptIndex = (state.promptIndex + 1) % prompts.length; renderPrompt(); });
 $('#shuffleReview').addEventListener('click', () => buildReviewQueue(true));
 $('#signOut').addEventListener('click', async () => { await state.supabase?.auth.signOut(); location.reload(); });
+const savedContentWidth = Number(localStorage.getItem('ls170-content-width'));
+if (savedContentWidth >= 680 && savedContentWidth <= 1400) document.documentElement.style.setProperty('--content-width', `${savedContentWidth}px`);
+$('#layoutEditorButton').addEventListener('click', () => {
+  const current = getComputedStyle(document.documentElement).getPropertyValue('--content-width').trim().replace('px','') || '900';
+  $('#contentWidth').value = parseInt(current, 10);
+  $('#layoutEditorDialog').showModal();
+});
+$('#closeLayoutEditor').addEventListener('click', () => $('#layoutEditorDialog').close());
+$('#saveContentWidth').addEventListener('click', () => {
+  const width = Math.max(680, Math.min(1400, Number($('#contentWidth').value) || 900));
+  document.documentElement.style.setProperty('--content-width', `${width}px`);
+  localStorage.setItem('ls170-content-width', String(width));
+  $('#layoutEditorDialog').close();
+});
 $('#loginForm').addEventListener('submit', async event => {
   event.preventDefault();
   if (!state.supabase) return;
