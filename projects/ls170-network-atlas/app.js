@@ -50,6 +50,21 @@ function escapeHtml(value) {
   return String(value).replace(/[&<>"']/g, character => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[character]));
 }
 
+function renderLessonVisual(stageId, sectionIndex) {
+  const visuals = {
+    language: {after:2, title:'Encapsulation adds a layer at each step', body:`<div class="visual-stack"><span>HTTP message</span><span>TCP segment <b>HTTP</b></span><span>IP packet <b>TCP · HTTP</b></span><span>Ethernet frame <b>IP · TCP · HTTP</b></span></div>`},
+    physical: {after:0, title:'Capacity is not the same as delay', body:`<div class="visual-capacity"><div><b>High bandwidth</b><i class="wide-pipe"></i><span>More bits can enter each second</span></div><div><b>Latency</b><i class="long-path"><em>●</em></i><span>Each bit still needs time to cross the path</span></div></div><div class="visual-bottleneck"><span>100 Mbps</span><i>→</i><span class="limit">10 Mbps bottleneck</span><i>→</i><span>100 Mbps</span></div>`},
+    internet: {after:2, title:'A name becomes an address before the connection begins', body:`<div class="visual-flow"><span>Browser</span><i>1 · ask</i><span>DNS resolver</span><i>2 · lookup</i><span>DNS hierarchy</span><i>3 · IP address</i><span>Browser connects</span></div>`},
+    transport: {after:1, title:'The TCP three-way handshake', body:`<div class="visual-sequence"><div><b>Client</b><b>Server</b></div><p><span>SYN →</span></p><p><span>← SYN-ACK</span></p><p><span>ACK →</span></p><small>Both sides confirm reachability and synchronize sequence state.</small></div>`},
+    web: {after:1, title:'One HTTP request and response cycle', body:`<div class="visual-cycle"><span>Client builds request</span><i>→</i><span>Server processes it</span><i>→</i><span>Server sends response</span><i>→</i><span>Client updates the page</span></div>`},
+    state: {after:1, title:'A session connects a stateless request to server-side state', body:`<div class="visual-state"><div><b>Browser</b><span>Cookie: session_id=abc</span></div><i>request →</i><div><b>Server</b><span>Looks up abc</span></div><i>→</i><div><b>Session store</b><span>abc → user state</span></div></div>`},
+    security: {after:1, title:'TLS establishes three protections for the channel', body:`<div class="visual-triad"><span><b>Confidentiality</b>Others cannot read the data</span><span><b>Integrity</b>Changes can be detected</span><span><b>Authentication</b>The server proves its identity</span></div>`}
+  };
+  const visual = visuals[stageId];
+  if (!visual || visual.after !== sectionIndex) return '';
+  return `<figure class="lesson-visual" aria-label="${escapeHtml(visual.title)}"><figcaption><span>VISUAL MODEL</span><b>${escapeHtml(visual.title)}</b></figcaption>${visual.body}</figure>`;
+}
+
 function openLesson(stageId) {
   const index = stages.findIndex(stage => stage.id === stageId);
   const stage = stages[index];
@@ -63,7 +78,7 @@ function openLesson(stageId) {
   const sections = stage.lesson.sections || [];
   const sectionContent = sections.map((section, sectionIndex) => {
     const paragraphs = section.paragraphs || [section.body];
-    return `<section class="lesson-chapter" id="lesson-${stage.id}-${sectionIndex + 1}"><div class="chapter-index">${stage.number}.${sectionIndex + 1}</div><div class="chapter-copy"><h3>${escapeHtml(section.title)}</h3>${paragraphs.filter(Boolean).map(paragraph => `<p>${renderLessonText(paragraph)}</p>`).join('')}${section.callout ? `<aside class="chapter-callout"><b>Keep this distinction clear</b><p>${renderLessonText(section.callout)}</p></aside>` : ''}</div></section>`;
+    return `<section class="lesson-chapter" id="lesson-${stage.id}-${sectionIndex + 1}"><div class="chapter-index">${stage.number}.${sectionIndex + 1}</div><div class="chapter-copy"><h3>${escapeHtml(section.title)}</h3>${paragraphs.filter(Boolean).map(paragraph => `<p>${renderLessonText(paragraph)}</p>`).join('')}${section.callout ? `<aside class="chapter-callout"><b>Keep this distinction clear</b><p>${renderLessonText(section.callout)}</p></aside>` : ''}${renderLessonVisual(stage.id, sectionIndex)}</div></section>`;
   }).join('');
   const objectives = stage.lesson.objectives || [];
   const checkpoint = stage.lesson.checkpoint;
